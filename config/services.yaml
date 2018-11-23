@@ -29,3 +29,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    app.doctrine.subscriber.table_prefix_subscriber:
+        class: App\Doctrine\Subscriber\TablePrefixSubscriber
+        arguments:
+            - '%db_prefix%'
+        tags:
+            - { name: doctrine.event_subscriber }
