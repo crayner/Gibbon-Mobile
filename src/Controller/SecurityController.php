@@ -28,26 +28,27 @@
  *
  * User: craig
  * Date: 23/11/2018
- * Time: 11:40
+ * Time: 12:32
  */
-namespace App\Repository;
+namespace App\Controller;
 
-use App\Entity\ApplicationForm;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ApplicationFormRepository
- * @package App\Repository
+ * Class SecurityController
+ * @package App\Controller
  */
-class ApplicationFormRepository extends ServiceEntityRepository
+class SecurityController extends Controller
 {
     /**
-     * ApplicationFormRepository constructor.
-     * @param RegistryInterface $registry
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/", name="home")
      */
-    public function __construct(RegistryInterface $registry)
+    public function home(Request $request)
     {
-        parent::__construct($registry, ApplicationForm::class);
+        return $this->render('base.html.twig');
     }
 }
