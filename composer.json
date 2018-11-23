@@ -15,6 +15,7 @@
         "symfony/monolog-bundle": "^3.1",
         "symfony/orm-pack": "^1.0",
         "symfony/process": "4.1.*",
+        "symfony/security": "4.1.*",
         "symfony/security-bundle": "4.1.*",
         "symfony/serializer-pack": "*",
         "symfony/swiftmailer-bundle": "^3.1",
@@ -25,6 +26,7 @@
         "symfony/yaml": "4.1.*"
     },
     "require-dev": {
+        "symfony/debug": "4.1.*",
         "symfony/debug-pack": "*",
         "symfony/dotenv": "4.1.*",
         "symfony/maker-bundle": "^1.9",
