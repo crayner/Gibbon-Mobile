@@ -1,2 +1,3 @@
 parameters:
     db_prefix: gibbon
+    locale: en

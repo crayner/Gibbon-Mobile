@@ -33,21 +33,21 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class SecurityController
+ * Class HomeController
  * @package App\Controller
  */
-class SecurityController extends Controller
+class HomeController extends Controller
 {
     /**
-     * @param Request $request
+     * home
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/", name="home")
      */
-    public function home(Request $request)
+    public function home()
     {
         return $this->render('base.html.twig');
     }
