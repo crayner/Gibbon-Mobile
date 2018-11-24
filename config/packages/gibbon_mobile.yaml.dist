@@ -1,6 +1,6 @@
 parameters:
     db_prefix: gibbon
-    locale: en_GB
+    locale: en
     security.hierarchy.roles:
         ROLE_USER: null,
         ROLE_ALLOWED_TO_SWITCH: null

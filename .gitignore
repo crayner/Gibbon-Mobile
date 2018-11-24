@@ -19,6 +19,7 @@
 .idea
 *.lock
 translations
+gibbon_mobile.yaml
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
