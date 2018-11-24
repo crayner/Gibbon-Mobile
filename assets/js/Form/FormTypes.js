@@ -7,6 +7,7 @@ import '../../css/Form/form.scss';
 import ToggleType from './ToggleType'
 import RenderFormGroup from './RenderFormGroup'
 import ExpandedChoiceType from './ExpandedChoiceType'
+import {translateMessage} from '../Component/MessageTranslator'
 
 export default function FormTypes(props) {
     const {
@@ -20,6 +21,8 @@ export default function FormTypes(props) {
     let element = {...form}
 
     let prefix = element.block_prefixes.slice(0).reverse()
+
+    let placeHolder = element.attr && element.attr.placeholder ? element.attr.placeholder : translateMessage(otherProps.translations, 'Enter Text') ;
 
     const content = prefix.find(type => {
         if (isFunction(type))
@@ -86,9 +89,10 @@ export default function FormTypes(props) {
                 type={type}
                 id={element.id}
                 value={getElementData(element.id)}
-                placeholder="Enter text"
+                placeholder={placeHolder}
                 className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
                 name={element.full_name}
+                label={element.label}
                 onChange={((e) => elementChange(e, element.id, 'text'))}
             />
         )
@@ -105,7 +109,7 @@ export default function FormTypes(props) {
             <FormControl
                 type="text"
                 value={element.value}
-                placeholder="Enter text"
+                placeholder={placeHolder}
                 onChange={((e) => elementChange(e, element.id, 'form'))}
                 className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
             />

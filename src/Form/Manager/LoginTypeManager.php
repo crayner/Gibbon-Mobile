@@ -29,11 +29,15 @@
  */
 namespace App\Form\Manager;
 
+use App\Util\LocaleHelper;
+use Hillrange\Form\Util\ButtonReactInterface;
+use Hillrange\Form\Util\TemplateManagerInterface;
+
 /**
  * Class LoginTypeManager
  * @package App\Form\Manager
  */
-class LoginTypeManager implements TemplateManagerInterface
+class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
 {
     /**
      * getTranslationsDomain
@@ -41,7 +45,9 @@ class LoginTypeManager implements TemplateManagerInterface
      * @return string
      */
     public function getTranslationDomain(): string
-    {}
+    {
+        return 'messages';
+    }
 
     /**
      * isLocale
@@ -49,7 +55,9 @@ class LoginTypeManager implements TemplateManagerInterface
      * @return bool
      */
     public function isLocale(): bool
-    {}
+    {
+        return true;
+    }
 
     /**
      * getTargetDivision
@@ -57,5 +65,97 @@ class LoginTypeManager implements TemplateManagerInterface
      * @return string
      */
     public function getTargetDivision(): string
-    {}
+    {
+        return 'loginForm';
+    }
+
+    /**
+     * getLocale
+     *
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return LocaleHelper::getLocale();
+    }
+
+    /**
+     * getTemplate
+     *
+     * @return array
+     */
+    public function getTemplate(): array
+    {
+        return [
+            'form' => [
+                'url' => '/login/',
+            ],
+            'container' => $this->getContainer(),
+        ];
+    }
+
+    /**
+     * getContainer
+     *
+     * @return array
+     */
+    private function getContainer(): array
+    {
+        $container = [
+            'panel' => $this->getPanel(),
+        ];
+        return $container;
+    }
+
+    /**
+     * getPanel
+     *
+     * @return array
+     */
+    private function getPanel(): array
+    {
+        $panel = [
+            'label' => 'Sign into Gibbon Mobile',
+            'colour' => 'success',
+            'buttons' => [
+                [
+                    'type' => 'save',
+                ],
+                [
+                    'type' => 'misc',
+                    'icon' => ['fab','google'],
+                    'colour' => 'success',
+                ],
+            ],
+            'rows' => $this->getRows(),
+        ];
+        return $panel;
+    }
+
+    /**
+     * getRows
+     *
+     * @return array
+     */
+    private function getRows(): array
+    {
+        $rows = [
+            [
+                'class' => 'row',
+                'columns' => [
+                    [
+                        'class' => 'col-12 card',
+                        'form' => ['_username' => 'row'],
+                    ],
+                    [
+                        'class' => 'col-12 card',
+                        'form' => ['_password' => 'row'],
+                    ],
+                ],
+            ],
+
+
+        ];
+        return $rows;
+    }
 }

@@ -1,6 +1,7 @@
 parameters:
     db_prefix: gibbon
     locale: en
+    session_name: 'gibbon_mobile'
     security.hierarchy.roles:
         ROLE_USER: null,
         ROLE_ALLOWED_TO_SWITCH: null

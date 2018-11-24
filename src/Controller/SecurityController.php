@@ -29,6 +29,7 @@
  */
 namespace App\Controller;
 
+use App\Form\Manager\LoginTypeManager;
 use App\Form\Security\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,9 +45,9 @@ class SecurityController extends Controller
      * home
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/login", name="login")
+     * @Route("/login/", name="login")
      */
-    public function login(Request $request)
+    public function login(Request $request, LoginTypeManager $manager)
     {
         $form = $this->createForm(LoginType::class);
 
@@ -54,7 +55,9 @@ class SecurityController extends Controller
 
         return $this->render('Security\login.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
+                'manager' => $manager,
+                'view' => $form->createView(),
             ]
         );
     }

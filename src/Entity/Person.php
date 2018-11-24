@@ -32,6 +32,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +43,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Person
 {
+    use BooleanList;
     /**
      * @var integer|null
      * @ORM\Id
@@ -51,27 +53,11 @@ class Person
     private $id;
 
     /**
-     * @var array
-     */
-    private static $booleanList = [
-        'Y',
-        'N',
-    ];
-
-    /**
      * @return array
      */
     public static function getPhoneTypeList(): array
     {
         return self::$phoneTypeList;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getBooleanList(): array
-    {
-        return self::$booleanList;
     }
 
     /**

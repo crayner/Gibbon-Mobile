@@ -25,30 +25,40 @@
  *
  * User: craig
  * Date: 24/11/2018
- * Time: 08:47
+ * Time: 14:00
  */
-namespace App\Form\Manager;
 
-interface TemplateManagerInterface
+namespace App\Util;
+
+
+use App\Entity\Person;
+
+class LocaleHelper
 {
     /**
-     * getTranslationsDomain
+     * @var string
+     */
+    private static $locale = 'en';
+
+    /**
+     * LocaleHelper constructor.
+     * @param string $locale
+     */
+    public function __construct(string $locale = 'en')
+    {
+        self::$locale = $locale;
+        $user = UserHelper::getCurrentUser();
+        if ($user instanceof Person)
+            self::$locale = ! empty($user->getI18nPersonal()) && ! empty($user->getI18nPersonal()->getCode()) ? $user->getI18nPersonal()->getCode() : self::$locale ;
+    }
+
+    /**
+     * getLocale
      *
      * @return string
      */
-    public function getTranslationDomain(): string;
-
-    /**
-     * isLocale
-     *
-     * @return bool
-     */
-    public function isLocale(): bool;
-
-    /**
-     * getTargetDivision
-     *
-     * @return string
-     */
-    public function getTargetDivision(): string;
+    public static function getLocale(): string
+    {
+        return self::$locale;
+    }
 }

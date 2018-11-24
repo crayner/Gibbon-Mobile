@@ -23,31 +23,20 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
  * User: craig
- * Date: 23/11/2018
- * Time: 11:14
+ * Date: 24/11/2018
+ * Time: 13:56
  */
-namespace App\Repository;
+
+namespace App\Manager;
+
 
 use App\Entity\SchoolYear;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Manager\Traits\EntityTrait;
 
-/**
- * Class SchoolYearRepository
- * @package App\Repository
- */
-class SchoolYearRepository extends ServiceEntityRepository
+class SchoolYearManager
 {
-    /**
-     * SchoolYearRepository constructor.
-     * @param RegistryInterface $registry
-     */
-    public function __construct(RegistryInterface $registry)
-    {
-        parent::__construct($registry, SchoolYear::class);
-    }
+    use EntityTrait;
+
+    private $entityName = SchoolYear::class;
 }

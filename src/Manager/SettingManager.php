@@ -27,11 +27,87 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Manager;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class SettingManager
+/**
+ * Class SettingManager
+ * @package App\Manager
+ */
+class SettingManager implements ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
+    /**
+     * SettingManager constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->setContainer($container);
+    }
+
+    /**
+     * @var Request|null
+     */
+    private $request;
+
+    /**
+     * getRequest
+     *
+     * @return Request|null
+     */
+    public function getRequest(): ?Request
+    {
+        if ($this->request instanceof Request)
+            return $this->request;
+        $stack = $this->getContainer()->get('request_stack');
+        return $this->request = $stack->getCurrentRequest();
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
+     * setContainer
+     *
+     * @param ContainerInterface|null $container
+     * @return SettingManager
+     */
+    public function setContainer(?ContainerInterface $container = null): SettingManager
+    {
+        $this->container = $container;
+        return $this;
+    }
+
+    /**
+     * @var SessionInterface|null
+     */
+    private $session;
+
+    /**
+     * getSession
+     *
+     * @return SessionInterface|null
+     */
+    public function getSession(): ?SessionInterface
+    {
+        if ($this->session instanceof SessionInterface)
+            return $this->session;
+        if ($this->getRequest() && $this->getRequest()->hasSession())
+            return $this->session = $this->getRequest()->getSession();
+        return null;
+    }
 }

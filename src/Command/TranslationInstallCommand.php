@@ -151,7 +151,7 @@ class TranslationInstallCommand extends Command
 
                 foreach($finder as $file) {
                     $source = $file->getPathname();
-                    $target = $targetDir . 'gibbon.' . $locale . '.' . $file->getExtension();
+                    $target = $targetDir . 'messages.' . $locale . '.' . $file->getExtension();
 
                     try {
                         if ($method === self::METHOD_RELATIVE_SYMLINK)
@@ -177,7 +177,7 @@ class TranslationInstallCommand extends Command
 
                     if ($locale === 'en_GB') {
                         $locale = 'en';
-                        $target = $targetDir . 'gibbon.en.' . $file->getExtension();
+                        $target = $targetDir . 'messages.en.' . $file->getExtension();
 
                         try {
                             if ($method === self::METHOD_RELATIVE_SYMLINK)

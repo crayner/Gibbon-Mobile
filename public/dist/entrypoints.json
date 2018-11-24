@@ -1,0 +1,15 @@
+{
+  "entrypoints": {
+    "form": {
+      "js": [
+        "build/runtime.d41d8cd9.js",
+        "build/vendors~0b0d7704.1dd7ca22.js",
+        "build/form.9139019d.js"
+      ],
+      "css": [
+        "build/vendors~0b0d7704.a2780709.css",
+        "build/form.fab1a325.css"
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@ controllers:
     requirements:
         _locale: '%locale%'
     defaults:
-        _locale: en
+        _locale: en_GB
     type: annotation
 _home:
     path: /

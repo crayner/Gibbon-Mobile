@@ -1,25 +1,8 @@
 {% trans_default_domain "Security" %}
-
-
-{% form_theme form
-    '@HillrangeForm/FormTheme/bootstrap.html.twig'
-%}
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            {{ form_row(form._username) }}
-        </div>
-        <div class="col-12">
-            {{ form_row(form._password) }}
-        </div>
-    </div>
-</div>
+<body>
+<div id="loginForm"></div>
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('form') }}
+    {{ renderForm(form,manager) }}
 {% endblock %}
-
-{% block stylesheets %}
-    {{ encore_entry_link_tags('form') }}
-{% endblock %}
+</body>

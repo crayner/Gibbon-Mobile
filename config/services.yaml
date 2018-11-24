@@ -41,8 +41,23 @@ services:
     App\Security\LogoutSuccessHandler:
         arguments:
             - '@router'
+            - '@App\Util\LocaleHelper'
             - '%locale%'
 
     App\Command\TranslationInstallCommand:
         arguments:
             - '%gibbon_document_root%'
+
+    App\Util\LocaleHelper:
+        arguments:
+            - '%locale%'
+
+    app.manager.translation_manager:
+        class: App\Manager\TranslationManager
+        decorates: 'translator'
+        arguments:
+            - '@app.manager.translation_manager.inner'
+            - '@App\Manager\StringReplacementManager'
+            - '@App\Manager\SettingManager'
+            - '@monolog.logger.translation'
+        public: false

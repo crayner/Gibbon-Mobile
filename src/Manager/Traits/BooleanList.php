@@ -23,31 +23,31 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
  * User: craig
- * Date: 23/11/2018
- * Time: 11:14
+ * Date: 24/11/2018
+ * Time: 16:38
  */
-namespace App\Repository;
-
-use App\Entity\SchoolYear;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+namespace App\Manager\Traits;
 
 /**
- * Class SchoolYearRepository
- * @package App\Repository
+ * Trait BooleanList
+ * @package App\Manager\Traits
  */
-class SchoolYearRepository extends ServiceEntityRepository
+trait BooleanList
 {
     /**
-     * SchoolYearRepository constructor.
-     * @param RegistryInterface $registry
+     * @var array
      */
-    public function __construct(RegistryInterface $registry)
+    private static $booleanList = [
+        'Y',
+        'N',
+    ];
+    /**
+     * @return array
+     */
+    public static function getBooleanList(): array
     {
-        parent::__construct($registry, SchoolYear::class);
+        return self::$booleanList;
     }
+
 }

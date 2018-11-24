@@ -35,6 +35,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class LoginType
@@ -47,11 +49,25 @@ class LoginType extends AbstractType
         $builder
             ->add('_username', TextType::class,
                 [
-
+                    'attr' => [
+                        'placeholder' => 'Username or email',
+                    ],
+                    'label' => 'Username or email',
+                    'constraints' => [
+                        new Length(['max' => 75]),
+                        new NotBlank(),
+                    ],
                 ]
             )->add('_password', PasswordType::class,
                 [
-
+                    'attr' => [
+                        'placeholder' => 'Password',
+                    ],
+                    'label' => 'Password',
+                    'constraints' => [
+                        new Length(['max' => 30]),
+                        new NotBlank(),
+                    ],
                 ]
             );
     }
@@ -75,7 +91,7 @@ class LoginType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'translation' => 'Security',
+                'translation' => 'messages',
                 'data_class' => Person::class,
             ]
         );

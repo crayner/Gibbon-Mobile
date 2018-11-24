@@ -1,6 +1,7 @@
 <?php
 namespace App\Security;
 
+use App\Util\LocaleHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -21,9 +22,10 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     /**
      * LogoutSuccessHandler constructor.
      * @param RouterInterface $router
+     * @param LocaleHelper $manager
      * @param string $locale
      */
-	public function __construct(RouterInterface $router, string $locale = 'en')
+	public function __construct(RouterInterface $router, LocaleHelper $manager, string $locale = 'en')
 	{
 		$this->router = $router;
         $this->locale = $locale;

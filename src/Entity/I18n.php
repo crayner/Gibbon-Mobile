@@ -68,4 +68,56 @@ class I18n
         $this->id = $id;
         return $this;
     }
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=5, nullable=true)
+     */
+    private $code;
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * setCode
+     *
+     * @param string|null $code
+     * @return I18n
+     */
+    public function setCode(?string $code): I18n
+    {
+        $this->code = mb_substr($code, 0, 5);
+        return $this;
+    }
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=100, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * setName
+     *
+     * @param string|null $name
+     * @return I18n
+     */
+    public function setName(?string $name): I18n
+    {
+        $this->name = mb_substr($name, 0, 100);
+        return $this;
+    }
 }
