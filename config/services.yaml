@@ -37,3 +37,12 @@ services:
             - '%db_prefix%'
         tags:
             - { name: doctrine.event_subscriber }
+
+    App\Security\LogoutSuccessHandler:
+        arguments:
+            - '@router'
+            - '%locale%'
+
+    App\Command\TranslationInstallCommand:
+        arguments:
+            - '%gibbon_document_root%'

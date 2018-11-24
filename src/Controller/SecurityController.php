@@ -23,12 +23,9 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
  * User: craig
  * Date: 23/11/2018
- * Time: 12:32
+ * Time: 17:57
  */
 namespace App\Controller;
 
@@ -38,23 +35,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class HomeController
+ * Class SecurityController
  * @package App\Controller
  */
-class HomeController extends Controller
+class SecurityController extends Controller
 {
-    /**
-     * home
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/", name="home")
-     */
-    public function home(Request $request)
-    {
-        if (is_null($this->getUser())) {
-            return $this->redirectToRoute('login');
-        }
-    }
     /**
      * home
      *
@@ -64,6 +49,9 @@ class HomeController extends Controller
     public function login(Request $request)
     {
         $form = $this->createForm(LoginType::class);
+
+        $form->handleRequest($request);
+
         return $this->render('Security\login.html.twig',
             [
                 'form' => $form->createView(),
