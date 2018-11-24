@@ -18,6 +18,7 @@
 
 .idea
 *.lock
+*.log
 translations
 gibbon_mobile.yaml
 
