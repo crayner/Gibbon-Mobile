@@ -29,6 +29,7 @@
  */
 namespace App\Form\Manager;
 
+use App\Manager\SettingManager;
 use App\Util\LocaleHelper;
 use Hillrange\Form\Util\ButtonReactInterface;
 use Hillrange\Form\Util\TemplateManagerInterface;
@@ -39,6 +40,20 @@ use Hillrange\Form\Util\TemplateManagerInterface;
  */
 class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
 {
+    /**
+     * @var SettingManager
+     */
+    private $settingManager;
+
+    /**
+     * LoginTypeManager constructor.
+     * @param SettingManager $settingManager
+     */
+    public function __construct(SettingManager $settingManager)
+    {
+        $this->settingManager = $settingManager;
+    }
+
     /**
      * getTranslationsDomain
      *
@@ -125,6 +140,7 @@ class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
                     'type' => 'misc',
                     'icon' => ['fab','google'],
                     'colour' => 'success',
+                    'display' => 'isGoogleOAuthOn',
                 ],
             ],
             'rows' => $this->getRows(),
@@ -157,5 +173,23 @@ class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
 
         ];
         return $rows;
+    }
+
+    /**
+     * isGoogleOAuthOn
+     * @return bool
+     * @throws \Exception
+     */
+    public function isGoogleOAuthOn(): bool
+    {
+        return $this->getSettingManager()->getSettingByScope('System', 'googleOAuth') === 'Y' ? true : false ;
+    }
+
+    /**
+     * @return SettingManager
+     */
+    public function getSettingManager(): SettingManager
+    {
+        return $this->settingManager;
     }
 }

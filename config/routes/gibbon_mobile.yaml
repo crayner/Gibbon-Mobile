@@ -1,11 +1,3 @@
-controllers:
-    resource: ../../src/Controller/
-    prefix:   /{_locale}
-    requirements:
-        _locale: '%locale%'
-    defaults:
-        _locale: en_GB
-    type: annotation
 _home:
     path: /
     controller: App\Special\Controller\LocaleController::home
