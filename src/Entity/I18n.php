@@ -20,17 +20,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Gibbon-Mobile
- *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
  *
  * User: craig
  * Date: 23/11/2018
  * Time: 11:56
  */
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

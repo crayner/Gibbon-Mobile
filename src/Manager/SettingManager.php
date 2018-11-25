@@ -29,10 +29,16 @@
  */
 namespace App\Manager;
 
+use App\Entity\Setting;
+use App\Manager\Traits\EntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class SettingManager
@@ -40,18 +46,39 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class SettingManager implements ContainerAwareInterface
 {
+    use EntityTrait;
+
+    /**
+     * @var string
+     */
+    private $entityName = Setting::class;
+
     /**
      * @var ContainerInterface
      */
     private $container;
 
     /**
-     * SettingManager constructor.
-     * @param ContainerInterface $container
+     * @var ArrayCollection
      */
-    public function __construct(ContainerInterface $container)
+    private $settings;
+
+    /**
+     * SettingManager constructor.
+     * this will overwrite the trait constructor, so it MUST implement the same functions as the trait.
+     * @param ContainerInterface $container
+     * @param MessageManager $messageManager
+     * @throws \Exception
+     */
+    public function __construct(ContainerInterface $container, MessageManager $messageManager)
     {
+        $this->entityManager = $container->get('doctrine')->getManager();
+        $this->messageManager = $messageManager;
+        self::$entityRepository = $this->getRepository();
+        $this->authorizationChecker = $container->get('security.authorization_checker');
+        $this->router = $container->get('router');
         $this->setContainer($container);
+        $this->settings = $this->loadSettingCache();
     }
 
     /**
@@ -70,6 +97,17 @@ class SettingManager implements ContainerAwareInterface
             return $this->request;
         $stack = $this->getContainer()->get('request_stack');
         return $this->request = $stack->getCurrentRequest();
+    }
+
+    /**
+     * hasRequest
+     * @return bool
+     */
+    private function hasRequest()
+    {
+        if ($this->getRequest() instanceof Request)
+            return true;
+        return false;
     }
 
     /**
@@ -109,5 +147,91 @@ class SettingManager implements ContainerAwareInterface
         if ($this->getRequest() && $this->getRequest()->hasSession())
             return $this->session = $this->getRequest()->getSession();
         return null;
+    }
+
+    /**
+     * hasSession
+     * @return bool
+     */
+    public function hasSession(): bool
+    {
+        return $this->hasRequest() ? $this->getRequest()->hasSession() : false ;
+    }
+
+    /**
+     * getSettingByScope
+     * @param string $scope
+     * @param string $name
+     * @return bool|string|null
+     * @throws \Exception
+     */
+    public function getSettingByScope(string $scope, string $name)
+    {
+        $setting = $this->getSettingFromCache($scope, $name) ?: $this->findOneBy(['scope' => $scope, 'name' => $name]);
+        if ($setting instanceof Setting) {
+            return $this->addSettingToCache($setting)->getValue();
+        }
+        return false;
+    }
+
+    /**
+     * addSettingToCache
+     * @param Setting $setting
+     * @return Setting
+     */
+    private function addSettingToCache(Setting $setting, bool $overwrite = false): Setting
+    {
+        $scope = $this->getSettings()->containsKey($setting->getScope()) ?: new ArrayCollection();
+        if ($scope->containsKey($setting->getName()) && ! $overwrite)
+            return $setting;
+        $scope->set($setting->getName(), $setting);
+        $this->settings->set($setting->getScope(), $scope);
+        return $setting;
+    }
+
+    /**
+     * getSettings
+     * @return ArrayCollection
+     */
+    private function getSettings(): ArrayCollection
+    {
+        if (empty($this->settings) || ! $this->settings instanceof $this->settings)
+            $this->settings = new ArrayCollection();
+        return $this->settings;
+    }
+
+    /**
+     * getSettingFromCache
+     * @param string $scope
+     * @param string $name
+     * @return Setting|null
+     */
+    private function getSettingFromCache(string $scope, string $name): ?Setting
+    {
+        if (! $this->getSettings()->containsKey($scope))
+            return null;
+
+        if ($this->getSettings()->get($scope)->containsKey($name))
+            return $this->getSettings()->get($scope)->get($name);
+        return null;
+    }
+
+    /**
+     * loadSettingCache
+     */
+    private function loadSettingCache(): void
+    {
+        if ($this->hasSession())
+            $this->settings = $this->getSession()->get('setting_cache');
+    }
+
+    /**
+     * saveSettingCache
+     * Called by SettingListener onTerminate
+     */
+    public function saveSettingCache(): void
+    {
+        if ($this->hasSession())
+            $this->getSession()->set('setting_cache', $this->settings);
     }
 }

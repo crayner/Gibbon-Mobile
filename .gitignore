@@ -5,10 +5,11 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-.idea
+
+/.idea/
 *.lock
 *.log
-translations
+/translations/
 gibbon_mobile.yaml
 
 ###> symfony/webpack-encore-bundle ###

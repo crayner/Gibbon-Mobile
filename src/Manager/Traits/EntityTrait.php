@@ -332,9 +332,8 @@ trait EntityTrait
 
     /**
      * findOneBy
-     *
      * @param array $criteria
-     * @return null|Object
+     * @return Object|null
      * @throws \Exception
      */
     public function findOneBy(array $criteria)
