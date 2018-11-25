@@ -15,3 +15,5 @@ parameters:
         ROLE_REGISTRAR: [ROLE_PRINCIPAL, ROLE_ADMIN]
         ROLE_SYSTEM_ADMIN: [ROLE_REGISTRAR, ROLE_PARENT]
     gibbon_document_root: 'f:\websites\crayner\Gibbon\'
+    # How often should the translations be copied from Gibbon
+    translation_refresh: 90

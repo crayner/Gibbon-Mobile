@@ -29,6 +29,8 @@
  */
 namespace App\Command;
 
+use App\Entity\Setting;
+use App\Manager\SettingManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -66,11 +68,16 @@ class TranslationInstallCommand extends Command
     private $gibbonDocumentRoot;
 
     /**
+     * @var SettingManager
+     */
+    private $manager;
+
+    /**
      * InstallCommand constructor.
      * @param Finder $finder
      * @param string $gibbonDocumentRoot
      */
-    public function __construct(string $gibbonDocumentRoot)
+    public function __construct(string $gibbonDocumentRoot, SettingManager $manager)
     {
         parent::__construct();
 
@@ -78,6 +85,15 @@ class TranslationInstallCommand extends Command
         $this->gibbonDocumentRoot = $gibbonDocumentRoot;
         $this->filesystem = new Filesystem();
         $this->finder->exclude(['LC_MESSAGES']);
+        $this->manager = $manager;
+    }
+
+    /**
+     * @return SettingManager
+     */
+    public function getSettingManager(): SettingManager
+    {
+        return $this->manager;
     }
 
     /**
@@ -217,6 +233,16 @@ class TranslationInstallCommand extends Command
                 $io->note('Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.');
             }
             $io->success($rows ? 'All translations were successfully installed.' : 'No translations were provided by Gibbon.');
+            $setting = $this->getSettingManager()->getSettingByScope('Mobile', 'translationTransferDate');
+            if (empty($setting)) {
+                $setting = new Setting();
+                $setting->setNameDisplay('Last Translation Transfer Date');
+                $setting->setScope('Mobile');
+                $setting->setName('translationTransferDate');
+                $setting->setDescription('This setting keeps track of the last date the translations were built from the Gibbon source.');
+            }
+            $setting->setValue(serialize(new \DateTime('now')));
+            $this->getSettingManager()->createSetting($setting);
         }
 
         return $exitCode;

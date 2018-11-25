@@ -47,6 +47,7 @@ services:
     App\Command\TranslationInstallCommand:
         arguments:
             - '%gibbon_document_root%'
+            - '@App\Manager\SettingManager'
 
     App\Util\LocaleHelper:
         arguments:

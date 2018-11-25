@@ -29,6 +29,7 @@
  */
 namespace App\Form\Manager;
 
+use App\Entity\Setting;
 use App\Manager\SettingManager;
 use App\Util\LocaleHelper;
 use Hillrange\Form\Util\ButtonReactInterface;
@@ -182,7 +183,8 @@ class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
      */
     public function isGoogleOAuthOn(): bool
     {
-        return $this->getSettingManager()->getSettingByScope('System', 'googleOAuth') === 'Y' ? true : false ;
+        $setting = $this->getSettingManager()->getSettingByScope('System', 'googleOAuth');
+        return $setting instanceof Setting && $setting->getValue() === 'Y' ? true : false ;
     }
 
     /**

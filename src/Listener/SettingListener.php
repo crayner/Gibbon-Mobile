@@ -30,6 +30,10 @@
 namespace App\Listener;
 
 use App\Manager\SettingManager;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
@@ -47,12 +51,19 @@ class SettingListener implements EventSubscriberInterface
     private $manager;
 
     /**
-     * SettingListener constructor.
-     * @param SettingManager $manager
+     * @var ContainerInterface
      */
-    public function __construct(?SettingManager $manager = null)
+    private $container;
+
+    /**
+     * SettingListener constructor.
+     * @param ContainerInterface $container
+     * @param SettingManager|null $manager
+     */
+    public function __construct(ContainerInterface $container, ?SettingManager $manager = null)
     {
         $this->manager = $manager;
+        $this->container = $container;
     }
 
     /**
@@ -71,22 +82,57 @@ class SettingListener implements EventSubscriberInterface
 
     /**
      * onResponse
+     * @param KernelEvent $event
+     * @throws \Exception
      */
     public function onResponse()
     {
-        if ($this->manager instanceof SettingManager)
+        if ($this->manager instanceof SettingManager) {
             $this->manager->saveSettingCache();
+
+            $lastTranslation = $this->manager->getSettingByScope('Mobile', 'translationTransferDate');
+            if ($lastTranslation !== false)
+                $lastTranslation = unserialize($lastTranslation->getValue());
+            if ($lastTranslation === false || ! $lastTranslation instanceof \DateTime || $lastTranslation->diff(new \DateTime('now'), true )->format('%a') > $this->manager->getParameter('translation_refresh', 90)) {
+                $application = new Application($this->getContainer()->get('kernel'));
+                $application->setAutoExit(false);
+
+                $input = new ArrayInput(array(
+                    'command' => 'translation:install',
+                    // (optional) define the value of command arguments
+                    '--relative' => '--relative',
+                ));
+
+                // You can use NullOutput() if you don't need the output
+                $output = new BufferedOutput();
+                $result = $application->run($input, $output);
+
+                // return the output, don't use if you used NullOutput()
+                if ($result !== 0)
+                    trigger_error($output->fetch(), E_USER_ERROR);
+
+                $output->fetch();
+            }
+        }
     }
 
     /**
      * onRequest
+     * @param KernelEvent $event
      */
     public function onRequest(KernelEvent $event)
     {
-        $request = $event->getRequest();
-        if (! $request->hasSession()) {
+        if (! $event->getRequest()->hasSession()) {
             $session = new Session();
             $session->start();
         }
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
     }
 }

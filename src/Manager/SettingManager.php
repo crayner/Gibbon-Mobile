@@ -32,13 +32,10 @@ namespace App\Manager;
 use App\Entity\Setting;
 use App\Manager\Traits\EntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class SettingManager
@@ -169,7 +166,7 @@ class SettingManager implements ContainerAwareInterface
     {
         $setting = $this->getSettingFromCache($scope, $name) ?: $this->findOneBy(['scope' => $scope, 'name' => $name]);
         if ($setting instanceof Setting) {
-            return $this->addSettingToCache($setting)->getValue();
+            return $this->addSettingToCache($setting);
         }
         return false;
     }
@@ -181,7 +178,7 @@ class SettingManager implements ContainerAwareInterface
      */
     private function addSettingToCache(Setting $setting, bool $overwrite = false): Setting
     {
-        $scope = $this->getSettings()->containsKey($setting->getScope()) ?: new ArrayCollection();
+        $scope = $this->getSettings()->containsKey($setting->getScope()) ? $this->getSettings()->get($setting->getScope()) : new ArrayCollection();
         if ($scope->containsKey($setting->getName()) && ! $overwrite)
             return $setting;
         $scope->set($setting->getName(), $setting);
@@ -218,11 +215,13 @@ class SettingManager implements ContainerAwareInterface
 
     /**
      * loadSettingCache
+     * @return ArrayCollection
      */
-    private function loadSettingCache(): void
+    private function loadSettingCache(): ArrayCollection
     {
         if ($this->hasSession())
             $this->settings = $this->getSession()->get('setting_cache');
+        return $this->getSettings();
     }
 
     /**
@@ -233,5 +232,43 @@ class SettingManager implements ContainerAwareInterface
     {
         if ($this->hasSession())
             $this->getSession()->set('setting_cache', $this->settings);
+    }
+
+    /**
+     * createSetting
+     * @param Setting $setting
+     * @param bool $overwrite
+     * @return SettingManager
+     * @throws \Exception
+     */
+    public function createSetting(Setting $setting, bool $overwrite = false): SettingManager
+    {
+        $exists = $this->getSettingByScope($setting->getScope(), $setting->getName());
+        if ($exists instanceof Setting)
+        {
+            $exists->setValue($setting->getValue());
+            if ($overwrite) {
+                $exists->setNameDisplay($setting->getNameDisplay());
+                $exists->setDescription($setting->getDescription());
+                $exists->setName($setting->getName());
+                $exists->setScope($setting->getScope());
+            }
+            $setting = $exists;
+        }
+        $this->getEntityManager()->persist($setting);
+        $this->getEntityManager()->flush();
+        $this->addSettingToCache($setting, true);
+        return $this;
+    }
+
+    /**
+     * getParameter
+     * @param string $name
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getParameter(string $name, $default = null)
+    {
+        return $this->getContainer()->hasParameter($name) ? $this->getContainer()->getParameter($name) : $default ;
     }
 }
