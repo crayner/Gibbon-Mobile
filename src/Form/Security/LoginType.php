@@ -51,6 +51,7 @@ class LoginType extends AbstractType
                 [
                     'attr' => [
                         'placeholder' => 'Username or email',
+                        'autocomplete' => 'username',
                     ],
                     'label' => 'Username or email',
                     'constraints' => [
@@ -62,6 +63,7 @@ class LoginType extends AbstractType
                 [
                     'attr' => [
                         'placeholder' => 'Password',
+                        'autocomplete' => 'current-password',
                     ],
                     'label' => 'Password',
                     'constraints' => [
@@ -93,6 +95,10 @@ class LoginType extends AbstractType
             [
                 'translation' => 'messages',
                 'data_class' => Person::class,
+                'attr' => [
+                    'novalidate' => true,
+                    'id' => $this->getBlockPrefix(),
+                ],
             ]
         );
     }

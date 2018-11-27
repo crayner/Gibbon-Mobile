@@ -1,0 +1,41 @@
+{% trans_default_domain "messages" %}
+
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>{% block title %}{{ 'Gibbon Mobile'|trans }}{% endblock title %}</title>
+
+        {% block stylesheets %}
+        {% endblock stylesheets %}
+    </head>
+    <body>
+    {% block content %}
+        {% block messages %}
+            {% include 'Default/flash.html.twig' %}
+        {% endblock messages %}
+    {% endblock content %}
+    {% block footer %}
+    {% endblock footer %}
+    <div id="coreRender"></div>
+    {% block javascripts %}
+        <script type="application/javascript" language="JavaScript">
+            function cssLinks(){
+                {% set link = encore_entry_css_files('core') %}
+                {% for css in link %}
+                    var newLink = document.createElement("link");
+                    newLink.href = '{{ asset(css) }}'
+                    newLink.rel = 'stylesheet'
+                    newLink.type = 'text/css'
+                    newLink.media = 'screen'
+                    document.head.appendChild(newLink)
+                {% endfor %}
+            }
+            window.addEventListener('load', cssLinks);
+            {% if props is not defined %}{% set props = {} %}{% endif %}
+            window.CORE_PROPS = {{ props|json_encode|raw }}
+        </script>
+        {{ encore_entry_script_tags('core') }}
+    {% endblock javascripts %}
+    </body>
+</html>

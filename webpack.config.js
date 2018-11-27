@@ -18,6 +18,7 @@ Encore
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
     .addEntry('form', './assets/js/form.js')
+    .addEntry('core', './assets/js/core.js')
     .splitEntryChunks()
 
     /*

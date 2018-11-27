@@ -1,8 +1,37 @@
-{% trans_default_domain "Security" %}
-<body>
-<div id="loginForm"></div>
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+{% form_theme form
+    '@HillrangeForm/FormTheme/bootstrap.html.twig'
+%}
+
+{% block content %}
+        <div id="loginForm">
+            {{ form_start(form) }}
+                {% block messages %}{{ parent() }}{% endblock messages %}
+                <div class="container">
+                    <div class="row alert alert-success">
+                        <div class="col-8 lead">{{ 'Sign into Gibbon Mobile'|trans }}</div>
+                        <div class="col-4 text-right">
+                            {{ saveButton({float: {}})|raw }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 card">
+                            {{ form_row(form._username) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 card">
+                            {{ form_row(form._password) }}
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+{% endblock content %}
 
 {% block javascripts %}
-    {{ renderForm(form,manager) }}
-{% endblock %}
-</body>
+    {{ parent() }}
+    {{ renderValidatorScript(fullForm) }}
+{% endblock javascripts %}

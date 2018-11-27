@@ -30,16 +30,15 @@
 namespace App\Form\Manager;
 
 use App\Entity\Setting;
+use App\Manager\MessageManager;
 use App\Manager\SettingManager;
 use App\Util\LocaleHelper;
-use Hillrange\Form\Util\ButtonReactInterface;
-use Hillrange\Form\Util\TemplateManagerInterface;
 
 /**
  * Class LoginTypeManager
  * @package App\Form\Manager
  */
-class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
+class LoginTypeManager
 {
     /**
      * @var SettingManager
@@ -76,16 +75,6 @@ class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
     }
 
     /**
-     * getTargetDivision
-     *
-     * @return string
-     */
-    public function getTargetDivision(): string
-    {
-        return 'loginForm';
-    }
-
-    /**
      * getLocale
      *
      * @return string
@@ -93,87 +82,6 @@ class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
     public function getLocale(): string
     {
         return LocaleHelper::getLocale();
-    }
-
-    /**
-     * getTemplate
-     *
-     * @return array
-     */
-    public function getTemplate(): array
-    {
-        return [
-            'form' => [
-                'url' => '/login/',
-            ],
-            'container' => $this->getContainer(),
-        ];
-    }
-
-    /**
-     * getContainer
-     *
-     * @return array
-     */
-    private function getContainer(): array
-    {
-        $container = [
-            'panel' => $this->getPanel(),
-        ];
-        return $container;
-    }
-
-    /**
-     * getPanel
-     *
-     * @return array
-     */
-    private function getPanel(): array
-    {
-        $panel = [
-            'label' => 'Sign into Gibbon Mobile',
-            'colour' => 'success',
-            'buttons' => [
-                [
-                    'type' => 'save',
-                ],
-                [
-                    'type' => 'misc',
-                    'icon' => ['fab','google'],
-                    'colour' => 'success',
-                    'display' => 'isGoogleOAuthOn',
-                ],
-            ],
-            'rows' => $this->getRows(),
-        ];
-        return $panel;
-    }
-
-    /**
-     * getRows
-     *
-     * @return array
-     */
-    private function getRows(): array
-    {
-        $rows = [
-            [
-                'class' => 'row',
-                'columns' => [
-                    [
-                        'class' => 'col-12 card',
-                        'form' => ['_username' => 'row'],
-                    ],
-                    [
-                        'class' => 'col-12 card',
-                        'form' => ['_password' => 'row'],
-                    ],
-                ],
-            ],
-
-
-        ];
-        return $rows;
     }
 
     /**
@@ -188,10 +96,20 @@ class LoginTypeManager implements TemplateManagerInterface, ButtonReactInterface
     }
 
     /**
+     * getSettingManager
      * @return SettingManager
      */
     public function getSettingManager(): SettingManager
     {
         return $this->settingManager;
+    }
+
+    /**
+     * getMessageManager
+     * @return MessageManager
+     */
+    public function getMessageManager(): MessageManager
+    {
+        return $this->getSettingManager()->getMessageManager();
     }
 }

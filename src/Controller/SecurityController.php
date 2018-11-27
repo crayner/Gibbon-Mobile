@@ -31,9 +31,13 @@ namespace App\Controller;
 
 use App\Form\Manager\LoginTypeManager;
 use App\Form\Security\LoginType;
+use Hillrange\Form\Util\FormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SecurityController
@@ -42,22 +46,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends Controller
 {
     /**
-     * home
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * login
+     * @param Request $request
+     * @param LoginTypeManager $manager
+     * @param FormManager $formManager
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/login/", name="login")
      */
-    public function login(Request $request, LoginTypeManager $manager)
+    public function login(Request $request, LoginTypeManager $manager, AuthenticationUtils $authenticationUtils)
     {
-        $form = $this->createForm(LoginType::class);
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
 
-        $form->handleRequest($request);
+        $form = $this->createForm(LoginType::class);
 
         return $this->render('Security\login.html.twig',
             [
-                'form' => $form,
-                'manager' => $manager,
-                'view' => $form->createView(),
+                'form'      => $form->createView(),
+                'manager'   => $manager,
+                'fullForm'  => $form,
             ]
         );
     }
