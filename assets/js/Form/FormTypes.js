@@ -22,7 +22,9 @@ export default function FormTypes(props) {
 
     let prefix = element.block_prefixes.slice(0).reverse()
 
-    let placeHolder = element.attr && element.attr.placeholder ? element.attr.placeholder : translateMessage(otherProps.translations, 'Enter Text') ;
+    const placeHolder = element.attr && element.attr.placeholder ? element.attr.placeholder : translateMessage(otherProps.translations, 'Enter Text') ;
+
+    const autoComplete = element.attr && element.attr.autocomplete ? element.attr.autocomplete : 'off' ;
 
     const content = prefix.find(type => {
         if (isFunction(type))
@@ -58,6 +60,8 @@ export default function FormTypes(props) {
             return textType()
         case 'time':
             return timeType()
+        case 'password':
+            return passwordType()
         default:
             return FormType()
     }
@@ -69,6 +73,7 @@ export default function FormTypes(props) {
             case 'hidden':
             case 'choice':
             case 'time':
+            case 'password':
             case 'text':
                 return true
             default:
@@ -76,10 +81,15 @@ export default function FormTypes(props) {
         }
     }
 
+    function passwordType() {
+        if (style === 'widget')
+            return textTypeWidget('password')
+        return RenderFormGroup(textTypeWidget('password'), {}, element)
+    }
 
     function textType() {
         if (style === 'widget')
-            return textTypeWidget()
+            return textTypeWidget('text')
         return RenderFormGroup(textTypeWidget('text'), {}, element)
     }
 
@@ -94,6 +104,7 @@ export default function FormTypes(props) {
                 name={element.full_name}
                 label={element.label}
                 onChange={((e) => elementChange(e, element.id, 'text'))}
+                autoComplete={autoComplete}
             />
         )
     }
@@ -112,6 +123,7 @@ export default function FormTypes(props) {
                 placeholder={placeHolder}
                 onChange={((e) => elementChange(e, element.id, 'form'))}
                 className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                autoComplete={autoComplete}
             />
         )
     }
@@ -134,13 +146,14 @@ export default function FormTypes(props) {
             second = element.children[2]
 
         return (
-            <div id={element.id} onChange={((e) => elementChange(e, element.id, 'time'))} autoComplete={'off'} className={'form-inline' + (typeof element.attr.class === 'undefined' ? '' : ' ' + element.attr.class)}>
+            <div id={element.id} onChange={((e) => elementChange(e, element.id, 'time'))} className={'form-inline' + (typeof element.attr.class === 'undefined' ? '' : ' ' + element.attr.class)}>
                 <FormControl
                     componentClass="select"
                     id={hour.id}
                     value={getElementData(hour.id)}
                     className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
                     time-type={'hour'}
+                    autoComplete={autoComplete}
                     onChange={((e) => elementChange(e, 'ignore_me'))}
                 >
                     {
@@ -157,6 +170,7 @@ export default function FormTypes(props) {
                         value={getElementData(minute.id)}
                         time-type={'minute'}
                         className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                        autoComplete={autoComplete}
                         onChange={((e) => elementChange(e, 'ignore_me'))}
                     >
                         {
@@ -173,6 +187,7 @@ export default function FormTypes(props) {
                             value={getElementData(second.id)}
                             time-type={'second'}
                             className={typeof element.attr.class === 'string' ? element.attr.class : undefined }
+                            autoComplete={autoComplete}
                             onChange={((e) => elementChange(e, 'ignore_me'))}
                         >
                             {
@@ -228,6 +243,7 @@ export default function FormTypes(props) {
                         value={getElementData(element.id)}
                         multiple={true}
                         className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
+                        autoComplete={autoComplete}
                         onChange={((e) => elementChange(e, 'ignore_me', 'choice'))}
                     >
                         {getChoiceList(true)}
@@ -240,6 +256,7 @@ export default function FormTypes(props) {
                         value={getElementData(element.id)}
                         multiple={false}
                         className={typeof element.attr.class === 'string' ? element.attr.class : undefined}
+                        autoComplete={autoComplete}
                         onChange={((e) => elementChange(e, element.id, 'choice'))}
                     >
                         {getChoiceList(false)}

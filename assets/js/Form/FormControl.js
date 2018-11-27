@@ -392,14 +392,13 @@ export default class FormControl extends Component {
                         template: this.template,
                     })
                 }).catch(error => {
-                console.error('Error: ', error)
-                this.messages.push({level: 'danger', message: error})
-                this.setState({
-                    form: this.form,
-                    messages: this.messages,
-                    template: this.template,
+                    this.messages.push({level: 'danger', message: error.stack.replace(/\n/g, "<br/>")})
+                    this.setState({
+                        form: this.form,
+                        messages: this.messages,
+                        template: this.template,
+                    })
                 })
-            })
         } else {
             const message = {level: 'dark', message: translateMessage(this.translations, 'All errors must be cleared before the form can be saved!')}
             this.messages.push(message)
