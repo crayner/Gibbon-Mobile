@@ -30,6 +30,7 @@
 namespace App\Listener;
 
 use App\Manager\SettingManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -56,14 +57,21 @@ class SettingListener implements EventSubscriberInterface
     private $container;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * SettingListener constructor.
      * @param ContainerInterface $container
+     * @param LoggerInterface $logger
      * @param SettingManager|null $manager
      */
-    public function __construct(ContainerInterface $container, ?SettingManager $manager = null)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger, ?SettingManager $manager = null)
     {
         $this->manager = $manager;
         $this->container = $container;
+        $this->logger = $logger;
     }
 
     /**
@@ -90,10 +98,12 @@ class SettingListener implements EventSubscriberInterface
         if ($this->manager instanceof SettingManager) {
             $this->manager->saveSettingCache();
 
-            $lastTranslation = $this->manager->getSettingByScope('Mobile', 'translationTransferDate');
+            $lastTranslation = $this->manager->getSettingByScopeByDate('Mobile', 'translationTransferDate');
             if ($lastTranslation !== false)
                 $lastTranslation = unserialize($lastTranslation->getValue());
-            if ($lastTranslation === false || ! $lastTranslation instanceof \DateTime || $lastTranslation->diff(new \DateTime('now'), true )->format('%a') > $this->manager->getParameter('translation_refresh', 90)) {
+            if ($lastTranslation === false || ! $lastTranslation instanceof \DateTime ||
+                $lastTranslation->diff(new \DateTime('now'), true )->format('%a') > $this->manager->getParameter('translation_refresh', 90))
+            {
                 $application = new Application($this->getContainer()->get('kernel'));
                 $application->setAutoExit(false);
 
@@ -112,6 +122,22 @@ class SettingListener implements EventSubscriberInterface
                     trigger_error($output->fetch(), E_USER_ERROR);
 
                 $output->fetch();
+
+                $input = new ArrayInput(array(
+                    'command' => 'setting:install',
+                ));
+
+                // You can use NullOutput() if you don't need the output
+                $output = new BufferedOutput();
+                $result = $application->run($input, $output);
+
+                // return the output, don't use if you used NullOutput()
+                if ($result !== 0)
+                    trigger_error($output->fetch(), E_USER_ERROR);
+
+                $output->fetch();
+
+                $this->logger->notice('Translation and Settings were updated.');
             }
         }
     }

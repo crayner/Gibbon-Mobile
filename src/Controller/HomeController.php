@@ -32,7 +32,7 @@
  */
 namespace App\Controller;
 
-use App\Form\Security\AuthenticateType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,26 +48,11 @@ class HomeController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/", name="home")
+     * @IsGranted("ROLE_USER")
      */
     public function home(Request $request)
     {
-        if (is_null($this->getUser())) {
-            return $this->redirectToRoute('login');
-        }
-    }
-    /**
-     * home
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/login", name="login")
-     */
-    public function login(Request $request)
-    {
-        $form = $this->createForm(AuthenticateType::class);
-        return $this->render('Security\login.html.twig',
-            [
-                'form' => $form->createView(),
-            ]
-        );
+        $this->getUser()->getRoles();
+        dd($this->getUser());
     }
 }

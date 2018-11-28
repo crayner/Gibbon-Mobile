@@ -42,6 +42,11 @@ use Symfony\Component\Validator\Constraints\DateTime;
 abstract class User implements UserInterface, EncoderAwareInterface
 {
     /**
+     * @var array
+     */
+    private $roles = [];
+
+    /**
      * Returns the roles granted to the user.
      *
      *     public function getRoles()
@@ -57,11 +62,14 @@ abstract class User implements UserInterface, EncoderAwareInterface
      */
     public function getRoles(): array
     {
+        if (!empty($this->roles))
+            return $this->roles;
         $roles[] = $this->getMappedRole($this->getPrimaryRole());
+        if ($this->isSystemAdmin())
+            $roles[] = 'ROLE_SYSTEM_ADMIN';
         foreach($this->getAllRolesAsArray() as $role)
-            $roles[] = $this->getMappedRole($role);
-
-        return array_unique($roles);
+                $roles[] = $this->getMappedRole($role);
+        return $this->roles = array_unique($roles);
     }
 
     /**

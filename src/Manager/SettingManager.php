@@ -162,7 +162,7 @@ class SettingManager implements ContainerAwareInterface
      * @return bool|string|null
      * @throws \Exception
      */
-    public function getSettingByScope(string $scope, string $name)
+    public function getSettingByScope(string $scope, string $name, bool $returnEntity = false)
     {
         $setting = $this->getSettingFromCache($scope, $name) ?: $this->findOneBy(['scope' => $scope, 'name' => $name]);
         if ($setting instanceof Setting) {
@@ -174,16 +174,18 @@ class SettingManager implements ContainerAwareInterface
     /**
      * addSettingToCache
      * @param Setting $setting
-     * @return Setting
+     * @param bool $returnEntity
+     * @param bool $overwrite
+     * @return Setting|string|null
      */
-    private function addSettingToCache(Setting $setting, bool $overwrite = false): Setting
+    private function addSettingToCache(Setting $setting, bool $returnEntity = false, bool $overwrite = false)
     {
         $scope = $this->getSettings()->containsKey($setting->getScope()) ? $this->getSettings()->get($setting->getScope()) : new ArrayCollection();
         if ($scope->containsKey($setting->getName()) && ! $overwrite)
-            return $setting;
+            return $returnEntity ? $setting : $setting->getValue();
         $scope->set($setting->getName(), $setting);
         $this->settings->set($setting->getScope(), $scope);
-        return $setting;
+        return $returnEntity ? $setting : $setting->getValue();
     }
 
     /**
@@ -270,5 +272,50 @@ class SettingManager implements ContainerAwareInterface
     public function getParameter(string $name, $default = null)
     {
         return $this->getContainer()->hasParameter($name) ? $this->getContainer()->getParameter($name) : $default ;
+    }
+
+    /**
+     * getSettingByScopeAsInteger
+     * @param string $scope
+     * @param string $name
+     * @param int $default
+     * @return int
+     * @throws \Exception
+     */
+    public function getSettingByScopeAsInteger(string $scope, string $name, int $default = 0): int
+    {
+        if ($result = $this->getSettingByScope($scope, $name) === false || empty($result))
+            return $default;
+        return intval($result);
+    }
+
+    /**
+     * getSettingByScopeAsArray
+     * @param string $scope
+     * @param string $name
+     * @param array $default
+     * @return array
+     * @throws \Exception
+     */
+    function getSettingByScopeAsArray(string $scope, string$name, array $default = []): array
+    {
+        if ($result = $this->getSettingByScope($scope, $name) === false || empty($result))
+            return $default;
+        return explode(',', $result);
+    }
+
+    /**
+     * getSettingByScopeAsArray
+     * @param string $scope
+     * @param string $name
+     * @param array $default
+     * @return array
+     * @throws \Exception
+     */
+    function getSettingByScopeAsDate(string $scope, string$name, ?\DateTime $default = null)
+    {
+        if ($result = $this->getSettingByScope($scope, $name) === false || empty($result))
+            return $default;
+        return unserialize($result);
     }
 }

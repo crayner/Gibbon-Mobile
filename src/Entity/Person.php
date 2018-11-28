@@ -34,7 +34,6 @@ namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 
 /**
  * Class GibbonPerson
@@ -2478,5 +2477,14 @@ class Person extends User
     {
         $this->fields = $fields;
         return $this;
+    }
+
+    /**
+     * isSystemAdmin
+     * @return bool
+     */
+    public function isSystemAdmin(): bool
+    {
+        return $this->getId() === 1;
     }
 }

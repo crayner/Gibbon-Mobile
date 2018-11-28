@@ -27,45 +27,30 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
+namespace App\Security;
 
-namespace App\Listener;
-
-use App\Util\EntityHelper;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * Class HelperListener
- *
- * This class simply pre loads static helpers.
- *
- * @package App\Listener
+ * Class MobileVoter
+ * @package App\Security
  */
-class HelperListener implements EventSubscriberInterface
+class MobileVoter implements VoterInterface
 {
     /**
-     * HelperListener constructor.
-     * @param EntityHelper $helper
+     * vote
+     *
+     * @param TokenInterface $token
+     * @param mixed $subject
+     * @param array $attributes
+     * @return int
+     * @throws \Exception
      */
-    public function __construct(EntityHelper $helper)
+    public function vote(TokenInterface $token, $subject, array $attributes): int
     {
+        dd($token,$subject,$attributes);
+
+        return VoterInterface::ACCESS_ABSTAIN;
     }
-
-    /**
-     * getSubscribedEvents
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        $listeners = [
-            KernelEvents::REQUEST => 'doNothing',
-        ];
-
-        return $listeners;
-    }
-
-    /**
-     * doNothing
-     */
-    public function doNothing(){}
 }
