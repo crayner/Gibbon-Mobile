@@ -26,13 +26,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * User: craig
+ * UserProvider: craig
  * Date: 23/11/2018
  * Time: 11:12
  */
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Null_;
 
 /**
  * Class SchoolYear
@@ -51,6 +52,14 @@ class SchoolYear
     private $id;
 
     /**
+     * @return array
+     */
+    public static function getStatusList(): array
+    {
+        return self::$statusList;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -65,6 +74,108 @@ class SchoolYear
     public function setId(?int $id): SchoolYear
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=9)
+     */
+    private $name;
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     * @return SchoolYear
+     */
+    public function setName(?string $name): SchoolYear
+    {
+        $this->name = mb_substr($name, 0,9);
+        return $this;
+    }
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=8)
+     */
+    private $status = 'Upcoming';
+
+    /**
+     * @var array 
+     */
+    private static $statusList = ['Past', 'Current', 'Upcoming'];
+    
+    /**
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    /**
+     * setStatus
+     * @param string|null $status
+     * @return SchoolYear
+     */
+    public function setStatus(?string $status): SchoolYear
+    {
+        $this->status = in_array($status, self::getStatusList()) ? $status : 'Unknown' ;
+        return $this;
+    }
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="firstDay")
+     */
+    private $firstDay;
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getFirstDay(): ?\DateTime
+    {
+        return $this->firstDay;
+    }
+
+    /**
+     * @param \DateTime|null $firstDay
+     * @return SchoolYear
+     */
+    public function setFirstDay(?\DateTime $firstDay): SchoolYear
+    {
+        $this->firstDay = $firstDay;
+        return $this;
+    }
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="lastDay")
+     */
+    private $lastDay;
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastDay(): ?\DateTime
+    {
+        return $this->lastDay;
+    }
+
+    /**
+     * @param \DateTime|null $lastDay
+     * @return SchoolYear
+     */
+    public function setLastDay(?\DateTime $lastDay): SchoolYear
+    {
+        $this->lastDay = $lastDay;
         return $this;
     }
 }

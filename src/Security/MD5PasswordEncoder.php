@@ -23,32 +23,46 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
  * UserProvider: craig
  * Date: 23/11/2018
- * Time: 11:05
+ * Time: 15:27
  */
+namespace App\Security;
 
-namespace App\Repository;
-
-use App\Entity\House;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 
 /**
- * Class HouseRepository
- * @package App\Repository
+ * Class MD5PasswordEncoder
+ * @package App\Security
  */
-class HouseRepository extends ServiceEntityRepository
+class MD5PasswordEncoder extends BasePasswordEncoder
 {
     /**
-     * HouseRepository constructor.
-     * @param RegistryInterface $registry
+     * Encodes the raw password.
+     *
+     * @param string $raw  The password to encode
+     * @param string $salt The salt
+     *
+     * @return string The encoded password
      */
-    public function __construct(RegistryInterface $registry)
+    public function encodePassword($raw, $salt): string
     {
-        parent::__construct($registry, House::class);
+        return md5($raw);
+    }
+
+    /**
+     * Checks a raw password against an encoded password.
+     *
+     * @param string $encoded An encoded password
+     * @param string $raw     A raw password
+     * @param string $salt    The salt
+     *
+     * @return bool true if the password is valid, false otherwise
+     */
+    public function isPasswordValid($encoded, $raw, $salt): bool
+    {
+        if ($encoded === $this->encodePassword($raw, $salt))
+            return true;
+        return false;
     }
 }

@@ -16,6 +16,17 @@
                             {{ saveButton({float: {}})|raw }}
                         </div>
                     </div>
+                    {% if error %}
+                        <div class="row alert alert-danger">
+                            <div class="col-12">
+                                {{ error.messageKey|trans(error.messageData) }}
+                                {% if app.environment is not same as('prod') %}
+                                    <br/>
+                                    {{ error.message }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="row">
                         <div class="col-12 card">
                             {{ form_row(form._username) }}
@@ -35,3 +46,6 @@
     {{ parent() }}
     {{ renderValidatorScript(fullForm) }}
 {% endblock javascripts %}
+
+
+

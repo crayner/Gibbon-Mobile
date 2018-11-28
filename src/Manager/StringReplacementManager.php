@@ -9,7 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * User: craig
+ * UserProvider: craig
  * Date: 2/08/2018
  * Time: 12:12
  */

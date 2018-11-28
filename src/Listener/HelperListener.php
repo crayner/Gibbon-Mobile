@@ -23,32 +23,49 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * UserProvider: craig
+ * User: craig
  * Date: 23/11/2018
- * Time: 11:05
+ * Time: 15:27
  */
 
-namespace App\Repository;
+namespace App\Listener;
 
-use App\Entity\House;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Util\EntityHelper;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Class HouseRepository
- * @package App\Repository
+ * Class HelperListener
+ *
+ * This class simple pre load static helpers.
+ *
+ * @package App\Listener
  */
-class HouseRepository extends ServiceEntityRepository
+class HelperListener implements EventSubscriberInterface
 {
     /**
-     * HouseRepository constructor.
-     * @param RegistryInterface $registry
+     * HelperListener constructor.
+     * @param EntityHelper $helper
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(EntityHelper $helper)
     {
-        parent::__construct($registry, House::class);
     }
+
+    /**
+     * getSubscribedEvents
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        $listeners = [
+            KernelEvents::REQUEST => 'doNothing',
+        ];
+
+        return $listeners;
+    }
+
+    /**
+     * doNothing
+     */
+    public function doNothing(){}
 }

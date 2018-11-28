@@ -23,21 +23,21 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * User: craig
+ * UserProvider: craig
  * Date: 23/11/2018
  * Time: 17:57
  */
 namespace App\Controller;
 
-use App\Form\Manager\LoginTypeManager;
-use App\Form\Security\LoginType;
+use App\Entity\Person;
+use App\Manager\LoginManager;
+use App\Form\Security\AuthenticateType;
+use App\Util\EntityHelper;
 use Hillrange\Form\Util\FormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class SecurityController
@@ -47,24 +47,30 @@ class SecurityController extends Controller
 {
     /**
      * login
-     * @param Request $request
-     * @param LoginTypeManager $manager
+     * @param LoginManager $manager
      * @param FormManager $formManager
      * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/login/", name="login")
      */
-    public function login(Request $request, LoginTypeManager $manager, AuthenticationUtils $authenticationUtils)
+    public function login(LoginManager $manager, AuthenticationUtils $authenticationUtils, EntityHelper $repository)
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        $form = $this->createForm(LoginType::class);
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        $user = $repository::getRepository(Person::class)->loadUserByUsername($lastUsername) ?: new Person();
+        $user->setUsername($lastUsername);
+
+        $form = $this->createForm(AuthenticateType::class, $user);
 
         return $this->render('Security\login.html.twig',
             [
                 'form'      => $form->createView(),
                 'manager'   => $manager,
                 'fullForm'  => $form,
+                'error'     => $error,
             ]
         );
     }

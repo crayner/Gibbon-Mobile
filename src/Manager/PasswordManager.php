@@ -23,32 +23,27 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
  * UserProvider: craig
  * Date: 23/11/2018
- * Time: 11:05
+ * Time: 15:27
  */
 
-namespace App\Repository;
+namespace App\Manager;
 
-use App\Entity\House;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * Class HouseRepository
- * @package App\Repository
- */
-class HouseRepository extends ServiceEntityRepository
+class PasswordManager
 {
     /**
-     * HouseRepository constructor.
-     * @param RegistryInterface $registry
+     * @var SettingManager
      */
-    public function __construct(RegistryInterface $registry)
+    private $settingManager;
+
+    /**
+     * PasswordManager constructor.
+     * @param SettingManager $settingManager
+     */
+    public function __construct(SettingManager $settingManager)
     {
-        parent::__construct($registry, House::class);
+        $this->settingManager = $settingManager;
     }
 }

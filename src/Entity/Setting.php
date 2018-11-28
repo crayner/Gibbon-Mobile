@@ -22,7 +22,7 @@
  * Gibbon-Mobile
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * User: craig
+ * UserProvider: craig
  * Date: 25/11/2018
  * Time: 10:00
  */

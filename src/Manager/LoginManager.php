@@ -23,22 +23,20 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * User: craig
+ * UserProvider: craig
  * Date: 24/11/2018
  * Time: 08:37
  */
-namespace App\Form\Manager;
+namespace App\Manager;
 
 use App\Entity\Setting;
-use App\Manager\MessageManager;
-use App\Manager\SettingManager;
 use App\Util\LocaleHelper;
 
 /**
- * Class LoginTypeManager
+ * Class LoginManager
  * @package App\Form\Manager
  */
-class LoginTypeManager
+class LoginManager
 {
     /**
      * @var SettingManager
@@ -46,7 +44,7 @@ class LoginTypeManager
     private $settingManager;
 
     /**
-     * LoginTypeManager constructor.
+     * LoginManager constructor.
      * @param SettingManager $settingManager
      */
     public function __construct(SettingManager $settingManager)

@@ -23,32 +23,49 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * UserProvider: craig
+ * User: craig
  * Date: 23/11/2018
- * Time: 11:05
+ * Time: 15:27
  */
+namespace App\Util;
 
-namespace App\Repository;
-
-use App\Entity\House;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class HouseRepository
- * @package App\Repository
+ * Class EntityHelper
+ * @package App\Util
  */
-class HouseRepository extends ServiceEntityRepository
+class EntityHelper
 {
     /**
-     * HouseRepository constructor.
-     * @param RegistryInterface $registry
+     * @var EntityManagerInterface
      */
-    public function __construct(RegistryInterface $registry)
+    private static $entityManager;
+
+    /**
+     * EntityHelper constructor.
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, House::class);
+        self::$entityManager = $entityManager;
+    }
+
+    /**
+     * getRepository
+     * @param string $className
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    public static function getRepository(string $className)
+    {
+        return self::getEntityManager()->getRepository($className);
+    }
+
+    /**
+     * @return EntityManagerInterface
+     */
+    public static function getEntityManager(): EntityManagerInterface
+    {
+        return self::$entityManager;
     }
 }

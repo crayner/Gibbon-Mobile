@@ -23,7 +23,7 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * User: craig
+ * UserProvider: craig
  * Date: 23/11/2018
  * Time: 15:34
  */
@@ -39,10 +39,10 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Class LoginType
+ * Class AuthenticateType
  * @package App\Form\Security
  */
-class LoginType extends AbstractType
+class AuthenticateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -81,7 +81,7 @@ class LoginType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'login';
+        return 'authenticate';
     }
 
     /**

@@ -62,3 +62,10 @@ services:
             - '@App\Manager\SettingManager'
             - '@monolog.logger.translation'
         public: false
+
+    App\Listener\MailerLoggerListener:
+        arguments:
+            - "@monolog.logger.mailer"
+        tags:
+            - { name: monolog.logger, channel: mailer }
+            - { name: "swiftmailer.default.plugin" }

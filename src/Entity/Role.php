@@ -26,12 +26,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * User: craig
+ * UserProvider: craig
  * Date: 23/11/2018
  * Time: 09:33
  */
 namespace App\Entity;
 
+use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +43,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Role
 {
+    use BooleanList;
+    
     /**
      * @var integer|null
      * @ORM\Id
@@ -49,6 +52,30 @@ class Role
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @return array
+     */
+    public static function getRestrictionList(): array
+    {
+        return self::$restrictionList;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypeList(): array
+    {
+        return self::$typeList;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCategoryList(): array
+    {
+        return self::$categoryList;
+    }
 
     /**
      * @return int|null
@@ -65,6 +92,246 @@ class Role
     public function setId(?int $id): Role
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=8)
+     */
+    private $category = 'Staff';
+
+    /**
+     * @var array
+     */
+    private static $categoryList = ['Staff','Student','Parent','Other'];
+
+    /**
+     * @return string
+     */
+    public function getCategory(): string
+    {
+        return $this->category;
+    }
+
+    /**
+     * setCategory
+     * @param string $category
+     * @return Role
+     */
+    public function setCategory(string $category): Role
+    {
+        $this->category = in_array($category, self::getCategoryList()) ? $category : 'Staff';
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=20)
+     */
+    private $name;
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * setName
+     * @param string $name
+     * @return Role
+     */
+    public function setName(string $name): Role
+    {
+        $this->name = mb_substr($name, 0, 20);
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=4, name="nameShort")
+     */
+    private $nameShort;
+
+    /**
+     * @return string
+     */
+    public function getNameShort(): string
+    {
+        return $this->nameShort;
+    }
+
+    /**
+     * setNameShort
+     * @param string $nameShort
+     * @return Role
+     */
+    public function setNameShort(string $nameShort): Role
+    {
+        $this->nameShort = mb_substr($nameShort, 0, 4);
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=4, name="description")
+     */
+    private $description;
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * setDescription
+     * @param string $description
+     * @return Role
+     */
+    public function setDescription(string $description): Role
+    {
+        $this->description = mb_substr($description, 0, 4);
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=4, name="type")
+     */
+    private $type = 'Core';
+
+    /**
+     * @var array
+     */
+    private static $typeList = ['Core', 'Additional'];
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * setType
+     * @param string $type
+     * @return Role
+     */
+    public function setType(string $type): Role
+    {
+        $this->type = in_array($type, self::getTypeList()) ? $type : 'Core';
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="canLoginRole")
+     */
+    private $canLoginRole = 'Y';
+
+    /**
+     * @return string
+     */
+    public function getCanLoginRole(): string
+    {
+        return $this->canLoginRole;
+    }
+
+    /**
+     * setCanLoginRole
+     * @param string $canLoginRole
+     * @return Role
+     */
+    public function setCanLoginRole(string $canLoginRole): Role
+    {
+        $this->canLoginRole = in_array($canLoginRole, self::getBooleanList()) ? $canLoginRole : 'Y';
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="futureYearsLogin")
+     */
+    private $futureYearsLogin = 'Y';
+
+    /**
+     * @return string
+     */
+    public function getFutureYearsLogin(): string
+    {
+        return $this->futureYearsLogin;
+    }
+
+    /**
+     * setFutureYearsLogin
+     * @param string $futureYearsLogin
+     * @return Role
+     */
+    public function setFutureYearsLogin(string $futureYearsLogin): Role
+    {
+        $this->futureYearsLogin = in_array($futureYearsLogin, self::getBooleanList()) ? $futureYearsLogin : 'Y';
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="pastYearsLogin")
+     */
+    private $pastYearsLogin = 'Y';
+
+    /**
+     * @return string
+     */
+    public function getPastYearsLogin(): string
+    {
+        return $this->pastYearsLogin;
+    }
+
+    /**
+     * setPastYearsLogin
+     * @param string $pastYearsLogin
+     * @return Role
+     */
+    public function setPastYearsLogin(string $pastYearsLogin): Role
+    {
+        $this->pastYearsLogin = in_array($pastYearsLogin, self::getBooleanList()) ? $pastYearsLogin : 'Y';
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @ORM\Column(length=10, name="restriction")
+     */
+    private $restriction = 'None';
+
+    /**
+     * @var array
+     */
+    private static $restrictionList = ['None', 'Same Role', 'Admin Only'];
+
+    /**
+     * @return string
+     */
+    public function getRestriction(): string
+    {
+        return $this->restriction;
+    }
+
+    /**
+     * setRestriction
+     * @param string $restriction
+     * @return Role
+     */
+    public function setRestriction(string $restriction): Role
+    {
+        $this->restriction = in_array($restriction, self::getRestrictionList()) ? $restriction : 'None';
         return $this;
     }
 }

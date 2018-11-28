@@ -17,3 +17,14 @@ parameters:
     gibbon_document_root: 'f:\websites\crayner\Gibbon\'
     # How often should the translations be copied from Gibbon
     translation_refresh: 90
+    # Mailer Settings .... @todo
+    mailer_transport: null
+    mailer_host: null
+    mailer_user: null
+    mailer_password: null
+    mailer_spool: { type: memory }
+    mailer_port: 25
+    mailer_encryption: none
+    mailer_auth_mode: plain
+    mailer_sender_name: 'Busybee Web Site'
+    mailer_sender_address: email@some-domain.com

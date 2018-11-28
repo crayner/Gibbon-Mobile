@@ -26,7 +26,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * User: craig
+ * UserProvider: craig
  * Date: 23/11/2018
  * Time: 08:17
  */
@@ -34,6 +34,7 @@ namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 
 /**
  * Class GibbonPerson
@@ -41,7 +42,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\Table(name="Person")
  */
-class Person
+class Person extends User
 {
     use BooleanList;
     /**
@@ -146,7 +147,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=60)
+     * @ORM\Column(length=60, name="firstName")
      */
     private $firstName;
 
@@ -170,7 +171,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=60)
+     * @ORM\Column(length=60, name="preferredName")
      */
     private $preferredName;
 
@@ -194,7 +195,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=150)
+     * @ORM\Column(length=150, name="officialName")
      */
     private $officialName;
 
@@ -218,7 +219,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=60)
+     * @ORM\Column(length=60, name="nameInCharacters")
      */
     private $nameInCharacters;
 
@@ -300,31 +301,31 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="password")
      */
-    private $password;
+    private $MD5Password;
 
     /**
-     * @return null|string
+     * @return string|null
      */
-    public function getPassword(): ?string
+    public function getMD5Password(): ?string
     {
-        return $this->password;
+        return $this->MD5Password;
     }
 
     /**
-     * @param null|string $password
+     * @param string|null $MD5Password
      * @return Person
      */
-    public function setPassword(?string $password): Person
+    public function setMD5Password(?string $MD5Password): Person
     {
-        $this->password = mb_substr($password, 0, 255);
+        $this->MD5Password = $MD5Password;
         return $this;
     }
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="passwordStrong")
      */
     private $passwordStrong;
 
@@ -348,7 +349,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="passwordStrongSalt")
      */
     private $passwordStrongSalt;
 
@@ -372,7 +373,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "N"})
+     * @ORM\Column(length=1, options={"default": "N"}, name="passwordForceReset")
      */
     private $passwordForceReset;
 
@@ -430,7 +431,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "N"})
+     * @ORM\Column(length=1, options={"default": "N"}, name="canLogin")
      */
     private $canLogin;
 
@@ -551,7 +552,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=75)
+     * @ORM\Column(length=75, name="emailAlternate")
      */
     private $emailAlternate;
 
@@ -599,7 +600,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=15)
+     * @ORM\Column(length=15, name="lastIPAddress")
      */
     private $lastIPAddress;
 
@@ -623,7 +624,7 @@ class Person
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, name="lastTimestamp")
      */
     private $lastTimestamp;
 
@@ -647,7 +648,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=15, nullable=true)
+     * @ORM\Column(length=15, nullable=true, name="lastFailIPAddress")
      */
     private $lastFailIPAddress;
 
@@ -671,7 +672,7 @@ class Person
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, name="lastFailTimestamp")
      */
     private $lastFailTimestamp;
 
@@ -695,16 +696,16 @@ class Person
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", columnDefinition="INT(1)", nullable=true)
+     * @ORM\Column(type="smallint", columnDefinition="INT(1)", nullable=true, name="failCount")
      */
     private $failCount;
 
     /**
      * @return int|null
      */
-    public function getFailCount(): ?int
+    public function getFailCount(): int
     {
-        return $this->failCount;
+        return intval($this->failCount);
     }
 
     /**
@@ -743,7 +744,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="address1District")
      */
     private $address1District;
 
@@ -767,7 +768,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="address1Country")
      */
     private $address1Country;
 
@@ -892,7 +893,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, name="phone1CountryCode")
      */
     private $phone1CountryCode;
 
@@ -964,7 +965,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, name="phone2CountryCode")
      */
     private $phone2CountryCode;
 
@@ -1036,7 +1037,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, name="phone3CountryCode")
      */
     private $phone3CountryCode;
 
@@ -1108,7 +1109,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, name="phone4CountryCode")
      */
     private $phone4CountryCode;
 
@@ -1180,7 +1181,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=30, name="languageFirst")
      */
     private $languageFirst;
 
@@ -1204,7 +1205,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=30, name="languageSecond")
      */
     private $languageSecond;
 
@@ -1228,7 +1229,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=30, name="languageThird")
      */
     private $languageThird;
 
@@ -1252,7 +1253,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=30, name="countryOfBirth")
      */
     private $countryOfBirth;
 
@@ -1276,7 +1277,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="birthCertificateScan")
      */
     private $birthCertificateScan;
 
@@ -1372,7 +1373,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="citizenship1PassportScan")
      */
     private $citizenship1PassportScan;
 
@@ -1468,7 +1469,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=30, name="nationalIDCardNumber")
      */
     private $nationalIDCardNumber;
 
@@ -1492,7 +1493,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="nationalIDCardScan")
      */
     private $nationalIDCardScan;
 
@@ -1516,7 +1517,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="residencyStatus")
      */
     private $residencyStatus;
 
@@ -1540,7 +1541,7 @@ class Person
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(nullable=true, type="date")
+     * @ORM\Column(nullable=true, type="date", name="visaExpiryDate")
      */
     private $visaExpiryDate;
 
@@ -1612,7 +1613,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=90)
+     * @ORM\Column(length=90, name="jobTitle")
      */
     private $jobTitle;
 
@@ -1853,7 +1854,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=10)
+     * @ORM\Column(length=10, name="studentID")
      */
     private $studentID;
 
@@ -1877,7 +1878,7 @@ class Person
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", name="dateStart")
      */
     private $dateStart;
 
@@ -1901,7 +1902,7 @@ class Person
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", name="dateEnd")
      */
     private $dateEnd;
 
@@ -1950,7 +1951,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=100, name="lastSchool")
      */
     private $lastSchool;
 
@@ -1974,7 +1975,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=100, name="nextSchool")
      */
     private $nextSchool;
 
@@ -1998,7 +1999,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=50)
+     * @ORM\Column(length=50, name="departureReason")
      */
     private $departureReason;
 
@@ -2046,7 +2047,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", name="transportNotes")
      */
     private $transportNotes;
 
@@ -2070,7 +2071,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", name="calendarFeedPersonal")
      */
     private $calendarFeedPersonal;
 
@@ -2094,7 +2095,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "Y"})
+     * @ORM\Column(length=1, options={"default": "Y"}, name="viewCalendarSchool")
      */
     private $viewCalendarSchool;
 
@@ -2118,7 +2119,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "Y"})
+     * @ORM\Column(length=1, options={"default": "Y"}, name="viewCalendarPersonal")
      */
     private $viewCalendarPersonal;
 
@@ -2142,7 +2143,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "N"})
+     * @ORM\Column(length=1, options={"default": "N"}, name="viewCalendarSpaceBooking")
      */
     private $viewCalendarSpaceBooking;
 
@@ -2191,7 +2192,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=20, name="lockerNumber")
      */
     private $lockerNumber;
 
@@ -2215,7 +2216,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=20, name="vehicleRegistration")
      */
     private $vehicleRegistration;
 
@@ -2239,7 +2240,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="personalBackground")
      */
     private $personalBackground;
 
@@ -2263,7 +2264,7 @@ class Person
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=true, name="messengerLastBubble")
      */
     private $messengerLastBubble;
 
@@ -2311,7 +2312,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255, nullable=true)
+     * @ORM\Column(length=255, nullable=true, name="dayType")
      */
     private $dayType;
 
@@ -2385,7 +2386,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", nullable=true, name="studentAgreements")
      */
     private $studentAgreements;
 
@@ -2409,7 +2410,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, name="googleAPIRefreshToken")
      */
     private $googleAPIRefreshToken;
 
@@ -2433,7 +2434,7 @@ class Person
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "Y"})
+     * @ORM\Column(length=1, options={"default": "Y"}, name="receiveNotificationEmails")
      */
     private $receiveNotificationEmails;
 

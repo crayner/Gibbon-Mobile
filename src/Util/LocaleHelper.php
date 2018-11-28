@@ -23,7 +23,7 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * User: craig
+ * UserProvider: craig
  * Date: 24/11/2018
  * Time: 14:00
  */

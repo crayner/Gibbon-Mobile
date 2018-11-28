@@ -26,13 +26,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * User: craig
+ * UserProvider: craig
  * Date: 23/11/2018
  * Time: 12:32
  */
 namespace App\Controller;
 
-use App\Form\Security\LoginType;
+use App\Form\Security\AuthenticateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,7 +63,7 @@ class HomeController extends Controller
      */
     public function login(Request $request)
     {
-        $form = $this->createForm(LoginType::class);
+        $form = $this->createForm(AuthenticateType::class);
         return $this->render('Security\login.html.twig',
             [
                 'form' => $form->createView(),

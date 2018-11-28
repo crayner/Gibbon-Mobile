@@ -1,6 +1,8 @@
 <?php
-namespace App\Manager;
+namespace App\Security;
 
+use App\Manager\MessageManager;
+use App\Manager\SettingManager;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
@@ -90,7 +92,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 			->fetchUserFromToken($credentials);
 
 		// 1) have they logged in with Google before? Easy!
-/*		$existingUser = $this->em->getRepository(User::class)
+/*		$existingUser = $this->em->getRepository(Person::class)
 			->findOneBy(['googleId' => $googleUser->getId()]);
 		if ($existingUser) {
 			return $existingUser;
@@ -100,7 +102,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$user = $userProvider->loadUserByUsername($this->google_user->getEmail());
 
 		// 3) Maybe you just want to "register" them by creating
-		// a User object
+		// a UserProvider object
 //		$user->setGoogleId($googleUser->getId());
 //		$this->em->persist($user);
 //		$this->em->flush();
@@ -140,7 +142,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
 	{
 		$user = $token->getUser();
-		$this->logger->notice("Google Authentication: User #" . $user->getId() . " (" . $user->getEmail() . ") The user authenticated via Google.");
+		$this->logger->notice("Google Authentication: UserProvider #" . $user->getId() . " (" . $user->getEmail() . ") The user authenticated via Google.");
 
         $user->setUserSetting('google_id', $this->google_user->getId(), 'string');
 
