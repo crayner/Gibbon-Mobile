@@ -37,6 +37,7 @@ use Hillrange\Form\Util\FormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -54,6 +55,9 @@ class SecurityController extends Controller
      */
     public function login(LoginManager $manager, AuthenticationUtils $authenticationUtils, EntityHelper $repository)
     {
+        if ($this->getUser() instanceof UserInterface && !$this->denyAccessUnlessGranted('ROLE_USER'))
+            return $this->redirectToRoute('home');
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -73,5 +77,14 @@ class SecurityController extends Controller
                 'error'     => $error,
             ]
         );
+    }
+
+    /**
+     * logout
+     * @Route("/logout/", name="logout")
+     */
+    public function logout()
+    {
+        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
     }
 }

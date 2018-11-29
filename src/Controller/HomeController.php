@@ -32,6 +32,7 @@
  */
 namespace App\Controller;
 
+use App\Manager\SettingManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,9 +51,8 @@ class HomeController extends Controller
      * @Route("/", name="home")
      * @IsGranted("ROLE_USER")
      */
-    public function home(Request $request)
+    public function home(Request $request, SettingManager $manager)
     {
-        $this->getUser()->getRoles();
-        dd($this->getUser());
+        return $this->render('base.html.twig');
     }
 }

@@ -3,12 +3,24 @@
     "form": {
       "js": [
         "build/runtime.d41d8cd9.js",
-        "build/vendors~0b0d7704.1dd7ca22.js",
-        "build/form.9139019d.js"
+        "build/vendors~eda011b8.29375d69.js",
+        "build/vendors~0b0d7704.c1c4d2eb.js",
+        "build/form.a6ef7742.js"
       ],
       "css": [
-        "build/vendors~0b0d7704.a2780709.css",
-        "build/form.fab1a325.css"
+        "build/vendors~eda011b8.a2780709.css",
+        "build/form.6e0904a2.css"
+      ]
+    },
+    "core": {
+      "js": [
+        "build/runtime.d41d8cd9.js",
+        "build/vendors~eda011b8.29375d69.js",
+        "build/core.80fd0a9a.js"
+      ],
+      "css": [
+        "build/vendors~eda011b8.a2780709.css",
+        "build/core.a2adcf0d.css"
       ]
     }
   }

@@ -1,3 +1,6 @@
 _home:
     path: /
     controller: App\Special\Controller\LocaleController::home
+keep_alive:
+    path: /keep/alive/
+    controller: App\Special\Controller\LocaleController::keepAlive

@@ -62,8 +62,6 @@ abstract class User implements UserInterface, EncoderAwareInterface
      */
     public function getRoles(): array
     {
-        if (!empty($this->roles))
-            return $this->roles;
         $roles[] = $this->getMappedRole($this->getPrimaryRole());
         if ($this->isSystemAdmin())
             $roles[] = 'ROLE_SYSTEM_ADMIN';

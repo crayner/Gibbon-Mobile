@@ -166,7 +166,7 @@ class SettingManager implements ContainerAwareInterface
     {
         $setting = $this->getSettingFromCache($scope, $name) ?: $this->findOneBy(['scope' => $scope, 'name' => $name]);
         if ($setting instanceof Setting) {
-            return $this->addSettingToCache($setting);
+            return $this->addSettingToCache($setting, $returnEntity);
         }
         return false;
     }
@@ -284,7 +284,8 @@ class SettingManager implements ContainerAwareInterface
      */
     public function getSettingByScopeAsInteger(string $scope, string $name, int $default = 0): int
     {
-        if ($result = $this->getSettingByScope($scope, $name) === false || empty($result))
+        $result = $this->getSettingByScope($scope, $name);
+        if (empty($result))
             return $default;
         return intval($result);
     }
@@ -299,7 +300,8 @@ class SettingManager implements ContainerAwareInterface
      */
     function getSettingByScopeAsArray(string $scope, string$name, array $default = []): array
     {
-        if ($result = $this->getSettingByScope($scope, $name) === false || empty($result))
+        $result = $this->getSettingByScope($scope, $name);
+        if (empty($result))
             return $default;
         return explode(',', $result);
     }
@@ -314,7 +316,8 @@ class SettingManager implements ContainerAwareInterface
      */
     function getSettingByScopeAsDate(string $scope, string$name, ?\DateTime $default = null)
     {
-        if ($result = $this->getSettingByScope($scope, $name) === false || empty($result))
+        $result = $this->getSettingByScope($scope, $name);
+        if (empty($result))
             return $default;
         return unserialize($result);
     }

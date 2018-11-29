@@ -98,9 +98,8 @@ class SettingListener implements EventSubscriberInterface
         if ($this->manager instanceof SettingManager) {
             $this->manager->saveSettingCache();
 
-            $lastTranslation = $this->manager->getSettingByScopeByDate('Mobile', 'translationTransferDate');
-            if ($lastTranslation !== false)
-                $lastTranslation = unserialize($lastTranslation->getValue());
+            $lastTranslation = $this->manager->getSettingByScopeAsDate('Mobile', 'translationTransferDate');
+
             if ($lastTranslation === false || ! $lastTranslation instanceof \DateTime ||
                 $lastTranslation->diff(new \DateTime('now'), true )->format('%a') > $this->manager->getParameter('translation_refresh', 90))
             {

@@ -75,3 +75,5 @@ services:
             -   '@service_container'
             -   '@monolog.logger.setting'
             -   '@App\Manager\SettingManager'
+        tags:
+            - { name: monolog.logger, channel: setting }

@@ -5,8 +5,12 @@ import { render } from 'react-dom'
 import "bootstrap/scss/bootstrap.scss";
 import "./vendor/FontAwesome/all"
 import "../css/Form/form.scss"
+import CoreControl from './Core/CoreControl'
+
 
 render(
-    <div>{''}</div>,
+    <CoreControl
+        {...window.CORE_PROPS}
+    />,
     document.getElementById('coreRender')
 )

@@ -1,2 +1,2 @@
 parameters:
-    cookie_lifetime: 500
+    cookie_lifetime: 35

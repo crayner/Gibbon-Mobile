@@ -234,7 +234,7 @@ class TranslationInstallCommand extends Command
                 $io->note('Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.');
             }
             $io->success($rows ? 'All translations were successfully installed.' : 'No translations were provided by Gibbon.');
-            $setting = $this->getSettingManager()->getSettingByScope('Mobile', 'translationTransferDate');
+            $setting = $this->getSettingManager()->getSettingByScope('Mobile', 'translationTransferDate', true);
             if (empty($setting)) {
                 $setting = new Setting();
                 $setting->setNameDisplay('Last Translation Transfer Date');

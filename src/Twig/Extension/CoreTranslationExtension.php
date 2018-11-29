@@ -23,53 +23,63 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * UserProvider: craig
+ * User: craig
  * Date: 23/11/2018
  * Time: 15:27
  */
 namespace App\Twig\Extension;
 
-use App\Manager\SettingManager;
-use App\Util\VersionHelper;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 
 /**
- * Class SettingExtension
+ * Class CoreTranslationExtension
  * @package App\Twig\Extension
  */
-class SettingExtension extends AbstractExtension
+class CoreTranslationExtension extends AbstractExtension
 {
     /**
-     * @var SettingManager
+     * @var TranslatorInterface
      */
-    private $manager;
+    private $translator;
 
     /**
-     * SettingExtension constructor.
-     * @param SettingManager $manager
+     * @return string
      */
-    public function __construct(SettingManager $manager)
+    public function getName()
     {
-        $this->manager = $manager;
+        return 'core_translation_extension';
     }
 
     /**
-     * getFunctions
-     * @return array|\Twig_Function[]
+     * {@inheritdoc}
      */
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('getSettingByScope', array($this->manager, 'getSettingByScope')),
-            new \Twig_SimpleFunction('getVersion', array($this, 'getVersion')),
+            new \Twig_SimpleFunction('coreTranslations', array($this, 'getCoreTranslations')),
         ];
     }
 
     /**
-     * getVersion
-     * @return string
+     * CoreTranslationExtension constructor.
+     * @param TranslatorInterface $translator
      */
-    public function getVersion(){
-        return VersionHelper::VERSION;
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * getCoreTranslations
+     * @return array
+     */
+    public function getCoreTranslations(): array
+    {
+        $translations = [];
+        $translations['Your session is about to expire: you will be logged out shortly.'] = $this->translator->trans('Your session is about to expire: you will be logged out shortly.');
+        $translations['Logout'] = $this->translator->trans('Logout');
+        $translations['Stay Connected'] = $this->translator->trans('Stay Connected');
+        return $translations;
     }
 }

@@ -1,9 +1,14 @@
 {
   "build/runtime.js": "/build/runtime.d41d8cd9.js",
-  "build/form.css": "/build/form.fab1a325.css",
-  "build/form.js": "/build/form.9139019d.js",
-  "build/vendors~0b0d7704.css": "/build/vendors~0b0d7704.a2780709.css",
-  "build/vendors~0b0d7704.js": "/build/vendors~0b0d7704.1dd7ca22.js",
-  "build/form.fab1a325.css.map": "/build/form.fab1a325.css.map",
-  "build/vendors~0b0d7704.a2780709.css.map": "/build/vendors~0b0d7704.a2780709.css.map"
+  "build/vendors~eda011b8.css": "/build/vendors~eda011b8.a2780709.css",
+  "build/vendors~eda011b8.js": "/build/vendors~eda011b8.29375d69.js",
+  "build/core.css": "/build/core.a2adcf0d.css",
+  "build/core.js": "/build/core.80fd0a9a.js",
+  "build/form.css": "/build/form.6e0904a2.css",
+  "build/form.js": "/build/form.a6ef7742.js",
+  "build/vendors~0b0d7704.js": "/build/vendors~0b0d7704.c1c4d2eb.js",
+  "build/core.a2adcf0d.css.map": "/build/core.a2adcf0d.css.map",
+  "build/form.6e0904a2.css.map": "/build/form.6e0904a2.css.map",
+  "build/static/rosella.jpg": "/build/static/rosella.jpg",
+  "build/vendors~eda011b8.a2780709.css.map": "/build/vendors~eda011b8.a2780709.css.map"
 }

@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
-</html>
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+
+{% block content %}
+    <div class="container">
+    <h3 class="alert alert-primary">You arrived at the base template.</h3>
+    </div>
+{% endblock content %}
+    {% block footer %}{{ parent() }}
+        {{ dump() }}
+    {% endblock footer %}

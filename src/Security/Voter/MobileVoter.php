@@ -27,7 +27,7 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-namespace App\Security;
+namespace App\Security\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -49,8 +49,6 @@ class MobileVoter implements VoterInterface
      */
     public function vote(TokenInterface $token, $subject, array $attributes): int
     {
-        dd($token,$subject,$attributes);
-
         return VoterInterface::ACCESS_ABSTAIN;
     }
 }

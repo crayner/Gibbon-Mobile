@@ -10,6 +10,7 @@
         {% endblock stylesheets %}
     </head>
     <body>
+    <div class="container">
     {% block content %}
         {% block messages %}
             {% include 'Default/flash.html.twig' %}
@@ -29,6 +30,7 @@
             </div>
         </div>
     {% endblock footer %}
+    </div>
     <div id="coreRender"></div>
     {% block javascripts %}
         <script type="application/javascript" language="JavaScript">
