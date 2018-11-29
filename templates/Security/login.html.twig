@@ -13,6 +13,9 @@
                     <div class="row alert alert-success">
                         <div class="col-8 lead">{{ 'Login'|trans }}</div>
                         <div class="col-4 text-right">
+                            {% if getSetting('System', 'googleOAuth') is same as('Y') and getParameter('google_client_id')|default('') is not same as('') %}
+                                {{ miscButton({class: 'btn btn-success fab fa-google', title: 'google.oauth', transDomain: 'messages', windowOpen: {route: path('google_oauth')}, style: {}})|raw }}
+                            {% endif %}
                             {{ saveButton({float: {}})|raw }}
                         </div>
                     </div>

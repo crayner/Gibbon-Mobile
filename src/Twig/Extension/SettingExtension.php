@@ -60,7 +60,8 @@ class SettingExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('getSettingByScope', array($this->manager, 'getSettingByScope')),
+            new \Twig_SimpleFunction('getSetting', array($this->manager, 'getSettingByScope')),
+            new \Twig_SimpleFunction('getParameter', array($this->manager, 'getParameter')),
             new \Twig_SimpleFunction('getVersion', array($this, 'getVersion')),
         ];
     }

@@ -27,23 +27,24 @@ security:
                 check_path:             login
                 csrf_parameter:         'authenticate[_token]'
                 csrf_token_id:          authenticate
+                default_target_path:    home
+                use_referer:            true
                 csrf_token_generator:   security.csrf.token_manager
                 username_parameter:     'authenticate[_username]'
                 password_parameter:     'authenticate[_password]'
-                success_handler:        App\Security\LoginSuccessHandler
-                failure_handler:        App\Security\LoginFailureHandler
-            provider:                   security_user_provider
+                failure_path_parameter: login
+                provider:               security_user_provider
             logout:
                 path:                   logout
                 target:                 home
                 success_handler:        App\Security\LogoutSuccessHandler
             remember_me:                false
-            #                secret:               '%env(APP_SECRET)%'
-            #                name:                 '%session_name%_remember_me'
-            #                lifetime:             43200 # 12 hours in seconds
-            #                path:                 /
-            #                secure:               false
-            #                remember_me_parameter: 'login[_remember_me]'
+#                secret:               '%env(APP_SECRET)%'
+#                name:                 '%session_name%_remember_me'
+#                lifetime:             43200 # 12 hours in seconds
+#                path:                 /
+#                secure:               false
+#                remember_me_parameter: 'login[_remember_me]'
             switch_user:                true
             guard:
                 authenticators:

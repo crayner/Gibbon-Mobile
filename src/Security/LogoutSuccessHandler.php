@@ -2,6 +2,7 @@
 namespace App\Security;
 
 use App\Util\LocaleHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -12,7 +13,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 	/**
 	 * @var string
 	 */
-	private $locale = 'en';
+	private $locale = 'en_GB';
 
 	/**
 	 * @var \Twig_Environment
@@ -20,20 +21,26 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 	private $router;
 
     /**
+     * @var LoggerInterface
+     */
+	private $logger;
+
+    /**
      * LogoutSuccessHandler constructor.
      * @param RouterInterface $router
      * @param LocaleHelper $manager
+     * @param LoggerInterface $logger
      * @param string $locale
      */
-	public function __construct(RouterInterface $router, LocaleHelper $manager, string $locale = 'en')
+	public function __construct(RouterInterface $router, LocaleHelper $manager, LoggerInterface $logger, string $locale = 'en_GB')
 	{
 		$this->router = $router;
         $this->locale = $locale;
+        $this->logger = $logger->withName('security');
 	}
 
     /**
      * onLogoutSuccess
-     *
      * @param Request $request
      * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
@@ -48,6 +55,8 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
                 $session->getFlashBag()->setAll($flash);
         }
 		$request->setLocale($this->locale);
+
+        $this->logger->info(sprintf('A user logged out from machine %s', $request->server->get('REMOTE_ADDRESS')));
 
 		return new RedirectResponse($this->router->generate('home'));
 	}

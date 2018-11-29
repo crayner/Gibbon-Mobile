@@ -1,6 +1,18 @@
 _home:
     path: /
     controller: App\Special\Controller\LocaleController::home
-keep_alive:
-    path: /keep/alive/
-    controller: App\Special\Controller\LocaleController::keepAlive
+google_oauth:
+    path: "/connect/google/"
+    controller: App\Special\Controller\OAuthController::connectGoogle
+connect_google_check:
+    path: "/security/oauth2callback/"
+    controller: App\Special\Controller\OAuthController::connectCheckGoogle
+# and then everything else
+controllers:
+    resource: ../../src/Controller/
+    prefix:   /{_locale}
+    requirements:
+        _locale: '%locale%'
+    defaults:
+        _locale: en_GB
+    type: annotation

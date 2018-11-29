@@ -71,7 +71,7 @@ class SettingListener implements EventSubscriberInterface
     {
         $this->manager = $manager;
         $this->container = $container;
-        $this->logger = $logger;
+        $this->logger = $logger->withName('setting');
     }
 
     /**
@@ -144,6 +144,7 @@ class SettingListener implements EventSubscriberInterface
     /**
      * onRequest
      * @param KernelEvent $event
+     * @throws \Exception
      */
     public function onRequest(KernelEvent $event)
     {
@@ -151,6 +152,9 @@ class SettingListener implements EventSubscriberInterface
             $session = new Session();
             $session->start();
         }
+        $file = __DIR__ . DIRECTORY_SEPARATOR .'..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon.yaml';
+        if (realpath($file) &&! file_exists($file))
+            self::onResponse();
     }
 
     /**

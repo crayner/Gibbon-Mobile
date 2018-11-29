@@ -314,11 +314,43 @@ class SettingManager implements ContainerAwareInterface
      * @return array
      * @throws \Exception
      */
-    function getSettingByScopeAsDate(string $scope, string$name, ?\DateTime $default = null)
+    function getSettingByScopeAsDate(string $scope, string $name, ?\DateTime $default = null)
     {
         $result = $this->getSettingByScope($scope, $name);
         if (empty($result))
             return $default;
         return unserialize($result);
+    }
+
+    /**
+     * getSettingByScopeAsBoolean
+     * @param string $scope
+     * @param string $name
+     * @param bool|null $default
+     * @return bool|null
+     * @throws \Exception
+     */
+    function getSettingByScopeAsBoolean(string $scope, string $name, ?bool $default = null)
+    {
+        $result = $this->getSettingByScope($scope, $name);
+        if (empty($result))
+            return $default;
+        return $result === 'Y' ? true : false ;
+    }
+
+    /**
+     * getSettingByScopeAsString
+     * @param string $scope
+     * @param string $name
+     * @param string|null $default
+     * @return string|null
+     * @throws \Exception
+     */
+    function getSettingByScopeAsString(string $scope, string $name, ?string $default = null)
+    {
+        $result = $this->getSettingByScope($scope, $name);
+        if (empty($result))
+            return $default;
+        return strval($result);
     }
 }

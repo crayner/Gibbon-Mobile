@@ -18,9 +18,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class GoogleAuthenticator implements AuthenticatorInterface
 {
+    use TargetPathTrait;
 	/**
 	 * @var ClientRegistry
 	 */
@@ -70,7 +72,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$this->router = $router;
 		$this->messageManager = $messageManager;
 		$this->settingManager = $settingManager;
-		$this->logger = $logger;
+		$this->logger = $logger->withName('security');
 	}
 
 	public function getCredentials(Request $request)
@@ -144,7 +146,8 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$user = $token->getUser();
 		$this->logger->notice("Google Authentication: UserProvider #" . $user->getId() . " (" . $user->getEmail() . ") The user authenticated via Google.");
 
-        $user->setUserSetting('google_id', $this->google_user->getId(), 'string');
+
+		$user->setGoogleAPIRefreshToken($this->google_user->getId());
 
 		$this->em->persist($user);
 		$this->em->flush();
@@ -152,7 +155,9 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		if (null !== $user->getLocale())
 			$request->setLocale($user->getLocale());
 
-		return new RedirectResponse($this->router->generate($this->settingManager->getParameter('security.routes.security_home')));
+        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey))
+            return new RedirectResponse($targetPath);
+        return new RedirectResponse($this->getLoginUrl());
 	}
 
     /**
@@ -225,6 +230,15 @@ class GoogleAuthenticator implements AuthenticatorInterface
 	 */
 	public function supportsRememberMe()
 	{
-		return true;
+		return false;
 	}
+
+    /**
+     * getLoginUrl
+     * @return string
+     */
+    protected function getLoginUrl()
+    {
+        return $this->router->generate('login');
+    }
 }

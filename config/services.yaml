@@ -42,6 +42,7 @@ services:
         arguments:
             - '@router'
             - '@App\Util\LocaleHelper'
+            - '@monolog.logger.security'
             - '%locale%'
 
     App\Command\TranslationInstallCommand:
@@ -69,11 +70,3 @@ services:
         tags:
             - { name: monolog.logger, channel: mailer }
             - { name: "swiftmailer.default.plugin" }
-
-    App\Listener\SettingListener:
-        arguments:
-            -   '@service_container'
-            -   '@monolog.logger.setting'
-            -   '@App\Manager\SettingManager'
-        tags:
-            - { name: monolog.logger, channel: setting }
