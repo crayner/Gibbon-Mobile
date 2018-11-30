@@ -40,7 +40,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ActivityAttendance
 {
-
     /**
      * @var integer|null
      * @ORM\Id
