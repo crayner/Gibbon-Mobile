@@ -83,17 +83,33 @@ class DoctrineSchemaUpdateCommand extends Command
 
         $io->text('Checking entity <info>'.$entityName.'</info>.');
         $io->newLine();
+        $success = true;
         foreach($sqlDiff as $s) {
             $io->text($s);
+            if (mb_strpos($s, "ADD"))
+            {
+                $io->warning('The system is adding an new field.');
+                $io->newLine();
+                $success = false;
+            }
+            if (mb_strpos($s, "DROP"))
+            {
+                $io->warning('The system is dropping a field.');
+                $io->newLine();
+                $success = false;
+            }
             $io->newLine();
         }
 
-        if ($input->getOption('force'))
+        if ($input->getOption('force') && $success)
         {
-            $io->text('Write the changes to the database will be attempted.');
+            $io->note('Write the changes to the database will be attempted.');
             $io->newLine();
             $schemaTool->updateSchema([$metadata], true);
         }
+
+        if ($success)
+            $io->success(sprintf('Looks like "%s" is ready to go.', $entityName));
 
         return $exitCode = 0;
     }
