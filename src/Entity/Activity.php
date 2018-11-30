@@ -39,7 +39,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
  * @ORM\Table(name="Activity")
  */
-
 class Activity
 {
     use BooleanList;

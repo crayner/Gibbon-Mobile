@@ -29,22 +29,22 @@
  */
 namespace App\Repository;
 
-use App\Entity\Activity;
+use App\Entity\ActivityAttendance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class ActivityRepository
+ * Class ActivityAttendanceRepository
  * @package App\Repository
  */
-class ActivityRepository extends ServiceEntityRepository
+class ActivityAttendanceRepository extends ServiceEntityRepository
 {
     /**
-     * ActivityRepository constructor.
+     * ActivityAttendanceRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Activity::class);
+        parent::__construct($registry, ActivityAttendance::class);
     }
 }
