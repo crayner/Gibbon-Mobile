@@ -86,15 +86,21 @@ class DoctrineSchemaUpdateCommand extends Command
         $success = true;
         foreach($sqlDiff as $s) {
             $io->text($s);
-            if (mb_strpos($s, "ADD"))
+            if (mb_strpos($s, "ADD") !== false)
             {
                 $io->warning('The system is adding an new field.');
                 $io->newLine();
                 $success = false;
             }
-            if (mb_strpos($s, "DROP"))
+            if (mb_strpos($s, "DROP") !== false)
             {
-                $io->warning('The system is dropping a field.');
+                $io->warning('The system is dropping a field or index.');
+                $io->newLine();
+                $success = false;
+            }
+            if (mb_strpos($s, "RENAME INDEX") !== false)
+            {
+                $io->warning('The system is changing an index.');
                 $io->newLine();
                 $success = false;
             }
