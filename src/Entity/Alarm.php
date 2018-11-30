@@ -35,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Alarm
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AlarmRepository")
- * @ORM\Table(name="AlarmRepository")
+ * @ORM\Table(name="Alarm")
  */
 class Alarm
 {
