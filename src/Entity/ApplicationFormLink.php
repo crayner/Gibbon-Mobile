@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ApplicationFormLink
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\ApplicationFormLinkRepository")
- * @ORM\Table(name="ApplicationFormLink")
+ * @ORM\Table(name="ApplicationFormLink", uniqueConstraints={@ORM\UniqueConstraint(name="link",columns={"gibbonApplicationFormID1","gibbonApplicationFormID2"})})
  */
 class ApplicationFormLink
 {

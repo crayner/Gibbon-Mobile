@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class AttendanceCode
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AttendanceCodeRepository")
- * @ORM\Table(name="AttendanceCode")
+ * @ORM\Table(name="AttendanceCode", uniqueConstraints={@ORM\UniqueConstraint(name="name",columns={"name"}),@ORM\UniqueConstraint(name="nameShort",columns={"nameShort"})})
  */
 class AttendanceCode
 {
