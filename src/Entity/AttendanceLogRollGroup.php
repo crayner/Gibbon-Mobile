@@ -36,6 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AttendanceLogRollGroupRepository")
  * @ORM\Table(name="AttendanceLogRollGroup")
+ * @ORM\HasLifecycleCallbacks
  */
 class AttendanceLogRollGroup
 {

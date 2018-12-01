@@ -37,6 +37,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\BehaviourLetterRepository")
  * @ORM\Table(name="BehaviourLetter")
+ * @ORM\HasLifecycleCallbacks
  */
 class BehaviourLetter
 {

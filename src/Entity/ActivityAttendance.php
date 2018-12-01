@@ -37,6 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\ActivityAttendanceRepository")
  * @ORM\Table(name="ActivityAttendance")
+ * @ORM\HasLifecycleCallbacks
  */
 class ActivityAttendance
 {
@@ -191,8 +192,8 @@ class ActivityAttendance
     /**
      * updateTimestampTaken
      * @return $this
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
      * @throws \Exception
      */
     public function updateTimestampTaken()

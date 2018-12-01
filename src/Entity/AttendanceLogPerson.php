@@ -36,6 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AttendanceLogPersonRepository")
  * @ORM\Table(name="AttendanceLogPerson", indexes={@ORM\Index(name="date", columns={"date"}),@ORM\Index(name="dateAndPerson", columns={"date","gibbonPersonID"}),@ORM\Index(name="gibbonPersonID", columns={"gibbonPersonID"})})
+ * @ORM\HasLifecycleCallbacks
  */
 class AttendanceLogPerson
 {

@@ -37,6 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AlarmConfirmRepository")
  * @ORM\Table(name="AlarmConfirm")
+ * @ORM\HasLifecycleCallbacks
  */
 class AlarmConfirm
 {
@@ -144,8 +145,8 @@ class AlarmConfirm
      * updateTimestamp
      * @return AlarmConfirm
      * @throws \Exception
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
      */
     public function updateTimestamp()
     {
