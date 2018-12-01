@@ -86,7 +86,7 @@ class Course
      * @var string|null
      * @ORM\Column(length=1)
      */
-    private $map;
+    private $map = 'Y';
 
     /**
      * @var string|null
@@ -222,7 +222,7 @@ class Course
      */
     public function setMap(?string $map): Course
     {
-        $this->map = $map;
+        $this->map = self::checkBoolean($map, 'Y');
         return $this;
     }
 

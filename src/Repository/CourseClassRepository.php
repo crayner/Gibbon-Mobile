@@ -27,23 +27,24 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-namespace App\Entity;
+namespace App\Repository;
 
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\CourseClass;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class Department
- * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\DepartmentRepository")
- * @ORM\Table(name="Department")
+ * Class CourseClassRepository
+ * @package App\Repository
  */
-class Department
+class CourseClassRepository extends ServiceEntityRepository
 {
     /**
-     * @var integer|null
-     * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonDepartmentID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
-     * @ORM\GeneratedValue
+     * CourseClassRepository constructor.
+     * @param RegistryInterface $registry
      */
-    private $id;
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, CourseClass::class);
+    }
 }

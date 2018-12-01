@@ -32,17 +32,17 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Department
+ * Class Scale
  * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\DepartmentRepository")
- * @ORM\Table(name="Department")
+ * @ORM\Entity(repositoryClass="App\Repository\ScaleRepository")
+ * @ORM\Table(name="Scale")
  */
-class Department
+class Scale
 {
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonDepartmentID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="smallint", name="gibbonScaleID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
