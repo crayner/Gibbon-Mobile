@@ -54,7 +54,7 @@ class CrowdAssessDiscuss
      * @ORM\ManyToOne(targetEntity="PlannerEntryHomework")
      * @ORM\JoinColumn(name="gibbonPlannerEntryHomeworkID", referencedColumnName="gibbonPlannerEntryHomeworkID")
      */
-    private $courseClass;
+    private $plannerEntryHomework;
 
     /**
      * @var Person|null
@@ -103,18 +103,18 @@ class CrowdAssessDiscuss
     /**
      * @return PlannerEntryHomework|null
      */
-    public function getCourseClass(): ?PlannerEntryHomework
+    public function getPlannerEntryHomework(): ?PlannerEntryHomework
     {
-        return $this->courseClass;
+        return $this->plannerEntryHomework;
     }
 
     /**
-     * @param PlannerEntryHomework|null $courseClass
+     * @param PlannerEntryHomework|null $plannerEntryHomework
      * @return CrowdAssessDiscuss
      */
-    public function setCourseClass(?PlannerEntryHomework $courseClass): CrowdAssessDiscuss
+    public function setPlannerEntryHomework(?PlannerEntryHomework $plannerEntryHomework): CrowdAssessDiscuss
     {
-        $this->courseClass = $courseClass;
+        $this->plannerEntryHomework = $plannerEntryHomework;
         return $this;
     }
 
