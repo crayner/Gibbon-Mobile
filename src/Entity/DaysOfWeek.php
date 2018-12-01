@@ -29,16 +29,19 @@
  */
 namespace App\Entity;
 
+use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class DaysOfWeek
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\DaysOfWeekRepository")
- * @ORM\Table(name="DaysOfWeek")
+ * @ORM\Table(name="DaysOfWeek", uniqueConstraints={@ORM\UniqueConstraint(name="name",columns={"name", "nameShort"}),@ORM\UniqueConstraint(name="nameShort",columns={"nameShort"}), @ORM\UniqueConstraint(name="sequenceNumber",columns={"sequenceNumber"}) })
  */
 class DaysOfWeek
 {
+    use BooleanList;
+
     /**
      * @var integer|null
      * @ORM\Id
@@ -46,4 +49,52 @@ class DaysOfWeek
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(length=10)
+     */
+    private $name;
+
+    /**
+     * @var string
+     * @ORM\Column(length=4, name="nameShort")
+     */
+    private $nameShort;
+
+    /**
+     * @var integer|null
+     * @ORM\Column(type="smallint", name="sequenceNumber")
+     */
+    private $sequenceNumber;
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="schoolDay")
+     */
+    private $schoolDay = 'Y';
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="time", name="schoolOpen", nullable=true)
+     */
+    private $schoolOpen;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="time", name="schoolStart", nullable=true)
+     */
+    private $schoolStart;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="time", name="schoolEnd", nullable=true)
+     */
+    private $schoolEnd;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="time", name="schoolClose", nullable=true)
+     */
+    private $schoolClose;
 }
