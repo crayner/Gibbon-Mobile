@@ -23,43 +23,28 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * UserProvider: craig
- * Date: 24/11/2018
- * Time: 16:38
+ * User: craig
+ * Date: 23/11/2018
+ * Time: 15:27
  */
-namespace App\Manager\Traits;
+namespace App\Repository;
+
+use App\Entity\ExternalAssessment;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Trait BooleanList
- * @package App\Manager\Traits
+ * Class ExternalAssessmentRepository
+ * @package App\Repository
  */
-trait BooleanList
+class ExternalAssessmentRepository extends ServiceEntityRepository
 {
     /**
-     * @var array
+     * ExternalAssessmentRepository constructor.
+     * @param RegistryInterface $registry
      */
-    private static $booleanList = [
-        'Y',
-        'N',
-    ];
-
-    /**
-     * getBooleanList
-     * @return array
-     */
-    public static function getBooleanList(): array
+    public function __construct(RegistryInterface $registry)
     {
-        return self::$booleanList;
-    }
-
-    /**
-     * checkBoolean
-     * @param string $value
-     * @param string $default
-     * @return string
-     */
-    private static function checkBoolean(string $value, string $default = 'Y')
-    {
-        return in_array($value, self::getBooleanList()) ? $value : $default;
+        parent::__construct($registry, ExternalAssessment::class);
     }
 }
