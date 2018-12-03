@@ -27,22 +27,23 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class FamilyChild
+ * Class FamilyRelationship
  * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\FamilyChildRepository")
- * @ORM\Table(name="FamilyChild", indexes={@ORM\Index(name="gibbonFamilyIndex", columns={"gibbonFamilyID"}),@ORM\Index(name="gibbonPersonIndex", columns={"gibbonPersonID"})})
+ * @ORM\Entity(repositoryClass="App\Repository\FamilyRelationshipRepository")
+ * @ORM\Table(name="FamilyRelationship")
  */
-class FamilyChild
+class FamilyRelationship
 {
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonFamilyChildID", columnDefinition="INT(8) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonFamilyRelationshipID", columnDefinition="INT(9) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -57,15 +58,22 @@ class FamilyChild
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID1", referencedColumnName="gibbonPersonID")
      */
-    private $person;
+    private $person1;
+
+    /**
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonID2", referencedColumnName="gibbonPersonID")
+     */
+    private $person2;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(length=50)
      */
-    private $comment;
+    private $relationship;
 
     /**
      * @return int|null
@@ -77,9 +85,9 @@ class FamilyChild
 
     /**
      * @param int|null $id
-     * @return FamilyChild
+     * @return FamilyRelationship
      */
-    public function setId(?int $id): FamilyChild
+    public function setId(?int $id): FamilyRelationship
     {
         $this->id = $id;
         return $this;
@@ -95,9 +103,9 @@ class FamilyChild
 
     /**
      * @param Family|null $family
-     * @return FamilyChild
+     * @return FamilyRelationship
      */
-    public function setFamily(?Family $family): FamilyChild
+    public function setFamily(?Family $family): FamilyRelationship
     {
         $this->family = $family;
         return $this;
@@ -106,36 +114,54 @@ class FamilyChild
     /**
      * @return Person|null
      */
-    public function getPerson(): ?Person
+    public function getPerson1(): ?Person
     {
-        return $this->person;
+        return $this->person1;
     }
 
     /**
-     * @param Person|null $person
-     * @return FamilyChild
+     * @param Person|null $person1
+     * @return FamilyRelationship
      */
-    public function setPerson(?Person $person): FamilyChild
+    public function setPerson1(?Person $person1): FamilyRelationship
     {
-        $this->person = $person;
+        $this->person1 = $person1;
+        return $this;
+    }
+
+    /**
+     * @return Person|null
+     */
+    public function getPerson2(): ?Person
+    {
+        return $this->person2;
+    }
+
+    /**
+     * @param Person|null $person2
+     * @return FamilyRelationship
+     */
+    public function setPerson2(?Person $person2): FamilyRelationship
+    {
+        $this->person2 = $person2;
         return $this;
     }
 
     /**
      * @return string|null
      */
-    public function getComment(): ?string
+    public function getRelationship(): ?string
     {
-        return $this->comment;
+        return $this->relationship;
     }
 
     /**
-     * @param string|null $comment
-     * @return FamilyChild
+     * @param string|null $relationship
+     * @return FamilyRelationship
      */
-    public function setComment(?string $comment): FamilyChild
+    public function setRelationship(?string $relationship): FamilyRelationship
     {
-        $this->comment = $comment;
+        $this->relationship = $relationship;
         return $this;
     }
 }

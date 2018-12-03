@@ -55,7 +55,7 @@ class FamilyAdult
      * @ORM\ManyToOne(targetEntity="Family")
      * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID")
      */
-    private $Family;
+    private $family;
 
     /**
      * @var Person|null
@@ -129,16 +129,16 @@ class FamilyAdult
      */
     public function getFamily(): ?Family
     {
-        return $this->Family;
+        return $this->family;
     }
 
     /**
-     * @param Family|null $Family
+     * @param Family|null $family
      * @return FamilyAdult
      */
-    public function setFamily(?Family $Family): FamilyAdult
+    public function setFamily(?Family $family): FamilyAdult
     {
-        $this->Family = $Family;
+        $this->family = $family;
         return $this;
     }
 
