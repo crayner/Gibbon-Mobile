@@ -41,6 +41,85 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FinanceFee
 {
+    use BooleanList;
+
+    /**
+     * @var integer|null
+     * @ORM\Id()
+     * @ORM\Column(type="integer", name="gibbonFinanceFeeID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var SchoolYear|null
+     * @ORM\ManyToOne(targetEntity="SchoolYear")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     */
+    private $schoolYear;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=100)
+     */
+    private $name;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=6, name="nameShort")
+     */
+    private $nameShort;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=1)
+     */
+    private $active = 'Y';
+
+    /**
+     * @var FinanceFeeCategory|null
+     * @ORM\ManyToOne(targetEntity="FinanceFeeCategory")
+     * @ORM\JoinColumn(name="gibbonFinanceFeeCategoryID", referencedColumnName="gibbonFinanceFeeCategoryID")
+     */
+    private $financeFeeCategory;
+
+    /**
+     * @var float|null
+     * @ORM\Column(type="float")
+     */
+    private $fee;
+
+    /**
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     */
+    private $personCreator;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", name="timestampCreator", nullable=true)
+     */
+    private $timestampCreator;
+
+    /**
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
+     */
+    private $personUpdate;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", name="timestampUpdate", nullable=true)
+     */
+    private $timestampUpdate;
     /**
      * @return int|null
      */
@@ -145,7 +224,7 @@ class FinanceFee
      */
     public function setActive(?string $active): FinanceFee
     {
-        $this->active = $active;
+        $this->active = self::checkBoolean($active);
         return $this;
     }
 
@@ -181,7 +260,7 @@ class FinanceFee
      */
     public function setFee(?float $fee): FinanceFee
     {
-        $this->fee = $fee;
+        $this->fee = number_format($fee, 2);
         return $this;
     }
 
@@ -215,9 +294,9 @@ class FinanceFee
      * @param \DateTime|null $timestampCreator
      * @return FinanceFee
      */
-    public function setTimestampCreator(?\DateTime $timestampCreator): FinanceFee
+    public function setTimestampCreator(?\DateTime $timestampCreator = null): FinanceFee
     {
-        $this->timestampCreator = $timestampCreator;
+        $this->timestampCreator = $timestampCreator ?: new \DateTime('now') ;
         return $this;
     }
 
@@ -248,91 +327,15 @@ class FinanceFee
     }
 
     /**
+     * setTimestampUpdate
      * @param \DateTime|null $timestampUpdate
      * @return FinanceFee
+     * @throws \Exception
+     * @ORM\PreUpdate()
      */
-    public function setTimestampUpdate(?\DateTime $timestampUpdate): FinanceFee
+    public function setTimestampUpdate(?\DateTime $timestampUpdate = null): FinanceFee
     {
-        $this->timestampUpdate = $timestampUpdate;
+        $this->timestampUpdate = $timestampUpdate ?: new \DateTime('now');
         return $this;
     }
-    use BooleanList;
-
-    /**
-     * @var integer|null
-     * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonFinanceFeeID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
-     * @ORM\GeneratedValue
-     */
-    private $id;
-
-    /**
-     * @var SchoolYear|null
-     * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
-     */
-    private $schoolYear;
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=100)
-     */
-    private $name;
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=6, name="nameShort")
-     */
-    private $nameShort;
-
-    /**
-     * @var string|null
-     * @ORM\Column(type="text")
-     */
-    private $description;
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=1)
-     */
-    private $active = 'Y';
-
-    /**
-     * @var FinanceFeeCategory|null
-     * @ORM\ManyToOne(targetEntity="FinanceFeeCategory")
-     * @ORM\JoinColumn(name="gibbonFinanceFeeCategoryID", referencedColumnName="gibbonFinanceFeeCategoryID")
-     */
-    private $financeFeeCategory;
-
-    /**
-     * @var float|null
-     * @ORM\Column(type="float")
-     */
-    private $fee;
-
-    /**
-     * @var Person|null
-     * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
-     */
-    private $personCreator;
-
-    /**
-     * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampCreator", nullable=true)
-     */
-    private $timestampCreator;
-
-    /**
-     * @var Person|null
-     * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
-     */
-    private $personUpdate;
-
-    /**
-     * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampUpdate", nullable=true)
-     */
-    private $timestampUpdate;
 }
