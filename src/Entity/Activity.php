@@ -434,7 +434,7 @@ class Activity
 
     /**
      * @var float|null
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="decimal", precision=8, scale=2, nullable=true)
      */
     private $payment;
 

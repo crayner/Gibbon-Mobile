@@ -90,7 +90,7 @@ class FinanceExpense
 
     /**
      * @var float|null
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=12, scale=2)
      */
     private $cost;
 
@@ -136,7 +136,7 @@ class FinanceExpense
 
     /**
      * @var float|null
-     * @ORM\Column(type="float", nullable=true, name="paymentAmount")
+     * @ORM\Column(type="decimal", precision=12, scale=2, nullable=true, name="paymentAmount")
      */
     private $paymentAmount;
 

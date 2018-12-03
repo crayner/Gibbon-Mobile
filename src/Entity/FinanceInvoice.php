@@ -137,7 +137,7 @@ class FinanceInvoice
 
     /**
      * @var float|null
-     * @ORM\Column(type="float", nullable=true, name="paidAmount", options={"comment": "The current running total amount paid to this invoice"})
+     * @ORM\Column(type="decimal", precision=13, scale=2, nullable=true, name="paidAmount", options={"comment": "The current running total amount paid to this invoice"})
      */
     private $paidAmount;
 

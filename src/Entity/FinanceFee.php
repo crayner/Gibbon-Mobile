@@ -91,7 +91,7 @@ class FinanceFee
 
     /**
      * @var float|null
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=12, scale=2)
      */
     private $fee;
 

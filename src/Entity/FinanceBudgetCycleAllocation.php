@@ -63,7 +63,7 @@ class FinanceBudgetCycleAllocation
 
     /**
      * @var float
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=14, scale=2)
      */
     private $value = 0.00;
 
