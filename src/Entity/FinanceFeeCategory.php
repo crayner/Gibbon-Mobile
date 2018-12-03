@@ -48,4 +48,54 @@ class FinanceFeeCategory
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=100)
+     */
+    private $name;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=6, name="nameShort")
+     */
+    private $nameShort;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=1)
+     */
+    private $active = 'Y';
+
+    /**
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     */
+    private $personCreator;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", name="timestampCreator", nullable=true)
+     */
+    private $timestampCreator;
+
+    /**
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
+     */
+    private $personUpdate;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", name="timestampUpdate", nullable=true)
+     */
+    private $timestampUpdate;
 }

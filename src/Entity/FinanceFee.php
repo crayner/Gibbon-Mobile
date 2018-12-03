@@ -120,6 +120,7 @@ class FinanceFee
      * @ORM\Column(type="datetime", name="timestampUpdate", nullable=true)
      */
     private $timestampUpdate;
+
     /**
      * @return int|null
      */
