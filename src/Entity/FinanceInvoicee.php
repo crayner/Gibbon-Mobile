@@ -23,43 +23,27 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * UserProvider: craig
- * Date: 24/11/2018
- * Time: 16:38
+ * User: craig
+ * Date: 23/11/2018
+ * Time: 15:27
  */
-namespace App\Manager\Traits;
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Trait BooleanList
- * @package App\Manager\Traits
+ * Class FinanceInvoicee
+ * @package App\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\FinanceInvoiceeRepository")
+ * @ORM\Table(name="FinanceInvoicee")
  */
-trait BooleanList
+class FinanceInvoicee
 {
     /**
-     * @var array
+     * @var integer|null
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="gibbonFinanceInvoiceeID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\GeneratedValue
      */
-    private static $booleanList = [
-        'Y',
-        'N',
-    ];
-
-    /**
-     * getBooleanList
-     * @return array
-     */
-    public static function getBooleanList(): array
-    {
-        return self::$booleanList;
-    }
-
-    /**
-     * checkBoolean
-     * @param string $value
-     * @param string|null $default
-     * @return string|null
-     */
-    private static function checkBoolean(string $value, ?string $default = 'Y')
-    {
-        return in_array($value, self::getBooleanList()) ? $value : $default;
-    }
+    private $id;
 }
