@@ -267,12 +267,15 @@ class FinanceBillingSchedule
     }
 
     /**
+     * setTimestampCreator
      * @param \DateTime|null $timestampCreator
      * @return FinanceBillingSchedule
+     * @throws \Exception
+     * @ORM\PrePersist()
      */
-    public function setTimestampCreator(?\DateTime $timestampCreator): FinanceBillingSchedule
+    public function setTimestampCreator(?\DateTime $timestampCreator = null): FinanceBillingSchedule
     {
-        $this->timestampCreator = $timestampCreator;
+        $this->timestampCreator = $timestampCreator ?: new \DateTime('now');
         return $this;
     }
 
@@ -303,12 +306,15 @@ class FinanceBillingSchedule
     }
 
     /**
+     * setTimestampUpdate
      * @param \DateTime|null $timestampUpdate
      * @return FinanceBillingSchedule
+     * @throws \Exception
+     * @ORM\PreUpdate()
      */
-    public function setTimestampUpdate(?\DateTime $timestampUpdate): FinanceBillingSchedule
+    public function setTimestampUpdate(?\DateTime $timestampUpdate = null): FinanceBillingSchedule
     {
-        $this->timestampUpdate = $timestampUpdate;
+        $this->timestampUpdate = $timestampUpdate ?: new \DateTime('now');
         return $this;
     }
 }

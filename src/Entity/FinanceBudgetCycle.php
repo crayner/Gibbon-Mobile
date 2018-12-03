@@ -34,46 +34,57 @@ use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class FinanceBudget
+ * Class FinanceBudgetCycle
  * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\FinanceBudgetRepository")
- * @ORM\Table(name="FinanceBudget", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"}), @ORM\UniqueConstraint(name="nameShort", columns={"nameShort"})})
+ * @ORM\Entity(repositoryClass="App\Repository\FinanceBudgetCycleRepository")
+ * @ORM\Table(name="FinanceBudgetCycle", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})})
  */
-class FinanceBudget
+class FinanceBudgetCycle
 {
     use BooleanList;
 
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonFinanceBudgetID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonFinanceBudgetCycleID", columnDefinition="INT(9) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=7)
      */
     private $name;
 
     /**
      * @var string|null
-     * @ORM\Column(length=8, name="nameShort")
+     * @ORM\Column(length=7)
      */
-    private $nameShort;
+    private $status = 'Upcoming';
 
     /**
-     * @var string|null
-     * @ORM\Column(length=1)
+     * @var array
      */
-    private $active = 'Y';
+    private static $statusList = ['Past', 'Current', 'Upcoming'];
 
     /**
-     * @var string|null
-     * @ORM\Column()
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="dateStart")
      */
-    private $category;
+    private $dateStart;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="dateEnd")
+     */
+    private $dateEnd;
+
+    /**
+     * @var integer|null
+     * @ORM\Column(type="integer", name="sequenceNumber", columnDefinition="INT(6)")
+     */
+    private $sequenceNumber;
 
     /**
      * @var Person|null
@@ -111,9 +122,9 @@ class FinanceBudget
 
     /**
      * @param int|null $id
-     * @return FinanceBudget
+     * @return FinanceBudgetCycle
      */
-    public function setId(?int $id): FinanceBudget
+    public function setId(?int $id): FinanceBudgetCycle
     {
         $this->id = $id;
         return $this;
@@ -129,9 +140,9 @@ class FinanceBudget
 
     /**
      * @param string|null $name
-     * @return FinanceBudget
+     * @return FinanceBudgetCycle
      */
-    public function setName(?string $name): FinanceBudget
+    public function setName(?string $name): FinanceBudgetCycle
     {
         $this->name = $name;
         return $this;
@@ -140,54 +151,72 @@ class FinanceBudget
     /**
      * @return string|null
      */
-    public function getNameShort(): ?string
+    public function getStatus(): ?string
     {
-        return $this->nameShort;
+        return $this->status;
     }
 
     /**
-     * @param string|null $nameShort
-     * @return FinanceBudget
+     * @param string|null $status
+     * @return FinanceBudgetCycle
      */
-    public function setNameShort(?string $nameShort): FinanceBudget
+    public function setStatus(?string $status): FinanceBudgetCycle
     {
-        $this->nameShort = $nameShort;
+        $this->status = $status;
         return $this;
     }
 
     /**
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getActive(): ?string
+    public function getDateStart(): ?\DateTime
     {
-        return $this->active;
+        return $this->dateStart;
     }
 
     /**
-     * @param string|null $active
-     * @return FinanceBudget
+     * @param \DateTime|null $dateStart
+     * @return FinanceBudgetCycle
      */
-    public function setActive(?string $active): FinanceBudget
+    public function setDateStart(?\DateTime $dateStart): FinanceBudgetCycle
     {
-        $this->active = self::checkBoolean($active, 'Y');
+        $this->dateStart = $dateStart;
         return $this;
     }
 
     /**
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getCategory(): ?string
+    public function getDateEnd(): ?\DateTime
     {
-        return $this->category;
+        return $this->dateEnd;
     }
 
     /**
-     * @param string|null $category
-     * @return FinanceBudget
+     * @param \DateTime|null $dateEnd
+     * @return FinanceBudgetCycle
      */
-    public function setCategory(?string $category): FinanceBudget
+    public function setDateEnd(?\DateTime $dateEnd): FinanceBudgetCycle
     {
-        $this->category = $category;
+        $this->dateEnd = $dateEnd;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSequenceNumber(): ?int
+    {
+        return $this->sequenceNumber;
+    }
+
+    /**
+     * @param int|null $sequenceNumber
+     * @return FinanceBudgetCycle
+     */
+    public function setSequenceNumber(?int $sequenceNumber): FinanceBudgetCycle
+    {
+        $this->sequenceNumber = $sequenceNumber;
         return $this;
     }
 
@@ -201,9 +230,9 @@ class FinanceBudget
 
     /**
      * @param Person|null $personCreator
-     * @return FinanceBudget
+     * @return FinanceBudgetCycle
      */
-    public function setPersonCreator(?Person $personCreator): FinanceBudget
+    public function setPersonCreator(?Person $personCreator): FinanceBudgetCycle
     {
         $this->personCreator = $personCreator;
         return $this;
@@ -220,11 +249,11 @@ class FinanceBudget
     /**
      * setTimestampCreator
      * @param \DateTime|null $timestampCreator
-     * @return FinanceBudget
+     * @return FinanceBudgetCycle
      * @throws \Exception
      * @ORM\PrePersist()
      */
-    public function setTimestampCreator(?\DateTime $timestampCreator = null): FinanceBudget
+    public function setTimestampCreator(?\DateTime $timestampCreator = null): FinanceBudgetCycle
     {
         $this->timestampCreator = $timestampCreator ?: new \DateTime('now');
         return $this;
@@ -240,9 +269,9 @@ class FinanceBudget
 
     /**
      * @param Person|null $personUpdater
-     * @return FinanceBudget
+     * @return FinanceBudgetCycle
      */
-    public function setPersonUpdater(?Person $personUpdater): FinanceBudget
+    public function setPersonUpdater(?Person $personUpdater): FinanceBudgetCycle
     {
         $this->personUpdater = $personUpdater;
         return $this;
@@ -259,11 +288,11 @@ class FinanceBudget
     /**
      * setTimestampUpdate
      * @param \DateTime|null $timestampUpdate
-     * @return FinanceBudget
+     * @return FinanceBudgetCycle
      * @throws \Exception
      * @ORM\PreUpdate()
      */
-    public function setTimestampUpdate(?\DateTime $timestampUpdate = null): FinanceBudget
+    public function setTimestampUpdate(?\DateTime $timestampUpdate = null): FinanceBudgetCycle
     {
         $this->timestampUpdate = $timestampUpdate ?: new \DateTime('now');
         return $this;

@@ -29,22 +29,22 @@
  */
 namespace App\Repository;
 
-use App\Entity\FinanceBudget;
+use App\Entity\FinanceBudgetCycle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class FinanceBudgetRepository
+ * Class FinanceBudgetCycleRepository
  * @package App\Repository
  */
-class FinanceBudgetRepository extends ServiceEntityRepository
+class FinanceBudgetCycleRepository extends ServiceEntityRepository
 {
     /**
-     * FinanceBudgetRepository constructor.
+     * FinanceBudgetCycleRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, FinanceBudget::class);
+        parent::__construct($registry, FinanceBudgetCycle::class);
     }
 }
