@@ -46,7 +46,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class DoctrineSchemaUpdateCommand extends Command
 {
-    protected static $defaultName = 'gibbon:schema:update';
+    protected static $defaultName = 'legacy:schema:update';
 
     /**
      * @var EntityManagerInterface
