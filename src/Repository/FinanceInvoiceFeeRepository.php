@@ -29,22 +29,22 @@
  */
 namespace App\Repository;
 
-use App\Entity\FinanceInvoiceeUpdate;
+use App\Entity\FinanceInvoiceFee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class FinanceInvoiceeUpdateRepository
+ * Class FinanceInvoiceFeeRepository
  * @package App\Repository
  */
-class FinanceInvoiceeUpdateRepository extends ServiceEntityRepository
+class FinanceInvoiceFeeRepository extends ServiceEntityRepository
 {
     /**
-     * FinanceInvoiceeUpdateRepository constructor.
+     * FinanceInvoiceFeeRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, FinanceInvoiceeUpdate::class);
+        parent::__construct($registry, FinanceInvoiceFee::class);
     }
 }
