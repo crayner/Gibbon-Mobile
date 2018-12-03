@@ -37,8 +37,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\FinanceExpenseRepository")
  * @ORM\Table(name="FinanceExpense")
+ * @ORM\HasLifecycleCallbacks
  */
-
 class FinanceExpense
 {
     use BooleanList;

@@ -36,6 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\FinanceExpenseApproverRepository")
  * @ORM\Table(name="FinanceExpenseApprover")
+ * @ORM\HasLifecycleCallbacks
  */
 
 class FinanceExpenseApprover
