@@ -44,7 +44,7 @@ class CourseClass
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonCourseClassID", columnDefinition="INT(3) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonCourseClassID", columnDefinition="INT(8) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
