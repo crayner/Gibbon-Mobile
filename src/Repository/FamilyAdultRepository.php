@@ -29,22 +29,22 @@
  */
 namespace App\Repository;
 
-use App\Entity\Family;
+use App\Entity\FamilyAdult;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class FamilyRepository
+ * Class FamilyAdultRepository
  * @package App\Repository
  */
-class FamilyRepository extends ServiceEntityRepository
+class FamilyAdultRepository extends ServiceEntityRepository
 {
     /**
-     * FamilyRepository constructor.
+     * FamilyAdultRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Family::class);
+        parent::__construct($registry, FamilyAdult::class);
     }
 }
