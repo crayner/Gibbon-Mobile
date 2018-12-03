@@ -28,6 +28,7 @@
  * Time: 15:27
  */
 namespace App\Entity;
+
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
