@@ -29,15 +29,15 @@
  */
 namespace App\Repository;
 
-use App\Entity\Module;
+use App\Entity\Notification;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class ModuleRepository
+ * Class NotificationRepository
  * @package App\Repository
  */
-class ModuleRepository extends ServiceEntityRepository
+class NotificationRepository extends ServiceEntityRepository
 {
     /**
      * ApplicationFormRepository constructor.
@@ -45,6 +45,6 @@ class ModuleRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Module::class);
+        parent::__construct($registry, Notification::class);
     }
 }
