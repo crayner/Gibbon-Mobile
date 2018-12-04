@@ -31,7 +31,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
+/**
+ * Class Log
+ * @package App\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\LogRepository")
+ * @ORM\Table(name="Log")
+ * @ORM\HasLifecycleCallbacks()
+ */
 class Log
 {
     /**
@@ -41,6 +47,52 @@ class Log
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @var Module|null
+     * @ORM\ManyToOne(targetEntity="Module")
+     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID")
+     */
+    private $module;
+
+    /**
+     * @var integer|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     */
+    private $person;
+
+    /**
+     * @var SchoolYear|null
+     * @ORM\ManyToOne(targetEntity="SchoolYear")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     *
+     */
+    private $schoolYear;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime")
+     */
+    private $timestamp;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=50)
+     */
+    private $title;
+
+    /**
+     * @var array|null
+     * @ORM\Column(type="simple_array", nullable=true, name="serialisedArray")
+     */
+    private $serialisedArray;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=15, nullable=true)
+     */
+    private $ip;
 
     /**
      * @return int|null
@@ -61,12 +113,40 @@ class Log
     }
 
     /**
-     * @var SchoolYear|null
-     * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
-     *
+     * @return Module|null
      */
-    private $schoolYear;
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    /**
+     * @param Module|null $module
+     * @return Log
+     */
+    public function setModule(?Module $module): Log
+    {
+        $this->module = $module;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPerson(): ?int
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param int|null $person
+     * @return Log
+     */
+    public function setPerson(?int $person): Log
+    {
+        $this->person = $person;
+        return $this;
+    }
 
     /**
      * @return SchoolYear|null
@@ -87,11 +167,6 @@ class Log
     }
 
     /**
-     * @var \DateTime|null
-     */
-    private $timestamp;
-
-    /**
      * @return \DateTime|null
      */
     public function getTimestamp(): ?\DateTime
@@ -110,21 +185,6 @@ class Log
     }
 
     /**
-     * Log constructor.
-     * @throws \Exception
-     */
-    public function __construct()
-    {
-        $this->setTimestamp(new \DateTime('now'));
-    }
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=50)
-     */
-    private $title;
-
-    /**
      * @return string|null
      */
     public function getTitle(): ?string
@@ -138,15 +198,9 @@ class Log
      */
     public function setTitle(?string $title): Log
     {
-        $this->title = mb_substr($title, 0, 50);
+        $this->title = $title;
         return $this;
     }
-
-    /**
-     * @var array|null
-     * @ORM\Column(type="simple_array", nullable=true)
-     */
-    private $serialisedArray;
 
     /**
      * @return array|null
@@ -167,12 +221,6 @@ class Log
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(length=15)
-     */
-    private $ip;
-
-    /**
      * @return string|null
      */
     public function getIp(): ?string
@@ -186,7 +234,7 @@ class Log
      */
     public function setIp(?string $ip): Log
     {
-        $this->ip = mb_substr($ip, 0, 15);
+        $this->ip = $ip;
         return $this;
     }
 }
