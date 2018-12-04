@@ -83,7 +83,7 @@ class NotificationEvent
      * @var string|null
      * @ORM\Column()
      */
-    private $scopes;
+    private $scopes = 'All';
 
     /**
      * @var string|null
@@ -195,7 +195,7 @@ class NotificationEvent
      */
     public function setScopes(?string $scopes): NotificationEvent
     {
-        $this->scopes = $scopes;
+        $this->scopes = $scopes ?: 'All';
         return $this;
     }
 
