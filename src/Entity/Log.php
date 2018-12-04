@@ -56,7 +56,7 @@ class Log
     private $module;
 
     /**
-     * @var integer|null
+     * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
      */
