@@ -48,7 +48,7 @@ class MarkbookTarget
     private $id;
 
     /**
-     * @var Person|null
+     * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
      * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
      */
@@ -67,60 +67,6 @@ class MarkbookTarget
      * @ORM\JoinColumn(name="gibbonScaleGradeID", referencedColumnName="gibbonScaleGradeID")
      */
     private $scaleGrade;
-
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int|null $id
-     * @return MarkbookTarget
-     */
-    public function setId(?int $id): MarkbookTarget
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return Person|null
-     */
-    public function getCourseClass(): ?Person
-    {
-        return $this->courseClass;
-    }
-
-    /**
-     * @param Person|null $courseClass
-     * @return MarkbookTarget
-     */
-    public function setCourseClass(?Person $courseClass): MarkbookTarget
-    {
-        $this->courseClass = $courseClass;
-        return $this;
-    }
-
-    /**
-     * @return Person|null
-     */
-    public function getStudent(): ?Person
-    {
-        return $this->student;
-    }
-
-    /**
-     * @param Person|null $student
-     * @return MarkbookTarget
-     */
-    public function setStudent(?Person $student): MarkbookTarget
-    {
-        $this->student = $student;
-        return $this;
-    }
 
     /**
      * @return ScaleGrade|null
