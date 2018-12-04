@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,6 +40,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LibraryType
 {
+    use BooleanList;
+
     /**
      * @var integer|null
      * @ORM\Id
@@ -46,4 +49,94 @@ class LibraryType
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=30)
+     */
+    private $name;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=1)
+     */
+    private $active = 'Y';
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text")
+     */
+    private $fields;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     * @return LibraryType
+     */
+    public function setId(?int $id): LibraryType
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     * @return LibraryType
+     */
+    public function setName(?string $name): LibraryType
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getActive(): ?string
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param string|null $active
+     * @return LibraryType
+     */
+    public function setActive(?string $active): LibraryType
+    {
+        $this->active = self::checkBoolean($active);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFields(): ?string
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @param string|null $fields
+     * @return LibraryType
+     */
+    public function setFields(?string $fields): LibraryType
+    {
+        $this->fields = $fields;
+        return $this;
+    }
 }
