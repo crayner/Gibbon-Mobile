@@ -45,7 +45,7 @@ class NotificationEvent
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonNotificationEventID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonNotificationEventID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -81,7 +81,7 @@ class NotificationEvent
 
     /**
      * @var string|null
-     * @ORM\Column()
+     * @ORM\Column(options={"default": "All"})
      */
     private $scopes = 'All';
 
