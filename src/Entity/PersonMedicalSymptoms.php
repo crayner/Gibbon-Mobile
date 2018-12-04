@@ -161,12 +161,15 @@ class PersonMedicalSymptoms
     }
 
     /**
+     * setTimestampTaken
      * @param \DateTime|null $timestampTaken
      * @return PersonMedicalSymptoms
+     * @throws \Exception
+     * @ORM\PrePersist()
      */
-    public function setTimestampTaken(?\DateTime $timestampTaken): PersonMedicalSymptoms
+    public function setTimestampTaken(?\DateTime $timestampTaken = null): PersonMedicalSymptoms
     {
-        $this->timestampTaken = $timestampTaken;
+        $this->timestampTaken = $timestampTaken ?: new \DateTime('now');
         return $this;
     }
 
