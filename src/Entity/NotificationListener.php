@@ -42,7 +42,7 @@ class NotificationListener
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonNotificationListenerID", columnDefinition="INT(10) UNSIGNED ZEROFILL"})
+     * @ORM\Column(type="integer", name="gibbonNotificationListenerID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
