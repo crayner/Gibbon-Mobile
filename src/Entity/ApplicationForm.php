@@ -807,7 +807,7 @@ class ApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="timestamp", nullable=true)
+     * @ORM\Column(type="datetime", name="timestamp", nullable=true)
      */
     private $timestamp;
 
