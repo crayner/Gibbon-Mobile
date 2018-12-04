@@ -27,17 +27,18 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
+
 namespace App\Repository;
 
-use App\Entity\MessengerTarget;
+use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class MessengerTargetRepository
+ * Class ModuleRepository
  * @package App\Repository
  */
-class MessengerTargetRepository extends ServiceEntityRepository
+class ModuleRepository extends ServiceEntityRepository
 {
     /**
      * ApplicationFormRepository constructor.
@@ -45,6 +46,6 @@ class MessengerTargetRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, MessengerTarget::class);
+        parent::__construct($registry, Module::class);
     }
 }
