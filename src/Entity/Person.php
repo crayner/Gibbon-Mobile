@@ -39,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class GibbonPerson
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
- * @ORM\Table(name="Person")
+ * @ORM\Table(name="Person", uniqueConstraints={@ORM\UniqueConstraint(name="username", columns={"username"})}, indexes={@ORM\Index(name="username_2", columns={"username", "email"})})
  */
 class Person extends User
 {
