@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program in the LICENCE file.
- * If not, see <http://www.gnu.org/licenses/>.
+ * If not, see <hTTColumnp://www.gnu.org/licenses/>.
  *
  * Gibbon-Mobile
  *
@@ -25,26 +25,26 @@
  *
  * User: craig
  * Date: 5/12/2018
- * Time: 16:35
+ * Time: 16:42
  */
 namespace App\Repository;
 
-use App\Entity\TT;
+use App\Entity\TTColumn;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class TTRepository
+ * Class TTColumnRepository
  * @package App\Repository
  */
-class TTRepository extends ServiceEntityRepository
+class TTColumnRepository extends ServiceEntityRepository
 {
     /**
-     * TTRepository constructor.
+     * TTColumnRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, TT::class);
+        parent::__construct($registry, TTColumn::class);
     }
 }
