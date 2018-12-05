@@ -56,9 +56,9 @@ class ExternalAssessmentStudent
     private $externalAssessment;
 
     /**
-     * @var Person|null
-     * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @var Scale|null
+     * @ORM\ManyToOne(targetEntity="Scale")
+     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID")
      */
     private $scale;
 
@@ -111,18 +111,18 @@ class ExternalAssessmentStudent
     }
 
     /**
-     * @return Person|null
+     * @return Scale|null
      */
-    public function getScale(): ?Person
+    public function getScale(): ?Scale
     {
         return $this->scale;
     }
 
     /**
-     * @param Person|null $scale
+     * @param Scale|null $scale
      * @return ExternalAssessmentStudent
      */
-    public function setScale(?Person $scale): ExternalAssessmentStudent
+    public function setScale(?Scale $scale): ExternalAssessmentStudent
     {
         $this->scale = $scale;
         return $this;

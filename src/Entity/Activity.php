@@ -361,7 +361,7 @@ class Activity
 
     /**
      * @var string|null
-     * @ORM\Column(length=255, name="gibbonYearGroupIDList")
+     * @ORM\Column(name="gibbonYearGroupIDList")
      */
     private $yearGroupList;
 
