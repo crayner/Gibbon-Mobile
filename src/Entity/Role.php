@@ -39,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Role
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
- * @ORM\Table(name="Role")
+ * @ORM\Table(name="Role", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"}), @ORM\UniqueConstraint(name="nameShort", columns={"nameShort"})})
  */
 class Role
 {
@@ -127,7 +127,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=20, unique=true)
      */
     private $name;
 
@@ -152,7 +152,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=4, name="nameShort")
+     * @ORM\Column(length=4, name="nameShort", unique=true)
      */
     private $nameShort;
 
@@ -251,7 +251,7 @@ class Role
      */
     public function setCanLoginRole(string $canLoginRole): Role
     {
-        $this->canLoginRole = in_array($canLoginRole, self::getBooleanList()) ? $canLoginRole : 'Y';
+        $this->canLoginRole = self::checkBoolean($canLoginRole);
         return $this;
     }
 
@@ -276,7 +276,7 @@ class Role
      */
     public function setFutureYearsLogin(string $futureYearsLogin): Role
     {
-        $this->futureYearsLogin = in_array($futureYearsLogin, self::getBooleanList()) ? $futureYearsLogin : 'Y';
+        $this->futureYearsLogin = self::checkBoolean($futureYearsLogin);
         return $this;
     }
 
@@ -301,7 +301,7 @@ class Role
      */
     public function setPastYearsLogin(string $pastYearsLogin): Role
     {
-        $this->pastYearsLogin = in_array($pastYearsLogin, self::getBooleanList()) ? $pastYearsLogin : 'Y';
+        $this->pastYearsLogin = self::checkBoolean($pastYearsLogin);
         return $this;
     }
 
