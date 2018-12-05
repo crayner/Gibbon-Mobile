@@ -25,26 +25,26 @@
  *
  * User: craig
  * Date: 5/12/2018
- * Time: 17:00
+ * Time: 17:07
  */
 namespace App\Repository;
 
-use App\Entity\TTDayRowClass;
+use App\Entity\TTDayRowClassException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class TTDayRowClassRepository
+ * Class TTDayRowClassExceptionRepository
  * @package App\Repository
  */
-class TTDayRowClassRepository extends ServiceEntityRepository
+class TTDayRowClassExceptionRepository extends ServiceEntityRepository
 {
     /**
-     * TTDayRowClassRepository constructor.
+     * TTDayRowClassExceptionRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, TTDayRowClass::class);
+        parent::__construct($registry, TTDayRowClassException::class);
     }
 }
