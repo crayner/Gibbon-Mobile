@@ -99,7 +99,7 @@ class Messenger
     private $body;
 
     /**
-     * @var integer|null
+     * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
      */
@@ -298,18 +298,18 @@ class Messenger
     }
 
     /**
-     * @return int|null
+     * @return Person|null
      */
-    public function getPerson(): ?int
+    public function getPerson(): ?Person
     {
         return $this->person;
     }
 
     /**
-     * @param int|null $person
+     * @param Person|null $person
      * @return Messenger
      */
-    public function setPerson(?int $person): Messenger
+    public function setPerson(?Person $person): Messenger
     {
         $this->person = $person;
         return $this;

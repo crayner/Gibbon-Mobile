@@ -36,7 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\PlannerEntryOutcomeRepository")
  * @ORM\Table(name="PlannerEntryOutcome")
- * @ORM\HasLifecycleCallbacks()
  */
 class PlannerEntryOutcome
 {
