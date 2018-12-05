@@ -29,15 +29,15 @@
  */
 namespace App\Repository;
 
-use App\Entity\SchoolYearTerm;
+use App\Entity\Space;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class SchoolYearTermRepository
+ * Class SpaceRepository
  * @package App\Repository
  */
-class SchoolYearTermRepository extends ServiceEntityRepository
+class SpaceRepository extends ServiceEntityRepository
 {
     /**
      * ApplicationFormRepository constructor.
@@ -45,6 +45,6 @@ class SchoolYearTermRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, SchoolYearTerm::class);
+        parent::__construct($registry, Space::class);
     }
 }
