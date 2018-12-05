@@ -29,15 +29,15 @@
  */
 namespace App\Repository;
 
-use App\Entity\PlannerEntryStudentHomework;
+use App\Entity\PlannerEntryStudentTracker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class PlannerEntryStudentHomeworkRepository
+ * Class PlannerEntryStudentTrackerRepository
  * @package App\Repository
  */
-class PlannerEntryStudentHomeworkRepository extends ServiceEntityRepository
+class PlannerEntryStudentTrackerRepository extends ServiceEntityRepository
 {
     /**
      * ApplicationFormRepository constructor.
@@ -45,6 +45,6 @@ class PlannerEntryStudentHomeworkRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, PlannerEntryStudentHomework::class);
+        parent::__construct($registry, PlannerEntryStudentTracker::class);
     }
 }
