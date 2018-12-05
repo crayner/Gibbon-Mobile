@@ -48,7 +48,7 @@ class AttendanceLogCourseClass
     private $id;
 
     /**
-     * @var Person|null
+     * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
      * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
      */
@@ -92,18 +92,18 @@ class AttendanceLogCourseClass
     }
 
     /**
-     * @return Person|null
+     * @return CourseClass|null
      */
-    public function getCourseClass(): ?Person
+    public function getCourseClass(): ?CourseClass
     {
         return $this->courseClass;
     }
 
     /**
-     * @param Person|null $courseClass
+     * @param CourseClass|null $courseClass
      * @return AttendanceLogCourseClass
      */
-    public function setCourseClass(?Person $courseClass): AttendanceLogCourseClass
+    public function setCourseClass(?CourseClass $courseClass): AttendanceLogCourseClass
     {
         $this->courseClass = $courseClass;
         return $this;
