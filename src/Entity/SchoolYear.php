@@ -39,7 +39,7 @@ use phpDocumentor\Reflection\Types\Null_;
  * Class SchoolYear
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\SchoolYearRepository")
- * @ORM\Table(name="SchoolYear")
+ * @ORM\Table(name="SchoolYear", uniqueConstraints={@ORM\UniqueConstraint(name="academicYearName", columns={"name"}), @ORM\UniqueConstraint(name="sequenceNumber", columns={"sequenceNumber"})})
  */
 class SchoolYear
 {
@@ -176,6 +176,30 @@ class SchoolYear
     public function setLastDay(?\DateTime $lastDay): SchoolYear
     {
         $this->lastDay = $lastDay;
+        return $this;
+    }
+
+    /**
+     * @var integer
+     * @ORM\Column(type="smallint",columnDefinition="INT(3)",name="sequenceNumber")
+     */
+    private $sequenceNumber;
+
+    /**
+     * @return int
+     */
+    public function getSequenceNumber(): int
+    {
+        return $this->sequenceNumber;
+    }
+
+    /**
+     * @param int $sequenceNumber
+     * @return SchoolYear
+     */
+    public function setSequenceNumber(int $sequenceNumber): SchoolYear
+    {
+        $this->sequenceNumber = $sequenceNumber;
         return $this;
     }
 }
