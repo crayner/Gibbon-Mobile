@@ -27,7 +27,6 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Resource
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\ResourceRepository")
- * @ORM\Table(name="Resource", uniqueConstraints={@ORM\UniqueConstraint(name="key", columns={"key"})})
+ * @ORM\Table(name="Resource")
  */
 class Resource
 {
