@@ -32,18 +32,17 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class PlannerEntryDiscuss
+ * Class PlannerEntryGuest
  * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\PlannerEntryDiscussRepository")
- * @ORM\Table(name="PlannerEntryDiscuss")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\Entity(repositoryClass="App\Repository\PlannerEntryGuestRepository")
+ * @ORM\Table(name="PlannerEntryGuest")
  */
-class PlannerEntryDiscuss
+class PlannerEntryGuest
 {
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="bigint", name="gibbonPlannerEntryDiscussID", columnDefinition="INT(16) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonPlannerEntryGuestID", columnDefinition="INT(16) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -63,23 +62,15 @@ class PlannerEntryDiscuss
     private $person;
 
     /**
-     * @var \DateTime|null
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private $timestamp;
-
-    /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(length=16)
      */
-    private $comment;
+    private $role;
 
     /**
-     * @var PlannerEntryDiscuss|null
-     * @ORM\ManyToOne(targetEntity="PlannerEntryDiscuss")
-     * @ORM\JoinColumn(name="gibbonPlannerEntryDiscussIDReplyTo", referencedColumnName="gibbonPlannerEntryDiscussID", nullable=true)
+     * @var array 
      */
-    private $replyTo;
+    private static $roleList = ['Guest Student','Guest Teacher','Guest Assistant','Guest Technician','Guest Parent','Other Guest'];
 
     /**
      * @return int|null
@@ -91,9 +82,9 @@ class PlannerEntryDiscuss
 
     /**
      * @param int|null $id
-     * @return PlannerEntryDiscuss
+     * @return PlannerEntryGuest
      */
-    public function setId(?int $id): PlannerEntryDiscuss
+    public function setId(?int $id): PlannerEntryGuest
     {
         $this->id = $id;
         return $this;
@@ -109,9 +100,9 @@ class PlannerEntryDiscuss
 
     /**
      * @param PlannerEntry|null $plannerEntry
-     * @return PlannerEntryDiscuss
+     * @return PlannerEntryGuest
      */
-    public function setPlannerEntry(?PlannerEntry $plannerEntry): PlannerEntryDiscuss
+    public function setPlannerEntry(?PlannerEntry $plannerEntry): PlannerEntryGuest
     {
         $this->plannerEntry = $plannerEntry;
         return $this;
@@ -127,65 +118,37 @@ class PlannerEntryDiscuss
 
     /**
      * @param Person|null $person
-     * @return PlannerEntryDiscuss
+     * @return PlannerEntryGuest
      */
-    public function setPerson(?Person $person): PlannerEntryDiscuss
+    public function setPerson(?Person $person): PlannerEntryGuest
     {
         $this->person = $person;
         return $this;
     }
 
     /**
-     * @return \DateTime|null
-     */
-    public function getTimestamp(): ?\DateTime
-    {
-        return $this->timestamp;
-    }
-
-    /**
-     * @param \DateTime|null $timestamp
-     * @return PlannerEntryDiscuss
-     */
-    public function setTimestamp(?\DateTime $timestamp): PlannerEntryDiscuss
-    {
-        $this->timestamp = $timestamp;
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
-    public function getComment(): ?string
+    public function getRole(): ?string
     {
-        return $this->comment;
+        return $this->role;
     }
 
     /**
-     * @param string|null $comment
-     * @return PlannerEntryDiscuss
+     * @param string|null $role
+     * @return PlannerEntryGuest
      */
-    public function setComment(?string $comment): PlannerEntryDiscuss
+    public function setRole(?string $role): PlannerEntryGuest
     {
-        $this->comment = $comment;
+        $this->role = in_array($role, self::getRoleList()) ? $role : null ;
         return $this;
     }
 
     /**
-     * @return PlannerEntryDiscuss|null
+     * @return array
      */
-    public function getReplyTo(): ?PlannerEntryDiscuss
+    public static function getRoleList(): array
     {
-        return $this->replyTo;
-    }
-
-    /**
-     * @param PlannerEntryDiscuss|null $replyTo
-     * @return PlannerEntryDiscuss
-     */
-    public function setReplyTo(?PlannerEntryDiscuss $replyTo): PlannerEntryDiscuss
-    {
-        $this->replyTo = $replyTo;
-        return $this;
+        return self::$roleList;
     }
 }
