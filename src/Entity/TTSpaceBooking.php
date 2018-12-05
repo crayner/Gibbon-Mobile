@@ -1,0 +1,225 @@
+<?php
+/**
+ * Created by PhpStorm.
+ *
+ * Gibbon, Flexible & Open School System
+ * Copyright (C) 2010, Ross Parker
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program in the LICENCE file.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Gibbon-Mobile
+ *
+ * (c) 2018 Craig Rayner <craig@craigrayner.com>
+ *
+ * User: craig
+ * Date: 5/12/2018
+ * Time: 17:18
+ */
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Class TTSpaceBooking
+ * @package App\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TTSpaceBookingRepository")
+ * @ORM\Table(name="TTSpaceBooking")
+ */
+class TTSpaceBooking
+{
+    /**
+     * @var integer|null
+     * @ORM\Id
+     * @ORM\Column(type="bigint", name="gibbonTTSpaceBookingID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=6, name="foreignKey")
+     */
+    private $foreignKey = 'gibbonSpaceID';
+
+    /**
+     * @var array
+     */
+    private static $foreignKeyList = ['gibbonSpaceID', 'gibbonLibraryItemID'];
+
+    /**
+     * @var integer|null
+     * @ORM\Column(type="integer", name="foreignKeyID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     */
+    private $foreignKeyID;
+
+    /**
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     */
+    private $person;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date")
+     */
+    private $date;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="time", name="timeStart")
+     */
+    private $timeStart;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="time", name="timeEnd")
+     */
+    private $timeEnd;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     * @return TTSpaceBooking
+     */
+    public function setId(?int $id): TTSpaceBooking
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getForeignKey(): ?string
+    {
+        return $this->foreignKey;
+    }
+
+    /**
+     * @param string|null $foreignKey
+     * @return TTSpaceBooking
+     */
+    public function setForeignKey(?string $foreignKey): TTSpaceBooking
+    {
+        $this->foreignKey = in_array($foreignKey, self::getForeignKeyList()) ? $foreignKey : 'gibbonSpaceID';
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getForeignKeyID(): ?int
+    {
+        return $this->foreignKeyID;
+    }
+
+    /**
+     * @param int|null $foreignKeyID
+     * @return TTSpaceBooking
+     */
+    public function setForeignKeyID(?int $foreignKeyID): TTSpaceBooking
+    {
+        $this->foreignKeyID = $foreignKeyID;
+        return $this;
+    }
+
+    /**
+     * @return Person|null
+     */
+    public function getPerson(): ?Person
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param Person|null $person
+     * @return TTSpaceBooking
+     */
+    public function setPerson(?Person $person): TTSpaceBooking
+    {
+        $this->person = $person;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDate(): ?\DateTime
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime|null $date
+     * @return TTSpaceBooking
+     */
+    public function setDate(?\DateTime $date): TTSpaceBooking
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getTimeStart(): ?\DateTime
+    {
+        return $this->timeStart;
+    }
+
+    /**
+     * @param \DateTime|null $timeStart
+     * @return TTSpaceBooking
+     */
+    public function setTimeStart(?\DateTime $timeStart): TTSpaceBooking
+    {
+        $this->timeStart = $timeStart;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getTimeEnd(): ?\DateTime
+    {
+        return $this->timeEnd;
+    }
+
+    /**
+     * @param \DateTime|null $timeEnd
+     * @return TTSpaceBooking
+     */
+    public function setTimeEnd(?\DateTime $timeEnd): TTSpaceBooking
+    {
+        $this->timeEnd = $timeEnd;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getForeignKeyList(): array
+    {
+        return self::$foreignKeyList;
+    }
+}
