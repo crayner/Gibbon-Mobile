@@ -25,26 +25,26 @@
  *
  * User: craig
  * Date: 5/12/2018
- * Time: 16:10
+ * Time: 16:23
  */
 namespace App\Repository;
 
-use App\Entity\StudentEnrolment;
+use App\Entity\StudentNote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class StudentEnrolmentRepository
+ * Class StudentNoteRepository
  * @package App\Repository
  */
-class StudentEnrolmentRepository extends ServiceEntityRepository
+class StudentNoteRepository extends ServiceEntityRepository
 {
     /**
-     * StudentEnrolmentRepository constructor.
+     * StudentNoteRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, StudentEnrolment::class);
+        parent::__construct($registry, StudentNote::class);
     }
 }
