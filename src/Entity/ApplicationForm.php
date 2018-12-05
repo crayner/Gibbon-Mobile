@@ -235,7 +235,7 @@ class ApplicationForm
     private $schoolYearEntry;
 
     /**
-     * @var SchoolYear|null
+     * @var YearGroup|null
      * @ORM\ManyToOne(targetEntity="YearGroup")
      * @ORM\JoinColumn(name="gibbonYearGroupIDEntry",referencedColumnName="gibbonYearGroupID")
      */
