@@ -37,7 +37,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\RubricRepository")
  * @ORM\Table(name="Rubric")
- * @ORM\HasLifecycleCallbacks()
  */
 class Rubric
 {
