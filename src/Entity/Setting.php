@@ -34,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Setting
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\SettingRepository")
- * @ORM\Table(name="Setting")
+ * @ORM\Table(name="Setting", uniqueConstraints={@ORM\UniqueConstraint(name="scope", columns={"scope","nameDisplay"}), @ORM\UniqueConstraint(name="scope_2", columns={"scope","name"})})
  */
 class Setting
 {
@@ -138,7 +138,7 @@ class Setting
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column()
      */
     private $description;
 
