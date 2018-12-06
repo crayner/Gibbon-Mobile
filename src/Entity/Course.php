@@ -53,7 +53,7 @@ class Course
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -84,7 +84,7 @@ class Course
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"comment": "Should this course be included in curriculum maps and other summaries?", "default": "Y"})
      */
     private $map = 'Y';
 

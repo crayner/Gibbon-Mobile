@@ -45,7 +45,7 @@ class Scale
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonScaleID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="smallint", name="gibbonScaleID", columnDefinition="INT(5) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;

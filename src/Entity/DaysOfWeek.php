@@ -64,13 +64,13 @@ class DaysOfWeek
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", name="sequenceNumber")
+     * @ORM\Column(type="smallint", name="sequenceNumber", columnDefinition="INT(2)")
      */
     private $sequenceNumber;
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="schoolDay")
+     * @ORM\Column(length=1, name="schoolDay", options={"default": "Y"})
      */
     private $schoolDay = 'Y';
 

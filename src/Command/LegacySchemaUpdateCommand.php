@@ -201,6 +201,10 @@ class LegacySchemaUpdateCommand extends Command
                         $success = false;
                     }
                     $default = $new['options']['default'];
+                    if ($field['Default'] === 'current_timestamp()')
+                        $field['Default'] = 'CURRENT_TIMESTAMP';
+                    if ($default === 'current_timestamp()')
+                        $default = 'CURRENT_TIMESTAMP';
                     if (strval($field['Default']) !== strval($default))
                     {
                         $io->warning(sprintf('The field "%s" is changing the DEFAULT value from "%s" to "%s"', $targetName, $field['Default'], $default));

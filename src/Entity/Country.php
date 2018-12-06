@@ -41,13 +41,13 @@ class Country
 {
     /**
      * @var string|null
+     * @ORM\Id()
      * @ORM\Column(length=80)
      */
     private $printable_name;
 
     /**
      * @var string|null
-     * @ORM\Id()
      * @ORM\Column(length=7, name="iddCountryCode")
      */
     private $iddCountryCode;

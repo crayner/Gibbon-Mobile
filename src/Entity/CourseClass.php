@@ -52,7 +52,7 @@ class CourseClass
     /**
      * @var Course|null
      * @ORM\ManyToOne(targetEntity="Course")
-     * @ORM\JoinColumn(name="gibbonCourseID", referencedColumnName="gibbonCourseID")
+     * @ORM\JoinColumn(name="gibbonCourseID", referencedColumnName="gibbonCourseID", nullable=false)
      */
     private $course;
 
@@ -70,13 +70,13 @@ class CourseClass
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $reportable = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $attendance = 'Y';
 

@@ -49,7 +49,7 @@ class Department
 
     /**
      * @var string
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, options={"default": "Learning Area"})
      */
     private $type = "Learning Area";
 

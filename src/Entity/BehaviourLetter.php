@@ -52,14 +52,14 @@ class BehaviourLetter
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -105,7 +105,7 @@ class BehaviourLetter
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestamp;
 

@@ -51,7 +51,7 @@ class Behaviour
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -64,7 +64,7 @@ class Behaviour
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -81,13 +81,13 @@ class Behaviour
 
     /**
      * @var string|null
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=100, nullable=true)
      */
     private $descriptor;
 
     /**
      * @var string|null
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=100, nullable=true)
      */
     private $level;
 
@@ -113,13 +113,13 @@ class Behaviour
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "current_timestamp()"})
      */
     private $timestamp;
 

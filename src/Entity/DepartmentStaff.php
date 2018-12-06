@@ -42,7 +42,7 @@ class DepartmentStaff
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonDepartmentStaffID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="smallint", name="gibbonDepartmentStaffID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,14 +50,14 @@ class DepartmentStaff
     /**
      * @var Department|null
      * @ORM\ManyToOne(targetEntity="Department")
-     * @ORM\JoinColumn(name="gibbonDepartmentID", referencedColumnName="gibbonDepartmentID")
+     * @ORM\JoinColumn(name="gibbonDepartmentID", referencedColumnName="gibbonDepartmentID", nullable=false)
      */
     private $department;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
