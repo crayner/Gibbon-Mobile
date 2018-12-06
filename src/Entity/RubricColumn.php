@@ -55,7 +55,7 @@ class RubricColumn
     /**
      * @var Rubric|null
      * @ORM\ManyToOne(targetEntity="Rubric")
-     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID")
+     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID", nullable=false)
      */
     private $rubric;
 
@@ -80,7 +80,7 @@ class RubricColumn
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $visualise = 'Y';
 

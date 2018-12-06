@@ -64,7 +64,7 @@ class Theme
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $active = 'N';
 

@@ -52,13 +52,13 @@ class RubricRow
     /**
      * @var Rubric|null
      * @ORM\ManyToOne(targetEntity="Rubric")
-     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID")
+     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID", nullable=false)
      */
     private $rubric;
 
     /**
      * @var string|null
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=40)
      */
     private $title;
 

@@ -52,7 +52,7 @@ class RollGroup
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -71,42 +71,42 @@ class RollGroup
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTutoe",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDTutor",referencedColumnName="gibbonPersonID")
      */
     private $tutor;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTutoe2",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDTutor2",referencedColumnName="gibbonPersonID")
      */
     private $tutor2;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTutor3",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDTutor3",referencedColumnName="gibbonPersonID")
      */
     private $tutoe3;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDEA",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDEA",referencedColumnName="gibbonPersonID")
      */
     private $assistant;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDEA2",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDEA2",referencedColumnName="gibbonPersonID")
      */
     private $assistant2;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDEA3",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDEA3",referencedColumnName="gibbonPersonID")
      */
     private $assistant3;
 
@@ -126,7 +126,7 @@ class RollGroup
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $attendance = 'Y';
 

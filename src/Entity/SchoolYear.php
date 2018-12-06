@@ -103,7 +103,7 @@ class SchoolYear
 
     /**
      * @var string|null
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "Upcoming"})
      */
     private $status = 'Upcoming';
 
@@ -133,7 +133,7 @@ class SchoolYear
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="firstDay")
+     * @ORM\Column(type="date", name="firstDay", nullable=true)
      */
     private $firstDay;
 
@@ -157,7 +157,7 @@ class SchoolYear
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="lastDay")
+     * @ORM\Column(type="date", name="lastDay", nullable=true)
      */
     private $lastDay;
 

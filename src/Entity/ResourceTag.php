@@ -35,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ResourceTag
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\ResourceTagRepository")
- * @ORM\Table(name="ResourceTag", uniqueConstraints={@ORM\UniqueConstraint(name="tag", columns={"tag"})}, indexes={@ORM|Index(name="tag_2", columns={"tag"})})
+ * @ORM\Table(name="ResourceTag", uniqueConstraints={@ORM\UniqueConstraint(name="tag", columns={"tag"})}, indexes={@ORM\Index(name="tag_2", columns={"tag"})})
  */
 class ResourceTag
 {

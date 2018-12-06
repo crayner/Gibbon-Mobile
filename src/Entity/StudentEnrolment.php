@@ -33,14 +33,14 @@ class StudentEnrolment
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      *
      */
     private $schoolYear;
@@ -48,14 +48,14 @@ class StudentEnrolment
     /**
      * @var YearGroup|null
      * @ORM\ManyToOne(targetEntity="YearGroup")
-     * @ORM\JoinColumn(name="gibbonYearGroupID",referencedColumnName="gibbonYearGroupID")
+     * @ORM\JoinColumn(name="gibbonYearGroupID",referencedColumnName="gibbonYearGroupID", nullable=false)
      */
     private $yearGroupEntry;
 
     /**
      * @var RollGroup|null
      * @ORM\ManyToOne(targetEntity="RollGroup")
-     * @ORM\JoinColumn(name="gibbonRollGroupID", referencedColumnName="gibbonRollGroupID")
+     * @ORM\JoinColumn(name="gibbonRollGroupID", referencedColumnName="gibbonRollGroupID", nullable=false)
      */
     private $rollGroup;
 

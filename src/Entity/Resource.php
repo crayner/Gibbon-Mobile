@@ -67,7 +67,7 @@ class Resource
 
     /**
      * @var string|null
-     * @ORM\Column(length=4, nullable=true)
+     * @ORM\Column(length=4)
      */
     private $type;
 
@@ -103,7 +103,7 @@ class Resource
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

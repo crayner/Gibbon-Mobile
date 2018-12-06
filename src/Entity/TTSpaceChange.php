@@ -50,14 +50,14 @@ class TTSpaceChange
     /**
      * @var TTDayRowClass|null
      * @ORM\ManyToOne(targetEntity="TTDayRowClass")
-     * @ORM\JoinColumn(name="gibbonTTDayRowClassID", referencedColumnName="gibbonTTDayRowClassID")
+     * @ORM\JoinColumn(name="gibbonTTDayRowClassID", referencedColumnName="gibbonTTDayRowClassID", nullable=false)
      */
     private $TTDayRowClass;
 
     /**
      * @var Space|null
      * @ORM\ManyToOne(targetEntity="Space")
-     * @ORM\JoinColumn(name="gibbonSpaceID",referencedColumnName="gibbonSpaceID",nullable=true)
+     * @ORM\JoinColumn(name="gibbonSpaceID",referencedColumnName="gibbonSpaceID")
      */
     private $space;
 
@@ -70,7 +70,7 @@ class TTSpaceChange
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

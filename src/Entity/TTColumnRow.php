@@ -50,7 +50,7 @@ class TTColumnRow
     /**
      * @var TTColumn|null
      * @ORM\ManyToOne(targetEntity="TTColumn")
-     * @ORM\JoinColumn(name="gibbonTTColumnID", referencedColumnName="gibbonTTColumnID")
+     * @ORM\JoinColumn(name="gibbonTTColumnID", referencedColumnName="gibbonTTColumnID", nullable=false)
      */
     private $TTColumn;
 

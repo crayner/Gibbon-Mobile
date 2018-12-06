@@ -42,7 +42,7 @@ class TT
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonTTID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonTTID", columnDefinition="INT(8) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,7 +50,7 @@ class TT
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -68,7 +68,7 @@ class TT
 
     /**
      * @var string|null
-     * @ORM\Column(length=24, name="nameShortDisplay")
+     * @ORM\Column(length=24, name="nameShortDisplay", options={"default": "Day Of The Week"})
      */
     private $nameShortDisplay;
 

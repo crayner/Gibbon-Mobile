@@ -27,7 +27,6 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -51,7 +50,7 @@ class SchoolYearTerm
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 

@@ -42,7 +42,7 @@ class Space
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonSpaceID", columnDefinition="INT(5) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonSpaceID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -73,7 +73,7 @@ class Space
 
     /**
      * @var integer
-     * @ORM\Column(type="integer", columnDefinition="INT(3)", name="computerStudent")
+     * @ORM\Column(type="integer", columnDefinition="INT(3)", name="computerStudent", options={"default": "0"})
      */
     private $studentComputers;
 
@@ -115,13 +115,13 @@ class Space
 
     /**
      * @var string|null
-     * @ORM\Column(length=5, name="phoneExternal")
+     * @ORM\Column(length=5, name="phoneInternal")
      */
     private $phoneInt;
 
     /**
      * @var string|null
-     * @ORM\Column(length=20, name="phoneInternal")
+     * @ORM\Column(length=20, name="phoneExternal")
      */
     private $phoneExt;
 

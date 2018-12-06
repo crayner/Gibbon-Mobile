@@ -50,7 +50,7 @@ class StaffApplicationFormFile
     /**
      * @var StaffApplicationForm|null
      * @ORM\ManyToOne(targetEntity="StaffApplicationForm")
-     * @ORM\JoinColumn(name="gibbonStaffApplicationFormID", referencedColumnName="gibbonStaffApplicationFormID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonStaffApplicationFormID", referencedColumnName="gibbonStaffApplicationFormID", nullable=false)
      */
     private $staffApplicationForm;
 

@@ -54,7 +54,7 @@ class Staff
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -78,9 +78,9 @@ class Staff
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="smartWorkflowHelp")
+     * @ORM\Column(length=1, name="smartWorkflowHelp", options={"default": "Y"})
      */
-    private $smartWorkflowHelp;
+    private $smartWorkflowHelp = 'Y';
 
     /**
      * @var string|null
@@ -114,7 +114,7 @@ class Staff
 
     /**
      * @var string|null
-     * @ORM\Column(length=100, name="biographicalGrouping")
+     * @ORM\Column(length=100, name="biographicalGrouping", options={"comment": "Used for group staff when creating a staff directory."})
      */
     private $biographicalGrouping;
 

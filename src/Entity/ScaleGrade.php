@@ -41,6 +41,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ScaleGrade
 {
     use BooleanList;
+
     /**
      * @var integer|null
      * @ORM\Id()
@@ -52,7 +53,7 @@ class ScaleGrade
     /**
      * @var Scale|null
      * @ORM\ManyToOne(targetEntity="Scale")
-     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID", nullable=false)
      */
     private $scale;
 
@@ -76,7 +77,7 @@ class ScaleGrade
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="isDefault")
+     * @ORM\Column(length=1, name="isDefault", options={"default": "N"})
      */
     private $isDefault = 'N';
 

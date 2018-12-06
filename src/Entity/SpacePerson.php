@@ -50,20 +50,20 @@ class SpacePerson
     /**
      * @var Space|null
      * @ORM\ManyToOne(targetEntity="Space")
-     * @ORM\JoinColumn(name="gibbonSpaceID", referencedColumnName="gibbonSpaceID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonSpaceID", referencedColumnName="gibbonSpaceID", nullable=false)
      */
     private $space;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var string|null
-     * @ORM\Column(length=8, name="usageType")
+     * @ORM\Column(length=8, name="usageType", nullable=true)
      */
     private $usageType;
 

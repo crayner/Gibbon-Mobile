@@ -88,7 +88,7 @@ class Rubric
     /**
      * @var Department|null
      * @ORM\ManyToOne(targetEntity="Department")
-     * @ORM\JoinColumn(name="gibbonDepartmentID", referencedColumnName="gibbonDepartmentID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonDepartmentID", referencedColumnName="gibbonDepartmentID")
      */
     private $department;
 
@@ -101,16 +101,16 @@ class Rubric
     /**
      * @var Scale|null
      * @ORM\ManyToOne(targetEntity="Scale")
-     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID")
      */
     private $scale;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
-    private $personCreator;
+    private $creator;
 
     /**
      * @return int|null
@@ -277,18 +277,18 @@ class Rubric
     /**
      * @return Person|null
      */
-    public function getPersonCreator(): ?Person
+    public function getCreator(): ?Person
     {
-        return $this->personCreator;
+        return $this->creator;
     }
 
     /**
-     * @param Person|null $personCreator
+     * @param Person|null $creator
      * @return Rubric
      */
-    public function setPersonCreator(?Person $personCreator): Rubric
+    public function setCreator(?Person $creator): Rubric
     {
-        $this->personCreator = $personCreator;
+        $this->creator = $creator;
         return $this;
     }
 

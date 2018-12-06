@@ -50,7 +50,7 @@ class SchoolYearSpecialDay
     /**
      * @var SchoolYearTerm|null
      * @ORM\ManyToOne(targetEntity="SchoolYearTerm")
-     * @ORM\JoinColumn(name="gibbonSchoolYearTermID", referencedColumnName="gibbonSchoolYearTermID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearTermID", referencedColumnName="gibbonSchoolYearTermID", nullable=false)
      */
     private $schoolYearTerm;
 

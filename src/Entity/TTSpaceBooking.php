@@ -49,7 +49,7 @@ class TTSpaceBooking
 
     /**
      * @var string|null
-     * @ORM\Column(length=6, name="foreignKey")
+     * @ORM\Column(length=6, name="foreignKey", options={"default": "gibbonSpaceID"})
      */
     private $foreignKey = 'gibbonSpaceID';
 
@@ -67,7 +67,7 @@ class TTSpaceBooking
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

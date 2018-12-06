@@ -50,28 +50,28 @@ class TTDayRowClass
     /**
      * @var TTColumnRow|null
      * @ORM\ManyToOne(targetEntity="TTColumnRow")
-     * @ORM\JoinColumn(name="gibbonTTColumnRowID", referencedColumnName="gibbonTTColumnRowID")
+     * @ORM\JoinColumn(name="gibbonTTColumnRowID", referencedColumnName="gibbonTTColumnRowID", nullable=false)
      */
     private $TTColumnRow;
 
     /**
      * @var TTDay|null
      * @ORM\ManyToOne(targetEntity="TTDay")
-     * @ORM\JoinColumn(name="gibbonTTDayID", referencedColumnName="gibbonTTDayID")
+     * @ORM\JoinColumn(name="gibbonTTDayID", referencedColumnName="gibbonTTDayID", nullable=false)
      */
     private $TTDay;
 
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
     /**
      * @var Space|null
      * @ORM\ManyToOne(targetEntity="Space")
-     * @ORM\JoinColumn(name="gibbonSpaceID", referencedColumnName="gibbonSpaceID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonSpaceID", referencedColumnName="gibbonSpaceID")
      */
     private $space;
 

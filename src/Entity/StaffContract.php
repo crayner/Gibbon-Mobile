@@ -51,7 +51,7 @@ class StaffContract
     /**
      * @var Staff|null
      * @ORM\ManyToOne(targetEntity="Staff")
-     * @ORM\JoinColumn(name="gibbonStaffID", referencedColumnName="gibbonStaffID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonStaffID", referencedColumnName="gibbonStaffID", nullable=false)
      */
     private $staff;
 
@@ -80,25 +80,25 @@ class StaffContract
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="dateEnd")
+     * @ORM\Column(type="date", name="dateEnd", nullable=true)
      */
     private $dateEnd;
 
     /**
      * @var string|null
-     * @ORM\Column(name="salaryScale")
+     * @ORM\Column(name="salaryScale", nullable=true)
      */
     private $salaryScale;
 
     /**
      * @var float|null
-     * @ORM\Column(name="salaryAmount", type="decimal", precision=12, scale=2)
+     * @ORM\Column(name="salaryAmount", type="decimal", precision=12, scale=2, nullable=true)
      */
     private $salaryAmount;
 
     /**
      * @var string|null
-     * @ORM\Column(name="salaryPeriod")
+     * @ORM\Column(name="salaryPeriod", nullable=true)
      */
     private $salaryPeriod = '';
 
@@ -109,67 +109,67 @@ class StaffContract
 
     /**
      * @var string|null
-     * @ORM\Column(name="responsibility")
+     * @ORM\Column(name="responsibility", nullable=true)
      */
     private $responsibility;
 
     /**
      * @var float|null
-     * @ORM\Column(name="responsibilityAmount", type="decimal", precision=12, scale=2)
+     * @ORM\Column(name="responsibilityAmount", type="decimal", precision=12, scale=2, nullable=true)
      */
     private $responsibilityAmount;
 
     /**
      * @var string|null
-     * @ORM\Column(name="responsibilityPeriod")
+     * @ORM\Column(name="responsibilityPeriod", nullable=true)
      */
     private $responsibilityPeriod = '';
 
     /**
      * @var float|null
-     * @ORM\Column(name="housingAmount", type="decimal", precision=12, scale=2)
+     * @ORM\Column(name="housingAmount", type="decimal", precision=12, scale=2, nullable=true)
      */
     private $housingAmount;
 
     /**
      * @var string|null
-     * @ORM\Column(name="housingPeriod")
+     * @ORM\Column(name="housingPeriod", nullable=true)
      */
     private $housingPeriod = '';
 
     /**
      * @var float|null
-     * @ORM\Column(name="travelAmount", type="decimal", precision=12, scale=2)
+     * @ORM\Column(name="travelAmount", type="decimal", precision=12, scale=2, nullable=true)
      */
     private $travelAmount;
 
     /**
      * @var string|null
-     * @ORM\Column(name="travelPeriod")
+     * @ORM\Column(name="travelPeriod", nullable=true)
      */
     private $travelPeriod = '';
 
     /**
      * @var float|null
-     * @ORM\Column(name="retirementAmount", type="decimal", precision=12, scale=2)
+     * @ORM\Column(name="retirementAmount", type="decimal", precision=12, scale=2, nullable=true)
      */
     private $retirementAmount;
 
     /**
      * @var string|null
-     * @ORM\Column(name="retirementPeriod")
+     * @ORM\Column(name="retirementPeriod", nullable=true)
      */
     private $retirementPeriod = '';
 
     /**
      * @var float|null
-     * @ORM\Column(name="bonusAmount", type="decimal", precision=12, scale=2)
+     * @ORM\Column(name="bonusAmount", type="decimal", precision=12, scale=2, nullable=true)
      */
     private $bonusAmount;
 
     /**
      * @var string|null
-     * @ORM\Column(name="bonusPeriod")
+     * @ORM\Column(name="bonusPeriod", nullable=true)
      */
     private $bonusPeriod = '';
 
@@ -187,14 +187,14 @@ class StaffContract
 
     /**
      * @var string|null
-     * @ORM\Column(name="contractUpload")
+     * @ORM\Column(name="contractUpload", nullable=true)
      */
     private $contractUpload;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 

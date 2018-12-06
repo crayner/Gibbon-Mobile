@@ -53,7 +53,7 @@ class StaffApplicationForm
     /**
      * @var StaffJobOpening|null
      * @ORM\ManyToOne(targetEntity="StaffJobOpening")
-     * @ORM\JoinColumn(name="gibbonStaffJobOpeningID", referencedColumnName="gibbonStaffJobOpeningID")
+     * @ORM\JoinColumn(name="gibbonStaffJobOpeningID", referencedColumnName="gibbonStaffJobOpeningID", nullable=false)
      */
     private $staffJobOpening;
 
@@ -66,43 +66,43 @@ class StaffApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=60)
+     * @ORM\Column(length=60, nullable=true)
      */
     private $surname;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="firstName")
+     * @ORM\Column(length=60, name="firstName", nullable=true)
      */
     private $firstName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="preferredName")
+     * @ORM\Column(length=60, name="preferredName", nullable=true)
      */
     private $preferredName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=150, name="officialName")
+     * @ORM\Column(length=150, name="officialName", nullable=true)
      */
     private $officialName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=20, name="nameInCharacters")
+     * @ORM\Column(length=60, name="nameInCharacters", nullable=true)
      */
     private $nameInCharacters;
 
     /**
      * @var string|null
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, nullable=true)
      */
     private $gender = 'Unspecified';
 
     /**
      * @var string|null
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -113,79 +113,79 @@ class StaffApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $dob;
 
     /**
      * @var string|null
-     * @ORM\Column(length=75)
+     * @ORM\Column(length=75, nullable=true)
      */
     private $email;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", name="homeAddress")
+     * @ORM\Column(type="text", name="homeAddress", nullable=true)
      */
     private $homeAddress;
 
     /**
      * @var string|null
-     * @ORM\Column(name="homeAddressDistrict")
+     * @ORM\Column(name="homeAddressDistrict", nullable=true)
      */
     private $homeAddressDistrict;
 
     /**
      * @var string|null
-     * @ORM\Column(name="homeAddressCountry")
+     * @ORM\Column(name="homeAddressCountry", nullable=true)
      */
     private $homeAddressCountry;
 
     /**
      * @var string
-     * @ORM\Column(length=6, name="phone1Type")
+     * @ORM\Column(length=6, name="phone1Type", nullable=true)
      */
     private $phone1Type = '';
 
     /**
      * @var string
-     * @ORM\Column(length=7, name="phone1CountryCode")
+     * @ORM\Column(length=7, name="phone1CountryCode", nullable=true)
      */
     private $phone1CountryCode;
 
     /**
      * @var string
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=20, nullable=true)
      */
     private $phone1;
 
     /**
      * @var string|null
-     * @ORM\Column(length=30,name="countryOfBirth")
+     * @ORM\Column(length=30,name="countryOfBirth", nullable=true)
      */
     private $countryOfBirth;
 
     /**
      * @var string|null
-     * @ORM\Column(name="citizenship1")
+     * @ORM\Column(name="citizenship1", nullable=true)
      */
     private $citizenship1;
 
     /**
      * @var string|null
-     * @ORM\Column(length=30, name="citizenship1Passport")
+     * @ORM\Column(length=30, name="citizenship1Passport", nullable=true)
      */
     private $citizenship1Passport;
 
     /**
      * @var string|null
-     * @ORM\Column(length=30, name="nationalIDCardNumber")
+     * @ORM\Column(length=30, name="nationalIDCardNumber", nullable=true)
      */
     private $nationalIDCardNumber;
 
     /**
      * @var string|null
-     * @ORM\Column(length=255, name="residencyStatus")
+     * @ORM\Column(length=255, name="residencyStatus", nullable=true)
      */
     private $residencyStatus;
 
@@ -197,31 +197,25 @@ class StaffApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(name="languageFirst", length=30)
+     * @ORM\Column(name="languageFirst", length=30, nullable=true)
      */
     private $languageFirst;
 
     /**
      * @var string|null
-     * @ORM\Column(name="languageSecond", length=30)
+     * @ORM\Column(name="languageSecond", length=30, nullable=true)
      */
     private $languageSecond;
 
     /**
      * @var string|null
-     * @ORM\Column(name="languageThird", length=30)
+     * @ORM\Column(name="languageThird", length=30, nullable=true)
      */
     private $languageThird;
 
     /**
      * @var string|null
-     * @ORM\Column(name="medicalInformation", type="text")
-     */
-    private $medicalInformation;
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=1, name="agreement")
+     * @ORM\Column(length=1, name="agreement", nullable=true)
      */
     private $agreement;
 
@@ -233,7 +227,7 @@ class StaffApplicationForm
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", name="priority", columnDefinition="INT(1)")
+     * @ORM\Column(type="smallint", name="priority", columnDefinition="INT(1)", options={"default": "0"})
      */
     private $priority = 0;
 
@@ -251,9 +245,15 @@ class StaffApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="dateStart")
+     * @ORM\Column(type="date", name="dateStart", nullable=true)
      */
     private $dateStart;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text")
+     */
+    private $questions;
 
     /**
      * @var string|null
@@ -263,13 +263,13 @@ class StaffApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(name="referenceEmail1", nullable=true, length=100)
+     * @ORM\Column(name="referenceEmail1", length=100)
      */
     private $referenceEmail1;
 
     /**
      * @var string|null
-     * @ORM\Column(name="referenceEmail2", nullable=true, length=100)
+     * @ORM\Column(name="referenceEmail2", length=100)
      */
     private $referenceEmail2;
 
@@ -762,24 +762,6 @@ class StaffApplicationForm
     /**
      * @return string|null
      */
-    public function getMedicalInformation(): ?string
-    {
-        return $this->medicalInformation;
-    }
-
-    /**
-     * @param string|null $medicalInformation
-     * @return StaffApplicationForm
-     */
-    public function setMedicalInformation(?string $medicalInformation): StaffApplicationForm
-    {
-        $this->medicalInformation = $medicalInformation;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getAgreement(): ?string
     {
         return $this->agreement;
@@ -882,6 +864,24 @@ class StaffApplicationForm
     public function setDateStart(?\DateTime $dateStart): StaffApplicationForm
     {
         $this->dateStart = $dateStart;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getQuestions(): ?string
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param string|null $questions
+     * @return StaffApplicationForm
+     */
+    public function setQuestions(?string $questions): StaffApplicationForm
+    {
+        $this->questions = $questions;
         return $this;
     }
 

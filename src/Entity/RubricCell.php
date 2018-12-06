@@ -50,21 +50,21 @@ class RubricCell
     /**
      * @var Rubric|null
      * @ORM\ManyToOne(targetEntity="Rubric")
-     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID")
+     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID", nullable=false)
      */
     private $rubric;
 
     /**
      * @var RubricColumn|null
      * @ORM\ManyToOne(targetEntity="RubricColumn")
-     * @ORM\JoinColumn(name="gibbonRubricColumnID", referencedColumnName="gibbonRubricColumnID")
+     * @ORM\JoinColumn(name="gibbonRubricColumnID", referencedColumnName="gibbonRubricColumnID", nullable=false)
      */
     private $rubricColumn;
 
     /**
      * @var RubricRow|null
      * @ORM\ManyToOne(targetEntity="RubricRow")
-     * @ORM\JoinColumn(name="gibbonRubricRowID", referencedColumnName="gibbonRubricRowID")
+     * @ORM\JoinColumn(name="gibbonRubricRowID", referencedColumnName="gibbonRubricRowID", nullable=false)
      */
     private $rubricRow;
 
@@ -72,7 +72,7 @@ class RubricCell
      * @var string|null
      * @ORM\Column(type="text")
      */
-    private $content;
+    private $contents;
 
     /**
      * @return int|null
@@ -149,18 +149,18 @@ class RubricCell
     /**
      * @return string|null
      */
-    public function getContent(): ?string
+    public function getContents(): ?string
     {
-        return $this->content;
+        return $this->contents;
     }
 
     /**
      * @param string|null $content
      * @return RubricCell
      */
-    public function setContent(?string $content): RubricCell
+    public function setContents(?string $contents): RubricCell
     {
-        $this->content = $content;
+        $this->contents = $contents;
         return $this;
     }
 }

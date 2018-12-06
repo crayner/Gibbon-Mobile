@@ -50,21 +50,21 @@ class RubricEntry
     /**
      * @var Rubric|null
      * @ORM\ManyToOne(targetEntity="Rubric")
-     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID")
+     * @ORM\JoinColumn(name="gibbonRubricID", referencedColumnName="gibbonRubricID", nullable=false)
      */
     private $rubric;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var RubricCell|null
      * @ORM\ManyToOne(targetEntity="RubricCell")
-     * @ORM\JoinColumn(name="gibbonRubricCellID", referencedColumnName="gibbonRubricCellID")
+     * @ORM\JoinColumn(name="gibbonRubricCellID", referencedColumnName="gibbonRubricCellID", nullable=false)
      */
     private $rubricCell;
 
@@ -75,8 +75,8 @@ class RubricEntry
     private $contextDBTable;
 
     /**
-     * @var string|null
-     * @ORM\Column(name="contextDBTableID", length=20)
+     * @var integer|null
+     * @ORM\Column(name="contextDBTableID", type="bigint", columnDefinition="INT(20) UNSIGNED ZEROFILL")
      */
     private $contextDBTableID;
 
@@ -171,18 +171,18 @@ class RubricEntry
     }
 
     /**
-     * @return string|null
+     * @return integer|null
      */
-    public function getContextDBTableID(): ?string
+    public function getContextDBTableID(): ?int
     {
         return $this->contextDBTableID;
     }
 
     /**
-     * @param string|null $contextDBTableID
+     * @param integer|null $contextDBTableID
      * @return RubricEntry
      */
-    public function setContextDBTableID(?string $contextDBTableID): RubricEntry
+    public function setContextDBTableID(?int $contextDBTableID): RubricEntry
     {
         $this->contextDBTableID = $contextDBTableID;
         return $this;

@@ -42,7 +42,7 @@ class TTDay
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonTTDayID", columnDefinition="INT(8) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonTTDayID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,14 +50,14 @@ class TTDay
     /**
      * @var TT|null
      * @ORM\ManyToOne(targetEntity="TT")
-     * @ORM\JoinColumn(name="gibbonTTID", referencedColumnName="gibbonTTID")
+     * @ORM\JoinColumn(name="gibbonTTID", referencedColumnName="gibbonTTID", nullable=false)
      */
     private $TT;
 
     /**
      * @var TTColumn|null
      * @ORM\ManyToOne(targetEntity="TTColumn")
-     * @ORM\JoinColumn(name="gibbonTTColumnID", referencedColumnName="gibbonTTColumnID")
+     * @ORM\JoinColumn(name="gibbonTTColumnID", referencedColumnName="gibbonTTColumnID", nullable=false)
      */
     private $TTColumn;
 

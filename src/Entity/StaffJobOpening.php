@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,6 +40,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class StaffJobOpening
 {
+    use BooleanList;
+
     /**
      * @var integer|null
      * @ORM\Id
@@ -67,9 +70,9 @@ class StaffJobOpening
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
-    private $active;
+    private $active = 'Y';
 
     /**
      * @var string|null
@@ -80,7 +83,7 @@ class StaffJobOpening
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
@@ -176,7 +179,7 @@ class StaffJobOpening
      */
     public function setActive(?string $active): StaffJobOpening
     {
-        $this->active = $active;
+        $this->active = self::checkBoolean($active);
         return $this;
     }
 

@@ -97,7 +97,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "Staff"})
      */
     private $category = 'Staff';
 
@@ -177,7 +177,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=4, name="description")
+     * @ORM\Column(length=60, name="description")
      */
     private $description;
 
@@ -202,7 +202,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=4, name="type")
+     * @ORM\Column(length=4, name="type", options={"default": "Core"})
      */
     private $type = 'Core';
 
@@ -232,7 +232,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="canLoginRole")
+     * @ORM\Column(length=1, name="canLoginRole", options={"default": "Y"})
      */
     private $canLoginRole = 'Y';
 
@@ -257,7 +257,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="futureYearsLogin")
+     * @ORM\Column(length=1, name="futureYearsLogin", options={"default": "Y"})
      */
     private $futureYearsLogin = 'Y';
 
@@ -282,7 +282,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="pastYearsLogin")
+     * @ORM\Column(length=1, name="pastYearsLogin", options={"default": "Y"})
      */
     private $pastYearsLogin = 'Y';
 
@@ -307,7 +307,7 @@ class Role
 
     /**
      * @var string
-     * @ORM\Column(length=10, name="restriction")
+     * @ORM\Column(length=10, name="restriction", options={"default": "None"})
      */
     private $restriction = 'None';
 

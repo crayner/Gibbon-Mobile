@@ -50,7 +50,7 @@ class TTDayDate
     /**
      * @var TTDay|null
      * @ORM\ManyToOne(targetEntity="TTDay")
-     * @ORM\JoinColumn(name="gibbonTTDayID", referencedColumnName="gibbonTTDayID")
+     * @ORM\JoinColumn(name="gibbonTTDayID", referencedColumnName="gibbonTTDayID", nullable=false)
      */
     private $TTDay;
 
