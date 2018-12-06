@@ -252,6 +252,7 @@ class LegacySchemaUpdateCommand extends Command
                         case 'date':
                         case 'datetime':
                         case 'text':
+                        case 'simple_array':
                             break;
                         case 'decimal':
                             if (strpos($field['Type'], 'decimal') === 0) {
@@ -279,7 +280,9 @@ class LegacySchemaUpdateCommand extends Command
                             }
                             if (strpos($field['Type'],'enum') === 0)
                                 break;
-                            dd(__LINE__,$field,$new);
+                            $io->error(sprintf('The field "%s" is is defined as a "%s" but will be changed to a "%s".  These are not compatible.', $targetName, $field['Type'], $new['type']));
+                            $io->newLine();
+                            $success = false;
                             break;
                         default:
                             dd(__LINE__,$new,$field);
@@ -332,6 +335,6 @@ class LegacySchemaUpdateCommand extends Command
             }
         }
 
-        dd(__LINE__,$metadata,$targetName);
+        dd(__LINE__,sprintf( '"%s" was not found as an associated or direct field in the existing table.', $targetName));
     }
 }

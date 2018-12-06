@@ -42,7 +42,7 @@ class Language
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="bigint", name="gibbonLanguageID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonLanguageID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;

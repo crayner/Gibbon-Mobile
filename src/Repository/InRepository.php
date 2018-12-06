@@ -29,15 +29,15 @@
  */
 namespace App\Repository;
 
-use App\Entity\In;
+use App\Entity\IN;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class InRepository
+ * Class INRepository
  * @package App\Repository
  */
-class InRepository extends ServiceEntityRepository
+class INRepository extends ServiceEntityRepository
 {
     /**
      * ApplicationFormRepository constructor.
@@ -45,6 +45,6 @@ class InRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, In::class);
+        parent::__construct($registry, IN::class);
     }
 }

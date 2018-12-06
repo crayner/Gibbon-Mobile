@@ -51,14 +51,14 @@ class Group
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDOwner", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDOwner", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $owner;
 
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -76,7 +76,7 @@ class Group
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampUpdated", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime", name="timestampUpdated", options={"default": "CURRENT_TIMESTAMP"}, nullable=true)
      */
     private $timestampUpdated;
 
@@ -161,13 +161,16 @@ class Group
     }
 
     /**
+     * setTimestampCreated
      * @param \DateTime|null $timestampCreated
      * @return Group
+     * @throws \Exception
+     * @ORM\PrePersist()
      */
-    public function setTimestampCreated(?\DateTime $timestampCreated): Group
+    public function setTimestampCreated(?\DateTime $timestampCreated = null): Group
     {
-        $this->timestampCreated = $timestampCreated;
-        return $this;
+        $this->timestampCreated = $timestampCreated ?: new \DateTime('now');
+        return $this->setTimestampUpdated($this->getTimestampCreated());
     }
 
     /**
@@ -183,12 +186,11 @@ class Group
      * @param \DateTime|null $timestampUpdated
      * @return Group
      * @throws \Exception
-     * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
     public function setTimestampUpdated(?\DateTime $timestampUpdated = null): Group
     {
-        $this->timestampUpdated = new \DateTime('now');
+        $this->timestampUpdated = $timestampUpdated ?: new \DateTime('now');
         return $this;
     }
 }

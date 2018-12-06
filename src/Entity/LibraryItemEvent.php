@@ -50,13 +50,13 @@ class LibraryItemEvent
     /**
      * @var LibraryItem|null
      * @ORM\ManyToOne(targetEntity="LibraryItem")
-     * @ORM\JoinColumn(name="gibbonLibraryItemID", referencedColumnName="gibbonLibraryItemID")
+     * @ORM\JoinColumn(name="gibbonLibraryItemID", referencedColumnName="gibbonLibraryItemID", nullable=false)
      */
     private $libraryItem;
 
     /**
      * @var string|null
-     * @ORM\Column(name="type", length=12, options={"comment": "This is maintained even after the item is returned, so we know what type of event it was."})
+     * @ORM\Column(name="type", length=12, options={"comment": "This is maintained even after the item is returned, so we know what type of event it was.", "default": "Other"})
      */
     private $type = 'Other';
 
@@ -67,7 +67,7 @@ class LibraryItemEvent
 
     /**
      * @var string|null
-     * @ORM\Column(name="status", length=16)
+     * @ORM\Column(name="status", length=16, options={"default": "Available"})
      */
     private $status = 'Available';
 
@@ -93,19 +93,19 @@ class LibraryItemEvent
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="timestampOut", type="datetime", nullable=true)
+     * @ORM\Column(name="timestampOut", type="datetime", nullable=true, options={"comment": "The time the event was recorded"})
      */
     private $timestampOut;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="returnExpected", type="date", nullable=true)
+     * @ORM\Column(name="returnExpected", type="date", nullable=true, options={"comment": "The time when the event expires."})
      */
     private $returnExpected;
 
     /**
      * @var string|null
-     * @ORM\Column(name="returnAction", length=16, nullable=true)
+     * @ORM\Column(name="returnAction", length=16, nullable=true, options={"comment": "What to do when the item is returned?"})
      */
     private $returnAction;
 

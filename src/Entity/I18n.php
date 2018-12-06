@@ -69,19 +69,19 @@ class I18n
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $installed = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="systemDefault")
+     * @ORM\Column(length=1, name="systemDefault", options={"default": "N"})
      */
     private $systemDefault = 'N';
 
@@ -105,7 +105,7 @@ class I18n
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $rtl = 'N';
 

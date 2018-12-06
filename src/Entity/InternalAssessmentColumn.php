@@ -53,13 +53,13 @@ class InternalAssessmentColumn
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
     /**
      * @var integer|null
-     * @ORM\Column(nullable=true, columnDefinition="INT(8)", options={"comment": "A value used to group multiple columns."}, name="groupingID")
+     * @ORM\Column(nullable=true, columnDefinition="INT(8) UNSIGNED ZEROFILL", options={"comment": "A value used to group multiple columns."}, name="groupingID", type="integer")
      */
     private $groupingID;
 
@@ -89,7 +89,7 @@ class InternalAssessmentColumn
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $attainment = 'Y';
 
@@ -102,7 +102,7 @@ class InternalAssessmentColumn
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $effort = 'Y';
 
@@ -115,13 +115,13 @@ class InternalAssessmentColumn
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $comment = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="uploadedResponse")
+     * @ORM\Column(length=1, name="uploadedResponse", options={"default": "N"})
      */
     private $uploadedResponse = 'N';
 
@@ -152,14 +152,14 @@ class InternalAssessmentColumn
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $creator;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
 

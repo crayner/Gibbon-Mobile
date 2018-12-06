@@ -50,14 +50,14 @@ class GroupPerson
     /**
      * @var Group|null
      * @ORM\ManyToOne(targetEntity="Group")
-     * @ORM\JoinColumn(name="gibbonGroupID", referencedColumnName="gibbonGroupID")
+     * @ORM\JoinColumn(name="gibbonGroupID", referencedColumnName="gibbonGroupID", nullable=false)
      */
     private $group;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 }

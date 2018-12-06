@@ -50,57 +50,57 @@ class InternalAssessmentEntry
     /**
      * @var InternalAssessmentColumn|null
      * @ORM\ManyToOne(targetEntity="InternalAssessmentColumn")
-     * @ORM\JoinColumn(name="gibbonInternalAssessmentColumnID", referencedColumnName="gibbonInternalAssessmentColumnID")
+     * @ORM\JoinColumn(name="gibbonInternalAssessmentColumnID", referencedColumnName="gibbonInternalAssessmentColumnID", nullable=false)
      */
     private $internalAssessmentColumn;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDStudent", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDStudent", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $student;
 
     /**
      * @var string|null
-     * @ORM\Column(length=10, name="attainmentValue")
+     * @ORM\Column(length=10, name="attainmentValue", nullable=true)
      */
     private $attainmentValue;
 
     /**
      * @var string|null
-     * @ORM\Column(length=100, name="attainmentDescriptor")
+     * @ORM\Column(length=100, name="attainmentDescriptor", nullable=true)
      */
     private $attainmentDescriptor;
 
     /**
      * @var string|null
-     * @ORM\Column(length=10, name="effortValue")
+     * @ORM\Column(length=10, name="effortValue", nullable=true)
      */
     private $effortValue;
 
     /**
      * @var string|null
-     * @ORM\Column(length=100, name="effortDescriptor")
+     * @ORM\Column(length=100, name="effortDescriptor", nullable=true)
      */
     private $effortDescriptor;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $comment;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $response;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
 

@@ -32,12 +32,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class In
+ * Class IN
  * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\InRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\INRepository")
  * @ORM\Table(name="IN", uniqueConstraints={@ORM\UniqueConstraint(name="gibbonPersonID", columns={"gibbonPersonID"})})
  */
-class In
+class IN
 {
     /**
      * @var integer|null
@@ -50,7 +50,7 @@ class In
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

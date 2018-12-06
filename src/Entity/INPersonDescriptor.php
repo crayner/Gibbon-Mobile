@@ -50,21 +50,21 @@ class INPersonDescriptor
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var INDescriptor|null
      * @ORM\ManyToOne(targetEntity="INDescriptor")
-     * @ORM\JoinColumn(name="gibbonINDescriptorID", referencedColumnName="gibbonINDescriptorID")
+     * @ORM\JoinColumn(name="gibbonINDescriptorID", referencedColumnName="gibbonINDescriptorID", nullable=false)
      */
     private $inDescriptor;
 
     /**
      * @var AlertLevel|null
      * @ORM\ManyToOne(targetEntity="AlertLevel")
-     * @ORM\JoinColumn(name="gibbonAlertLevelID", referencedColumnName="gibbonAlertLevelID")
+     * @ORM\JoinColumn(name="gibbonAlertLevelID", referencedColumnName="gibbonAlertLevelID", nullable=false)
      */
     private $alertLevel;
 

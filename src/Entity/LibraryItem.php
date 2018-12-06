@@ -45,7 +45,7 @@ class LibraryItem
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="bigint", name="gibbonLibraryItemID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonLibraryItemID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -53,7 +53,7 @@ class LibraryItem
     /**
      * @var LibraryType|null
      * @ORM\ManyToOne(targetEntity="LibraryType")
-     * @ORM\JoinColumn(name="gibbonLibraryTypeID", referencedColumnName="gibbonLibraryTypeID")
+     * @ORM\JoinColumn(name="gibbonLibraryTypeID", referencedColumnName="gibbonLibraryTypeID", nullable=false)
      */
     private $libraryType;
 
@@ -137,7 +137,7 @@ class LibraryItem
 
     /**
      * @var string|null
-     * @ORM\Column(name="ownershipType", length=12)
+     * @ORM\Column(name="ownershipType", length=12, options={"default": "School"})
      */
     private $ownershipType = 'School';
     
@@ -164,13 +164,13 @@ class LibraryItem
 
     /**
      * @var string|null
-     * @ORM\Column(name="replacement", length=1)
+     * @ORM\Column(name="replacement", length=1, options={"default": "Y"})
      */
     private $replacement = 'Y';
 
     /**
      * @var float|null
-     * @ORM\Column(name="replacementCost", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="replacementCost", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $replacementCost;
 
@@ -194,19 +194,19 @@ class LibraryItem
 
     /**
      * @var string|null
-     * @ORM\Column(name="bookable", length=1)
+     * @ORM\Column(name="bookable", length=1, options={"default": "N"})
      */
     private $bookable = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(name="borrowable", length=1)
+     * @ORM\Column(name="borrowable", length=1, options={"default": "Y"}))
      */
     private $borrowable = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(name="status", length=16, options={"comment": "The current status of the item."})
+     * @ORM\Column(name="status", length=16, options={"comment": "The current status of the item.", "default": "Available"})
      */
     private $status = 'Available';
 
@@ -233,21 +233,21 @@ class LibraryItem
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="timestampStatus", type="datetime", options={"comment": "The time the status was recorded"})
+     * @ORM\Column(name="timestampStatus", type="datetime", options={"comment": "The time the status was recorded"}, nullable=true)
      */
     private $timestampStatus;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="returnExpected", type="date", options={"comment": "The time when the event expires."})
+     * @ORM\Column(name="returnExpected", type="date", options={"comment": "The time when the event expires."}, nullable=true)
      */
     private $returnExpected;
 
     /**
      * @var string|null
-     * @ORM\Column(name="returnAction", length=16, options={"comment": "What to do when the item is returned?"})
+     * @ORM\Column(name="returnAction", length=16, options={"comment": "What to do when the item is returned?"}, nullable=true)
      */
-    private $returnAction = '';
+    private $returnAction;
 
     /**
      * @var array
@@ -264,7 +264,7 @@ class LibraryItem
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 

@@ -43,7 +43,7 @@ class Like
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="smallint", name="gibbonLikeID", columnDefinition="INT(5) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonLikeID", columnDefinition="INT(16) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -51,14 +51,14 @@ class Like
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
     /**
      * @var Module|null
      * @ORM\ManyToOne(targetEntity="Module")
-     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID")
+     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID", nullable=false)
      */
     private $module;
 
@@ -69,22 +69,22 @@ class Like
     private $contextKeyName;
 
     /**
-     * @var string|null
-     * @ORM\Column(name="contextKeyValue", length=20)
+     * @var integer|null
+     * @ORM\Column(name="contextKeyValue", type="bigint", columnDefinition="INT(20)")
      */
     private $contextKeyValue;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDRecipient", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDRecipient", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $recipient;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDGiver", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDGiver", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $giver;
 
@@ -179,18 +179,18 @@ class Like
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getContextKeyValue(): ?string
+    public function getContextKeyValue(): ?int
     {
         return $this->contextKeyValue;
     }
 
     /**
-     * @param string|null $contextKeyValue
+     * @param int|null $contextKeyValue
      * @return Like
      */
-    public function setContextKeyValue(?string $contextKeyValue): Like
+    public function setContextKeyValue(?int $contextKeyValue): Like
     {
         $this->contextKeyValue = $contextKeyValue;
         return $this;

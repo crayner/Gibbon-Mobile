@@ -63,11 +63,11 @@ class INDescriptor
      * @var string|null
      * @ORM\Column(type="text")
      */
-    private $descriptor;
+    private $description;
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", name="sequenceNumber")
+     * @ORM\Column(type="smallint", name="sequenceNumber", columnDefinition="INT(3)")
      */
     private $sequenceNumber;
 
@@ -128,18 +128,18 @@ class INDescriptor
     /**
      * @return string|null
      */
-    public function getDescriptor(): ?string
+    public function getDescription(): ?string
     {
-        return $this->descriptor;
+        return $this->description;
     }
 
     /**
-     * @param string|null $descriptor
+     * @param string|null $description
      * @return INDescriptor
      */
-    public function setDescriptor(?string $descriptor): INDescriptor
+    public function setDescription(?string $description): INDescriptor
     {
-        $this->descriptor = $descriptor;
+        $this->description = $description;
         return $this;
     }
 
