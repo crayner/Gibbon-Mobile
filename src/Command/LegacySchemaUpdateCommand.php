@@ -284,6 +284,11 @@ class LegacySchemaUpdateCommand extends Command
                             $io->newLine();
                             $success = false;
                             break;
+                        case 'boolean':
+                            if ($field['Type'] === 'tinyint(1)')
+                                break;
+                            dd(__LINE__,$new,$field);
+                            break;
                         default:
                             dd(__LINE__,$new,$field);
                     }
