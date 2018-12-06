@@ -44,7 +44,7 @@ class ApplicationFormLink
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonApplicationFormLinkID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonApplicationFormLinkID", columnDefinition="INT(12) UNSIGNED")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -52,20 +52,20 @@ class ApplicationFormLink
     /**
      * @var ApplicationForm|null
      * @ORM\ManyToOne(targetEntity="ApplicationForm")
-     * @ORM\JoinColumn(name="gibbonApplicationFormID1", referencedColumnName="gibbonApplicationFormID")
+     * @ORM\JoinColumn(name="gibbonApplicationFormID1", referencedColumnName="gibbonApplicationFormID", nullable=false)
      */
     private $applicationForm1;
 
     /**
      * @var ApplicationForm|null
      * @ORM\ManyToOne(targetEntity="ApplicationForm")
-     * @ORM\JoinColumn(name="gibbonApplicationFormID2", referencedColumnName="gibbonApplicationFormID")
+     * @ORM\JoinColumn(name="gibbonApplicationFormID2", referencedColumnName="gibbonApplicationFormID", nullable=false)
      */
     private $applicationForm2;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "current_timestamp()"})
      */
     private $timestamp;
 
@@ -132,23 +132,16 @@ class ApplicationFormLink
     }
 
     /**
+     * setTimestamp
      * @param \DateTime|null $timestamp
      * @return ApplicationFormLink
-     */
-    public function setTimestamp(?\DateTime $timestamp): ApplicationFormLink
-    {
-        $this->timestamp = $timestamp;
-        return $this;
-    }
-
-    /**
-     * updateTimestamp
-     * @return ApplicationFormLink
+     * @throws \Exception
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
-     * @throws \Exception
      */
-    public function updateTimestamp(){
-        return $this->setTimestamp(new \DateTime('now'));
+    public function setTimestamp(?\DateTime $timestamp = null): ApplicationFormLink
+    {
+        $this->timestamp = $timestamp ?: new \DateTime('now');
+        return $this;
     }
 }

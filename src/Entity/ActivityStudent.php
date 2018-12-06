@@ -37,7 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ActivityStudentRepository
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\ActivityStudentRepository")
- * @ORM\Table(name="ActivityStudentRepository")
+ * @ORM\Table(name="ActivityStudent", indexes={@ORM\Index(name="gibbonActivityID", columns={"gibbonActivityID","status"})})
  */
 class ActivityStudent
 {
@@ -54,20 +54,20 @@ class ActivityStudent
     /**
      * @var Activity|null
      * @ORM\ManyToOne(targetEntity="Activity")
-     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID")
+     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID", nullable=false)
      */
     private $activity;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var string
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -91,7 +91,7 @@ class ActivityStudent
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="invoiceGenerated")
+     * @ORM\Column(length=1, name="invoiceGenerated", options={"default": "N"})
      */
     private $invoiceGenerated = 'N';
 

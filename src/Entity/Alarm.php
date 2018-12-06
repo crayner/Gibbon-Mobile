@@ -60,7 +60,7 @@ class Alarm
 
     /**
      * @var string
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, options={"default": "Past"})
      */
     private $status = 'Past';
 
@@ -72,7 +72,7 @@ class Alarm
     /**
      * @var integer|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

@@ -50,20 +50,20 @@ class ActivityStaff
     /**
      * @var Activity|null
      * @ORM\ManyToOne(targetEntity="Activity")
-     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID")
+     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID", nullable=false)
      */
     private $activity;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var string
-     * @ORM\Column(length=9)
+     * @ORM\Column(length=9, options={"default": "Organiser"})
      */
     private $role = 'Organiser';
 

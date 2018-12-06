@@ -91,7 +91,7 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, options={"default": "Unspecified"})
      */
     private $gender = 'Unspecified';
 
@@ -105,13 +105,13 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=20, nullable=true)
      */
     private $username;
 
     /**
      * @var string|null
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -122,38 +122,33 @@ class ApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $dob;
 
     /**
      * @var string|null
-     * @ORM\Column(length=75)
+     * @ORM\Column(length=75, nullable=true)
      */
     private $email;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", name="homeAddress")
+     * @ORM\Column(type="text", name="homeAddress", nullable=true)
      */
     private $homeAddress;
 
     /**
      * @var string|null
-     * @ORM\Column(name="homeAddressDistrict")
+     * @ORM\Column(name="homeAddressDistrict", nullable=true)
      */
     private $homeAddressDistrict;
 
     /**
      * @var string|null
-     * @ORM\Column(name="homeAddressCountry")
+     * @ORM\Column(name="homeAddressCountry", nullable=true)
      */
     private $homeAddressCountry;
-
-    /**
-     * @var array 
-     */
-    private static $phoneTypeList = ['','Mobile','Home','Work','Fax','Pager','Other'];
 
     /**
      * @var string
@@ -230,14 +225,14 @@ class ApplicationForm
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearIDEntry",referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearIDEntry",referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYearEntry;
 
     /**
      * @var YearGroup|null
      * @ORM\ManyToOne(targetEntity="YearGroup")
-     * @ORM\JoinColumn(name="gibbonYearGroupIDEntry",referencedColumnName="gibbonYearGroupID")
+     * @ORM\JoinColumn(name="gibbonYearGroupIDEntry",referencedColumnName="gibbonYearGroupID", nullable=false)
      */
     private $yearGroupEntry;
 
@@ -279,7 +274,7 @@ class ApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="schoolDate1", type="date")
+     * @ORM\Column(name="schoolDate1", type="date", nullable=true)
      */
     private $schoolDate1;
 
@@ -309,7 +304,7 @@ class ApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="schoolDate2", type="date")
+     * @ORM\Column(name="schoolDate2", type="date", nullable=true)
      */
     private $schoolDate2;
 
@@ -423,7 +418,7 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, nullable=true)
      */
     private $sen;
 
@@ -435,31 +430,31 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(name="languageChoice", length=100)
+     * @ORM\Column(name="languageChoice", length=100, nullable=true)
      */
     private $languageChoice;
 
     /**
      * @var string|null
-     * @ORM\Column(name="languageChoiceExperience", type="text")
+     * @ORM\Column(name="languageChoiceExperience", type="text", nullable=true)
      */
     private $languageChoiceExperience;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="scholarshipInterest")
+     * @ORM\Column(length=1, name="scholarshipInterest", options={"default": "N"})
      */
     private $scholarshipInterest = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="scholarshipRequired")
+     * @ORM\Column(length=1, name="scholarshipRequired", options={"default": "N"})
      */
     private $scholarshipRequired = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, options={"default": "Family"})
      */
     private $payment = 'Family';
 
@@ -470,55 +465,55 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(name="companyName", length=100)
+     * @ORM\Column(name="companyName", length=100, nullable=true)
      */
     private $companyName;
 
     /**
      * @var string|null
-     * @ORM\Column(name="companyContact", length=100)
+     * @ORM\Column(name="companyContact", length=100, nullable=true)
      */
     private $companyContact;
 
     /**
      * @var string|null
-     * @ORM\Column(name="companyAddress", length=255)
+     * @ORM\Column(name="companyAddress", length=255, nullable=true)
      */
     private $companyAddress;
 
     /**
      * @var string|null
-     * @ORM\Column(name="companyEmail", type="text")
+     * @ORM\Column(name="companyEmail", type="text", nullable=true)
      */
     private $companyEmail;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="companyCCFamily")
+     * @ORM\Column(length=1, name="companyCCFamily", nullable=true, options={"comment": "When company is billed, should family receive a copy?"})
      */
     private $companyCCFamily;
 
     /**
      * @var string|null
-     * @ORM\Column(length=20, name="companyPhone")
+     * @ORM\Column(length=20, name="companyPhone", nullable=true)
      */
     private $companyPhone;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="companyAll")
+     * @ORM\Column(length=1, name="companyAll", nullable=true)
      */
     private $companyAll;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", name="gibbonFinanceFeeCategoryIDList")
+     * @ORM\Column(type="text", name="gibbonFinanceFeeCategoryIDList", nullable=true)
      */
     private $financeFeeCategoryList;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="agreement")
+     * @ORM\Column(length=1, name="agreement", nullable=true)
      */
     private $agreement;
 
@@ -531,45 +526,45 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=5, name="parent1Title", nullable=true)
+     * @ORM\Column(length=5, name="parent1title", nullable=true)
      */
-    private $parent1Title;
+    private $parent1title;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="parent1Surname")
+     * @ORM\Column(length=60, name="parent1surname", nullable=true)
      */
-    private $parent1Surname;
+    private $parent1surname;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="parent1FirstName")
+     * @ORM\Column(length=60, name="parent1firstName", nullable=true)
      */
-    private $parent1FirstName;
+    private $parent1firstName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="parent1preferredName")
+     * @ORM\Column(length=60, name="parent1preferredName", nullable=true)
      */
     private $parent1preferredName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=150, name="parent1officialName")
+     * @ORM\Column(length=150, name="parent1officialName", nullable=true)
      */
     private $parent1officialName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=20, name="parent1nameInCharacters")
+     * @ORM\Column(length=20, name="parent1nameInCharacters", nullable=true)
      */
     private $parent1nameInCharacters;
 
     /**
      * @var string|null
-     * @ORM\Column(length=12, name="parent1Gender")
+     * @ORM\Column(length=12, name="parent1gender", options={"default": "Unspecified"})
      */
-    private $parent1Gender = 'M';
+    private $parent1gender = 'Unspecified';
 
     /**
      * @var string|null
@@ -669,45 +664,45 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=5, name="parent2Title", nullable=true)
+     * @ORM\Column(length=5, name="parent2title", nullable=true)
      */
-    private $parent2Title;
+    private $parent2title;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="parent2Surname")
+     * @ORM\Column(length=60, name="parent2surname", nullable=true)
      */
-    private $parent2Surname;
+    private $parent2surname;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="parent2FirstName")
+     * @ORM\Column(length=60, name="parent2firstName", nullable=true)
      */
-    private $parent2FirstName;
+    private $parent2firstName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=60, name="parent2preferredName")
+     * @ORM\Column(length=60, name="parent2preferredName", nullable=true)
      */
     private $parent2preferredName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=150, name="parent2officialName")
+     * @ORM\Column(length=150, name="parent2officialName", nullable=true)
      */
     private $parent2officialName;
 
     /**
      * @var string|null
-     * @ORM\Column(length=20, name="parent2nameInCharacters")
+     * @ORM\Column(length=20, name="parent2nameInCharacters", nullable=true)
      */
     private $parent2nameInCharacters;
 
     /**
      * @var string|null
-     * @ORM\Column(length=12, name="parent2Gender")
+     * @ORM\Column(length=12, name="parent2gender", options={"default": "Unspecified"})
      */
-    private $parent2Gender = 'M';
+    private $parent2gender = 'Unspecified';
 
     /**
      * @var string|null
@@ -813,7 +808,7 @@ class ApplicationForm
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", name="priority", columnDefinition="INT(1)")
+     * @ORM\Column(type="smallint", name="priority", columnDefinition="INT(1)", options={"default": "0"})
      */
     private $priority = 0;
 
@@ -831,7 +826,7 @@ class ApplicationForm
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="dateStart")
+     * @ORM\Column(type="date", name="dateStart", nullable=true)
      */
     private $dateStart;
 
@@ -863,9 +858,14 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(name="paymentMade", length=10)
+     * @ORM\Column(name="paymentMade", length=10, options={"default": "N"})
      */
     private $paymentMade = 'N';
+
+    /**
+     * @var array
+     */
+    private static $paymentMadeList = ['N', 'Y', 'Exemption'];
 
     /**
      * @var Payment|null
@@ -882,7 +882,7 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $privacy;
 
@@ -1044,7 +1044,7 @@ class ApplicationForm
      */
     public function setGender(?string $gender): ApplicationForm
     {
-        $this->gender = $gender;
+        $this->gender = in_array($gender, self::getGenderList()) ? $gender : 'Unspecified';
         return $this;
     }
 
@@ -1080,7 +1080,7 @@ class ApplicationForm
      */
     public function setStatus(?string $status): ApplicationForm
     {
-        $this->status = $status;
+        $this->status = in_array($status, self::getStatusList()) ? $status : 'Pending';
         return $this;
     }
 
@@ -1188,7 +1188,7 @@ class ApplicationForm
      */
     public function setPhone1Type(string $phone1Type): ApplicationForm
     {
-        $this->phone1Type = $phone1Type;
+        $this->phone1Type = in_array($phone1Type, self::getPhoneTypeList()) ? $phone1Type : '';
         return $this;
     }
 
@@ -1242,7 +1242,7 @@ class ApplicationForm
      */
     public function setPhone2Type(string $phone2Type): ApplicationForm
     {
-        $this->phone2Type = $phone2Type;
+        $this->phone2Type = in_array($phone2Type, self::getPhoneTypeList()) ? $phone2Type : '' ;
         return $this;
     }
 
@@ -2088,7 +2088,7 @@ class ApplicationForm
      */
     public function setPayment(?string $payment): ApplicationForm
     {
-        $this->payment = $payment;
+        $this->payment = in_array($payment, self::getPaymentList()) ? $payment : 'Family';
         return $this;
     }
 
@@ -2277,16 +2277,16 @@ class ApplicationForm
      */
     public function getParent1Title(): ?string
     {
-        return $this->parent1Title;
+        return $this->parent1title;
     }
 
     /**
-     * @param string|null $parent1Title
+     * @param string|null $parent1title
      * @return ApplicationForm
      */
-    public function setParent1Title(?string $parent1Title): ApplicationForm
+    public function setParent1Title(?string $parent1title): ApplicationForm
     {
-        $this->parent1Title = $parent1Title;
+        $this->parent1title = $parent1title;
         return $this;
     }
 
@@ -2295,16 +2295,16 @@ class ApplicationForm
      */
     public function getParent1Surname(): ?string
     {
-        return $this->parent1Surname;
+        return $this->parent1surname;
     }
 
     /**
-     * @param string|null $parent1Surname
+     * @param string|null $parent1surname
      * @return ApplicationForm
      */
-    public function setParent1Surname(?string $parent1Surname): ApplicationForm
+    public function setParent1Surname(?string $parent1surname): ApplicationForm
     {
-        $this->parent1Surname = $parent1Surname;
+        $this->parent1surname = $parent1surname;
         return $this;
     }
 
@@ -2313,16 +2313,16 @@ class ApplicationForm
      */
     public function getParent1FirstName(): ?string
     {
-        return $this->parent1FirstName;
+        return $this->parent1firstName;
     }
 
     /**
-     * @param string|null $parent1FirstName
+     * @param string|null $parent1firstName
      * @return ApplicationForm
      */
-    public function setParent1FirstName(?string $parent1FirstName): ApplicationForm
+    public function setParent1FirstName(?string $parent1firstName): ApplicationForm
     {
-        $this->parent1FirstName = $parent1FirstName;
+        $this->parent1firstName = $parent1firstName;
         return $this;
     }
 
@@ -2385,16 +2385,16 @@ class ApplicationForm
      */
     public function getParent1Gender(): ?string
     {
-        return $this->parent1Gender;
+        return $this->parent1gender;
     }
 
     /**
-     * @param string|null $parent1Gender
+     * @param string|null $parent1gender
      * @return ApplicationForm
      */
-    public function setParent1Gender(?string $parent1Gender): ApplicationForm
+    public function setParent1Gender(?string $parent1gender): ApplicationForm
     {
-        $this->parent1Gender = $parent1Gender;
+        $this->parent1gender = in_array($parent1gender, self::getGenderList()) ? $parent1gender : 'Unspecified';
         return $this;
     }
 
@@ -2691,16 +2691,16 @@ class ApplicationForm
      */
     public function getParent2Title(): ?string
     {
-        return $this->parent2Title;
+        return $this->parent2title;
     }
 
     /**
-     * @param string|null $parent2Title
+     * @param string|null $parent2title
      * @return ApplicationForm
      */
-    public function setParent2Title(?string $parent2Title): ApplicationForm
+    public function setParent2Title(?string $parent2title): ApplicationForm
     {
-        $this->parent2Title = $parent2Title;
+        $this->parent2title = $parent2title;
         return $this;
     }
 
@@ -2709,16 +2709,16 @@ class ApplicationForm
      */
     public function getParent2Surname(): ?string
     {
-        return $this->parent2Surname;
+        return $this->parent2surname;
     }
 
     /**
-     * @param string|null $parent2Surname
+     * @param string|null $parent2surname
      * @return ApplicationForm
      */
-    public function setParent2Surname(?string $parent2Surname): ApplicationForm
+    public function setParent2Surname(?string $parent2surname): ApplicationForm
     {
-        $this->parent2Surname = $parent2Surname;
+        $this->parent2surname = $parent2surname;
         return $this;
     }
 
@@ -2727,16 +2727,16 @@ class ApplicationForm
      */
     public function getParent2FirstName(): ?string
     {
-        return $this->parent2FirstName;
+        return $this->parent2firstName;
     }
 
     /**
-     * @param string|null $parent2FirstName
+     * @param string|null $parent2firstName
      * @return ApplicationForm
      */
-    public function setParent2FirstName(?string $parent2FirstName): ApplicationForm
+    public function setParent2FirstName(?string $parent2firstName): ApplicationForm
     {
-        $this->parent2FirstName = $parent2FirstName;
+        $this->parent2firstName = $parent2firstName;
         return $this;
     }
 
@@ -2799,16 +2799,16 @@ class ApplicationForm
      */
     public function getParent2Gender(): ?string
     {
-        return $this->parent2Gender;
+        return $this->parent2gender;
     }
 
     /**
-     * @param string|null $parent2Gender
+     * @param string|null $parent2gender
      * @return ApplicationForm
      */
-    public function setParent2Gender(?string $parent2Gender): ApplicationForm
+    public function setParent2Gender(?string $parent2gender): ApplicationForm
     {
-        $this->parent2Gender = $parent2Gender;
+        $this->parent2gender = in_array($parent2gender, self::getGenderList()) ? $parent2gender : 'Unspecified';
         return $this;
     }
 
@@ -3276,7 +3276,7 @@ class ApplicationForm
      */
     public function setPaymentMade(?string $paymentMade): ApplicationForm
     {
-        $this->paymentMade = $paymentMade;
+        $this->paymentMade = in_array($paymentMade, self::getPaymentMadeList()) ? $paymentMade : 'N';
         return $this;
     }
 
@@ -3401,7 +3401,7 @@ class ApplicationForm
      */
     public static function getPhoneTypeList(): array
     {
-        return self::$phoneTypeList;
+        return Person::getPhoneTypeList();
     }
 
     /**
@@ -3410,5 +3410,13 @@ class ApplicationForm
     public static function getPaymentList(): array
     {
         return self::$paymentList;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPaymentMadeList(): array
+    {
+        return self::$paymentMadeList;
     }
 }

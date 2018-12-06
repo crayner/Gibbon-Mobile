@@ -43,7 +43,7 @@ class Family
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonFamilyID", columnDefinition="INT(5) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonFamilyID", columnDefinition="INT(7) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;

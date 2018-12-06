@@ -50,7 +50,7 @@ class ActivitySlot
     /**
      * @var Activity|null
      * @ORM\ManyToOne(targetEntity="Activity")
-     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID")
+     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID", nullable=false)
      */
     private $activity;
 
@@ -70,7 +70,7 @@ class ActivitySlot
     /**
      * @var DaysOfWeek|null
      * @ORM\ManyToOne(targetEntity="DaysOfWeek")
-     * @ORM\JoinColumn(name="gibbonDaysOfWeekID",referencedColumnName="gibbonDaysOfWeekID")
+     * @ORM\JoinColumn(name="gibbonDaysOfWeekID",referencedColumnName="gibbonDaysOfWeekID", nullable=false)
      */
     private $dayOfWeek;
 

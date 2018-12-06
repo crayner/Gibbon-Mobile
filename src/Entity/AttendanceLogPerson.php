@@ -51,14 +51,14 @@ class AttendanceLogPerson
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="AttendanceCode")
-     * @ORM\JoinColumn(name="gibbonAttendanceCodeID", referencedColumnName="gibbonAttendanceCodeID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonAttendanceCodeID", referencedColumnName="gibbonAttendanceCodeID")
      */
     private $attendanceCode;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -87,7 +87,7 @@ class AttendanceLogPerson
 
     /**
      * @var string|null
-     * @ORM\Column(length=20)
+     * @ORM\Column(length=20, nullable=true)
      */
     private $context;
 
@@ -111,7 +111,7 @@ class AttendanceLogPerson
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personTaker;
 
@@ -124,7 +124,7 @@ class AttendanceLogPerson
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampTaken")
+     * @ORM\Column(type="datetime", name="timestampTaken", nullable=true)
      */
     private $timestampTaken;
 

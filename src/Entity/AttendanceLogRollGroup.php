@@ -51,14 +51,14 @@ class AttendanceLogRollGroup
     /**
      * @var RollGroup|null
      * @ORM\ManyToOne(targetEntity="RollGroup")
-     * @ORM\JoinColumn(name="gibbonRollGroupID", referencedColumnName="gibbonRollGroupID")
+     * @ORM\JoinColumn(name="gibbonRollGroupID", referencedColumnName="gibbonRollGroupID", nullable=false)
      */
     private $rollGroup;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personTaker;
 
@@ -70,7 +70,7 @@ class AttendanceLogRollGroup
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampTaken")
+     * @ORM\Column(type="datetime", name="timestampTaken", options={"default": "current_timestamp()"})
      */
     private $timestampTaken;
 
@@ -155,24 +155,16 @@ class AttendanceLogRollGroup
     }
 
     /**
+     * setTimestampTaken
      * @param \DateTime|null $timestampTaken
-     * @return AttendanceLogRollGroup
-     */
-    public function setTimestampTaken(?\DateTime $timestampTaken): AttendanceLogRollGroup
-    {
-        $this->timestampTaken = $timestampTaken;
-        return $this;
-    }
-
-    /**
-     * updateTakenTime
      * @return AttendanceLogRollGroup
      * @throws \Exception
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateTakenTime(): AttendanceLogRollGroup
+    public function setTimestampTaken(?\DateTime $timestampTaken = null): AttendanceLogRollGroup
     {
-        return $this->setTimestampTaken(new \DateTime('now'));
+        $this->timestampTaken = $timestampTaken ?: new \DateTime('now');
+        return $this;
     }
 }

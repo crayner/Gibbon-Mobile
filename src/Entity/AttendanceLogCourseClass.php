@@ -42,7 +42,7 @@ class AttendanceLogCourseClass
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="smallint", name="gibbonAttendanceLogCourseClassID", columnDefinition="INT(3) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonAttendanceLogCourseClassID", columnDefinition="INT(14) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,14 +50,14 @@ class AttendanceLogCourseClass
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -69,7 +69,7 @@ class AttendanceLogCourseClass
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampTaken")
+     * @ORM\Column(type="datetime", name="timestampTaken", options={"default": "current_timestamp()"})
      */
     private $timestampTaken;
 
@@ -154,24 +154,16 @@ class AttendanceLogCourseClass
     }
 
     /**
+     * setTimestampTaken
      * @param \DateTime|null $timestampTaken
-     * @return AttendanceLogCourseClass
-     */
-    public function setTimestampTaken(?\DateTime $timestampTaken): AttendanceLogCourseClass
-    {
-        $this->timestampTaken = $timestampTaken;
-        return $this;
-    }
-
-    /**
-     * updateTakenTime
      * @return AttendanceLogCourseClass
      * @throws \Exception
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateTakenTime()
+    public function setTimestampTaken(?\DateTime $timestampTaken = null): AttendanceLogCourseClass
     {
-        return $this->setTimestampTaken(new \DateTime('now'));
+        $this->timestampTaken = $timestampTaken ?: new \DateTime('now');
+        return $this;
     }
 }

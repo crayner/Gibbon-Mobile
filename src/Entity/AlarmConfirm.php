@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class AlarmConfirm
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AlarmConfirmRepository")
- * @ORM\Table(name="AlarmConfirm")
+ * @ORM\Table(name="AlarmConfirm", uniqueConstraints={@ORM\UniqueConstraint(name="gibbonAlarmID", columns={"gibbonAlarmID","gibbonPersonID"})})
  * @ORM\HasLifecycleCallbacks
  */
 class AlarmConfirm
@@ -52,20 +52,20 @@ class AlarmConfirm
     /**
      * @var Alarm|null
      * @ORM\ManyToOne(targetEntity="Alarm")
-     * @ORM\JoinColumn(name="gibbonAlarmID",referencedColumnName="gibbonAlarmID")
+     * @ORM\JoinColumn(name="gibbonAlarmID",referencedColumnName="gibbonAlarmID", nullable=false)
      */
     private $alarm;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "current_timestamp()"})
      */
     private $timestamp;
 
@@ -132,24 +132,16 @@ class AlarmConfirm
     }
 
     /**
-     * @param \DateTime $timestamp
-     * @return AlarmConfirm
-     */
-    public function setTimestamp(\DateTime $timestamp): AlarmConfirm
-    {
-        $this->timestamp = $timestamp;
-        return $this;
-    }
-
-    /**
-     * updateTimestamp
+     * setTimestamp
+     * @param \DateTime|null $timestamp
      * @return AlarmConfirm
      * @throws \Exception
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateTimestamp()
+    public function setTimestamp(\DateTime $timestamp = null): AlarmConfirm
     {
-        return $this->setTimestamp(new \DateTime('now'));
+        $this->timestamp = $timestamp ?: new \DateTime('now');
+        return $this;
     }
 }

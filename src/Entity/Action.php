@@ -72,7 +72,7 @@ class Action
     /**
      * @var Module|null
      * @ORM\ManyToOne(targetEntity="Module")
-     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID")
+     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID", nullable=false)
      */
     private $module;
 
@@ -96,7 +96,7 @@ class Action
 
     /**
      * @var string|null
-     * @ORM\Column(length=50, options={"comments": "The action name should be unqiue to the module that it is related too."})
+     * @ORM\Column(length=50, options={"comment": "The action name should be unqiue to the module that it is related to"})
      */
     private $name;
 
@@ -192,7 +192,7 @@ class Action
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", name="URLList", options={"comments": "Comma separated list of all URLs that make up this action"})
+     * @ORM\Column(type="text", name="URLList", options={"comment": "Comma seperated list of all URLs that make up this action"})
      */
     private $URLList;
 
@@ -289,7 +289,7 @@ class Action
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="defaultPermissionAdmin", options={"default": "Y"})
+     * @ORM\Column(length=1, name="defaultPermissionAdmin", options={"default": "N"})
      */
     private $defaultPermissionAdmin = 'N';
 
@@ -307,13 +307,13 @@ class Action
      */
     public function setDefaultPermissionAdmin(string $defaultPermissionAdmin): Action
     {
-        $this->defaultPermissionAdmin = in_array($defaultPermissionAdmin, self::getBooleanList()) ? $defaultPermissionAdmin : 'N';
+        $this->defaultPermissionAdmin = self::checkBoolean($defaultPermissionAdmin, 'N');
         return $this;
     }
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="defaultPermissionTeacher", options={"default": "Y"})
+     * @ORM\Column(length=1, name="defaultPermissionTeacher", options={"default": "N"})
      */
     private $defaultPermissionTeacher = 'N';
 
@@ -331,13 +331,13 @@ class Action
      */
     public function setDefaultPermissionTeacher(string $defaultPermissionTeacher): Action
     {
-        $this->defaultPermissionTeacher = in_array($defaultPermissionTeacher, self::getBooleanList()) ? $defaultPermissionTeacher : 'N';
+        $this->defaultPermissionTeacher = self::checkBoolean($defaultPermissionTeacher, 'N');
         return $this;
     }
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="defaultPermissionStudent", options={"default": "Y"})
+     * @ORM\Column(length=1, name="defaultPermissionStudent", options={"default": "N"})
      */
     private $defaultPermissionStudent = 'N';
 
@@ -355,13 +355,13 @@ class Action
      */
     public function setDefaultPermissionStudent(string $defaultPermissionStudent): Action
     {
-        $this->defaultPermissionStudent = in_array($defaultPermissionStudent, self::getBooleanList()) ? $defaultPermissionStudent : 'N';
+        $this->defaultPermissionStudent = self::checkBoolean($defaultPermissionStudent, 'N');
         return $this;
     }
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="defaultPermissionParent", options={"default": "Y"})
+     * @ORM\Column(length=1, name="defaultPermissionParent", options={"default": "N"})
      */
     private $defaultPermissionParent = 'N';
 
@@ -379,13 +379,13 @@ class Action
      */
     public function setDefaultPermissionParent(string $defaultPermissionParent): Action
     {
-        $this->defaultPermissionParent = in_array($defaultPermissionParent, self::getBooleanList()) ? $defaultPermissionParent : 'N';
+        $this->defaultPermissionParent = self::checkBoolean($defaultPermissionParent, 'N');
         return $this;
     }
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="defaultPermissionSupport", options={"default": "Y"})
+     * @ORM\Column(length=1, name="defaultPermissionSupport", options={"default": "N"})
      */
     private $defaultPermissionSupport = 'N';
 
@@ -403,7 +403,7 @@ class Action
      */
     public function setDefaultPermissionSupport(string $defaultPermissionSupport): Action
     {
-        $this->defaultPermissionSupport = in_array($defaultPermissionSupport, self::getBooleanList()) ? $defaultPermissionSupport : 'N';
+        $this->defaultPermissionSupport = self::checkBoolean($defaultPermissionSupport, 'N');
         return $this;
     }
 
@@ -427,7 +427,7 @@ class Action
      */
     public function setCategoryPermissionStaff(string $categoryPermissionStaff): Action
     {
-        $this->categoryPermissionStaff = in_array($categoryPermissionStaff, self::getBooleanList()) ? $categoryPermissionStaff : 'Y';
+        $this->categoryPermissionStaff = self::checkBoolean($categoryPermissionStaff, 'Y');
         return $this;
     }
 
@@ -451,7 +451,7 @@ class Action
      */
     public function setCategoryPermissionStudent(string $categoryPermissionStudent): Action
     {
-        $this->categoryPermissionStudent = in_array($categoryPermissionStudent, self::getBooleanList()) ? $categoryPermissionStudent : 'Y';
+        $this->categoryPermissionStudent = self::checkBoolean($categoryPermissionStudent, 'Y');
         return $this;
     }
 
@@ -475,7 +475,7 @@ class Action
      */
     public function setCategoryPermissionParent(string $categoryPermissionParent): Action
     {
-        $this->categoryPermissionParent = in_array($categoryPermissionParent, self::getBooleanList()) ? $categoryPermissionParent : 'Y';
+        $this->categoryPermissionParent = self::checkBoolean($categoryPermissionParent, 'Y');
         return $this;
     }
 
@@ -499,7 +499,7 @@ class Action
      */
     public function setCategoryPermissionOther(string $categoryPermissionOther): Action
     {
-        $this->categoryPermissionOther = in_array($categoryPermissionOther, self::getBooleanList()) ? $categoryPermissionOther : 'Y';
+        $this->categoryPermissionOther = self::checkBoolean($categoryPermissionOther, 'Y');
         return $this;
     }
 }

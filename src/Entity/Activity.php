@@ -96,7 +96,7 @@ class Activity
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID",referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID",referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -120,7 +120,7 @@ class Activity
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active = 'Y';
 
@@ -144,7 +144,7 @@ class Activity
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"comment": "Can a parent/student select this for registration?"})
+     * @ORM\Column(length=1, options={"comment": "Can a parent/student select this for registration?", "default": "Y"})
      */
     private $registration = 'Y';
 
@@ -192,7 +192,7 @@ class Activity
 
     /**
      * @var string|null
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "School"})
      */
     private $provider = 'School';
 
@@ -338,7 +338,7 @@ class Activity
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="programEnd")
+     * @ORM\Column(type="date", name="programEnd", nullable=true)
      */
     private $programEnd;
 
@@ -385,7 +385,7 @@ class Activity
 
     /**
      * @var int
-     * @ORM\Column(type="smallint",columnDefinition="INT(3)",name="maxParticipants")
+     * @ORM\Column(type="smallint", columnDefinition="INT(3)", name="maxParticipants", options={"default": "0"})
      */
     private $maxParticipants = 0;
 
@@ -458,7 +458,7 @@ class Activity
 
     /**
      * @var string
-     * @ORM\Column(length=16, name="paymentType")
+     * @ORM\Column(length=16, name="paymentType", nullable=true, options={"default": "Entire Programme"})
      */
     private $paymentType = 'Entire Programme';
 
@@ -487,7 +487,7 @@ class Activity
 
     /**
      * @var string
-     * @ORM\Column(length=9, name="paymentFirmness")
+     * @ORM\Column(length=9, name="paymentFirmness", nullable=true, options={"default": "Finalised"})
      */
     private $paymentFirmness = 'Finalised';
 

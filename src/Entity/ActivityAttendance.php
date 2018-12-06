@@ -70,7 +70,7 @@ class ActivityAttendance
     /**
      * @var Activity|null
      * @ORM\ManyToOne(targetEntity="Activity")
-     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID")
+     * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID", nullable=false)
      */
     private $activity;
 
@@ -95,7 +95,7 @@ class ActivityAttendance
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTaker",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDTaker",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personTaker;
 
@@ -167,7 +167,7 @@ class ActivityAttendance
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampTaken")
+     * @ORM\Column(type="datetime", name="timestampTaken", options={"default": "current_timestamp()"})
      */
     private $timestampTaken;
 
@@ -180,25 +180,16 @@ class ActivityAttendance
     }
 
     /**
+     * setTimestampTaken
      * @param \DateTime|null $timestampTaken
      * @return ActivityAttendance
-     */
-    public function setTimestampTaken(?\DateTime $timestampTaken): ActivityAttendance
-    {
-        $this->timestampTaken = $timestampTaken;
-        return $this;
-    }
-
-    /**
-     * updateTimestampTaken
-     * @return $this
+     * @throws \Exception
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
-     * @throws \Exception
      */
-    public function updateTimestampTaken()
+    public function setTimestampTaken(?\DateTime $timestampTaken = null): ActivityAttendance
     {
-        $this->setTimestampTaken(new \DateTime('now'));
+        $this->timestampTaken = $timestampTaken ?: new \DateTime('now');
         return $this;
     }
 }

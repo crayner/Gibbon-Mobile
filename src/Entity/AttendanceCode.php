@@ -120,7 +120,7 @@ class AttendanceCode
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", name="sequenceNumber")
+     * @ORM\Column(type="smallint", name="sequenceNumber", columnDefinition="INT(3)")
      */
     private $sequenceNumber;
 
