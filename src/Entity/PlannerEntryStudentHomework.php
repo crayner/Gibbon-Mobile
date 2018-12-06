@@ -53,14 +53,14 @@ class PlannerEntryStudentHomework
     /**
      * @var PlannerEntry|null
      * @ORM\ManyToOne(targetEntity="PlannerEntry")
-     * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID")
+     * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID", nullable=false)
      */
     private $plannerEntry;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -78,7 +78,7 @@ class PlannerEntryStudentHomework
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="homeworkComplete")
+     * @ORM\Column(length=1, name="homeworkComplete", options={"default": "N"})
      */
     private $homeworkComplete = 'N';
 

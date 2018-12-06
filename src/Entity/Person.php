@@ -44,6 +44,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Person extends User
 {
     use BooleanList;
+
     /**
      * @var integer|null
      * @ORM\Id
@@ -242,7 +243,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, options={"default": "Unspecified"})
      */
     private $gender;
 
@@ -372,9 +373,9 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "N"}, name="passwordForceReset")
+     * @ORM\Column(length=1, options={"default": "N", "comment": "Force user to reset password on next login."}, name="passwordForceReset")
      */
-    private $passwordForceReset;
+    private $passwordForceReset = 'N';
 
     /**
      * @return null|string
@@ -396,7 +397,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, options={"default": "Full"})
      */
     private $status;
 
@@ -430,7 +431,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "N"}, name="canLogin")
+     * @ORM\Column(length=1, options={"default": "Y"}, name="canLogin")
      */
     private $canLogin;
 
@@ -455,7 +456,7 @@ class Person extends User
     /**
      * @var Role|null
      * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumn(name="gibbonRoleIDPrimary", referencedColumnName="gibbonRoleID")
+     * @ORM\JoinColumn(name="gibbonRoleIDPrimary", referencedColumnName="gibbonRoleID", nullable=false)
      */
     private $primaryRole;
 
@@ -503,7 +504,7 @@ class Person extends User
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $dob;
 
@@ -527,7 +528,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=75)
+     * @ORM\Column(length=75, nullable=true)
      */
     private $email;
 
@@ -551,7 +552,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=75, name="emailAlternate")
+     * @ORM\Column(length=75, name="emailAlternate", nullable=true)
      */
     private $emailAlternate;
 
@@ -575,7 +576,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, nullable=true)
      */
     private $image_240;
 
@@ -695,7 +696,7 @@ class Person extends User
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", columnDefinition="INT(1)", nullable=true, name="failCount")
+     * @ORM\Column(type="smallint", columnDefinition="INT(1)", nullable=true, name="failCount", options={"default": "0"})
      */
     private $failCount;
 
@@ -1877,7 +1878,7 @@ class Person extends User
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="dateStart")
+     * @ORM\Column(type="date", name="dateStart", nullable=true)
      */
     private $dateStart;
 
@@ -1901,7 +1902,7 @@ class Person extends User
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="dateEnd")
+     * @ORM\Column(type="date", name="dateEnd", nullable=true)
      */
     private $dateEnd;
 
@@ -2022,7 +2023,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=50)
+     * @ORM\Column()
      */
     private $transport;
 
@@ -2311,7 +2312,7 @@ class Person extends User
 
     /**
      * @var string|null
-     * @ORM\Column(length=255, nullable=true, name="dayType")
+     * @ORM\Column(length=255, nullable=true, name="dayType", options={"comment": "Student day type, as specified in the application form."})
      */
     private $dayType;
 
@@ -2456,24 +2457,24 @@ class Person extends User
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(type="text")
+     * @var array|null
+     * @ORM\Column(type="simple_array", options={"comment": "Serialised array of custom field values"})
      */
     private $fields;
 
     /**
-     * @return null|string
+     * @return null|array
      */
-    public function getFields(): ?string
+    public function getFields(): ?array
     {
         return $this->fields;
     }
 
     /**
-     * @param null|string $fields
+     * @param null|array $fields
      * @return Person
      */
-    public function setFields(?string $fields): Person
+    public function setFields(?array $fields): Person
     {
         $this->fields = $fields;
         return $this;

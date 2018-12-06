@@ -53,7 +53,7 @@ class PlannerEntry
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
@@ -115,7 +115,7 @@ class PlannerEntry
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $homework = 'N';
 
@@ -145,7 +145,7 @@ class PlannerEntry
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="homeworkSubmissionDrafts")
+     * @ORM\Column(length=1, name="homeworkSubmissionDrafts", nullable=true)
      */
     private $homeworkSubmissionDrafts;
 
@@ -162,7 +162,7 @@ class PlannerEntry
 
     /**
      * @var string|null
-     * @ORM\Column(length=10, name="homeworkSubmissionRequired")
+     * @ORM\Column(length=10, name="homeworkSubmissionRequired", options={"default": "Optional"}, nullable=true)
      */
     private $homeworkSubmissionRequired = 'Optional';
 
@@ -215,27 +215,27 @@ class PlannerEntry
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="viewableStudents")
+     * @ORM\Column(length=1, name="viewableStudents", options={"default": "Y"})
      */
     private $viewableStudents = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="viewableParents")
+     * @ORM\Column(length=1, name="viewableParents", options={"default": "N"})
      */
     private $viewableParents = 'N';
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
-    private $personCreator;
+    private $creator;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
 
@@ -746,18 +746,18 @@ class PlannerEntry
     /**
      * @return Person|null
      */
-    public function getPersonCreator(): ?Person
+    public function getCreator(): ?Person
     {
-        return $this->personCreator;
+        return $this->creator;
     }
 
     /**
-     * @param Person|null $personCreator
+     * @param Person|null $creator
      * @return PlannerEntry
      */
-    public function setPersonCreator(?Person $personCreator): PlannerEntry
+    public function setCreator(?Person $creator): PlannerEntry
     {
-        $this->personCreator = $personCreator;
+        $this->creator = $creator;
         return $this;
     }
 

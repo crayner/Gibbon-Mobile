@@ -53,21 +53,21 @@ class PlannerParentWeeklyEmailSummary
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDParent", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDParent", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $parent;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDStudent",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDStudent",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $student;
 
@@ -85,7 +85,7 @@ class PlannerParentWeeklyEmailSummary
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $confirmed = 'N';
 

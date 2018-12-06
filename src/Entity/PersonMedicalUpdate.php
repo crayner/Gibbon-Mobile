@@ -36,6 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\PersonMedicalUpdateRepository")
  * @ORM\Table(name="PersonMedicalUpdate", indexes={@ORM\Index(name="gibbonMedicalIndex", columns={"gibbonPersonID","gibbonPersonMedicalID","gibbonSchoolYearID"})})
+ * @ORM\HasLifecycleCallbacks()
  */
 class PersonMedicalUpdate
 {
@@ -56,7 +57,7 @@ class PersonMedicalUpdate
 
     /**
      * @var string
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -75,7 +76,7 @@ class PersonMedicalUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -112,7 +113,7 @@ class PersonMedicalUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personUpdater;
 
@@ -329,12 +330,15 @@ class PersonMedicalUpdate
     }
 
     /**
+     * setTimestamp
      * @param \DateTime|null $timestamp
      * @return PersonMedicalUpdate
+     * @throws \Exception
+     * @ORM\PrePersist()
      */
-    public function setTimestamp(?\DateTime $timestamp): PersonMedicalUpdate
+    public function setTimestamp(?\DateTime $timestamp = null): PersonMedicalUpdate
     {
-        $this->timestamp = $timestamp;
+        $this->timestamp = $timestamp ?: new \DateTime('now');
         return $this;
     }
 

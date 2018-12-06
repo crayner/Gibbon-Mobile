@@ -46,20 +46,20 @@ class PersonField
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonPersonFieldID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="smallint", name="gibbonPersonFieldID", columnDefinition="INT(3) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
 
     /**
      * @var string|null
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=50)
      */
     private $name;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active;
 
@@ -82,13 +82,13 @@ class PersonField
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", options={"comment": "Field length for varchar, rows for text, comma-separate list for select/checkbox."})
      */
     private $options;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $required;
 

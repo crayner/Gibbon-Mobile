@@ -70,7 +70,7 @@ class PersonMedicalConditionUpdate
 
     /**
      * @var string|null
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=80)
      */
     private $name;
 
@@ -126,7 +126,7 @@ class PersonMedicalConditionUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personUpdater;
 

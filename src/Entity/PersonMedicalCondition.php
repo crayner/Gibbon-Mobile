@@ -50,7 +50,7 @@ class PersonMedicalCondition
     /**
      * @var PersonMedical|null
      * @ORM\ManyToOne(targetEntity="PersonMedical")
-     * @ORM\JoinColumn(name="gibbonPersonMedicalID",referencedColumnName="gibbonPersonMedicalID")
+     * @ORM\JoinColumn(name="gibbonPersonMedicalID",referencedColumnName="gibbonPersonMedicalID", nullable=false)
      */
     private $personMedical;
 

@@ -86,11 +86,14 @@ class LegacySchemaUpdateCommand extends Command
         $success = true;
         foreach($sqlDiff as $s) {
             $io->text($s);
-            if (mb_strpos($s, "ADD") !== false)
+            if (mb_strpos($s, "ADD") !== false && mb_strpos($s, "ADD CONSTRAINT") === false)
             {
                 $io->warning('The system is adding a field or index.');
                 $io->newLine();
                 $success = false;
+            } elseif (mb_strpos($s, "ADD CONSTRAINT") !== false) {
+                $io->note('The system is adding a new CONSTRAINT.');
+                $io->newLine();
             }
             if (mb_strpos($s, "DROP") !== false)
             {

@@ -57,7 +57,7 @@ class PersonUpdate
 
     /**
      * @var string|null
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -69,7 +69,7 @@ class PersonUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -393,7 +393,7 @@ class PersonUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personUpdater;
 
@@ -411,7 +411,7 @@ class PersonUpdate
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", options={"comment": "Serialised array of custom field values"})
      */
     private $fields;
 

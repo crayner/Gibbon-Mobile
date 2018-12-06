@@ -63,12 +63,13 @@ class Payment
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * Person recording the transaction
      */
     private $person;
 
     /**
      * @var string|null
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, options={"default": "Online"})
      */
     private $type = 'Online';
 
@@ -79,7 +80,7 @@ class Payment
 
     /**
      * @var string|null
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"comment": "Complete means paid in one go, partial is part of a set of payments, and final is last in a set of payments.", "default": "Complete"})
      */
     private $status = 'Complete';
 
@@ -96,13 +97,13 @@ class Payment
 
     /**
      * @var string|null
-     * @ORM\Column(length=6)
+     * @ORM\Column(length=6, nullable=true)
      */
     private $gateway = 'Paypal';
 
     /**
      * @var string|null
-     * @ORM\Column(length=12, name="onlineTransactionStatus")
+     * @ORM\Column(length=12, name="onlineTransactionStatus", nullable=true)
      */
     private $onlineTransactionStatus;
 
@@ -113,25 +114,25 @@ class Payment
 
     /**
      * @var string|null
-     * @ORM\Column(length=50, name="paymentToken")
+     * @ORM\Column(length=50, name="paymentToken", nullable=true)
      */
     private $paymentToken;
 
     /**
      * @var string|null
-     * @ORM\Column(length=50, name="paymentPayerID")
+     * @ORM\Column(length=50, name="paymentPayerID", nullable=true)
      */
     private $paymentPayerID;
 
     /**
      * @var string|null
-     * @ORM\Column(length=50, name="paymentTransactionID")
+     * @ORM\Column(length=50, name="paymentTransactionID", nullable=true)
      */
     private $paymentTransactionID;
 
     /**
      * @var string|null
-     * @ORM\Column(length=50, name="paymentReceiptID")
+     * @ORM\Column(length=50, name="paymentReceiptID", nullable=true)
      */
     private $paymentReceiptID;
 

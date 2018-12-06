@@ -51,14 +51,14 @@ class Permission
     /**
      * @var Role|null
      * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumn(name="gibbonRoleID", referencedColumnName="gibbonRoleID")
+     * @ORM\JoinColumn(name="gibbonRoleID", referencedColumnName="gibbonRoleID", nullable=false)
      */
     private $role;
 
     /**
      * @var Action|null
      * @ORM\ManyToOne(targetEntity="Action")
-     * @ORM\JoinColumn(name="gibbonActionID", referencedColumnName="gibbonActionID")
+     * @ORM\JoinColumn(name="gibbonActionID", referencedColumnName="gibbonActionID", nullable=false)
      */
     private $action;
 

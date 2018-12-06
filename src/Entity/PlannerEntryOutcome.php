@@ -50,14 +50,14 @@ class PlannerEntryOutcome
     /**
      * @var PlannerEntry|null
      * @ORM\ManyToOne(targetEntity="PlannerEntry")
-     * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID")
+     * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID", nullable=false)
      */
     private $plannerEntry;
 
     /**
      * @var Outcome|null
      * @ORM\ManyToOne(targetEntity="Outcome")
-     * @ORM\JoinColumn(name="gibbonOutcomeID", referencedColumnName="gibbonOutcomeID")
+     * @ORM\JoinColumn(name="gibbonOutcomeID", referencedColumnName="gibbonOutcomeID", nullable=false)
      */
     private $outcome;
 
