@@ -53,21 +53,21 @@ class UnitClassBlock
     /**
      * @var UnitClass|null
      * @ORM\ManyToOne(targetEntity="UnitClass")
-     * @ORM\JoinColumn(name="gibbonUnitClassID", referencedColumnName="gibbonUnitClassID")
+     * @ORM\JoinColumn(name="gibbonUnitClassID", referencedColumnName="gibbonUnitClassID", nullable=false)
      */
     private $unitClass;
 
     /**
      * @var PlannerEntry|null
      * @ORM\ManyToOne(targetEntity="PlannerEntry")
-     * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID")
+     * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID", nullable=false)
      */
     private $plannerEntry;
 
     /**
      * @var UnitBlock|null
      * @ORM\ManyToOne(targetEntity="UnitBlock")
-     * @ORM\JoinColumn(name="gibbonUnitBlockID", referencedColumnName="gibbonUnitBlockID")
+     * @ORM\JoinColumn(name="gibbonUnitBlockID", referencedColumnName="gibbonUnitBlockID", nullable=false)
      */
     private $unitBlock;
 
@@ -93,7 +93,7 @@ class UnitClassBlock
      * @var string|null
      * @ORM\Column(type="text")
      */
-    private $content;
+    private $contents;
 
     /**
      * @var string|null
@@ -109,7 +109,7 @@ class UnitClassBlock
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $complete = 'N';
 
@@ -248,18 +248,18 @@ class UnitClassBlock
     /**
      * @return string|null
      */
-    public function getContent(): ?string
+    public function getContents(): ?string
     {
-        return $this->content;
+        return $this->contents;
     }
 
     /**
-     * @param string|null $content
+     * @param string|null $contents
      * @return UnitClassBlock
      */
-    public function setContent(?string $content): UnitClassBlock
+    public function setContents(?string $contents): UnitClassBlock
     {
-        $this->content = $content;
+        $this->contents = $contents;
         return $this;
     }
 

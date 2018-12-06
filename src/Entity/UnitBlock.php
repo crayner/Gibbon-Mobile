@@ -50,7 +50,7 @@ class UnitBlock
     /**
      * @var Unit|null
      * @ORM\ManyToOne(targetEntity="Unit")
-     * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID")
+     * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID", nullable=false)
      */
     private $unit;
 
@@ -76,7 +76,7 @@ class UnitBlock
      * @var string|null
      * @ORM\Column(type="text")
      */
-    private $content;
+    private $contents;
 
     /**
      * @var string|null
@@ -189,18 +189,18 @@ class UnitBlock
     /**
      * @return string|null
      */
-    public function getContent(): ?string
+    public function getContents(): ?string
     {
-        return $this->content;
+        return $this->contents;
     }
 
     /**
-     * @param string|null $content
+     * @param string|null $contents
      * @return UnitBlock
      */
-    public function setContent(?string $content): UnitBlock
+    public function setContents(?string $contents): UnitBlock
     {
-        $this->content = $content;
+        $this->contents = $contents;
         return $this;
     }
 

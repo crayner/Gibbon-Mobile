@@ -50,14 +50,14 @@ class UnitBlockStar
     /**
      * @var UnitBlock|null
      * @ORM\ManyToOne(targetEntity="UnitBlock")
-     * @ORM\JoinColumn(name="gibbonUnitBlockID", referencedColumnName="gibbonUnitBlockID")
+     * @ORM\JoinColumn(name="gibbonUnitBlockID", referencedColumnName="gibbonUnitBlockID", nullable=false)
      */
     private $unitBlock;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

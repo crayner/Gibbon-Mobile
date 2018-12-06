@@ -53,7 +53,7 @@ class Unit
     /**
      * @var Course|null
      * @ORM\ManyToOne(targetEntity="Course")
-     * @ORM\JoinColumn(name="gibbonCourseID", referencedColumnName="gibbonCourseID")
+     * @ORM\JoinColumn(name="gibbonCourseID", referencedColumnName="gibbonCourseID", nullable=false)
      */
     private $course;
 
@@ -65,9 +65,9 @@ class Unit
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
-    private $active;
+    private $active = 'Y';
 
     /**
      * @var string|null
@@ -83,9 +83,9 @@ class Unit
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"comment": "Should this unit be included in curriculum maps and other summaries?"})
+     * @ORM\Column(length=1, options={"comment": "Should this unit be included in curriculum maps and other summaries?", "default": "Y"})
      */
-    private $map;
+    private $map = 'Y';
 
     /**
      * @var integer|null
@@ -107,9 +107,9 @@ class Unit
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
-    private $embeddable;
+    private $embeddable = 'N';
 
     /**
      * @var string|null
@@ -126,14 +126,14 @@ class Unit
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $creator;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
 

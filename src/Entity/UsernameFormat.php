@@ -64,31 +64,31 @@ class UsernameFormat
 
     /**
      * @var string|null
-     * @ORM\Column(name="isDefault", length=1)
+     * @ORM\Column(name="isDefault", length=1, options={"default": "N"})
      */
     private $isDefault = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(name="isNumeric", length=1)
+     * @ORM\Column(name="isNumeric", length=1, options={"default": "N"})
      */
     private $isNumeric = 'N';
 
     /**
      * @var integer|null
-     * @ORM\Column(name="numericValue", type="bigint", columnDefinition="INT(12)", options={"default": "0"})
+     * @ORM\Column(name="numericValue", type="bigint", columnDefinition="INT(12) UNSIGNED", options={"default": "0"})
      */
     private $numericValue = 0;
 
     /**
      * @var integer|null
-     * @ORM\Column(name="numericIncrement", type="smallint", columnDefinition="INT(3)", options={"default": "1"})
+     * @ORM\Column(name="numericIncrement", type="smallint", columnDefinition="INT(3) UNSIGNED", options={"default": "1"})
      */
     private $numericIncrement = 1;
 
     /**
      * @var integer|null
-     * @ORM\Column(name="numericSIze", type="smallint", columnDefinition="INT(3)", options={"default": "4"})
+     * @ORM\Column(name="numericSize", type="smallint", columnDefinition="INT(3) UNSIGNED", options={"default": "4"})
      */
     private $numericSize = 4;
 

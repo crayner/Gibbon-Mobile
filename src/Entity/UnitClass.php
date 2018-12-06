@@ -53,20 +53,20 @@ class UnitClass
     /**
      * @var Unit|null
      * @ORM\ManyToOne(targetEntity="Unit")
-     * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID")
+     * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID", nullable=false)
      */
     private $unit;
 
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $running = 'N';
 

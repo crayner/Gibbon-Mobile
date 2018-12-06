@@ -50,14 +50,14 @@ class UnitOutcome
     /**
      * @var Unit|null
      * @ORM\ManyToOne(targetEntity="Unit")
-     * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID")
+     * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID", nullable=false)
      */
     private $unit;
 
     /**
      * @var Outcome|null
      * @ORM\ManyToOne(targetEntity="Outcome")
-     * @ORM\JoinColumn(name="gibbonOutcomeID", referencedColumnName="gibbonOutcomeID")
+     * @ORM\JoinColumn(name="gibbonOutcomeID", referencedColumnName="gibbonOutcomeID", nullable=false)
      */
     private $outcome;
 
