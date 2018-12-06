@@ -45,14 +45,14 @@ class Module
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonModuleID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonModuleID", columnDefinition="INT(4) UNSIGNED ZEROFILL", options={"comment": "This number is assigned at install, and is only unique to the installation"})
      * @ORM\GeneratedValue
      */
     private $id;
 
     /**
      * @var string|null
-     * @ORM\Column(length=30)
+     * @ORM\Column(length=30, options={"comment": "This name should be globally unique preferably, but certainly locally unique"})
      */
     private $name;
 
@@ -64,13 +64,13 @@ class Module
 
     /**
      * @var string|null
-     * @ORM\Column(name="entryURL")
+     * @ORM\Column(name="entryURL", options={"default": "index.php"})
      */
     private $entryURL;
 
     /**
      * @var string|null
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, options={"default": "Core"})
      */
     private $type = 'Core';
 
@@ -81,7 +81,7 @@ class Module
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active = 'Y';
 

@@ -45,7 +45,7 @@ class Outcome
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonOutcomeID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonOutcomeID", columnDefinition="INT(8) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -94,7 +94,7 @@ class Outcome
     /**
      * @var Department|null
      * @ORM\ManyToOne(targetEntity="Department")
-     * @ORM\JoinColumn(name="gibbonDepartmentID", referencedColumnName="gibbonDepartmentID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonDepartmentID", referencedColumnName="gibbonDepartmentID")
      */
     private $department;
 
@@ -107,7 +107,7 @@ class Outcome
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 

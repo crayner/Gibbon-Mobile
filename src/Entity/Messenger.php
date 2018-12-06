@@ -45,20 +45,20 @@ class Messenger
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonMessengerID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonMessengerID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $email = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="messageWall")
+     * @ORM\Column(length=1, name="messageWall", options={"default": "N"})
      */
     private $messageWall = 'N';
 
@@ -82,7 +82,7 @@ class Messenger
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $sms = 'N';
 
@@ -101,7 +101,7 @@ class Messenger
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 

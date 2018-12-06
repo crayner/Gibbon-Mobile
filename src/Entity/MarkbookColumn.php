@@ -53,7 +53,7 @@ class MarkbookColumn
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
@@ -87,7 +87,7 @@ class MarkbookColumn
 
     /**
      * @var integer|null
-     * @ORM\Column(nullable=true, columnDefinition="INT(8)", options={"comment": "A value used to group multiple columns."}, name="groupingID")
+     * @ORM\Column(nullable=true, type="integer", columnDefinition="INT(8) UNSIGNED ZEROFILL", options={"comment": "A value used to group multiple markbook columns."}, name="groupingID")
      */
     private $groupingID;
 
@@ -111,7 +111,7 @@ class MarkbookColumn
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $date;
 
@@ -129,7 +129,7 @@ class MarkbookColumn
     
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $attainment = 'Y';
 
@@ -142,25 +142,25 @@ class MarkbookColumn
 
     /**
      * @var float|null
-     * @ORM\Column(type="decimal", precision=5, scale=2, name="attainmentWeighting")
+     * @ORM\Column(type="decimal", precision=5, scale=2, name="attainmentWeighting", nullable=true)
      */
     private $attainmentWeighting;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="attainmentRaw")
+     * @ORM\Column(length=1, name="attainmentRaw", options={"default": "N"})
      */
-    private $attainmentRaw = 'Y';
+    private $attainmentRaw = 'N';
 
     /**
      * @var float|null
-     * @ORM\Column(type="decimal", precision=8, scale=2, name="attainmentRawMax")
+     * @ORM\Column(type="decimal", precision=8, scale=2, name="attainmentRawMax", nullable=true)
      */
     private $attainmentRawMax;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $effort = 'Y';
 
@@ -187,13 +187,13 @@ class MarkbookColumn
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $comment = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="uploadedResponse")
+     * @ORM\Column(length=1, name="uploadedResponse", options={"default": "Y"})
      */
     private $uploadedResponse = 'Y';
 
@@ -205,7 +205,7 @@ class MarkbookColumn
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="date", name="completeDate")
+     * @ORM\Column(type="date", name="completeDate", nullable=true)
      */
     private $completeDate;
 
@@ -224,14 +224,14 @@ class MarkbookColumn
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $creator;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
 

@@ -42,7 +42,7 @@ class MarkbookTarget
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonMarkbookTargetID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonMarkbookTargetID", columnDefinition="INT(14) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,14 +50,14 @@ class MarkbookTarget
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDStudent", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDStudent", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $student;
 

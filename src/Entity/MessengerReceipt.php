@@ -50,14 +50,14 @@ class MessengerReceipt
     /**
      * @var Messenger|null
      * @ORM\ManyToOne(targetEntity="Messenger")
-     * @ORM\JoinColumn(name="gibbonMessengerID", referencedColumnName="gibbonMessengerID")
+     * @ORM\JoinColumn(name="gibbonMessengerID", referencedColumnName="gibbonMessengerID", nullable=false)
      */
     private $messenger;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID")
      */
     private $person;
 

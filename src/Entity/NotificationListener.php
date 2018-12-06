@@ -63,13 +63,13 @@ class NotificationListener
 
     /**
      * @var string|null
-     * @ORM\Column(length=30, name="scopeType")
+     * @ORM\Column(length=30, name="scopeType", nullable=true)
      */
     private $scopeType;
 
     /**
      * @var integer|null
-     * @ORM\Column(type="bigint", name="scopeID", columnDefinition="INT(20) UNSIGNED")
+     * @ORM\Column(type="bigint", name="scopeID", columnDefinition="INT(20) UNSIGNED", nullable=true)
      */
     private $scopeID;
 

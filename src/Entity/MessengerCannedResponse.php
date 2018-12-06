@@ -36,6 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\MessengerCannedResponseRepository")
  * @ORM\Table(name="MessengerCannedResponse")
+ * @ORM\HasLifecycleCallbacks()
  */
 class MessengerCannedResponse
 {
@@ -61,16 +62,16 @@ class MessengerCannedResponse
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampCreator")
+     * @ORM\Column(type="datetime", name="timestampCreator", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestampCreator;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
-    private $personCreator;
+    private $creator;
 
     /**
      * @return int|null
@@ -135,30 +136,33 @@ class MessengerCannedResponse
     }
 
     /**
+     * setTimestampCreator
      * @param \DateTime|null $timestampCreator
      * @return MessengerCannedResponse
+     * @throws \Exception
+     * @ORM\PrePersist()
      */
-    public function setTimestampCreator(?\DateTime $timestampCreator): MessengerCannedResponse
+    public function setTimestampCreator(?\DateTime $timestampCreator = null): MessengerCannedResponse
     {
-        $this->timestampCreator = $timestampCreator;
+        $this->timestampCreator = $timestampCreator ?: new \DateTime('now');
         return $this;
     }
 
     /**
      * @return Person|null
      */
-    public function getPersonCreator(): ?Person
+    public function getCreator(): ?Person
     {
-        return $this->personCreator;
+        return $this->creator;
     }
 
     /**
-     * @param Person|null $personCreator
+     * @param Person|null $creator
      * @return MessengerCannedResponse
      */
-    public function setPersonCreator(?Person $personCreator): MessengerCannedResponse
+    public function setCreator(?Person $creator): MessengerCannedResponse
     {
-        $this->personCreator = $personCreator;
+        $this->creator = $creator;
         return $this;
     }
 }

@@ -42,7 +42,7 @@ class Notification
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonNotificationID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonNotificationID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,13 +50,13 @@ class Notification
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var string|null
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "New"})
      */
     private $status = 'New';
 

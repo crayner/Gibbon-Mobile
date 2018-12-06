@@ -45,7 +45,7 @@ class MarkbookEntry
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonMarkbookEntryID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonMarkbookEntryID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -53,46 +53,46 @@ class MarkbookEntry
     /**
      * @var MarkbookColumn|null
      * @ORM\ManyToOne(targetEntity="MarkbookColumn")
-     * @ORM\JoinColumn(name="gibbonMarkbookColumnID", referencedColumnName="gibbonMarkbookColumnID")
+     * @ORM\JoinColumn(name="gibbonMarkbookColumnID", referencedColumnName="gibbonMarkbookColumnID", nullable=false)
      */
     private $markbookColumn;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDStudent", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDStudent", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $student;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="modifiedAssessment")
+     * @ORM\Column(length=1, name="modifiedAssessment", nullable=true)
      */
     private $modifiedAssessment = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(length=10, name="attainmentValue")
+     * @ORM\Column(length=10, name="attainmentValue", nullable=true)
      */
     private $attainmentValue;
 
     /**
      * @var string|null
-     * @ORM\Column(length=10, name="attainmentValueRaw")
+     * @ORM\Column(length=10, name="attainmentValueRaw", nullable=true)
      */
     private $attainmentValueRaw;
 
     /**
      * @var string|null
-     * @ORM\Column(length=100, name="attainmentDescriptor")
+     * @ORM\Column(length=100, name="attainmentDescriptor", nullable=true)
      */
     private $attainmentDescriptor;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="attainmentConcern", options={"comment": "'P' denotes that student has exceed their personal target"})
+     * @ORM\Column(length=1, name="attainmentConcern", options={"comment": "'P' denotes that student has exceed their personal target"}, nullable=true)
      */
-    private $attainmentConcern = 'N';
+    private $attainmentConcern;
 
     /**
      * @var array 
@@ -101,38 +101,38 @@ class MarkbookEntry
 
     /**
      * @var string|null
-     * @ORM\Column(length=10, name="effortValue")
+     * @ORM\Column(length=10, name="effortValue", nullable=true)
      */
     private $effortValue;
 
     /**
      * @var string|null
-     * @ORM\Column(length=100, name="effortDescriptor")
+     * @ORM\Column(length=100, name="effortDescriptor", nullable=true)
      */
     private $effortDescriptor;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="effortConcern")
+     * @ORM\Column(length=1, name="effortConcern", nullable=true)
      */
     private $effortConcern = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $comment;
 
     /**
      * @var string|null
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     private $response;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
 

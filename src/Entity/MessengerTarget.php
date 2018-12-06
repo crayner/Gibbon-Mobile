@@ -54,13 +54,13 @@ class MessengerTarget
     /**
      * @var Messenger|null
      * @ORM\ManyToOne(targetEntity="Messenger")
-     * @ORM\JoinColumn(name="gibbonMessengerID", referencedColumnName="gibbonMessengerID")
+     * @ORM\JoinColumn(name="gibbonMessengerID", referencedColumnName="gibbonMessengerID", nullable=false)
      */
     private $messenger;
 
     /**
      * @var string|null
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, nullable=true)
      */
     private $type;
 
@@ -77,19 +77,19 @@ class MessengerTarget
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
-    private $parents;
+    private $parents = 'N';
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $students;
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "N"})
      */
     private $staff;
 

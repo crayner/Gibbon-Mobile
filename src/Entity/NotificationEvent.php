@@ -70,7 +70,7 @@ class NotificationEvent
 
     /**
      * @var string|null
-     * @ORM\Column(length=12)
+     * @ORM\Column(length=12, options={"default": "Core"})
      */
     private $type = 'Core';
 
@@ -87,7 +87,7 @@ class NotificationEvent
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active = 'Y';
 

@@ -42,7 +42,7 @@ class MedicalCondition
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonMedicalConditionID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="smallint", name="gibbonMedicalConditionID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;

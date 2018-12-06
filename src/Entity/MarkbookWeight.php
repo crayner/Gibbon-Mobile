@@ -52,7 +52,7 @@ class MarkbookWeight
     /**
      * @var CourseClass|null
      * @ORM\ManyToOne(targetEntity="CourseClass")
-     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID")
+     * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;
 
@@ -70,13 +70,13 @@ class MarkbookWeight
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $reportable = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=4)
+     * @ORM\Column(length=4, options={"default": "year"})
      */
     private $calculate = 'year';
 
