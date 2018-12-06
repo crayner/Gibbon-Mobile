@@ -27,7 +27,6 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
@@ -46,7 +45,7 @@ class FinanceBudgetCycle
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonFinanceBudgetCycleID", columnDefinition="INT(9) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonFinanceBudgetCycleID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -59,7 +58,7 @@ class FinanceBudgetCycle
 
     /**
      * @var string|null
-     * @ORM\Column(length=7)
+     * @ORM\Column(length=7, options={"default": "Upcoming"})
      */
     private $status = 'Upcoming';
 
@@ -89,7 +88,7 @@ class FinanceBudgetCycle
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
@@ -102,7 +101,7 @@ class FinanceBudgetCycle
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID")
      */
     private $personUpdater;
 

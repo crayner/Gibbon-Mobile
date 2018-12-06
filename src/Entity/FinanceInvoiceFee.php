@@ -45,7 +45,7 @@ class FinanceInvoiceFee
     /**
      * @var integer|null
      * @ORM\Id
-     * @ORM\Column(type="integer", name="gibbonFinanceInvoiceFeeID", columnDefinition="INT(10) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonFinanceInvoiceFeeID", columnDefinition="INT(15) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -53,13 +53,13 @@ class FinanceInvoiceFee
     /**
      * @var FinanceInvoice|null
      * @ORM\ManyToOne(targetEntity="FinanceInvoice")
-     * @ORM\JoinColumn(name="gibbonFinanceInvoiceID", referencedColumnName="gibbonFinanceInvoiceID")
+     * @ORM\JoinColumn(name="gibbonFinanceInvoiceID", referencedColumnName="gibbonFinanceInvoiceID", nullable=false)
      */
     private $financeInvoice;
 
     /**
      * @var string
-     * @ORM\Column(length=12, name="feeType")
+     * @ORM\Column(length=12, name="feeType", options={"default": "Ad Hoc"})
      */
     private $feeType = 'Ad Hoc';
 
@@ -72,7 +72,7 @@ class FinanceInvoiceFee
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, nullable=true)
+     * @ORM\Column(length=1, nullable=true, options={"comment": "Has this fee been separated from its parent in gibbonFinanceFee? Only applies to Standard fees. Separation takes place during invoice issueing."})
      */
     private $separated;
 

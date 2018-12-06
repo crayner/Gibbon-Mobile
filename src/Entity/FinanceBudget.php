@@ -27,7 +27,6 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
@@ -65,7 +64,7 @@ class FinanceBudget
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active = 'Y';
 
@@ -78,7 +77,7 @@ class FinanceBudget
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
@@ -91,7 +90,7 @@ class FinanceBudget
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID")
      */
     private $personUpdater;
 

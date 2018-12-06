@@ -54,7 +54,7 @@ class FinanceFee
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
@@ -78,14 +78,14 @@ class FinanceFee
 
     /**
      * @var string|null
-     * @ORM\Column(length=1)
+     * @ORM\Column(length=1, options={"default": "Y"})
      */
     private $active = 'Y';
 
     /**
      * @var FinanceFeeCategory|null
      * @ORM\ManyToOne(targetEntity="FinanceFeeCategory")
-     * @ORM\JoinColumn(name="gibbonFinanceFeeCategoryID", referencedColumnName="gibbonFinanceFeeCategoryID")
+     * @ORM\JoinColumn(name="gibbonFinanceFeeCategoryID", referencedColumnName="gibbonFinanceFeeCategoryID", nullable=false)
      */
     private $financeFeeCategory;
 
@@ -98,7 +98,7 @@ class FinanceFee
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
@@ -111,7 +111,7 @@ class FinanceFee
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID")
      */
     private $personUpdate;
 

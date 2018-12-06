@@ -53,7 +53,7 @@ class FinanceInvoicee
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -83,7 +83,7 @@ class FinanceInvoicee
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", name="companyEmails", nullable=true)
+     * @ORM\Column(type="text", name="companyEmail", nullable=true)
      */
     private $companyEmail;
 

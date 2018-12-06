@@ -60,7 +60,7 @@ class FinanceInvoiceeUpdate
 
     /**
      * @var string
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -72,7 +72,7 @@ class FinanceInvoiceeUpdate
     /**
      * @var FinanceInvoicee|null
      * @ORM\ManyToOne(targetEntity="FinanceInvoicee")
-     * @ORM\JoinColumn(name="gibbonFinanceInvoiceeID", referencedColumnName="gibbonFinanceInvoiceeID")
+     * @ORM\JoinColumn(name="gibbonFinanceInvoiceeID", referencedColumnName="gibbonFinanceInvoiceeID", nullable=false)
      */
     private $financeInvoicee;
 
@@ -102,7 +102,7 @@ class FinanceInvoiceeUpdate
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", name="companyEmails", nullable=true)
+     * @ORM\Column(type="text", name="companyEmail", nullable=true)
      */
     private $companyEmail;
 
@@ -133,13 +133,13 @@ class FinanceInvoiceeUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personUpdater;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestamp;
 

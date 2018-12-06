@@ -50,20 +50,20 @@ class FinanceBudgetCycleAllocation
     /**
      * @var FinanceBudget|null
      * @ORM\ManyToOne(targetEntity="FinanceBudget")
-     * @ORM\JoinColumn(name="gibbonFinanceBudgetID", referencedColumnName="gibbonFinanceBudgetID")
+     * @ORM\JoinColumn(name="gibbonFinanceBudgetID", referencedColumnName="gibbonFinanceBudgetID", nullable=false)
      */
     private $financeBudget;
 
     /**
      * @var FinanceBudgetCycle|null
      * @ORM\ManyToOne(targetEntity="FinanceBudgetCycle")
-     * @ORM\JoinColumn(name="gibbonFinanceBudgetCycleID", referencedColumnName="gibbonFinanceBudgetCycleID")
+     * @ORM\JoinColumn(name="gibbonFinanceBudgetCycleID", referencedColumnName="gibbonFinanceBudgetCycleID", nullable=false)
      */
     private $financeBudgetCycle;
 
     /**
      * @var float
-     * @ORM\Column(type="decimal", precision=14, scale=2)
+     * @ORM\Column(type="decimal", precision=14, scale=2, options={"default": "0.00"})
      */
     private $value = 0.00;
 

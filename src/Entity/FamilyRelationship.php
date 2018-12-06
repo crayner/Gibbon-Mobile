@@ -51,21 +51,21 @@ class FamilyRelationship
     /**
      * @var Family|null
      * @ORM\ManyToOne(targetEntity="Family")
-     * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID")
+     * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID", nullable=false)
      */
     private $family;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID1", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID1", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person1;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID2", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID2", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person2;
 

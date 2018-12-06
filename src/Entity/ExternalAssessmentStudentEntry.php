@@ -42,7 +42,7 @@ class ExternalAssessmentStudentEntry
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonExternalAssessmentStudentEntryID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonExternalAssessmentStudentEntryID", columnDefinition="INT(14) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -50,14 +50,14 @@ class ExternalAssessmentStudentEntry
     /**
      * @var ExternalAssessmentStudent|null
      * @ORM\ManyToOne(targetEntity="ExternalAssessmentStudent")
-     * @ORM\JoinColumn(name="gibbonExternalAssessmentStudentID", referencedColumnName="gibbonExternalAssessmentStudentID")
+     * @ORM\JoinColumn(name="gibbonExternalAssessmentStudentID", referencedColumnName="gibbonExternalAssessmentStudentID", nullable=false)
      */
     private $externalAssessmentStudent;
 
     /**
      * @var ExternalAssessmentField|null
      * @ORM\ManyToOne(targetEntity="ExternalAssessmentField")
-     * @ORM\JoinColumn(name="gibbonExternalAssessmentFieldID", referencedColumnName="gibbonExternalAssessmentFieldID")
+     * @ORM\JoinColumn(name="gibbonExternalAssessmentFieldID", referencedColumnName="gibbonExternalAssessmentFieldID", nullable=false)
      */
     private $externalAssessmentField;
 

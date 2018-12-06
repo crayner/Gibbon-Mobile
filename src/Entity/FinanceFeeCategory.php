@@ -47,7 +47,7 @@ class FinanceFeeCategory
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonFinanceFeeCategoryID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="integer", name="gibbonFinanceFeeCategoryID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;

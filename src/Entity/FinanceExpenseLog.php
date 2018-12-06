@@ -50,20 +50,20 @@ class FinanceExpenseLog
     /**
      * @var FinanceExpense|null
      * @ORM\ManyToOne(targetEntity="FinanceExpense")
-     * @ORM\JoinColumn(name="gibbonFinanceExpenseID", referencedColumnName="gibbonFinanceExpenseID")
+     * @ORM\JoinColumn(name="gibbonFinanceExpenseID", referencedColumnName="gibbonFinanceExpenseID", nullable=false)
      */
     private $financeExpense;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestamp;
 

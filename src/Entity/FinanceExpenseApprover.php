@@ -52,26 +52,26 @@ class FinanceExpenseApprover
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
     /**
      * @var integer|null
-     * @ORM\Column(type="smallint", nullable=true, name="sequenceNumber")
+     * @ORM\Column(type="smallint", nullable=true, name="sequenceNumber", columnDefinition="INT(4)")
      */
     private $sequenceNumber;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampCreator")
+     * @ORM\Column(type="datetime", name="timestampCreator", nullable=true)
      */
     private $timestampCreator;
 
@@ -84,7 +84,7 @@ class FinanceExpenseApprover
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampUpdate")
+     * @ORM\Column(type="datetime", name="timestampUpdate", nullable=true)
      */
     private $timestampUpdate;
 
@@ -175,7 +175,7 @@ class FinanceExpenseApprover
      * @throws \Exception
      * @ORM\PrePersist()
      */
-    public function setTimestampCreator(?\DateTime $timestampCreator): FinanceExpenseApprover
+    public function setTimestampCreator(?\DateTime $timestampCreator = null): FinanceExpenseApprover
     {
         $this->timestampCreator = $timestampCreator ?: new \DateTime('now');
         return $this;
@@ -214,7 +214,7 @@ class FinanceExpenseApprover
      * @throws \Exception
      * @ORM\PreUpdate()
      */
-    public function setTimestampUpdate(?\DateTime $timestampUpdate): FinanceExpenseApprover
+    public function setTimestampUpdate(?\DateTime $timestampUpdate = null): FinanceExpenseApprover
     {
         $this->timestampUpdate = $timestampUpdate ?: new \DateTime('now');
         return $this;

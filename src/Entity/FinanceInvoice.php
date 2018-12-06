@@ -54,20 +54,20 @@ class FinanceInvoice
     /**
      * @var SchoolYear|null
      * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID", referencedColumnName="gibbonSchoolYearID", nullable=false)
      */
     private $schoolYear;
 
     /**
      * @var FinanceInvoicee|null
      * @ORM\ManyToOne(targetEntity="FinanceInvoicee")
-     * @ORM\JoinColumn(name="gibbonFinanceInvoiceeID", referencedColumnName="gibbonFinanceInvoiceeID")
+     * @ORM\JoinColumn(name="gibbonFinanceInvoiceeID", referencedColumnName="gibbonFinanceInvoiceeID", nullable=false)
      */
     private $financeInvoicee;
 
     /**
      * @var string
-     * @ORM\Column(length=8, name="invoiceTo")
+     * @ORM\Column(length=8, name="invoiceTo", options={"default": "Family"})
      */
     private $invoiceTo = 'Family';
 
@@ -78,7 +78,7 @@ class FinanceInvoice
 
     /**
      * @var string
-     * @ORM\Column(length=12, name="billingScheduleType")
+     * @ORM\Column(length=12, name="billingScheduleType", options={"default": "Ad Hoc"})
      */
     private $billingScheduleType = 'Ad Hoc';
 
@@ -89,7 +89,7 @@ class FinanceInvoice
 
     /**
      * @var string
-     * @ORM\Column(length=1, options={"comment": "Has this invoice been separated from its schedule in gibbonFinanceBillingSchedule? Only applies to scheduled invoices. Separation takes place during invoice issueing."})
+     * @ORM\Column(length=1, options={"comment": "Has this invoice been separated from its schedule in gibbonFinanceBillingSchedule? Only applies to scheduled invoices. Separation takes place during invoice issueing."}, nullable=true)
      */
     private $separated;
 
@@ -102,7 +102,7 @@ class FinanceInvoice
 
     /**
      * @var string
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -169,7 +169,7 @@ class FinanceInvoice
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
@@ -182,7 +182,7 @@ class FinanceInvoice
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID", nullable=true)
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdate", referencedColumnName="gibbonPersonID")
      */
     private $personUpdate;
 

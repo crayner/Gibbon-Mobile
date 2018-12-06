@@ -56,7 +56,7 @@ class Family
 
     /**
      * @var string|null
-     * @ORM\Column(length=100, name="nameAddress")
+     * @ORM\Column(length=100, name="nameAddress", options={"comment": "The formal name to be used for addressing the family (e.g. Mr. & Mrs. Smith)"})
      */
     private $nameAddress;
 
@@ -97,13 +97,13 @@ class Family
 
     /**
      * @var string|null
-     * @ORM\Column(length=30, name="languageHomeSecondary")
+     * @ORM\Column(length=30, name="languageHomeSecondary", nullable=true)
      */
     private $languageHomeSecondary;
 
     /**
      * @var string|null
-     * @ORM\Column(length=50, name="familySync")
+     * @ORM\Column(length=50, name="familySync", nullable=true)
      */
     private $familySync;
 

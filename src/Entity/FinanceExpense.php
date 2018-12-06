@@ -54,14 +54,14 @@ class FinanceExpense
     /**
      * @var FinanceBudget|null
      * @ORM\ManyToOne(targetEntity="FinanceBudget")
-     * @ORM\JoinColumn(name="gibbonFinanceBudgetID", referencedColumnName="gibbonFinanceBudgetID")
+     * @ORM\JoinColumn(name="gibbonFinanceBudgetID", referencedColumnName="gibbonFinanceBudgetID", nullable=false)
      */
     private $financeBudget;
 
     /**
      * @var FinanceBudgetCycle|null
      * @ORM\ManyToOne(targetEntity="FinanceBudgetCycle")
-     * @ORM\JoinColumn(name="gibbonFinanceBudgetCycleID", referencedColumnName="gibbonFinanceBudgetCycleID")
+     * @ORM\JoinColumn(name="gibbonFinanceBudgetCycleID", referencedColumnName="gibbonFinanceBudgetCycleID", nullable=false)
      */
     private $financeBudgetCycle;
 
@@ -96,13 +96,13 @@ class FinanceExpense
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="countAgainstBudget")
+     * @ORM\Column(length=1, name="countAgainstBudget", options={"default": "Y"})
      */
     private $countAgainstBudget = 'Y';
 
     /**
      * @var string|null
-     * @ORM\Column(length=6, name="purchaseBy")
+     * @ORM\Column(length=6, name="purchaseBy", options={"default": "School"})
      */
     private $purchaseBy = 'School';
 
@@ -173,19 +173,19 @@ class FinanceExpense
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDCreator", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personCreator;
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampCreator", options={"defaults": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime", name="timestampCreator", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestampCreator;
 
     /**
      * @var string
-     * @ORM\Column(length=1, name="statusApprovalBudgetCleared")
+     * @ORM\Column(length=1, name="statusApprovalBudgetCleared", options={"default": "N"})
      */
     private $statusApprovalBudgetCleared = 'N';
 

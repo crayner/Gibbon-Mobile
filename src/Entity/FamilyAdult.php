@@ -53,14 +53,14 @@ class FamilyAdult
     /**
      * @var Family|null
      * @ORM\ManyToOne(targetEntity="Family")
-     * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID")
+     * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID", nullable=false)
      */
     private $family;
 
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -78,7 +78,7 @@ class FamilyAdult
 
     /**
      * @var string|null
-     * @ORM\Column(type="smallint", name="contactPriority")
+     * @ORM\Column(type="smallint", name="contactPriority", options={"default": 1}, columnDefinition="INT(2)")
      */
     private $contactPriority;
 

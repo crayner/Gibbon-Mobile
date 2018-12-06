@@ -46,7 +46,7 @@ class ExternalAssessment
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonExternalAssessmentID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="smallint", name="gibbonExternalAssessmentID", columnDefinition="INT(4) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -83,7 +83,7 @@ class ExternalAssessment
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, name="allowFileUpload")
+     * @ORM\Column(length=1, name="allowFileUpload", options={"default": "N"})
      */
     private $allowFileUpload = 'N';
 

@@ -51,7 +51,7 @@ class ExternalAssessmentField
     /**
      * @var ExternalAssessment|null
      * @ORM\ManyToOne(targetEntity="ExternalAssessment")
-     * @ORM\JoinColumn(name="gibbonExternalAssessmentID", referencedColumnName="gibbonExternalAssessmentID")
+     * @ORM\JoinColumn(name="gibbonExternalAssessmentID", referencedColumnName="gibbonExternalAssessmentID", nullable=false)
      */
     private $externalAssessment;
 
@@ -76,13 +76,13 @@ class ExternalAssessmentField
     /**
      * @var Scale|null
      * @ORM\ManyToOne(targetEntity="Scale")
-     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID")
+     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID", nullable=false)
      */
     private $scale;
 
     /**
      * @var string|null
-     * @ORM\Column(name="gibbonYearGroupIDList")
+     * @ORM\Column(name="gibbonYearGroupIDList", nullable=true)
      */
     private $yearGroupList;
 

@@ -57,7 +57,7 @@ class FamilyUpdate
 
     /**
      * @var string
-     * @ORM\Column(length=8)
+     * @ORM\Column(length=8, options={"default": "Pending"})
      */
     private $status = 'Pending';
 
@@ -69,7 +69,7 @@ class FamilyUpdate
     /**
      * @var Family|null
      * @ORM\ManyToOne(targetEntity="Family")
-     * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID")
+     * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID", nullable=false)
      */
     private $family;
 
@@ -112,7 +112,7 @@ class FamilyUpdate
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID")
+     * @ORM\JoinColumn(name="gibbonPersonIDUpdater", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $personUpdater;
 

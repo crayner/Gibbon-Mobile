@@ -27,7 +27,6 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -43,7 +42,7 @@ class ExternalAssessmentStudent
     /**
      * @var integer|null
      * @ORM\Id()
-     * @ORM\Column(type="integer", name="gibbonExternalAssessmentStudentID", columnDefinition="INT(6) UNSIGNED ZEROFILL")
+     * @ORM\Column(type="bigint", name="gibbonExternalAssessmentStudentID", columnDefinition="INT(12) UNSIGNED ZEROFILL")
      * @ORM\GeneratedValue
      */
     private $id;
@@ -51,16 +50,16 @@ class ExternalAssessmentStudent
     /**
      * @var ExternalAssessment|null
      * @ORM\ManyToOne(targetEntity="ExternalAssessment")
-     * @ORM\JoinColumn(name="gibbonExternalAssessmentID", referencedColumnName="gibbonExternalAssessmentID")
+     * @ORM\JoinColumn(name="gibbonExternalAssessmentID", referencedColumnName="gibbonExternalAssessmentID", nullable=false)
      */
     private $externalAssessment;
 
     /**
-     * @var Scale|null
-     * @ORM\ManyToOne(targetEntity="Scale")
-     * @ORM\JoinColumn(name="gibbonScaleID", referencedColumnName="gibbonScaleID")
+     * @var Person|null
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
-    private $scale;
+    private $person;
 
     /**
      * @var \DateTime|null
@@ -111,20 +110,20 @@ class ExternalAssessmentStudent
     }
 
     /**
-     * @return Scale|null
+     * @return Person|null
      */
-    public function getScale(): ?Scale
+    public function getPerson(): ?Person
     {
-        return $this->scale;
+        return $this->person;
     }
 
     /**
-     * @param Scale|null $scale
+     * @param Person|null $person
      * @return ExternalAssessmentStudent
      */
-    public function setScale(?Scale $scale): ExternalAssessmentStudent
+    public function setPerson(?Person $person): ExternalAssessmentStudent
     {
-        $this->scale = $scale;
+        $this->person = $person;
         return $this;
     }
 

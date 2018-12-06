@@ -50,7 +50,7 @@ class FileExtension
 
     /**
      * @var string
-     * @ORM\Column(length=16)
+     * @ORM\Column(length=16, options={"default": "Other"})
      */
     private $type = 'Other';
 
