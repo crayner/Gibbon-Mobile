@@ -83,6 +83,8 @@ trait EntityTrait
         self::$entityRepository = $this->getRepository();
         $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
+        if (method_exists($this, 'additionalConstruct'))
+            $this->additionalConstruct();
     }
 
     /**
