@@ -6,44 +6,45 @@
 %}
 
 {% block content %}
-        <div id="loginForm">
-            {{ form_start(form) }}
-                {% block messages %}{{ parent() }}{% endblock messages %}
-                <div class="container">
-                    <div class="row alert alert-success">
-                        <div class="col-8 lead">{{ 'Login'|trans }}</div>
-                        <div class="col-4 text-right">
-                            {% if getSetting('System', 'googleOAuth') is same as('Y') and getParameter('google_client_id')|default('') is not same as('') %}
-                                {{ miscButton({class: 'btn btn-success fab fa-google', title: 'google.oauth', transDomain: 'messages', windowOpen: {route: path('google_oauth')}, style: {}})|raw }}
-                            {% endif %}
-                            {{ saveButton({float: {}})|raw }}
-                        </div>
-                    </div>
-                    {% if error %}
-                        <div class="row alert alert-danger">
-                            <div class="col-12">
-                                {{ error.messageKey|trans(error.messageData) }}
-                                {% if app.environment is not same as('prod') %}
-                                    <br/>
-                                    {{ error.message }}
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col-12 card">
-                            {{ form_row(form._username) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 card">
-                            {{ form_row(form._password) }}
-                        </div>
+    <div id="loginForm">
+        {{ form_start(form) }}
+            {% block messages %}{{ parent() }}{% endblock messages %}
+            <div class="container">
+                <div class="row alert alert-success">
+                    <div class="col-8 lead">{{ 'Login'|trans }}</div>
+                    <div class="col-4 text-right">
+                        {% if getSetting('System', 'googleOAuth') is same as('Y') and getParameter('google_client_id')|default('') is not same as('') %}
+                            {{ miscButton({class: 'btn btn-success fab fa-google', title: 'google.oauth', transDomain: 'messages', windowOpen: {route: path('google_oauth')}, style: {}})|raw }}
+                        {% endif %}
+                        {{ saveButton({float: {}})|raw }}
                     </div>
                 </div>
-            {{ form_end(form) }}
-        </div>
+                {% if error %}
+                    <div class="row alert alert-danger">
+                        <div class="col-12">
+                            {{ error.messageKey|trans(error.messageData) }}
+                            {% if app.environment is not same as('prod') %}
+                                <br/>
+                                {{ error.message }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12 card">
+                        {{ form_row(form._username) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 card">
+                        {{ form_row(form._password) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
 {% endblock content %}
+{% block menuContent %}{% endblock menuContent %}
 
 {% block javascripts %}
     {{ parent() }}

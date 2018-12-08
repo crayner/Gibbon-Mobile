@@ -3,10 +3,6 @@
 {% extends 'Default/template.html.twig' %}
 
 {% block content %}
-    <div class="container">
-    <h3 class="alert alert-primary">You arrived at the base template.</h3>
-    </div>
+    <h3 class="alert alert-primary text-center">You arrived at the base template.</h3>
 {% endblock content %}
-    {% block footer %}{{ parent() }}
-        {{ dump() }}
-    {% endblock footer %}
+{% block footer %}{{ parent() }}{% endblock footer %}

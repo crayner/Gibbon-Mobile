@@ -10,26 +10,29 @@
         {% endblock stylesheets %}
     </head>
     <body>
-    <div class="container">
-    {% block content %}
-        {% block messages %}
-            {% include 'Default/flash.html.twig' %}
-        {% endblock messages %}
-    {% endblock content %}
-    {% block footer %}
-        <div class="container text-center" style="padding: 0; background-color: rgba(100,100,100,0.5);">
-            <div class="text-center text-white" style="min-height: 75px;">
-                    <img src="{{ asset('images/logo.png') }}" height="75" alt="{{ 'Logo'|trans }}" style="float: left;" />
-                    <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} &copy; Craig Rayner 2018</small>
-                    <p class="small">
-                        {{ 'Created under the'|trans }} <a target='_blank' href='https://www.gnu.org/licenses/gpl.html' class="text-white">GNU GPL</a>
-                        @ <a target='_blank' href='http://www.ichk.edu.hk' class="text-white">ICHK</a> |
-                        <a target='_blank' href='https://gibbonedu.org/about/#ourTeam' class="text-white">{{ 'Credits'|trans }}</a> |
-                        <a target='_blank' href='https://gibbonedu.org/about/#translators' class="text-white">{{ 'Translators'|trans }}</a>
-                    </p>
+    <div class="container mobileContent">
+        {% block menuContent %}
+            <div class="notificationTray"></div>
+        {% endblock menuContent %}
+        {% block content %}
+            {% block messages %}
+                {% include 'Default/flash.html.twig' %}
+            {% endblock messages %}
+        {% endblock content %}
+        {% block footer %}
+            <div class="container text-center mobileFooter">
+                <div class="text-center text-charcoal" style="min-height: 75px;">
+                        <img src="{{ asset('images/logo.png') }}" height="75" alt="{{ 'Logo'|trans }}" style="float: left;" />
+                        <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} &copy; Craig Rayner 2018</small>
+                        <p class="small">
+                            {{ 'Created under the'|trans }} <a target='_blank' href='https://www.gnu.org/licenses/gpl.html' class="text-charcoal">GNU GPL</a>
+                            @ <a target='_blank' href='http://www.ichk.edu.hk' class="text-charcoal" title="Hill Range Services">HRS</a> |
+                            <a target='_blank' href='https://gibbonedu.org/about/#ourTeam' class="text-charcoal">{{ 'Credits'|trans }}</a> |
+                            <a target='_blank' href='https://gibbonedu.org/about/#translators' class="text-charcoal">{{ 'Translators'|trans }}</a>
+                        </p>
+                </div>
             </div>
-        </div>
-    {% endblock footer %}
+        {% endblock footer %}
     </div>
     <div id="coreRender"></div>
     {% block javascripts %}

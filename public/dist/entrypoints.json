@@ -16,11 +16,11 @@
       "js": [
         "build/runtime.d41d8cd9.js",
         "build/vendors~eda011b8.29375d69.js",
-        "build/core.80fd0a9a.js"
+        "build/core.8129f8d3.js"
       ],
       "css": [
         "build/vendors~eda011b8.a2780709.css",
-        "build/core.a2adcf0d.css"
+        "build/core.cbaedc58.css"
       ]
     }
   }
