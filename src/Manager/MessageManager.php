@@ -1,7 +1,7 @@
 <?php
 namespace App\Manager;
 
-use App\Organism\Message;
+use App\Manager\Objects\Message;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class MessageManager

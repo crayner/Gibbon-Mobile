@@ -21,7 +21,7 @@ export default function MessageWall(props) {
     const rr = len > 1 ? (35 - (len * 4)) : 28
 
     return (
-        <span className="fa-layers fa-fw fa-2x" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Message Wall')}>
+        <span className="fa-layers fa-fw" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Message Wall')}>
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'text-tomato'} icon={faCommentAlt} transform={'down-3 left-2'} />
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'text-tomato'} icon={faCommentAlt} transform={'rotate-180 up-3 right-2'} />
             <span className="fa-layers-counter" style={{background: colour, margin: '28px ' + rr + 'px 0 0'}}>{y}</span>

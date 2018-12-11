@@ -21,7 +21,7 @@ export default function Likes(props) {
     const rr = len > 1 ? (35 - (len * 4)) : 28
 
     return (
-        <span className="fa-layers fa-fw fa-2x" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Likes')}>
+        <span className="fa-layers fa-fw" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Likes')}>
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'text-tomato'} icon={faStar} />
             <span className="fa-layers-counter" style={{background: colour, margin: '28px ' + rr + 'px 0 0'}}>{y}</span>
         </span>

@@ -29,6 +29,7 @@
  */
 namespace App\Manager;
 
+use App\Entity\Notification;
 use App\Manager\Objects\Notifications;
 use App\Provider\NotificationProvider;
 use Symfony\Component\HttpFoundation\Request;
@@ -224,14 +225,46 @@ class NotificationManager
 
         foreach($this->getNotifications()->getNotifications() as $notification)
         {
-            $w = $this->getSerialiser()->serialize($notification, 'json', ['attributes' => ['id','text','actionLink','timestamp','person' => ['id'], 'module' => ['name']]]);
+            $w = $this->getSerialiser()->serialize($notification, 'json', ['attributes' => ['id','text','actionLink','timestamp','count','module' => ['name']]]);
             $result[] = json_decode($w);
         }
         return $result;
     }
 
+    /**
+     * getLastNotificationTime
+     * @return \DateTime
+     * @throws \Exception
+     */
     public function getLastNotificationTime()
     {
         return $this->getNotifications()->getLastNotificationTime();
+    }
+
+    /**
+     * archiveNotification
+     * @param Notification $notification
+     */
+    public function archiveNotification(Notification $notification)
+    {
+        $this->getProvider()->archive($notification);
+    }
+
+    /**
+     * archiveNotification
+     * @param Notification $notification
+     */
+    public function deleteNotification(Notification $notification)
+    {
+        $this->getProvider()->delete($notification);
+    }
+
+    /**
+     * getMessages
+     * @return MessageManager
+     */
+    public function getMessages(): MessageManager
+    {
+        return $this->getProvider()->getMessageManager();
     }
 }

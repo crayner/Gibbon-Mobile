@@ -1,6 +1,7 @@
 {% trans_default_domain "messages" %}
 
 {% extends 'Default/template.html.twig' %}
+
 {% form_theme form
     '@HillrangeForm/FormTheme/bootstrap.html.twig'
 %}
@@ -8,7 +9,6 @@
 {% block content %}
     <div id="loginForm">
         {{ form_start(form) }}
-            {% block messages %}{{ parent() }}{% endblock messages %}
             <div class="container">
                 <div class="row alert alert-success">
                     <div class="col-8 lead">{{ 'Login'|trans }}</div>

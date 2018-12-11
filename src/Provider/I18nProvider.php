@@ -24,51 +24,46 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 9/12/2018
- * Time: 08:35
+ * Date: 11/12/2018
+ * Time: 13:18
  */
 namespace App\Provider;
 
-use App\Entity\Notification;
-use App\Entity\Person;
+use App\Entity\I18n;
 use App\Manager\Traits\EntityTrait;
-use App\Util\UserHelper;
+use Doctrine\ORM\NoResultException;
 
 /**
- * Class NotificationProvider
+ * Class I18nProvider
  * @package App\Provider
  */
-class NotificationProvider
+class I18nProvider
 {
     use EntityTrait;
 
     /**
      * @var string
      */
-    private $entityName = Notification::class;
+    private $entityName = I18n::class;
 
     /**
-     * findByNew
-     * @param Person|null $person
-     * @return object[]
-     * @throws \Exception
+     * getDateFormat
+     * @param string $locale
+     * @return string
      */
-    public function findByNew(?Person $person = null): array
+    public function getDateFormatPHP(string $locale = 'en_GB'): string
     {
-        $person = $person ?: UserHelper::getCurrentUser();
-        return $this->getRepository()->findBy(['status' => 'New', 'person' => $person], ['timestamp' => 'ASC']) ?: [];
-    }
+        try {
+            $result = $this->getRepository()->createQueryBuilder('i')
+                ->select('i.dateFormatPHP')
+                ->where('i.code = :locale')
+                ->setParameter('locale', $locale)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch( NoResultException $e) {
+            $result = 'd/m/Y';
+        }
 
-    /**
-     * archive
-     */
-    public function archive(Notification $notification)
-    {
-        $this->setEntity($notification);
-        $this->getEntity()->setStatus('Archived');
-        $this->saveEntity();
-        dump($this->getEntity());
-        if ($this->getMessageManager()->getStatus() === 'default')
-            $this->getMessageManager()->add('success', 'Your request was completed successfully.', [], 'messages');
+        return $result;
     }
 }

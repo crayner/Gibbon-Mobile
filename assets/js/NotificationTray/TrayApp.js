@@ -51,7 +51,7 @@ export default class TrayApp extends Component {
 
     showNotifications() {
         if (this.state.notificationCount > 0)
-            openPage('/notifications/show/', {method: 'GET'}, this.locale);
+            openPage('/notification/show/', {method: 'GET'}, this.locale);
     }
 
     render () {

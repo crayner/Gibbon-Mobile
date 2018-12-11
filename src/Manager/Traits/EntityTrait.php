@@ -143,7 +143,7 @@ trait EntityTrait
             $entity = $this->find($id);
         if (empty($entity))
         {
-            $this->getMessageManager()->add('warning', 'entity.not_found', ['%{entity}' => $this->getEntityName()], 'System');
+            $this->getMessageManager()->add('warning', 'Your request failed because your inputs were invalid.', [], 'messages');
             return $entity;
         }
 
@@ -151,7 +151,7 @@ trait EntityTrait
             if ($this->canDelete($entity)) {
                 $this->getEntityManager()->remove($entity);
                 $this->getEntityManager()->flush();
-                $this->getMessageManager()->add('success', 'entity.removed.success', ['%{entity}' => $this->getEntityName(), '%{name}' => $entity->__toString()], 'System');
+                $this->getMessageManager()->add('success', 'Your request was completed successfully.', [], 'messages');
                 $this->entity = null;
                 return $entity;
 
@@ -160,19 +160,19 @@ trait EntityTrait
             if ($entity->canDelete()) {
                 $this->getEntityManager()->remove($entity);
                 $this->getEntityManager()->flush();
-                $this->getMessageManager()->add('success', 'entity.removed.success', ['%{entity}' => $this->getEntityName(), '%{name}' => $entity->__toString()], 'System');
+                $this->getMessageManager()->add('success', 'Your request was completed successfully.', [], 'messages');
                 $this->entity = null;
                 return $entity;
             }
         } else {
             $this->getEntityManager()->remove($entity);
             $this->getEntityManager()->flush();
-            $this->getMessageManager()->add('success', 'entity.removed.success', ['%{entity}' => $this->getEntityName(), '%{name}' => $entity->__toString()], 'System');
+            $this->getMessageManager()->add('success', 'Your request was completed successfully.', [], 'messages');
             $this->entity = null;
             return $entity;
 
         }
-        $this->getMessageManager()->add('warning', 'entity.remove.locked', ['%{entity}' => $this->getEntityName(), '%{name}' => $entity->__toString()], 'System');
+        $this->getMessageManager()->add('warning', 'Your request failed because your inputs were invalid.', [], 'messages');
 
         return $entity;
     }
@@ -238,8 +238,13 @@ trait EntityTrait
                 $this->getMessageManager()->add('danger', $error->getMessage(), [], false);
             return $this;
         }
-        $this->getEntityManager()->persist($this->getEntity());
-        $this->getEntityManager()->flush();
+        try {
+            $this->getEntityManager()->persist($this->getEntity());
+            $this->getEntityManager()->flush();
+        } catch (\Exception $e)
+        {
+            $this->getMessageManager()->add('danger', 'Your request failed due to a database error.', [], false);
+        }
         return $this;
     }
 

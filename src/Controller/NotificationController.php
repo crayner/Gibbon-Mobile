@@ -29,6 +29,7 @@
  */
 namespace App\Controller;
 
+use App\Entity\Notification;
 use App\Manager\NotificationManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -42,16 +43,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class NotificationController extends Controller
 {
     /**
-     * notificationCount
+     * notificationShow
      * @param NotificationManager $manager
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/notification/count/", name="notification_count")
+     * @Route("/notification/show/", name="notifications_show")
      */
-    public function count(NotificationManager $manager)
+    public function show(NotificationManager $manager)
     {
-        $manager->getCount();
+        $manager->setNotifications();
 
-        return $this->render('base.html.twig');
+        return $this->render('Notification/show.html.twig',
+            [
+                'manager' => $manager,
+            ]
+        );
     }
 
     /**
@@ -69,5 +74,47 @@ class NotificationController extends Controller
             [
                 'count' => $manager->getCount(),
             ],200);
+    }
+
+    /**
+     * delete
+     * @param Notification $id
+     * @param NotificationManager $manager
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @Route("/notification/{id}/delete/", name="notification_delete")
+     * @IsGranted("ROLE_USER")
+     */
+    public function delete(Notification $id, NotificationManager $manager)
+    {
+        $manager->deleteNotification($id);
+        $manager->setNotifications();
+
+        return $this->render('Notification/show.html.twig',
+            [
+                'manager' => $manager,
+            ]
+        );
+    }
+
+    /**
+     * archive
+     * @param Notification $id
+     * @param NotificationManager $manager
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @Route("/notification/{id}/archive/", name="notification_archive")
+     * @IsGranted("ROLE_USER")
+     */
+    public function archive(Notification $id, NotificationManager $manager)
+    {
+        $manager->archiveNotification($id);
+        $manager->setNotifications();
+
+        return $this->render('Notification/show.html.twig',
+            [
+                'manager' => $manager,
+            ]
+        );
     }
 }

@@ -1,16 +1,16 @@
 {
   "build/runtime.js": "/build/runtime.d41d8cd9.js",
-  "build/vendors~e6ac30b8.js": "/build/vendors~e6ac30b8.e0082b31.js",
-  "build/vendors~652e473b.js": "/build/vendors~652e473b.6018202c.js",
-  "build/core.css": "/build/core.8349bbf9.css",
-  "build/core.js": "/build/core.f2b2ba81.js",
-  "build/form.css": "/build/form.93cc88d0.css",
-  "build/form.js": "/build/form.62eb9788.js",
+  "build/vendors~e6ac30b8.js": "/build/vendors~e6ac30b8.b248167b.js",
+  "build/vendors~652e473b.js": "/build/vendors~652e473b.c84a5ec5.js",
+  "build/core.css": "/build/core.49b12085.css",
+  "build/core.js": "/build/core.2053cf44.js",
+  "build/form.css": "/build/form.7d67586e.css",
+  "build/form.js": "/build/form.19f5683c.js",
   "build/notificationTray.js": "/build/notificationTray.4ab8b48d.js",
-  "build/vendors~1aeabec8.css": "/build/vendors~1aeabec8.57323faa.css",
-  "build/vendors~1aeabec8.js": "/build/vendors~1aeabec8.d6139c8d.js",
-  "build/core.8349bbf9.css.map": "/build/core.8349bbf9.css.map",
-  "build/form.93cc88d0.css.map": "/build/form.93cc88d0.css.map",
+  "build/vendors~1aeabec8.css": "/build/vendors~1aeabec8.2d1b2953.css",
+  "build/vendors~1aeabec8.js": "/build/vendors~1aeabec8.18677e1f.js",
+  "build/core.49b12085.css.map": "/build/core.49b12085.css.map",
+  "build/form.7d67586e.css.map": "/build/form.7d67586e.css.map",
   "build/static/rosella.jpg": "/build/static/rosella.jpg",
-  "build/vendors~1aeabec8.57323faa.css.map": "/build/vendors~1aeabec8.57323faa.css.map"
+  "build/vendors~1aeabec8.2d1b2953.css.map": "/build/vendors~1aeabec8.2d1b2953.css.map"
 }

@@ -1,0 +1,63 @@
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+
+{% set title = 'New Notifications' %}
+{% set messages = manager.messages %}
+
+{% block content %}
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-2 card card-header">
+                {{ 'Source'|trans }}
+            </div>
+            <div class="col-2 card card-header">
+                {{ 'Date'|trans }}
+            </div>
+            <div class="col-4 card card-header">
+                {{ 'Message'|trans }}
+            </div>
+            <div class="col-2 card card-header">
+                {{ 'Count'|trans }}
+            </div>
+            <div class="col-2 card card-header">
+                {{ 'Actions'|trans }}
+            </div>
+        </div>
+        {% if manager.count > 0 %}
+            {% for notification in manager.toArray %}
+                <div class="row align-self-center">
+                    <div class="col-2 card small text-center">
+                        {{ notification.module|default('System') }}
+                    </div>
+                    <div class="col-2 card small text-center">
+                        {{ notification.timestamp|date(dateFormat(app.request.get('_locale'))) }}
+                    </div>
+                    <div class="col-4 card small">
+                        {{ notification.text }}
+                    </div>
+                    <div class="col-2 card text-center small">
+                        {{ notification.count }}
+                    </div>
+                    <div class="col-2 card text-right">
+                        <div>
+                        {{ deleteButton({title: 'Delete', transDomain: 'messages', mergeClass: 'btn-sm', colour: 'warning', windowOpen: {route: path('notification_delete', {id: notification.id})}})|raw }}
+                        {% if notification.actionLink is same as('') %}
+                            {% set action = {windowOpen: {route: path('notification_archive', {id: notification.id})}} %}
+                        {% else %}
+                            {% set action = {windowOpen: {route: getSetting('absoluteURL') ~ '/notificationsActionProcess.php?action=' ~ notification.actionLink ~ '&gibbonNotificationID=' ~ notification.id, target: '_blank'}} %}
+                        {% endif %}
+                        {{ miscButton({title: 'Action & Archive', transDomain: 'messages', class: 'btn-sm btn btn-success fas fa-search-plus'}|merge(action))|raw }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row align-self-center">
+                <div class="col-12 card text-center alert alert-info">
+                    {{ 'There are no records to display.'|trans }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
