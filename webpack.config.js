@@ -49,7 +49,7 @@ Encore
     .copyFiles({
         from: './assets/static',
         to: 'static/[path][name].[ext]',
-        pattern: /\.(png|gif|jpg|jpeg)$/
+        pattern: /\.(png|gif|jpg|jpeg)$/,
     })
 
 

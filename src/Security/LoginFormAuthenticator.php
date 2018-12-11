@@ -30,6 +30,7 @@
 namespace App\Security;
 
 use App\Entity\Person;
+use App\Entity\Setting;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,10 +151,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param UserInterface $user
      * @return bool
      */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
-        $x = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
-        return $x;
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
@@ -167,6 +167,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         //store the token blah blah blah
+        $session = $request->getSession();
+        $timezone = $this->entityManager->getRepository(Setting::class)->findOneBy(['scope' => 'System', 'name' => 'timezone']) ?: 'UTC';
+        $session->set('last_activity_time', new \DateTime('now', new \DateTimeZone($timezone)));
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);

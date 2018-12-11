@@ -23,5 +23,5 @@ FormHelp.propTypes = {
 }
 
 FormHelp.defaultProps = {
-    help: ''
+    help: '',
 }

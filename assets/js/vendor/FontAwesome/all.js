@@ -506,7 +506,7 @@ var icons = {
   "yoast": [448, 512, [], "f2b1", "M91.3 76h186l-7 18.9h-179c-39.7 0-71.9 31.6-71.9 70.3v205.4c0 35.4 24.9 70.3 84 70.3V460H91.3C41.2 460 0 419.8 0 370.5V165.2C0 115.9 40.7 76 91.3 76zm229.1-56h66.5C243.1 398.1 241.2 418.9 202.2 459.3c-20.8 21.6-49.3 31.7-78.3 32.7v-51.1c49.2-7.7 64.6-49.9 64.6-75.3 0-20.1.6-12.6-82.1-223.2h61.4L218.2 299 320.4 20zM448 161.5V460H234c6.6-9.6 10.7-16.3 12.1-19.4h182.5V161.5c0-32.5-17.1-51.9-48.2-62.9l6.7-17.6c41.7 13.6 60.9 43.1 60.9 80.5z"],
   "youtube": [576, 512, [], "f167", "M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"],
   "youtube-square": [448, 512, [], "f431", "M186.8 202.1l95.2 54.1-95.2 54.1V202.1zM448 80v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h352c26.5 0 48 21.5 48 48zm-42 176.3s0-59.6-7.6-88.2c-4.2-15.8-16.5-28.2-32.2-32.4C337.9 128 224 128 224 128s-113.9 0-142.2 7.7c-15.7 4.2-28 16.6-32.2 32.4-7.6 28.5-7.6 88.2-7.6 88.2s0 59.6 7.6 88.2c4.2 15.8 16.5 27.7 32.2 31.9C110.1 384 224 384 224 384s113.9 0 142.2-7.7c15.7-4.2 28-16.1 32.2-31.9 7.6-28.5 7.6-88.1 7.6-88.1z"],
-  "zhihu": [640, 512, [], "f63f", "M170.54 148.13v217.54l23.43.01 7.71 26.37 42.01-26.37h49.53V148.13H170.54zm97.75 193.93h-27.94l-27.9 17.51-5.08-17.47-11.9-.04V171.75h72.82v170.31zm-118.46-94.39H97.5c1.74-27.1 2.2-51.59 2.2-73.46h51.16s1.97-22.56-8.58-22.31h-88.5c3.49-13.12 7.87-26.66 13.12-40.67 0 0-24.07 0-32.27 21.57-3.39 8.9-13.21 43.14-30.7 78.12 5.89-.64 25.37-1.18 36.84-22.21 2.11-5.89 2.51-6.66 5.14-14.53h28.87c0 10.5-1.2 66.88-1.68 73.44H20.83c-11.74 0-15.56 23.62-15.56 23.62h65.58C66.45 321.1 42.83 363.12 0 396.34c20.49 5.85 40.91-.93 51-9.9 0 0 22.98-20.9 35.59-69.25l53.96 64.94s7.91-26.89-1.24-39.99c-7.58-8.92-28.06-33.06-36.79-41.81L87.9 311.95c4.36-13.98 6.99-27.55 7.87-40.67h61.65s-.09-23.62-7.59-23.62v.01zm412.02-1.6c20.83-25.64 44.98-58.57 44.98-58.57s-18.65-14.8-27.38-4.06c-6 8.15-36.83 48.2-36.83 48.2l19.23 14.43zm-150.09-59.09c-9.01-8.25-25.91 2.13-25.91 2.13s39.52 55.04 41.12 57.45l19.46-13.73s-25.67-37.61-34.66-45.86h-.01zM640 258.35c-19.78 0-130.91.93-131.06.93v-101c4.81 0 12.42-.4 22.85-1.2 40.88-2.41 70.13-4 87.77-4.81 0 0 12.22-27.19-.59-33.44-3.07-1.18-23.17 4.58-23.17 4.58s-165.22 16.49-232.36 18.05c1.6 8.82 7.62 17.08 15.78 19.55 13.31 3.48 22.69 1.7 49.15.89 24.83-1.6 43.68-2.43 56.51-2.43v99.81H351.41s2.82 22.31 25.51 22.85h107.94v70.92c0 13.97-11.19 21.99-24.48 21.12-14.08.11-26.08-1.15-41.69-1.81 1.99 3.97 6.33 14.39 19.31 21.84 9.88 4.81 16.17 6.57 26.02 6.57 29.56 0 45.67-17.28 44.89-45.31v-73.32h122.36c9.68 0 8.7-23.78 8.7-23.78l.03-.01z"]
+  "zhihu": [640, 512, [], "f63f", "M170.54 148.13v217.54l23.43.01 7.71 26.37 42.01-26.37h49.53V148.13H170.54zm97.75 193.93h-27.94l-27.9 17.51-5.08-17.47-11.9-.04V171.75h72.82v170.31zm-118.46-94.39H97.5c1.74-27.1 2.2-51.59 2.2-73.46h51.16s1.97-22.56-8.58-22.31h-88.5c3.49-13.12 7.87-26.66 13.12-40.67 0 0-24.07 0-32.27 21.57-3.39 8.9-13.21 43.14-30.7 78.12 5.89-.64 25.37-1.18 36.84-22.21 2.11-5.89 2.51-6.66 5.14-14.53h28.87c0 10.5-1.2 66.88-1.68 73.44H20.83c-11.74 0-15.56 23.62-15.56 23.62h65.58C66.45 321.1 42.83 363.12 0 396.34c20.49 5.85 40.91-.93 51-9.9 0 0 22.98-20.9 35.59-69.25l53.96 64.94s7.91-26.89-1.24-39.99c-7.58-8.92-28.06-33.06-36.79-41.81L87.9 311.95c4.36-13.98 6.99-27.55 7.87-40.67h61.65s-.09-23.62-7.59-23.62v.01zm412.02-1.6c20.83-25.64 44.98-58.57 44.98-58.57s-18.65-14.8-27.38-4.06c-6 8.15-36.83 48.2-36.83 48.2l19.23 14.43zm-150.09-59.09c-9.01-8.25-25.91 2.13-25.91 2.13s39.52 55.04 41.12 57.45l19.46-13.73s-25.67-37.61-34.66-45.86h-.01zM640 258.35c-19.78 0-130.91.93-131.06.93v-101c4.81 0 12.42-.4 22.85-1.2 40.88-2.41 70.13-4 87.77-4.81 0 0 12.22-27.19-.59-33.44-3.07-1.18-23.17 4.58-23.17 4.58s-165.22 16.49-232.36 18.05c1.6 8.82 7.62 17.08 15.78 19.55 13.31 3.48 22.69 1.7 49.15.89 24.83-1.6 43.68-2.43 56.51-2.43v99.81H351.41s2.82 22.31 25.51 22.85h107.94v70.92c0 13.97-11.19 21.99-24.48 21.12-14.08.11-26.08-1.15-41.69-1.81 1.99 3.97 6.33 14.39 19.31 21.84 9.88 4.81 16.17 6.57 26.02 6.57 29.56 0 45.67-17.28 44.89-45.31v-73.32h122.36c9.68 0 8.7-23.78 8.7-23.78l.03-.01z"],
 };
 
 bunker(function () {
@@ -779,7 +779,7 @@ var icons = {
   "window-close": [512, 512, [], "f410", "M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm0 394c0 3.3-2.7 6-6 6H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h404c3.3 0 6 2.7 6 6v340zM356.5 194.6L295.1 256l61.4 61.4c4.6 4.6 4.6 12.1 0 16.8l-22.3 22.3c-4.6 4.6-12.1 4.6-16.8 0L256 295.1l-61.4 61.4c-4.6 4.6-12.1 4.6-16.8 0l-22.3-22.3c-4.6-4.6-4.6-12.1 0-16.8l61.4-61.4-61.4-61.4c-4.6-4.6-4.6-12.1 0-16.8l22.3-22.3c4.6-4.6 12.1-4.6 16.8 0l61.4 61.4 61.4-61.4c4.6-4.6 12.1-4.6 16.8 0l22.3 22.3c4.7 4.6 4.7 12.1 0 16.8z"],
   "window-maximize": [512, 512, [], "f2d0", "M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm0 394c0 3.3-2.7 6-6 6H54c-3.3 0-6-2.7-6-6V192h416v234z"],
   "window-minimize": [512, 512, [], "f2d1", "M480 480H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h448c17.7 0 32 14.3 32 32s-14.3 32-32 32z"],
-  "window-restore": [512, 512, [], "f2d2", "M464 0H144c-26.5 0-48 21.5-48 48v48H48c-26.5 0-48 21.5-48 48v320c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-48h48c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-96 464H48V256h320v208zm96-96h-48V144c0-26.5-21.5-48-48-48H144V48h320v320z"]
+  "window-restore": [512, 512, [], "f2d2", "M464 0H144c-26.5 0-48 21.5-48 48v48H48c-26.5 0-48 21.5-48 48v320c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-48h48c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-96 464H48V256h320v208zm96-96h-48V144c0-26.5-21.5-48-48-48H144V48h320v320z"],
 };
 
 bunker(function () {
@@ -1769,7 +1769,7 @@ var icons = {
   "wrench": [512, 512, [], "f0ad", "M507.73 109.1c-2.24-9.03-13.54-12.09-20.12-5.51l-74.36 74.36-67.88-11.31-11.31-67.88 74.36-74.36c6.62-6.62 3.43-17.9-5.66-20.16-47.38-11.74-99.55.91-136.58 37.93-39.64 39.64-50.55 97.1-34.05 147.2L18.74 402.76c-24.99 24.99-24.99 65.51 0 90.5 24.99 24.99 65.51 24.99 90.5 0l213.21-213.21c50.12 16.71 107.47 5.68 147.37-34.22 37.07-37.07 49.7-89.32 37.91-136.73zM64 472c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"],
   "x-ray": [640, 512, [], "f497", "M240 384c-8.8 0-16 7.2-16 16s7.2 16 16 16 16-7.2 16-16-7.2-16-16-16zm160 32c8.8 0 16-7.2 16-16s-7.2-16-16-16-16 7.2-16 16 7.2 16 16 16zM624 0H16C7.2 0 0 7.2 0 16v32c0 8.8 7.2 16 16 16h608c8.8 0 16-7.2 16-16V16c0-8.8-7.2-16-16-16zm0 448h-48V96H64v352H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h608c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM480 248c0 4.4-3.6 8-8 8H336v32h104c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H336v32h64c26.5 0 48 21.5 48 48s-21.5 48-48 48-48-21.5-48-48v-16h-64v16c0 26.5-21.5 48-48 48s-48-21.5-48-48 21.5-48 48-48h64v-32H200c-4.4 0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h104v-32H168c-4.4 0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h136v-32H200c-4.4 0-8-3.6-8-8v-16c0-4.4 3.6-8 8-8h104v-24c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v24h104c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H336v32h136c4.4 0 8 3.6 8 8v16z"],
   "yen-sign": [384, 512, [], "f157", "M351.208 32h-65.277a12 12 0 0 0-10.778 6.724l-55.39 113.163c-14.513 34.704-27.133 71.932-27.133 71.932h-1.262s-12.62-37.228-27.133-71.932l-55.39-113.163A11.997 11.997 0 0 0 98.068 32H32.792c-9.057 0-14.85 9.65-10.59 17.643L102.322 200H44c-6.627 0-12 5.373-12 12v32c0 6.627 5.373 12 12 12h88.162L152 293.228V320H44c-6.627 0-12 5.373-12 12v32c0 6.627 5.373 12 12 12h108v92c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-92h108c6.627 0 12-5.373 12-12v-32c0-6.627-5.373-12-12-12H232v-26.772L251.838 256H340c6.627 0 12-5.373 12-12v-32c0-6.627-5.373-12-12-12h-58.322l80.12-150.357C366.058 41.65 360.266 32 351.208 32z"],
-  "yin-yang": [496, 512, [], "f6ad", "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm0 376c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm0-128c-53.02 0-96 42.98-96 96s42.98 96 96 96c-106.04 0-192-85.96-192-192S141.96 64 248 64c53.02 0 96 42.98 96 96s-42.98 96-96 96zm0-128c-17.67 0-32 14.33-32 32s14.33 32 32 32 32-14.33 32-32-14.33-32-32-32z"]
+  "yin-yang": [496, 512, [], "f6ad", "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm0 376c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm0-128c-53.02 0-96 42.98-96 96s42.98 96 96 96c-106.04 0-192-85.96-192-192S141.96 64 248 64c53.02 0 96 42.98 96 96s-42.98 96-96 96zm0-128c-17.67 0-32 14.33-32 32s14.33 32 32 32 32-14.33 32-32-14.33-32-32-32z"],
 };
 
 bunker(function () {
@@ -1971,7 +1971,7 @@ var _default = _extends({
   observeMutations: true,
   keepOriginalSource: true,
   measurePerformance: false,
-  showMissingIcons: true
+  showMissingIcons: true,
 }, initial);
 
 if (!_default.autoReplaceSvg) _default.observeMutations = false;
@@ -2019,7 +2019,7 @@ var meaninglessTransform = {
   y: 0,
   rotate: 0,
   flipX: false,
-  flipY: false
+  flipY: false,
 };
 
 function isReserved(name) {
@@ -2130,21 +2130,21 @@ function transformForSvg(_ref) {
       iconWidth = _ref.iconWidth;
 
   var outer = {
-    transform: 'translate(' + containerWidth / 2 + ' 256)'
+    transform: 'translate(' + containerWidth / 2 + ' 256)',
   };
   var innerTranslate = 'translate(' + transform.x * 32 + ', ' + transform.y * 32 + ') ';
   var innerScale = 'scale(' + transform.size / 16 * (transform.flipX ? -1 : 1) + ', ' + transform.size / 16 * (transform.flipY ? -1 : 1) + ') ';
   var innerRotate = 'rotate(' + transform.rotate + ' 0 0)';
   var inner = {
-    transform: innerTranslate + ' ' + innerScale + ' ' + innerRotate
+    transform: innerTranslate + ' ' + innerScale + ' ' + innerRotate,
   };
   var path = {
-    transform: 'translate(' + iconWidth / 2 * -1 + ' -256)'
+    transform: 'translate(' + iconWidth / 2 * -1 + ' -256)',
   };
   return {
     outer: outer,
     inner: inner,
-    path: path
+    path: path,
   };
 }
 
@@ -2177,7 +2177,7 @@ var ALL_SPACE = {
   x: 0,
   y: 0,
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
 var makeIconMasking = function (_ref) {
@@ -2197,18 +2197,18 @@ var makeIconMasking = function (_ref) {
   var maskRect = {
     tag: 'rect',
     attributes: _extends({}, ALL_SPACE, {
-      fill: 'white'
-    })
+      fill: 'white',
+    }),
   };
   var maskInnerGroup = {
     tag: 'g',
     attributes: _extends({}, trans.inner),
-    children: [{ tag: 'path', attributes: _extends({}, mainPath.attributes, trans.path, { fill: 'black' }) }]
+    children: [{ tag: 'path', attributes: _extends({}, mainPath.attributes, trans.path, { fill: 'black' }) }],
   };
   var maskOuterGroup = {
     tag: 'g',
     attributes: _extends({}, trans.outer),
-    children: [maskInnerGroup]
+    children: [maskInnerGroup],
   };
   var maskId = 'mask-' + nextUniqueId();
   var clipId = 'clip-' + nextUniqueId();
@@ -2217,20 +2217,20 @@ var makeIconMasking = function (_ref) {
     attributes: _extends({}, ALL_SPACE, {
       id: maskId,
       maskUnits: 'userSpaceOnUse',
-      maskContentUnits: 'userSpaceOnUse'
+      maskContentUnits: 'userSpaceOnUse',
     }),
-    children: [maskRect, maskOuterGroup]
+    children: [maskRect, maskOuterGroup],
   };
   var defs = {
     tag: 'defs',
-    children: [{ tag: 'clipPath', attributes: { id: clipId }, children: [maskPath] }, maskTag]
+    children: [{ tag: 'clipPath', attributes: { id: clipId }, children: [maskPath] }, maskTag],
   };
 
   children.push(defs, { tag: 'rect', attributes: _extends({ fill: 'currentColor', 'clip-path': 'url(#' + clipId + ')', mask: 'url(#' + maskId + ')' }, ALL_SPACE) });
 
   return {
     children: children,
-    attributes: attributes
+    attributes: attributes,
   };
 };
 
@@ -2258,9 +2258,9 @@ var makeIconStandard = function (_ref) {
         children: [{
           tag: main.icon.tag,
           children: main.icon.children,
-          attributes: _extends({}, main.icon.attributes, trans.path)
-        }]
-      }]
+          attributes: _extends({}, main.icon.attributes, trans.path),
+        }],
+      }],
     });
   } else {
     children.push(main.icon);
@@ -2268,7 +2268,7 @@ var makeIconStandard = function (_ref) {
 
   return {
     children: children,
-    attributes: attributes
+    attributes: attributes,
   };
 };
 
@@ -2286,17 +2286,17 @@ var asIcon = function (_ref) {
 
     var offset = {
       x: width / height / 2,
-      y: 0.5
+      y: 0.5,
     };
     attributes['style'] = joinStyles(_extends({}, styles, {
-      'transform-origin': offset.x + transform.x / 16 + 'em ' + (offset.y + transform.y / 16) + 'em'
+      'transform-origin': offset.x + transform.x / 16 + 'em ' + (offset.y + transform.y / 16) + 'em',
     }));
   }
 
   return [{
     tag: 'svg',
     attributes: attributes,
-    children: children
+    children: children,
   }];
 };
 
@@ -2312,13 +2312,13 @@ var asSymbol = function (_ref) {
   return [{
     tag: 'svg',
     attributes: {
-      style: 'display: none;'
+      style: 'display: none;',
     },
     children: [{
       tag: 'symbol',
       attributes: _extends({}, attributes, { id: id }),
-      children: children
-    }]
+      children: children,
+    }],
   }];
 };
 
@@ -2352,8 +2352,8 @@ function makeInlineSvgAbstract(params) {
       'class': attrClass,
       'role': 'img',
       'xmlns': 'http://www.w3.org/2000/svg',
-      'viewBox': '0 0 ' + width + ' ' + height
-    })
+      'viewBox': '0 0 ' + width + ' ' + height,
+    }),
   };
 
   if (watchable) {
@@ -2369,7 +2369,7 @@ function makeInlineSvgAbstract(params) {
     mask: mask,
     transform: transform,
     symbol: symbol,
-    styles: extra.styles
+    styles: extra.styles,
   });
 
   var _ref2 = mask.found && main.found ? makeIconMasking(args) : makeIconStandard(args),
@@ -2398,7 +2398,7 @@ function makeLayersTextAbstract(params) {
 
 
   var attributes = _extends({}, extra.attributes, title ? { 'title': title } : {}, {
-    'class': extra.classes.join(' ')
+    'class': extra.classes.join(' '),
   });
 
   if (watchable) {
@@ -2423,7 +2423,7 @@ function makeLayersTextAbstract(params) {
   val.push({
     tag: 'span',
     attributes: attributes,
-    children: [content]
+    children: [content],
   });
 
   if (title) {
@@ -2440,7 +2440,7 @@ function makeLayersCounterAbstract(params) {
 
 
   var attributes = _extends({}, extra.attributes, title ? { 'title': title } : {}, {
-    'class': extra.classes.join(' ')
+    'class': extra.classes.join(' '),
   });
 
   var styleString = joinStyles(extra.styles);
@@ -2454,7 +2454,7 @@ function makeLayersCounterAbstract(params) {
   val.push({
     tag: 'span',
     attributes: attributes,
-    children: [content]
+    children: [content],
   });
 
   if (title) {
@@ -2628,7 +2628,7 @@ function iconFromMapping(mapping, prefix, iconName) {
     return {
       prefix: prefix,
       iconName: iconName,
-      icon: mapping[prefix][iconName]
+      icon: mapping[prefix][iconName],
     };
   }
 }
@@ -2714,7 +2714,7 @@ var mutators = {
     node.setAttribute('class', splitClasses.toNode.join(' '));
     node.setAttribute(DATA_FA_I2SVG, '');
     node.innerHTML = newInnerHTML;
-  }
+  },
 };
 
 function perform(mutations, callback) {
@@ -2800,7 +2800,7 @@ function observe(options) {
   if (!IS_DOM) return;
 
   mo.observe(observeMutationsRoot, {
-    childList: true, attributes: true, characterData: true, subtree: true
+    childList: true, attributes: true, characterData: true, subtree: true,
   });
 }
 
@@ -2871,7 +2871,7 @@ var parseTransformString = function parseTransformString(transformString) {
     y: 0,
     flipX: false,
     flipY: false,
-    rotate: 0
+    rotate: 0,
   };
 
   if (!transformString) {
@@ -2977,7 +2977,7 @@ var blankMeta = {
   transform: meaninglessTransform,
   symbol: false,
   mask: null,
-  extra: { classes: [], styles: {}, attributes: {} }
+  extra: { classes: [], styles: {}, attributes: {} },
 };
 
 function parseMeta(node) {
@@ -3002,8 +3002,8 @@ function parseMeta(node) {
     extra: {
       classes: extraClasses,
       styles: extraStyles,
-      attributes: extraAttributes
-    }
+      attributes: extraAttributes,
+    },
   };
 }
 
@@ -3020,41 +3020,41 @@ var FILL = { fill: 'currentColor' };
 var ANIMATION_BASE = {
   attributeType: 'XML',
   repeatCount: 'indefinite',
-  dur: '2s'
+  dur: '2s',
 };
 var RING = {
   tag: 'path',
   attributes: _extends({}, FILL, {
-    d: 'M156.5,447.7l-12.6,29.5c-18.7-9.5-35.9-21.2-51.5-34.9l22.7-22.7C127.6,430.5,141.5,440,156.5,447.7z M40.6,272H8.5 c1.4,21.2,5.4,41.7,11.7,61.1L50,321.2C45.1,305.5,41.8,289,40.6,272z M40.6,240c1.4-18.8,5.2-37,11.1-54.1l-29.5-12.6 C14.7,194.3,10,216.7,8.5,240H40.6z M64.3,156.5c7.8-14.9,17.2-28.8,28.1-41.5L69.7,92.3c-13.7,15.6-25.5,32.8-34.9,51.5 L64.3,156.5z M397,419.6c-13.9,12-29.4,22.3-46.1,30.4l11.9,29.8c20.7-9.9,39.8-22.6,56.9-37.6L397,419.6z M115,92.4 c13.9-12,29.4-22.3,46.1-30.4l-11.9-29.8c-20.7,9.9-39.8,22.6-56.8,37.6L115,92.4z M447.7,355.5c-7.8,14.9-17.2,28.8-28.1,41.5 l22.7,22.7c13.7-15.6,25.5-32.9,34.9-51.5L447.7,355.5z M471.4,272c-1.4,18.8-5.2,37-11.1,54.1l29.5,12.6 c7.5-21.1,12.2-43.5,13.6-66.8H471.4z M321.2,462c-15.7,5-32.2,8.2-49.2,9.4v32.1c21.2-1.4,41.7-5.4,61.1-11.7L321.2,462z M240,471.4c-18.8-1.4-37-5.2-54.1-11.1l-12.6,29.5c21.1,7.5,43.5,12.2,66.8,13.6V471.4z M462,190.8c5,15.7,8.2,32.2,9.4,49.2h32.1 c-1.4-21.2-5.4-41.7-11.7-61.1L462,190.8z M92.4,397c-12-13.9-22.3-29.4-30.4-46.1l-29.8,11.9c9.9,20.7,22.6,39.8,37.6,56.9 L92.4,397z M272,40.6c18.8,1.4,36.9,5.2,54.1,11.1l12.6-29.5C317.7,14.7,295.3,10,272,8.5V40.6z M190.8,50 c15.7-5,32.2-8.2,49.2-9.4V8.5c-21.2,1.4-41.7,5.4-61.1,11.7L190.8,50z M442.3,92.3L419.6,115c12,13.9,22.3,29.4,30.5,46.1 l29.8-11.9C470,128.5,457.3,109.4,442.3,92.3z M397,92.4l22.7-22.7c-15.6-13.7-32.8-25.5-51.5-34.9l-12.6,29.5 C370.4,72.1,384.4,81.5,397,92.4z'
-  })
+    d: 'M156.5,447.7l-12.6,29.5c-18.7-9.5-35.9-21.2-51.5-34.9l22.7-22.7C127.6,430.5,141.5,440,156.5,447.7z M40.6,272H8.5 c1.4,21.2,5.4,41.7,11.7,61.1L50,321.2C45.1,305.5,41.8,289,40.6,272z M40.6,240c1.4-18.8,5.2-37,11.1-54.1l-29.5-12.6 C14.7,194.3,10,216.7,8.5,240H40.6z M64.3,156.5c7.8-14.9,17.2-28.8,28.1-41.5L69.7,92.3c-13.7,15.6-25.5,32.8-34.9,51.5 L64.3,156.5z M397,419.6c-13.9,12-29.4,22.3-46.1,30.4l11.9,29.8c20.7-9.9,39.8-22.6,56.9-37.6L397,419.6z M115,92.4 c13.9-12,29.4-22.3,46.1-30.4l-11.9-29.8c-20.7,9.9-39.8,22.6-56.8,37.6L115,92.4z M447.7,355.5c-7.8,14.9-17.2,28.8-28.1,41.5 l22.7,22.7c13.7-15.6,25.5-32.9,34.9-51.5L447.7,355.5z M471.4,272c-1.4,18.8-5.2,37-11.1,54.1l29.5,12.6 c7.5-21.1,12.2-43.5,13.6-66.8H471.4z M321.2,462c-15.7,5-32.2,8.2-49.2,9.4v32.1c21.2-1.4,41.7-5.4,61.1-11.7L321.2,462z M240,471.4c-18.8-1.4-37-5.2-54.1-11.1l-12.6,29.5c21.1,7.5,43.5,12.2,66.8,13.6V471.4z M462,190.8c5,15.7,8.2,32.2,9.4,49.2h32.1 c-1.4-21.2-5.4-41.7-11.7-61.1L462,190.8z M92.4,397c-12-13.9-22.3-29.4-30.4-46.1l-29.8,11.9c9.9,20.7,22.6,39.8,37.6,56.9 L92.4,397z M272,40.6c18.8,1.4,36.9,5.2,54.1,11.1l12.6-29.5C317.7,14.7,295.3,10,272,8.5V40.6z M190.8,50 c15.7-5,32.2-8.2,49.2-9.4V8.5c-21.2,1.4-41.7,5.4-61.1,11.7L190.8,50z M442.3,92.3L419.6,115c12,13.9,22.3,29.4,30.5,46.1 l29.8-11.9C470,128.5,457.3,109.4,442.3,92.3z M397,92.4l22.7-22.7c-15.6-13.7-32.8-25.5-51.5-34.9l-12.6,29.5 C370.4,72.1,384.4,81.5,397,92.4z',
+  }),
 };
 var OPACITY_ANIMATE = _extends({}, ANIMATION_BASE, {
-  attributeName: 'opacity'
+  attributeName: 'opacity',
 });
 var DOT = {
   tag: 'circle',
   attributes: _extends({}, FILL, {
     cx: '256',
     cy: '364',
-    r: '28'
+    r: '28',
   }),
-  children: [{ tag: 'animate', attributes: _extends({}, ANIMATION_BASE, { attributeName: 'r', values: '28;14;28;28;14;28;' }) }, { tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '1;0;1;1;0;1;' }) }]
+  children: [{ tag: 'animate', attributes: _extends({}, ANIMATION_BASE, { attributeName: 'r', values: '28;14;28;28;14;28;' }) }, { tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '1;0;1;1;0;1;' }) }],
 };
 var QUESTION = {
   tag: 'path',
   attributes: _extends({}, FILL, {
     opacity: '1',
-    d: 'M263.7,312h-16c-6.6,0-12-5.4-12-12c0-71,77.4-63.9,77.4-107.8c0-20-17.8-40.2-57.4-40.2c-29.1,0-44.3,9.6-59.2,28.7 c-3.9,5-11.1,6-16.2,2.4l-13.1-9.2c-5.6-3.9-6.9-11.8-2.6-17.2c21.2-27.2,46.4-44.7,91.2-44.7c52.3,0,97.4,29.8,97.4,80.2 c0,67.6-77.4,63.5-77.4,107.8C275.7,306.6,270.3,312,263.7,312z'
+    d: 'M263.7,312h-16c-6.6,0-12-5.4-12-12c0-71,77.4-63.9,77.4-107.8c0-20-17.8-40.2-57.4-40.2c-29.1,0-44.3,9.6-59.2,28.7 c-3.9,5-11.1,6-16.2,2.4l-13.1-9.2c-5.6-3.9-6.9-11.8-2.6-17.2c21.2-27.2,46.4-44.7,91.2-44.7c52.3,0,97.4,29.8,97.4,80.2 c0,67.6-77.4,63.5-77.4,107.8C275.7,306.6,270.3,312,263.7,312z',
   }),
-  children: [{ tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '1;0;0;0;0;1;' }) }]
+  children: [{ tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '1;0;0;0;0;1;' }) }],
 };
 var EXCLAMATION = {
   tag: 'path',
   attributes: _extends({}, FILL, {
     opacity: '0',
-    d: 'M232.5,134.5l7,168c0.3,6.4,5.6,11.5,12,11.5h9c6.4,0,11.7-5.1,12-11.5l7-168c0.3-6.8-5.2-12.5-12-12.5h-23 C237.7,122,232.2,127.7,232.5,134.5z'
+    d: 'M232.5,134.5l7,168c0.3,6.4,5.6,11.5,12,11.5h9c6.4,0,11.7-5.1,12-11.5l7-168c0.3-6.8-5.2-12.5-12-12.5h-23 C237.7,122,232.2,127.7,232.5,134.5z',
   }),
-  children: [{ tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '0;0;1;1;0;0;' }) }]
+  children: [{ tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '0;0;1;1;0;0;' }) }],
 };
 
 var missing = { tag: 'g', children: [RING, DOT, QUESTION, EXCLAMATION] };
@@ -3067,12 +3067,12 @@ var STYLE_TO_PREFIX = {
   'Solid': 'fas',
   'Regular': 'far',
   'Light': 'fal',
-  'Brands': 'fab'
+  'Brands': 'fab',
 };
 var FONT_WEIGHT_TO_PREFIX = {
   '900': 'fas',
   '400': 'far',
-  '300': 'fal'
+  '300': 'fal',
 };
 
 function findIcon(iconName, prefix) {
@@ -3080,7 +3080,7 @@ function findIcon(iconName, prefix) {
     found: false,
     width: 512,
     height: 512,
-    icon: missing
+    icon: missing,
   };
 
   if (iconName && prefix && styles[prefix] && styles[prefix][iconName]) {
@@ -3093,7 +3093,7 @@ function findIcon(iconName, prefix) {
       found: true,
       width: width,
       height: height,
-      icon: { tag: 'path', attributes: { fill: 'currentColor', d: vectorData[0] } }
+      icon: { tag: 'path', attributes: { fill: 'currentColor', d: vectorData[0] } },
     };
   } else if (iconName && prefix && !config.showMissingIcons) {
     throw new MissingIcon('Icon is missing for prefix ' + prefix + ' with icon name ' + iconName);
@@ -3115,7 +3115,7 @@ function generateSvgReplacementMutation(node, nodeMeta) {
   return [node, makeInlineSvgAbstract({
     icons: {
       main: findIcon(iconName, prefix),
-      mask: findIcon(mask.iconName, mask.prefix)
+      mask: findIcon(mask.iconName, mask.prefix),
     },
     prefix: prefix,
     iconName: iconName,
@@ -3124,7 +3124,7 @@ function generateSvgReplacementMutation(node, nodeMeta) {
     mask: mask,
     title: title,
     extra: extra,
-    watchable: true
+    watchable: true,
   })];
 }
 
@@ -3155,7 +3155,7 @@ function generateLayersText(node, nodeMeta) {
     transform: transform,
     title: title,
     extra: extra,
-    watchable: true
+    watchable: true,
   })];
 }
 
@@ -3211,12 +3211,12 @@ function searchPseudoElements(root) {
             var abstract = makeInlineSvgAbstract(_extends({}, blankMeta, {
               icons: {
                 main: findIcon(iconName, prefix),
-                mask: emptyCanonicalIcon()
+                mask: emptyCanonicalIcon(),
               },
               prefix: prefix,
               iconName: iconName,
               extra: extra,
-              watchable: true
+              watchable: true,
             }));
 
             var element = DOCUMENT.createElement('svg');
@@ -3382,12 +3382,12 @@ var Library = function () {
         define(key, additions[key]);
         build();
       });
-    }
+    },
   }, {
     key: 'reset',
     value: function reset() {
       this.definitions = {};
-    }
+    },
   }, {
     key: '_pullDefinitions',
     value: function _pullDefinitions(additions, definition) {
@@ -3406,7 +3406,7 @@ var Library = function () {
       });
 
       return additions;
-    }
+    },
   }]);
   return Library;
 }();
@@ -3420,7 +3420,7 @@ function prepIcon(icon) {
     found: true,
     width: width,
     height: height,
-    icon: { tag: 'path', attributes: { fill: 'currentColor', d: vectorData[0] } }
+    icon: { tag: 'path', attributes: { fill: 'currentColor', d: vectorData[0] } },
   };
 }
 
@@ -3433,7 +3433,7 @@ function ensureCss() {
 
 function apiObject(val, abstractCreator) {
   Object.defineProperty(val, 'abstract', {
-    get: abstractCreator
+    get: abstractCreator,
   });
 
   Object.defineProperty(val, 'html', {
@@ -3441,7 +3441,7 @@ function apiObject(val, abstractCreator) {
       return val.abstract.map(function (a) {
         return toHtml(a);
       });
-    }
+    },
   });
 
   Object.defineProperty(val, 'node', {
@@ -3451,7 +3451,7 @@ function apiObject(val, abstractCreator) {
       var container = DOCUMENT.createElement('div');
       container.innerHTML = val.html;
       return container.children;
-    }
+    },
   });
 
   return val;
@@ -3540,23 +3540,23 @@ var dom = {
 
     domready(function () {
       autoReplace({
-        autoReplaceSvgRoot: autoReplaceSvgRoot
+        autoReplaceSvgRoot: autoReplaceSvgRoot,
       });
 
       observe({
         treeCallback: onTree,
         nodeCallback: onNode,
         pseudoElementsCallback: searchPseudoElements,
-        observeMutationsRoot: observeMutationsRoot
+        observeMutationsRoot: observeMutationsRoot,
       });
     });
-  }
+  },
 };
 
 var parse = {
   transform: function transform(transformString) {
     return parseTransformString(transformString);
-  }
+  },
 };
 
 var icon = resolveIcons(function (iconDefinition) {
@@ -3598,7 +3598,7 @@ var icon = resolveIcons(function (iconDefinition) {
     return makeInlineSvgAbstract({
       icons: {
         main: prepIcon(icon),
-        mask: mask ? prepIcon(mask.icon) : { found: false, width: null, height: null, icon: {} }
+        mask: mask ? prepIcon(mask.icon) : { found: false, width: null, height: null, icon: {} },
       },
       prefix: prefix,
       iconName: iconName,
@@ -3608,8 +3608,8 @@ var icon = resolveIcons(function (iconDefinition) {
       extra: {
         attributes: attributes,
         styles: styles,
-        classes: classes
-      }
+        classes: classes,
+      },
     });
   });
 });
@@ -3638,8 +3638,8 @@ var text = function text(content) {
       extra: {
         attributes: attributes,
         styles: styles,
-        classes: [config.familyPrefix + '-layers-text'].concat(toConsumableArray(classes))
-      }
+        classes: [config.familyPrefix + '-layers-text'].concat(toConsumableArray(classes)),
+      },
     });
   });
 };
@@ -3665,8 +3665,8 @@ var counter = function counter(content) {
       extra: {
         attributes: attributes,
         styles: styles,
-        classes: [config.familyPrefix + '-layers-counter'].concat(toConsumableArray(classes))
-      }
+        classes: [config.familyPrefix + '-layers-counter'].concat(toConsumableArray(classes)),
+      },
     });
   });
 };
@@ -3686,7 +3686,7 @@ var layer = function layer(assembler) {
     return [{
       tag: 'span',
       attributes: { class: config.familyPrefix + '-layers' },
-      children: children
+      children: children,
     }];
   });
 };
@@ -3702,7 +3702,7 @@ var api = {
   text: text,
   counter: counter,
   layer: layer,
-  toHtml: toHtml
+  toHtml: toHtml,
 };
 
 var autoReplace = function autoReplace() {
@@ -3726,7 +3726,7 @@ function bootstrap() {
       observe({
         treeCallback: onTree,
         nodeCallback: onNode,
-        pseudoElementsCallback: searchPseudoElements
+        pseudoElementsCallback: searchPseudoElements,
       });
     });
   }
@@ -3747,7 +3747,7 @@ function bootstrap() {
 
       build();
       autoReplace();
-    }
+    },
   });
 }
 

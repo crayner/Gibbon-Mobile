@@ -8,7 +8,7 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
 export default function FormErrors(props) {
     const {
-        errors
+        errors,
     } = props
 
     if (errors.length === 0)

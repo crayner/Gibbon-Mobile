@@ -64,7 +64,7 @@ class NotificationController extends Controller
      * @param NotificationManager $manager
      * @return JsonResponse
      * @throws \Exception
-     * @Route("/notification/details/", name="notification_details")
+     * @Route("/notification/details/", name="api_notification_details")
      * @IsGranted("ROLE_USER")
      */
     public function details(NotificationManager $manager)
