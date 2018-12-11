@@ -6,7 +6,7 @@
 .mobileFooter {
     padding: 0;
     background-color: rgba(173,255,47,0.75);
-    margin: -16px 0;
+    margin-bottom: -16px;
     border-radius: 5px;
 }
 .text-charcoal {
@@ -14,4 +14,10 @@
     a {
         color: #36454F;
     }
+}
+.text-tomato {
+    color: tomato !important;
+}
+.text-black {
+    color: black !important;
 }

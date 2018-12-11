@@ -583,7 +583,7 @@ class Person extends User
     /**
      * @return null|string
      */
-    public function getImage_240(): ?string
+    public function getImage240(): ?string
     {
         return $this->image_240;
     }
@@ -592,7 +592,7 @@ class Person extends User
      * @param null|string $image_240
      * @return Person
      */
-    public function setImage_240(?string $image_240): Person
+    public function setImage240(?string $image_240): Person
     {
         $this->image_240 = mb_substr($image_240, 0, 75);
         return $this;

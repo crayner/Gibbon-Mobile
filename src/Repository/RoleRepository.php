@@ -32,8 +32,10 @@
  */
 namespace App\Repository;
 
+use App\Entity\Person;
 use App\Entity\Role;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -49,5 +51,23 @@ class RoleRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Role::class);
+    }
+
+    /**
+     * loadUserRoles
+     * @param Person|null $person
+     * @return array
+     */
+    public function loadUserRoles(?Person $person): array
+    {
+        if (empty($person))
+            return [];
+        $roles = explode(',',$person->getAllRoles());
+        $result = $this->createQueryBuilder('r')
+            ->where('r.id IN (:roles)')
+            ->setParameter('roles', $roles, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult();
+        return $result ?: [];
     }
 }

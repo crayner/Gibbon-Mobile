@@ -8,7 +8,6 @@ import "../css/Form/form.scss"
 import "../css/App.scss"
 import CoreControl from './Core/CoreControl'
 
-
 render(
     <CoreControl
         {...window.CORE_PROPS}

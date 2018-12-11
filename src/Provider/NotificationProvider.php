@@ -24,66 +24,38 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 7/12/2018
- * Time: 13:39
+ * Date: 9/12/2018
+ * Time: 08:35
  */
 namespace App\Provider;
 
+use App\Entity\Notification;
 use App\Entity\Person;
-use App\Entity\Role;
 use App\Manager\Traits\EntityTrait;
+use App\Util\UserHelper;
 
 /**
- * Class PersonProvider
- * @package App\Manager\Provider
+ * Class NotificationProvider
+ * @package App\Provider
  */
-class PersonProvider extends UserProvider
+class NotificationProvider
 {
     use EntityTrait;
 
     /**
      * @var string
      */
-    private $entityName = Person::class;
+    private $entityName = Notification::class;
 
     /**
-     * isStaff
-     * @return bool
-     */
-    public function isStaff(): bool
-    {
-        foreach($this->loadUserRoles() as $role)
-            if ($role->getCategory() === 'Staff')
-                return true;
-        return false;
-    }
-
-    /**
-     * isStaff
-     * @return bool
-     */
-    public function isParent(): bool
-    {
-        foreach($this->loadUserRoles() as $role)
-            if ($role->getCategory() === 'Parent')
-                return true;
-        return false;
-    }
-
-    /**
-     * @var array
-     */
-    private $userRoles = [];
-
-    /**
-     * loadUserRoles
-     * @return array
+     * findByNew
+     * @param Person|null $person
+     * @return object[]
      * @throws \Exception
      */
-    public function loadUserRoles(): array
+    public function findByNew(?Person $person = null): array
     {
-        if (empty($userRole))
-            return $this->userRoles = $this->getRepository(Role::class)->loadUserRoles($this->getEntity());
-        return $this->userRoles;
+        $person = $person ?: UserHelper::getCurrentUser();
+        return $this->getRepository()->findBy(['status' => 'New', 'person' => $person], ['timestamp' => 'ASC']) ?: [];
     }
 }

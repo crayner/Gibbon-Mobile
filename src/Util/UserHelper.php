@@ -16,6 +16,7 @@
 namespace App\Util;
 
 use App\Entity\Person;
+use App\Provider\PersonProvider;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,14 +27,19 @@ class UserHelper
      */
     private static $tokenStorage;
 
+    /**
+     * @var PersonProvider
+     */
+    private static $provider;
 
     /**
      * UserHelper constructor.
      * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage, PersonProvider $provider)
     {
         self::$tokenStorage = $tokenStorage;
+        self::$provider = $provider;
     }
 
     /**
@@ -43,7 +49,7 @@ class UserHelper
 
     /**
      * getCurrentUser
-     *
+     * @return UserInterface|null
      */
     public static function getCurrentUser(): ?UserInterface
     {
@@ -65,5 +71,34 @@ class UserHelper
             self::$currentUser = null;
 
         return self::$currentUser;
+    }
+
+    /**
+     * getProvider
+     * @return PersonProvider
+     */
+    public static function getProvider(): PersonProvider
+    {
+        return self::$provider;
+    }
+
+    /**
+     * isStaff
+     * @return bool
+     */
+    public static function isStaff(): bool
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->isStaff();
+    }
+
+    /**
+     * isParent
+     * @return bool
+     */
+    public static function isParent(): bool
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->isParent();
     }
 }

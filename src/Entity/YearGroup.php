@@ -49,7 +49,7 @@ class YearGroup
 
     /**
      * @var string|null
-     * @ORM\Column(length=10)
+     * @ORM\Column(length=15)
      */
     private $name;
 

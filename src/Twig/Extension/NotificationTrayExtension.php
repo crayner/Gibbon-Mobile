@@ -24,49 +24,50 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 23/11/2018
- * Time: 15:27
+ * Date: 8/12/2018
+ * Time: 13:26
  */
+namespace App\Twig\Extension;
 
-namespace App\Listener;
-
-use App\Util\EntityHelper;
-use App\Util\UserHelper;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
+use App\Manager\NotificationTrayManager;
+use Twig\Extension\AbstractExtension;
 
 /**
- * Class HelperListener
- *
- * This class simply pre loads static helpers.
- *
- * @package App\Listener
+ * Class NotificationTrayExtension
+ * @package App\Twig\Extension
  */
-class HelperListener implements EventSubscriberInterface
+class NotificationTrayExtension extends AbstractExtension
 {
     /**
-     * HelperListener constructor.
-     * @param EntityHelper $helper
+     * @var NotificationTrayManager
      */
-    public function __construct(EntityHelper $helper, UserHelper $userHelper)
+    private $manager;
+
+    /**
+     * @return string
+     */
+    public function getName()
     {
+        return 'notification_tray_extension';
     }
 
     /**
-     * getSubscribedEvents
-     * @return array
+     * NotificationTrayExtension constructor.
+     * @param NotificationTrayManager $manager
      */
-    public static function getSubscribedEvents()
+    public function __construct(NotificationTrayManager $manager)
     {
-        $listeners = [
-            KernelEvents::REQUEST => 'doNothing',
+        $this->manager = $manager;
+    }
+
+    /**
+     * getFunctions
+     * @return array|\Twig_Function[]
+     */
+    public function getFunctions()
+    {
+        return [
+            new \Twig_SimpleFunction('getNotificationTray', array($this->manager, 'getNotificationTrayProperties'), ['is_safe' => ['html']]),
         ];
-
-        return $listeners;
     }
-
-    /**
-     * doNothing
-     */
-    public function doNothing(){}
 }

@@ -30,7 +30,6 @@
 namespace App\Entity;
 
 use App\Util\EntityHelper;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -183,9 +182,9 @@ abstract class User implements UserInterface, EncoderAwareInterface, EquatableIn
      * isEnabled
      * @return bool
      */
-    public function isEnabled(): Boolean
+    public function isEnabled(): bool
     {
-        if ($this->getPrimaryRole()->getCanRoleLogin() === 'N')
+        if ($this->getPrimaryRole()->getCanLoginRole() === 'N')
             return false;
 
         return $this->getCanLogin() === 'N' ? false : true ;

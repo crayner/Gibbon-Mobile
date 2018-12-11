@@ -12,7 +12,7 @@
     <body>
     <div class="container mobileContent">
         {% block menuContent %}
-            <div class="notificationTray"></div>
+            <div id="notificationTray"></div>
         {% endblock menuContent %}
         {% block content %}
             {% block messages %}
@@ -55,8 +55,10 @@
             {% set props = props|merge({locale: app.request.get('_locale')}) %}
             {% set props = props|merge({translations: coreTranslations()}) %}
             window.CORE_PROPS = {{ props|json_encode|raw }}
+            window.TRAY_PROPS = {{ getNotificationTray()|raw }}
         </script>
         {{ encore_entry_script_tags('core') }}
+        {{ encore_entry_script_tags('notificationTray') }}
     {% endblock javascripts %}
     </body>
 </html>
