@@ -1,0 +1,6 @@
+hillrange_form:
+    upload_path: '%gibbon_document_root%uploads/'
+    button_class_off: 'btn btn-danger far fa-thumbs-down'
+    button_class_on:  'btn btn-success far fa-thumbs-up'
+    use_font_awesome: true
+    translation_domain: 'messages'
