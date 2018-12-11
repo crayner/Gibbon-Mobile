@@ -22,7 +22,7 @@ export default function Likes(props) {
 
     return (
         <span className="fa-layers fa-fw" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Likes')}>
-            <FontAwesomeIcon className={y === 0 ? 'text-muted': 'text-tomato'} icon={faStar} />
+            <FontAwesomeIcon className={y === 0 ? 'text-muted': 'alert-success'} icon={faStar} />
             <span className="fa-layers-counter" style={{background: colour, margin: '28px ' + rr + 'px 0 0'}}>{y}</span>
         </span>
     )

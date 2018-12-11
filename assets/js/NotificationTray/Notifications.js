@@ -23,8 +23,8 @@ export default function Notifications(props) {
 
     return (
         <span className="fa-layers fa-fw" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Notifications')} onClick={() => showNotifications()}>
-            <FontAwesomeIcon className={y === 0 ? 'text-muted': 'text-black'} icon={faStickyNote} />
-            <span className="fa-layers-counter" style={{background: colour, margin: '26px ' + rr + 'px 0 0'}}>{y}</span>
+            <FontAwesomeIcon className={y === 0 ? 'text-muted': 'alert-success'} icon={faStickyNote} />
+            <span className={y === 0 ? 'fa-layers-counter text-counter-zero': 'fa-layers-counter text-tomato'} style={{margin: '26px ' + rr + 'px 0 0'}}>{y}</span>
         </span>
     )
 }

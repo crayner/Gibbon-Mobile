@@ -61,14 +61,31 @@ class NotificationProvider
 
     /**
      * archive
+     * @param Notification $notification
+     * @param bool $flush
      */
-    public function archive(Notification $notification)
+    public function archive(Notification $notification, bool $flush = true)
     {
         $this->setEntity($notification);
         $this->getEntity()->setStatus('Archived');
-        $this->saveEntity();
-        dump($this->getEntity());
+        $this->saveEntity(null,$flush);
         if ($this->getMessageManager()->getStatus() === 'default')
             $this->getMessageManager()->add('success', 'Your request was completed successfully.', [], 'messages');
+    }
+
+    /**
+     * archiveAllByUser
+     * @param Person|null $person
+     * @throws \Exception
+     */
+    public function archiveAllByUser(?Person $person = null)
+    {
+        $person = $person ?: UserHelper::getCurrentUser();
+
+        foreach($this->findByNew($person) as $notification)
+        {
+            $this->archive($notification);
+        }
+        $this->flush();
     }
 }

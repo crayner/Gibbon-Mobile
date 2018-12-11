@@ -16,7 +16,8 @@
     }
 }
 .text-tomato {
-    color: tomato !important;
+    background-color: tomato !important;
+    color: white !important;
 }
 .text-black {
     color: black !important;
@@ -25,4 +26,8 @@
     font-weight: 400;
     background-color: transparent;
     border-color: transparent;
+}
+.text-counter-zero {
+    color: white;
+    background-color: grey;
 }

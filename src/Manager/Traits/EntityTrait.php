@@ -226,11 +226,11 @@ trait EntityTrait
 
     /**
      * saveEntity
-     *
-     * @param null|ValidatorInterface $validator
+     * @param ValidatorInterface|null $validator
+     * @param bool $flush
      * @return $this
      */
-    public function saveEntity(?ValidatorInterface $validator = null)
+    public function saveEntity(?ValidatorInterface $validator = null, bool $flush = true)
     {
         if ($validator && ($list = $validator->validate($this->getEntity()))->count() > 0)
         {
@@ -240,7 +240,8 @@ trait EntityTrait
         }
         try {
             $this->getEntityManager()->persist($this->getEntity());
-            $this->getEntityManager()->flush();
+            if ($flush)
+                $this->getEntityManager()->flush();
         } catch (\Exception $e)
         {
             $this->getMessageManager()->add('danger', 'Your request failed due to a database error.', [], false);
@@ -349,5 +350,20 @@ trait EntityTrait
         if ($this->getRepository() !== null)
             $this->entity = $this->getRepository()->findOneBy($criteria);
         return $this->entity;
+    }
+
+    /**
+     * flush
+     * @return $this
+     */
+    public function flush()
+    {
+        try {
+            $this->getEntityManager()->flush();
+        } catch (\Exception $e)
+        {
+            $this->getMessageManager()->add('danger', 'Your request failed due to a database error.', [], false);
+        }
+        return $this;
     }
 }

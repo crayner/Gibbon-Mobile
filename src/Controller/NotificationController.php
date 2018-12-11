@@ -117,4 +117,20 @@ class NotificationController extends Controller
             ]
         );
     }
+
+    /**
+     * deleteAll
+     * @param NotificationManager $manager
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @Route("/notification/archive/all/", name="notification_archive_all")
+     * @IsGranted("ROLE_USER")
+     */
+    public function archiveAll(NotificationManager $manager)
+    {
+        $manager->archiveAllNotification();
+        $manager->setNotifications();
+
+        return $this->render('base.html.twig');
+    }
 }

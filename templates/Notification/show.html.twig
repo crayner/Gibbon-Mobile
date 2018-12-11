@@ -21,7 +21,10 @@
                 {{ 'Count'|trans }}
             </div>
             <div class="col-2 card card-header">
-                {{ 'Actions'|trans }}
+                <div>
+                    {{ 'Actions'|trans }}
+                    {{ deleteButton({title: 'Archive All', class: 'btn-sm btn btn-warning fas fa-archive', windowOpen: {route: path('notification_archive_all')}})|raw }}
+                </div>
             </div>
         </div>
         {% if manager.count > 0 %}
@@ -41,13 +44,13 @@
                     </div>
                     <div class="col-2 card text-right">
                         <div>
-                        {{ deleteButton({title: 'Delete', transDomain: 'messages', mergeClass: 'btn-sm', colour: 'warning', windowOpen: {route: path('notification_delete', {id: notification.id})}})|raw }}
+                        {{ deleteButton({title: 'Delete',class: 'btn-sm btn btn-warning fas fa-trash-alt', windowOpen: {route: path('notification_delete', {id: notification.id})}})|raw }}
                         {% if notification.actionLink is same as('') %}
                             {% set action = {windowOpen: {route: path('notification_archive', {id: notification.id})}} %}
                         {% else %}
                             {% set action = {windowOpen: {route: getSetting('absoluteURL') ~ '/notificationsActionProcess.php?action=' ~ notification.actionLink ~ '&gibbonNotificationID=' ~ notification.id, target: '_blank'}} %}
                         {% endif %}
-                        {{ miscButton({title: 'Action & Archive', transDomain: 'messages', class: 'btn-sm btn btn-success fas fa-search-plus'}|merge(action))|raw }}
+                        {{ miscButton({title: 'Action & Archive', class: 'btn-sm btn btn-primary fas fa-archive'}|merge(action))|raw }}
                         </div>
                     </div>
                 </div>

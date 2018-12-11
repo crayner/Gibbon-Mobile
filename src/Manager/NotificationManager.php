@@ -267,4 +267,12 @@ class NotificationManager
     {
         return $this->getProvider()->getMessageManager();
     }
+
+    /**
+     * deleteAllNotification
+     */
+    public function archiveAllNotification()
+    {
+        $this->getProvider()->archiveAllByUser();
+    }
 }
