@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class Messenger
@@ -101,7 +104,7 @@ class Messenger
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID",referencedColumnName="gibbonPersonID", nullable=false)
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
 
@@ -134,6 +137,12 @@ class Messenger
      * @ORM\Column(type="text", name="smsReport")
      */
     private $smsReport;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\MessengerTarget", mappedBy="messenger")
+     */
+    private $targets;
 
     /**
      * @return int|null
@@ -402,6 +411,49 @@ class Messenger
     public function setSmsReport(?string $smsReport): Messenger
     {
         $this->smsReport = $smsReport;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTargets(): Collection
+    {
+        if (empty($this->targets))
+            $this->targets = new ArrayCollection();
+
+        if ($this->targets instanceof PersistentCollection)
+            $this->targets->initialize();
+
+        return $this->targets;
+    }
+
+    /**
+     * @param Collection|null $targets
+     * @return Messenger
+     */
+    public function setTargets(?Collection $targets): Messenger
+    {
+        $this->targets = $targets;
+        return $this;
+    }
+
+    /**
+     * addTarget
+     * @param MessengerTarget $target
+     * @param bool $add
+     * @return Messenger
+     */
+    public function addTarget(MessengerTarget $target, bool $add = true): Messenger
+    {
+        if ($target && $this->getTargets()->contains($target))
+            return $this;
+
+        if ($add)
+            $target->setMessenger($this, false);
+
+        $this->targets->add($target);
+
         return $this;
     }
 }

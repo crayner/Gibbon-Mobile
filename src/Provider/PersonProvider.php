@@ -29,9 +29,14 @@
  */
 namespace App\Provider;
 
+use App\Entity\CourseClassPerson;
+use App\Entity\FamilyAdult;
 use App\Entity\Person;
 use App\Entity\Role;
+use App\Entity\StudentEnrolment;
 use App\Manager\Traits\EntityTrait;
+use App\Util\SchoolYearHelper;
+use App\Util\UserHelper;
 
 /**
  * Class PersonProvider
@@ -52,8 +57,21 @@ class PersonProvider extends UserProvider
      */
     public function isStaff(): bool
     {
-        foreach($this->loadUserRoles() as $role)
+        foreach($this->getUserRoles() as $role)
             if ($role->getCategory() === 'Staff')
+                return true;
+        return false;
+    }
+
+    /**
+     * isStudent
+     * @return bool
+     * @throws \Exception
+     */
+    public function isStudent(): bool
+    {
+        foreach($this->getUserRoles() as $role)
+            if ($role->getCategory() === 'Student')
                 return true;
         return false;
     }
@@ -64,7 +82,7 @@ class PersonProvider extends UserProvider
      */
     public function isParent(): bool
     {
-        foreach($this->loadUserRoles() as $role)
+        foreach($this->getUserRoles() as $role)
             if ($role->getCategory() === 'Parent')
                 return true;
         return false;
@@ -76,14 +94,143 @@ class PersonProvider extends UserProvider
     private $userRoles = [];
 
     /**
-     * loadUserRoles
+     * getUserRoles
      * @return array
      * @throws \Exception
      */
-    public function loadUserRoles(): array
+    public function getUserRoles(): array
     {
-        if (empty($userRole))
-            return $this->userRoles = $this->getRepository(Role::class)->loadUserRoles($this->getEntity());
+        if (empty($this->userRole))
+            return $this->userRoles = $this->getRepository(Role::class)->findUserRoles($this->getEntity());
         return $this->userRoles;
+    }
+
+    /**
+     * getUserRoles
+     * @return array
+     * @throws \Exception
+     */
+    public function getUserRoleCategories(): array
+    {
+        $categories = [];
+        foreach($this->getUserRoles() as $role)
+            if (! in_array($role->getCategory(), $categories))
+                $categories[] = $role->getCategory();
+        return $categories;
+    }
+
+    /**
+     * getStaffYearGroupsByCourse
+     * @return array
+     * @throws \Exception
+     */
+    public function getStaffYearGroupsByCourse(): array
+    {
+        $x = $this->getRepository(CourseClassPerson::class)->createQueryBuilder('ccp')
+            ->select('c.yearGroupList')
+            ->leftJoin('ccp.courseClass', 'cc')
+            ->leftJoin('cc.course', 'c')
+            ->where('ccp.person = :person')
+            ->setParameter('person', $this->getEntity())
+            ->andWhere('c.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+        $results = [];
+        foreach($x as $list)
+            $results = array_merge($results, explode(',',$list['yearGroupList']));
+
+        return array_unique($results);
+    }
+
+    /**
+     * getStaffYearGroupsByRollGroup
+     * @return array
+     * @throws \Exception
+     */
+    public function getStaffYearGroupsByRollGroup(): array
+    {
+        $x = $this->getRepository(StudentEnrolment::class)->createQueryBuilder('se')
+            ->select('DISTINCT yg.id AS yearGroupList')
+            ->leftJoin('se.yearGroup', 'yg')
+            ->leftJoin('se.rollGroup', 'rg')
+            ->where('rg.tutor = :person OR rg.tutor2 = :person OR rg.tutor3 = :person')
+            ->setParameter('person', $this->getEntity())
+            ->andWhere('se.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+        $results = [];
+        foreach($x as $list)
+            $results = array_merge($results, explode(',',$list['yearGroupList']));
+
+        return array_unique($results);
+    }
+
+    /**
+     * getStaffYearGroupsByRollGroup
+     * @return array
+     * @throws \Exception
+     */
+    public function getStudentYearGroup(?Person $person = null): array
+    {
+        $person = $person ?: UserHelper::getCurrentUser();
+        $x = $this->getRepository(StudentEnrolment::class)->createQueryBuilder('se')
+            ->select('DISTINCT yg.id AS yearGroupList')
+            ->leftJoin('se.yearGroup', 'yg')
+            ->where('se.schoolYear = :schoolYear')
+            ->andWhere('se.person = :person')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->setParameter('person', $person)
+            ->getQuery()
+            ->getResult();
+        $results = [];
+        foreach($x as $list)
+            $results = array_merge($results, explode(',',$list['yearGroupList']));
+
+        return array_unique($results);
+    }
+
+    /**
+     * getParentYearGroups
+     * @return array
+     * @throws \Exception
+     */
+    public function getParentYearGroups(): array
+    {
+        $children = $this->getChildrenOfParent();
+
+        $yearGroups = [];
+        foreach($children as $child)
+            $yearGroups[] = $this->getStudentYearGroup($child);
+
+        return array_unique($yearGroups);
+    }
+
+    /**
+     * getChildrenOfParent
+     * @param Person|null $person
+     * @return array
+     * @throws \Exception
+     */
+    public function getChildrenOfParent(?Person $person = null): array
+    {
+        $person = $person ?: $this->getEntity();
+        $x = $this->getRepository(FamilyAdult::class)->createQueryBuilder('fa')
+            ->leftJoin('fa.family', 'f')
+            ->leftJoin('f.children', 'fc')
+            ->leftJoin('fc.person', 'p')
+            ->select('fa,f,fc,p')
+            ->where('fa.person = :person')
+            ->setParameter('person', $person)
+            ->getQuery()
+            ->getResult();
+        $results = [];
+        foreach(($x ?: []) as $item) {
+            foreach($item->getFamily()->getChildren() as $child)
+                if ($child->getPerson())
+                    $results[$child->getPerson()->getId()] = $child->getPerson();
+        }
+        return $results;
     }
 }

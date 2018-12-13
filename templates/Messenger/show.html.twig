@@ -1,0 +1,32 @@
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+
+{% set title = 'New Notifications' %}
+{% set messages = manager.messages %}
+
+{% block content %}
+    <div class="container">
+        {% if manager.count > 0 %}
+            {% for message in manager.toArray %}
+                <div class="row">
+                    <div class="col-2 card">
+
+                    </div>
+                    <div class="col-10 card">
+                        <h4 class="alert alert-info">{{ message.subject }}</h4>
+                        <div>
+                            {{ message.body|raw }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row align-self-center">
+                <div class="col-12 card text-center alert alert-info">
+                    {{ 'There are no records to display.'|trans }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -52,7 +52,7 @@ class FamilyAdult
 
     /**
      * @var Family|null
-     * @ORM\ManyToOne(targetEntity="Family")
+     * @ORM\ManyToOne(targetEntity="Family", inversedBy="adults")
      * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID", nullable=false)
      */
     private $family;

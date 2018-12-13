@@ -87,7 +87,7 @@ class RollGroup
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumn(name="gibbonPersonIDTutor3",referencedColumnName="gibbonPersonID")
      */
-    private $tutoe3;
+    private $tutor3;
 
     /**
      * @var Person|null
@@ -247,18 +247,18 @@ class RollGroup
     /**
      * @return Person|null
      */
-    public function getTutoe3(): ?Person
+    public function getTutor3(): ?Person
     {
-        return $this->tutoe3;
+        return $this->tutor3;
     }
 
     /**
-     * @param Person|null $tutoe3
+     * @param Person|null $tutor3
      * @return RollGroup
      */
-    public function setTutoe3(?Person $tutoe3): RollGroup
+    public function setTutor3(?Person $tutor3): RollGroup
     {
-        $this->tutoe3 = $tutoe3;
+        $this->tutor3 = $tutor3;
         return $this;
     }
 

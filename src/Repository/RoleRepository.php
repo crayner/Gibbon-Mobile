@@ -54,11 +54,11 @@ class RoleRepository extends ServiceEntityRepository
     }
 
     /**
-     * loadUserRoles
+     * findUserRoles
      * @param Person|null $person
      * @return array
      */
-    public function loadUserRoles(?Person $person): array
+    public function findUserRoles(?Person $person): array
     {
         if (empty($person))
             return [];

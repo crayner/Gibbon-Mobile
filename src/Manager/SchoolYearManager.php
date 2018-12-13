@@ -27,16 +27,87 @@
  * Date: 24/11/2018
  * Time: 13:56
  */
-
 namespace App\Manager;
-
 
 use App\Entity\SchoolYear;
 use App\Manager\Traits\EntityTrait;
+use App\Provider\SchoolYearProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+/**
+ * Class SchoolYearManager
+ * @package App\Manager
+ */
 class SchoolYearManager
 {
-    use EntityTrait;
+    /**
+     * @var SchoolYearProvider
+     */
+    private $provider;
 
-    private $entityName = SchoolYear::class;
+    /**
+     * @var RequestStack
+     */
+    private $stack;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * SchoolYearManager constructor.
+     * @param RequestStack $stack
+     * @param SchoolYearProvider $provider
+     */
+    public function __construct(RequestStack $stack, SchoolYearProvider $provider)
+    {
+        $this->stack = $stack;
+        $this->provider = $provider;
+    }
+
+    /**
+     * getRepository
+     * @param string $entityName
+     * @return \Doctrine\Common\Persistence\ObjectRepository|null
+     * @throws \Exception
+     */
+    public function getRepository(string $entityName = SchoolYear::class)
+    {
+        return $this->getProvider()->getRepository($entityName);
+    }
+
+    /**
+     * @return SchoolYearProvider
+     */
+    public function getProvider(): SchoolYearProvider
+    {
+        return $this->provider;
+    }
+
+    /**
+     * getSession
+     * @return SessionInterface|null
+     */
+    public function getSession(): ?SessionInterface
+    {
+        if ($this->getRequest() && $this->getRequest()->hasSession())
+            return $this->session = $this->session ?: $this->getRequest()->getSession();
+        return null;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): ?Request
+    {
+        return $this->request = $this->request ?: $this->stack->getCurrentRequest();
+    }
 }

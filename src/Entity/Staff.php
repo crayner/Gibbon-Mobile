@@ -53,7 +53,7 @@ class Staff
 
     /**
      * @var Person|null
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\OneToOne(targetEntity="Person", inversedBy="staff")
      * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $person;
@@ -151,11 +151,15 @@ class Staff
     }
 
     /**
+     * setPerson
      * @param Person|null $person
+     * @param bool $add
      * @return Staff
      */
-    public function setPerson(?Person $person): Staff
+    public function setPerson(?Person $person, bool $add = true): Staff
     {
+        if ($person instanceof Person)
+            $person->setStaff($this, false);
         $this->person = $person;
         return $this;
     }

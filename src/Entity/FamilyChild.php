@@ -49,7 +49,7 @@ class FamilyChild
 
     /**
      * @var Family|null
-     * @ORM\ManyToOne(targetEntity="Family")
+     * @ORM\ManyToOne(targetEntity="Family", inversedBy="children")
      * @ORM\JoinColumn(name="gibbonFamilyID", referencedColumnName="gibbonFamilyID", nullable=false)
      */
     private $family;

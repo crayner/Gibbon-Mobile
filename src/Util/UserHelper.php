@@ -96,9 +96,99 @@ class UserHelper
      * isParent
      * @return bool
      */
+    public static function isStudent(): bool
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->isStudent();
+    }
+
+    /**
+     * isParent
+     * @return bool
+     */
     public static function isParent(): bool
     {
         self::$provider->setEntity(self::getCurrentUser());
         return self::$provider->isParent();
+    }
+
+    /**
+     * getRoles
+     * @return array
+     * @throws \Exception
+     */
+    public static function getRoles(): array
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->getUserRoles();
+    }
+
+    /**
+     * getRoleCategories
+     * @return array
+     * @throws \Exception
+     */
+    public static function getRoleCategories(): array
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->getUserRoleCategories();
+    }
+
+    /**
+     * @var array
+     */
+    private static $staffYearGroupsByCourse;
+
+    /**
+     * getYearGroups
+     * @return array
+     * @throws \Exception
+     */
+    public static function getStaffYearGroupsByCourse(): array
+    {
+        if (! empty(self::$staffYearGroupsByCourse))
+            return self::$staffYearGroupsByCourse;
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->getStaffYearGroupsByCourse();
+    }
+
+    /**
+     * @var array
+     */
+    private static $staffYearGroupsByRollGroup;
+
+    /**
+     * getYearGroups
+     * @return array
+     * @throws \Exception
+     */
+    public static function getStaffYearGroupsByRollGroup(): array
+    {
+        if (! empty(self::$staffYearGroupsByRollGroup))
+            return self::$staffYearGroupsByRollGroup;
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->getStaffYearGroupsByRollGroup();
+    }
+
+    /**
+     * getYearGroups
+     * @return array
+     * @throws \Exception
+     */
+    public static function getStudentYearGroup(): array
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->getStudentYearGroup();
+    }
+
+    /**
+     * getYearGroups
+     * @return array
+     * @throws \Exception
+     */
+    public static function getParentYearGroups(): array
+    {
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$provider->getParentYearGroups();
     }
 }

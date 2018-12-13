@@ -16,22 +16,25 @@ export default class TrayApp extends Component {
         this.isStaff = props.isStaff
         this.otherProps = {...props}
         this.state = {
-            messageCount: 0,
             likeCount: 0,
             notificationCount: 0,
+            messengerCount: 0,
         }
         this.timeout = this.isStaff === true ? 10000 : 120000
         this.showNotifications = this.showNotifications.bind(this)
+        this.showMessenger = this.showMessenger.bind(this)
     }
 
     componentDidMount () {
         if (this.displayTray){
             this.loadNotification(250 + 2000 * Math.random())
+            this.loadMessenger(250 + 2000 * Math.random())
         }
     }
 
     componentWillUnmount() {
         clearTimeout(this.notificationTime);
+        clearTimeout(this.messengerTime);
     }
 
     loadNotification(timeout){
@@ -48,10 +51,30 @@ export default class TrayApp extends Component {
         }, timeout)
     }
 
+    loadMessenger(timeout){
+        this.messengerTime = setTimeout(() => {
+            fetchJson('/messenger/details/', {method: 'GET'}, this.locale)
+                .then(data => {
+                    console.log(data,this.state)
+                    if (data.count !== this.state.messengerCount) {
+                        console.log(data,this.state)
+                        this.setState({
+                            messengerCount: data.count,
+                        })
+                    }
+                })
+            this.loadMessenger(this.timeout)
+        }, timeout)
+    }
 
     showNotifications() {
         if (this.state.notificationCount > 0)
             openPage('/notification/show/', {method: 'GET'}, this.locale);
+    }
+
+    showMessenger() {
+        if (this.state.messengerCount > 0)
+            openPage('/messenger/today/show/', {method: 'GET'}, this.locale);
     }
 
     render () {
@@ -60,7 +83,7 @@ export default class TrayApp extends Component {
                 <div className={'text-right'}>
                     <Notifications notificationCount={this.state.notificationCount} {...this.otherProps} showNotifications={this.showNotifications} />
                     <Likes likeCount={this.state.likeCount} {...this.otherProps} />
-                    <MessageWall messageCount={this.state.messageCount} {...this.otherProps} />
+                    <MessageWall messengerCount={this.state.messengerCount} {...this.otherProps} showMessenger={this.showMessenger} />
                 </div>
             )
         }

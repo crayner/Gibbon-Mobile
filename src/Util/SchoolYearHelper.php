@@ -32,6 +32,11 @@ class SchoolYearHelper
     private static $schoolYearRepository;
 
     /**
+     * @var SchoolYearManager
+     */
+    private static $manager;
+
+    /**
      * SchoolYearHelper constructor.
      *
      * @param SchoolYearManager $manager
@@ -41,6 +46,7 @@ class SchoolYearHelper
     public function __construct(SchoolYearManager $manager, UserHelper $userHelper)
     {
         self::$schoolYearRepository = $manager->getRepository();
+        self::$manager = $manager;
     }
 
     /**
@@ -59,17 +65,13 @@ class SchoolYearHelper
             return self::$currentSchoolYear;
 
         UserHelper::getCurrentUser();
-        if (UserHelper::getCurrentUser() instanceof UserInterface)
-        {
-            $settings = UserHelper::getCurrentUser()->getUserSettings();
-            if (isset($settings['currentschoolcalendar']))
-                self::$currentSchoolYear = self::$schoolYearRepository->find($settings['currentschoolcalendar']);
-            else
-                self::$currentSchoolYear = self::$schoolYearRepository->findOneBy(['status' => 'current']);
-        }
-        else
+        if (UserHelper::getCurrentUser() instanceof UserInterface) {
+            self::$currentSchoolYear = self::$manager->getSession()->get('school_year') ?: self::$schoolYearRepository->findOneBy(['status' => 'current']);
+            self::$manager->getSession()->get('school_year', self::$currentSchoolYear);
+        } else {
             self::$currentSchoolYear = self::$schoolYearRepository->findOneBy(['status' => 'current']);
-
+            self::$manager->getSession()->remove('school_year');
+        }
         return self::$currentSchoolYear;
     }
 

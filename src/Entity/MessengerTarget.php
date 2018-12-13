@@ -53,7 +53,7 @@ class MessengerTarget
 
     /**
      * @var Messenger|null
-     * @ORM\ManyToOne(targetEntity="Messenger")
+     * @ORM\ManyToOne(targetEntity="Messenger", inversedBy="targets")
      * @ORM\JoinColumn(name="gibbonMessengerID", referencedColumnName="gibbonMessengerID", nullable=false)
      */
     private $messenger;
@@ -85,13 +85,13 @@ class MessengerTarget
      * @var string|null
      * @ORM\Column(length=1, options={"default": "N"})
      */
-    private $students;
+    private $students = 'N';
 
     /**
      * @var string|null
      * @ORM\Column(length=1, options={"default": "N"})
      */
-    private $staff;
+    private $staff = 'N';
 
     /**
      * @return int|null
@@ -123,8 +123,11 @@ class MessengerTarget
      * @param Messenger|null $messenger
      * @return MessengerTarget
      */
-    public function setMessenger(?Messenger $messenger): MessengerTarget
+    public function setMessenger(?Messenger $messenger, bool $add = true): MessengerTarget
     {
+        if ($messenger instanceof Messenger && $add)
+            $messenger->addTarget($this, false);
+
         $this->messenger = $messenger;
         return $this;
     }

@@ -33,7 +33,10 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class GibbonPerson
@@ -2487,5 +2490,64 @@ class Person extends User
     public function isSystemAdmin(): bool
     {
         return $this->getId() === 1;
+    }
+
+    /**
+     * @var Staff|null
+     * @ORM\OneToOne(targetEntity="App\Entity\Staff", mappedBy="person")
+     */
+    private $staff;
+
+    /**
+     * @return Staff|null
+     */
+    public function getStaff(): ?Staff
+    {
+        return $this->staff;
+    }
+
+    /**
+     * setStaff
+     * @param Staff|null $staff
+     * @param bool $add
+     * @return Person
+     */
+    public function setStaff(?Staff $staff, bool $add = true): Person
+    {
+        if ($staff instanceof Staff && $add)
+            $staff->setPerson($this, false);
+        $this->staff = $staff;
+        return $this;
+    }
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\CourseClassPerson", mappedBy="person")
+     */
+    private $courseClassPerson;
+
+    /**
+     * getCourseClassPerson
+     * @return Collection|null
+     */
+    public function getCourseClassPerson(): ?Collection
+    {
+        if (empty($this->courseClassPerson))
+            $this->courseClassPerson = new ArrayCollection();
+
+        if ($this->courseClassPerson instanceof PersistentCollection)
+            $this->courseClassPerson->initialize();
+
+        return $this->courseClassPerson;
+    }
+
+    /**
+     * @param Collection|null $courseClassPerson
+     * @return Person
+     */
+    public function setCourseClassPerson(?Collection $courseClassPerson): Person
+    {
+        $this->courseClassPerson = $courseClassPerson;
+        return $this;
     }
 }

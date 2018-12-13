@@ -31,6 +31,8 @@
 namespace App\Listener;
 
 use App\Util\EntityHelper;
+use App\Util\RelationshipHelper;
+use App\Util\SchoolYearHelper;
 use App\Util\UserHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -46,9 +48,10 @@ class HelperListener implements EventSubscriberInterface
 {
     /**
      * HelperListener constructor.
+     * Pre loads Helper classes so ALWAYS available in memory.
      * @param EntityHelper $helper
      */
-    public function __construct(EntityHelper $helper, UserHelper $userHelper)
+    public function __construct(EntityHelper $helper, UserHelper $userHelper, RelationshipHelper $relationshipHelper, SchoolYearHelper $schoolYearHelper)
     {
     }
 

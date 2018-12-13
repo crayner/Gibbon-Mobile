@@ -50,7 +50,7 @@ class StudentEnrolment
      * @ORM\ManyToOne(targetEntity="YearGroup")
      * @ORM\JoinColumn(name="gibbonYearGroupID",referencedColumnName="gibbonYearGroupID", nullable=false)
      */
-    private $yearGroupEntry;
+    private $yearGroup;
 
     /**
      * @var RollGroup|null
@@ -122,18 +122,18 @@ class StudentEnrolment
     /**
      * @return YearGroup|null
      */
-    public function getYearGroupEntry(): ?YearGroup
+    public function getYearGroup(): ?YearGroup
     {
-        return $this->yearGroupEntry;
+        return $this->yearGroup;
     }
 
     /**
-     * @param YearGroup|null $yearGroupEntry
+     * @param YearGroup|null $yearGroup
      * @return StudentEnrolment
      */
-    public function setYearGroupEntry(?YearGroup $yearGroupEntry): StudentEnrolment
+    public function setYearGroup(?YearGroup $yearGroup): StudentEnrolment
     {
-        $this->yearGroupEntry = $yearGroupEntry;
+        $this->yearGroup = $yearGroup;
         return $this;
     }
 

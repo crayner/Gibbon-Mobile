@@ -88,10 +88,9 @@ class NotificationTrayManager
 
         $result['translations'] = $translations;
 
-        $result['displayTray'] = $this->displayTray;
+        $result['displayTray'] = $this->getDisplayTray();
         $result['locale'] = $this->getStack()->getCurrentRequest()->get('_locale');
         $result['isStaff'] = UserHelper::isStaff();
-        $result['notifications'] = $this->getDisplayTray();
 
         return json_encode($result);
     }

@@ -30,7 +30,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class Family
@@ -106,6 +109,18 @@ class Family
      * @ORM\Column(length=50, name="familySync", nullable=true)
      */
     private $familySync;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(mappedBy="family", targetEntity="App\Entity\FamilyAdult")
+     */
+    private $adults;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(mappedBy="family", targetEntity="App\Entity\FamilyChild")
+     */
+    private $children;
 
     /**
      * @return int|null
@@ -293,5 +308,54 @@ class Family
     public static function getStatusList(): array
     {
         return self::$statusList;
+    }
+
+    /**
+     * getAdults
+     * @return Collection|null
+     */
+    public function getAdults(): ?Collection
+    {
+        if (empty($this->adults))
+            $this->adults = new ArrayCollection();
+
+        if ($this->adults instanceof PersistentCollection)
+            $this->adults->initialize();
+
+        return $this->adults;
+    }
+
+    /**
+     * @param Collection|null $adults
+     * @return Family
+     */
+    public function setAdults(?Collection $adults): Family
+    {
+        $this->adults = $adults;
+        return $this;
+    }
+
+    /**
+     * @return Collection|null
+     */
+    public function getChildren(): ?Collection
+    {
+        if (empty($this->children))
+            $this->children = new ArrayCollection();
+
+        if ($this->children instanceof PersistentCollection)
+            $this->children->initialize();
+
+        return $this->children;
+    }
+
+    /**
+     * @param Collection|null $children
+     * @return Family
+     */
+    public function setChildren(?Collection $children): Family
+    {
+        $this->children = $children;
+        return $this;
     }
 }
