@@ -510,4 +510,117 @@ class MessengerProvider
             ->getQuery()
             ->getResult() ?: [];
     }
+
+    /**
+     * getMessagesByType
+     * @param string $showDate
+     * @param string $timezone
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getMessagesByType(string $showDate = 'today', string $timezone = 'UTC')
+    {
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt', 'mt.type')
+            ->select('mt.type, COUNT(mt.id)')
+            ->leftJoin('mt.messenger', 'm')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->setParameter('date', $date)
+            ->addGroupBy('mt.type')
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    /**
+     * getCourseClassStaffMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivityStaffMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $activities = UserHelper::getActivitiesByStaff('id');
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.staff = :yes')
+            ->andWhere('mt.identifier IN (:activities)')
+            ->setParameter('date', $date)
+            ->setParameter('yes', 'Y')
+            ->setParameter('messageType', 'Activity')
+            ->setParameter('activities', $activities, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult() ?: [];
+    }
+
+    /**
+     * getActivityStudentMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivityStudentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $activities = UserHelper::getActivitiesByStudent(null, 'id');
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.students = :yes')
+            ->andWhere('mt.identifier IN (:activities)')
+            ->setParameter('date', $date)
+            ->setParameter('yes', 'Y')
+            ->setParameter('messageType', 'Activity')
+            ->setParameter('activities', $activities, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult() ?: [];
+    }
+
+    /**
+     * getActivityStudentMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivityParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $activities = UserHelper::getActivitiesByParent('id');
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.students = :yes')
+            ->andWhere('mt.identifier IN (:activities)')
+            ->setParameter('date', $date)
+            ->setParameter('yes', 'Y')
+            ->setParameter('messageType', 'Activity')
+            ->setParameter('activities', $activities, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult() ?: [];
+    }
 }

@@ -29,6 +29,7 @@
  */
 namespace App\Provider;
 
+use App\Entity\Activity;
 use App\Entity\Course;
 use App\Entity\CourseClass;
 use App\Entity\CourseClassPerson;
@@ -312,6 +313,58 @@ class PersonProvider extends UserProvider
         $rollGroups = [];
         foreach($children as $child)
             $rollGroups[] = $this->getStudentRollGroups($child);
+
+        return array_unique($rollGroups);
+    }
+
+    /**
+     * getActivitiesByStaff
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivitiesByStaff(): array
+    {
+        return $this->getRepository(Activity::class)->createQueryBuilder('a')
+            ->select('DISTINCT a')
+            ->leftJoin('a.staff', 'a_s')
+            ->where('a_s.person = :person')
+            ->setParameter('person', UserHelper::getCurrentUser())
+            ->andWhere('a.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getActivitiesByStudents
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivitiesByStudents(): array
+    {
+        return $this->getRepository(Activity::class)->createQueryBuilder('a')
+            ->select('DISTINCT a')
+            ->leftJoin('a.students', 'a_s')
+            ->where('a_s.person = :person')
+            ->setParameter('person', UserHelper::getCurrentUser())
+            ->andWhere('a.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getActivitiesByParent
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivitiesByParent(): array
+    {
+        $children = UserHelper::getChildrenOfParent();
+
+        $rollGroups = [];
+        foreach ($children as $child)
+            $rollGroups = array_merge($rollGroups, UserHelper::getActivitiesByStudents($child, 'id'));
 
         return array_unique($rollGroups);
     }

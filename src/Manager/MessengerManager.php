@@ -79,6 +79,11 @@ class MessengerManager
     }
 
     /**
+     * @var array
+     */
+    private $messagesByType;
+
+    /**
      * setMessages
      * @param string $showDate
      * @return MessengerManager
@@ -88,40 +93,54 @@ class MessengerManager
     {
         $messages = new ArrayCollection();
 
-        foreach($this->getIndividualMessages() as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        $this->messagesByType = $this->getProvider()->getMessagesByType($showDate,$this->getTimezone());
 
-        foreach($this->getRoleCategoryMessages($showDate) as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        if ($this->hasMessagesByType('Individuals'))
+            foreach($this->getIndividualMessages() as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
-        foreach($this->getRoleMessages($showDate) as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        if ($this->hasMessagesByType('Role Categories'))
+            foreach($this->getRoleCategoryMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
-        foreach($this->getYearGroupMessages($showDate) as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        if ($this->hasMessagesByType('Role'))
+            foreach($this->getRoleMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
-        foreach($this->getRollGroupMessages($showDate) as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        if ($this->hasMessagesByType('Year Group'))
+            foreach($this->getYearGroupMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
-        foreach($this->getCourseMessages($showDate) as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        if ($this->hasMessagesByType('Roll Group'))
+            foreach($this->getRollGroupMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
-        foreach($this->getCourseClassMessages($showDate) as $message)
-            if (!$messages->contains($message))
-                $messages->add($message);
+        if ($this->hasMessagesByType('Course'))
+            foreach($this->getCourseMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
+
+        if ($this->hasMessagesByType('Course Class'))
+            foreach($this->getCourseClassMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
+
+        if ($this->hasMessagesByType('Activity'))
+            foreach($this->getActivityMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
         dump($messages);
         trigger_error('STOP HERE', E_USER_ERROR);
         $this->messages = new ArrayCollection($messages);
 
 
-//      'Activity','Applicants','Houses','Transport','Attendance','Group'
+//      'Applicants','Houses','Transport','Attendance','Group'
         return $this;
     }
 
@@ -271,5 +290,34 @@ class MessengerManager
         $messages =  array_merge($messages, $this->getProvider()->getCourseClassParentMessages($showDate, $this->getTimezone()));
 
         return $messages;
+    }
+
+    /**
+     * getActivityMessages
+     * @param string $showDate
+     * @return array
+     * @throws \Exception
+     */
+    public function getActivityMessages(string $showDate = 'today')
+    {
+        $messages =  $this->getProvider()->getActivityStaffMessages($showDate, $this->getTimezone()) ;
+
+        $messages =  array_merge($messages, $this->getProvider()->getActivityStudentMessages($showDate, $this->getTimezone()));
+
+        $messages =  array_merge($messages, $this->getProvider()->getActivityParentMessages($showDate, $this->getTimezone()));
+
+        return $messages;
+    }
+
+    /**
+     * hasMessagesByType
+     * @param string $type
+     * @return bool
+     */
+    private function hasMessagesByType(string $type): bool
+    {
+        if (empty($this->messagesByType[$type]))
+            return false;
+        return true;
     }
 }

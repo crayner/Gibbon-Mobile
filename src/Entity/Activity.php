@@ -31,7 +31,10 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class Action
@@ -50,6 +53,124 @@ class Activity
      * @ORM\GeneratedValue
      */
     private $id;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=1, options={"default": "Y"})
+     */
+    private $active = 'Y';
+
+    /**
+     * @var SchoolYear|null
+     * @ORM\ManyToOne(targetEntity="SchoolYear")
+     * @ORM\JoinColumn(name="gibbonSchoolYearID",referencedColumnName="gibbonSchoolYearID", nullable=false)
+     */
+    private $schoolYear;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=1, options={"comment": "Can a parent/student select this for registration?", "default": "Y"})
+     */
+    private $registration = 'Y';
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=40)
+     */
+    private $name;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=8, options={"default": "School"})
+     */
+    private $provider = 'School';
+
+    /**
+     * @var array
+     */
+    private static $providerList = ['School', 'External'];
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=255)
+     */
+    private $type;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text", name="gibbonSchoolYearTermIDList")
+     */
+    private $schoolYearTermList;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="listingStart", nullable=true)
+     */
+    private $listingStart;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="listingEnd", nullable=true)
+     */
+    private $listingEnd;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="programStart", nullable=true, nullable=true)
+     */
+    private $programStart;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="date", name="programEnd", nullable=true)
+     */
+    private $programEnd;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var float|null
+     * @ORM\Column(type="decimal", precision=8, scale=2, nullable=true)
+     */
+    private $payment;
+
+    /**
+     * @var array
+     */
+    private static $paymentTypeList = ['Entire Programme','Per Session','Per Week','Per Term'];
+
+    /**
+     * @var string
+     * @ORM\Column(length=9, name="paymentFirmness", nullable=true, options={"default": "Finalised"})
+     */
+    private $paymentFirmness = 'Finalised';
+
+    /**
+     * @var string
+     * @ORM\Column(length=16, name="paymentType", nullable=true, options={"default": "Entire Programme"})
+     */
+    private $paymentType = 'Entire Programme';
+
+    /**
+     * @var array
+     */
+    private static $paymentFirmnessList = ['Finalised', 'Estimated'];
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityStaff", mappedBy="activity")
+     */
+    private $staff;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\ActivityStudent", mappedBy="activity")
+     */
+    private $students;
 
     /**
      * @return array
@@ -94,13 +215,6 @@ class Activity
     }
 
     /**
-     * @var SchoolYear|null
-     * @ORM\ManyToOne(targetEntity="SchoolYear")
-     * @ORM\JoinColumn(name="gibbonSchoolYearID",referencedColumnName="gibbonSchoolYearID", nullable=false)
-     */
-    private $schoolYear;
-
-    /**
      * @return SchoolYear|null
      */
     public function getSchoolYear(): ?SchoolYear
@@ -117,12 +231,6 @@ class Activity
         $this->schoolYear = $schoolYear;
         return $this;
     }
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=1, options={"default": "Y"})
-     */
-    private $active = 'Y';
 
     /**
      * @return string|null
@@ -143,12 +251,6 @@ class Activity
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(length=1, options={"comment": "Can a parent/student select this for registration?", "default": "Y"})
-     */
-    private $registration = 'Y';
-
-    /**
      * @return string|null
      */
     public function getRegistration(): ?string
@@ -165,12 +267,6 @@ class Activity
         $this->registration = in_array($registration, self::getBooleanList()) ? $registration : 'Y';
         return $this;
     }
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=40)
-     */
-    private $name;
 
     /**
      * @return string|null
@@ -191,17 +287,6 @@ class Activity
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(length=8, options={"default": "School"})
-     */
-    private $provider = 'School';
-
-    /**
-     * @var array
-     */
-    private static $providerList = ['School', 'External'];
-
-    /**
      * @return string|null
      */
     public function getProvider(): ?string
@@ -218,12 +303,6 @@ class Activity
         $this->provider = in_array($provider, self::getProviderList()) ? $provider : 'School';
         return $this;
     }
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=255)
-     */
-    private $type;
 
     /**
      * @return string|null
@@ -244,12 +323,6 @@ class Activity
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(type="text", name="gibbonSchoolYearTermIDList")
-     */
-    private $schoolYearTermList;
-
-    /**
      * @return string|null
      */
     public function getSchoolYearTermList(): ?string
@@ -266,12 +339,6 @@ class Activity
         $this->schoolYearTermList = $schoolYearTermList;
         return $this;
     }
-
-    /**
-     * @var \DateTime|null
-     * @ORM\Column(type="date", name="listingStart", nullable=true)
-     */
-    private $listingStart;
 
     /**
      * @return \DateTime|null
@@ -291,12 +358,6 @@ class Activity
     }
 
     /**
-     * @var \DateTime|null
-     * @ORM\Column(type="date", name="listingEnd", nullable=true)
-     */
-    private $listingEnd;
-
-    /**
      * @return \DateTime|null
      */
     public function getListingEnd(): ?\DateTime
@@ -314,12 +375,6 @@ class Activity
     }
 
     /**
-     * @var \DateTime|null
-     * @ORM\Column(type="date", name="programStart", nullable=true, nullable=true)
-     */
-    private $programStart;
-
-    /**
      * @return \DateTime|null
      */
     public function getProgramStart(): ?\DateTime
@@ -335,12 +390,6 @@ class Activity
         $this->programStart = $programStart;
         return $this;
     }
-
-    /**
-     * @var \DateTime|null
-     * @ORM\Column(type="date", name="programEnd", nullable=true)
-     */
-    private $programEnd;
 
     /**
      * @return \DateTime|null
@@ -409,12 +458,6 @@ class Activity
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
-
-    /**
      * @return string|null
      */
     public function getDescription(): ?string
@@ -431,12 +474,6 @@ class Activity
         $this->description = $description;
         return $this;
     }
-
-    /**
-     * @var float|null
-     * @ORM\Column(type="decimal", precision=8, scale=2, nullable=true)
-     */
-    private $payment;
 
     /**
      * @return float|null
@@ -457,12 +494,6 @@ class Activity
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=16, name="paymentType", nullable=true, options={"default": "Entire Programme"})
-     */
-    private $paymentType = 'Entire Programme';
-
-    /**
      * @return string
      */
     public function getPaymentType(): string
@@ -479,17 +510,6 @@ class Activity
         $this->paymentType = in_array($paymentType, self::getPaymentTypeList()) ? $paymentType : 'Entire Programme';
         return $this;
     }
-
-    /**
-     * @var array
-     */
-    private static $paymentTypeList = ['Entire Programme','Per Session','Per Week','Per Term'];
-
-    /**
-     * @var string
-     * @ORM\Column(length=9, name="paymentFirmness", nullable=true, options={"default": "Finalised"})
-     */
-    private $paymentFirmness = 'Finalised';
 
     /**
      * @return string
@@ -510,7 +530,51 @@ class Activity
     }
 
     /**
-     * @var array
+     * getStaff
+     * @return Collection|null
      */
-    private static $paymentFirmnessList = ['Finalised', 'Estimated'];
+    public function getStaff(): ?Collection
+    {
+        if (empty($this->staff))
+            $this->staff = new ArrayCollection();
+        
+        if ($this->staff instanceof PersistentCollection)
+            $this->staff->initialize();
+        
+        return $this->staff;
+    }
+
+    /**
+     * @param Collection|null $staff
+     * @return Activity
+     */
+    public function setStaff(?Collection $staff): Activity
+    {
+        $this->staff = $staff;
+        return $this;
+    }
+
+    /**
+     * @return Collection|null
+     */
+    public function getStudents(): ?Collection
+    {
+        if (empty($this->students))
+            $this->students = new ArrayCollection();
+
+        if ($this->students instanceof PersistentCollection)
+            $this->students->initialize();
+
+        return $this->students;
+    }
+
+    /**
+     * @param Collection|null $students
+     * @return Activity
+     */
+    public function setStudents(?Collection $students): Activity
+    {
+        $this->students = $students;
+        return $this;
+    }
 }

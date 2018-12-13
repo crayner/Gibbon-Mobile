@@ -49,7 +49,7 @@ class ActivityStaff
 
     /**
      * @var Activity|null
-     * @ORM\ManyToOne(targetEntity="Activity")
+     * @ORM\ManyToOne(targetEntity="Activity", inversedBy="staff")
      * @ORM\JoinColumn(name="gibbonActivityID",referencedColumnName="gibbonActivityID", nullable=false)
      */
     private $activity;

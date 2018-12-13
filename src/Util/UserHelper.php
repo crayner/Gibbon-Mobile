@@ -297,4 +297,56 @@ class UserHelper
             $result[] = $item->getId();
         return array_unique($result);
     }
+
+    /**
+     * getActivitiesByStaff
+     * @param string $returnStyle
+     * @return array
+     * @throws \Exception
+     */
+    public static function getActivitiesByStaff(string $returnStyle = 'entity')
+    {
+        $x = self::getProvider()->getActivitiesByStaff();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
+
+    /**
+     * getActivitiesByStudents
+     * @param string $returnStyle
+     * @return array
+     * @throws \Exception
+     */
+    public static function getActivitiesByStudent(?Person $person = null, string $returnStyle = 'entity')
+    {
+        self::getProvider()->setEntity($person ?: self::getCurrentUser());
+        $x = self::getProvider()->getActivitiesByStudents();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
+
+    /**
+     * getActivitiesByParent
+     * @param string $returnStyle
+     * @return array
+     * @throws \Exception
+     */
+    public static function getActivitiesByParent(string $returnStyle = 'entity')
+    {
+        $x = self::getProvider()->getActivitiesByParent();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
 }
