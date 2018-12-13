@@ -30,6 +30,7 @@
 namespace App\Manager;
 
 use App\Provider\MessengerProvider;
+use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -82,6 +83,21 @@ class MessengerManager
      * @var array
      */
     private $messagesByType;
+
+    /**
+     * @var bool
+     */
+    private $staff;
+
+    /**
+     * @var bool
+     */
+    private $student;
+
+    /**
+     * @var bool
+     */
+    private $parent;
 
     /**
      * setMessages
@@ -142,13 +158,17 @@ class MessengerManager
                 if (!$messages->contains($message))
                     $messages->add($message);
 
+        if ($this->hasMessagesByType('Attendance'))
+            foreach($this->getAttendanceMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
 
         dump($messages);
         trigger_error('STOP HERE', E_USER_ERROR);
         $this->messages = new ArrayCollection($messages);
 
 
-//      'Houses','Transport','Attendance','Group'
+//      'Transport','Attendance','Group'
         return $this;
     }
 
@@ -240,11 +260,11 @@ class MessengerManager
      */
     public function getYearGroupMessages(string $showDate = 'today')
     {
-        $messages =  $this->getProvider()->getYearGroupStaffMessages($showDate, $this->getTimezone()) ;
+        $messages =  $this->isStaff() ? $this->getProvider()->getYearGroupStaffMessages($showDate, $this->getTimezone()) : [];
 
-        $messages =  array_merge($messages, $this->getProvider()->getYearGroupStudentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getYearGroupStudentMessages($showDate, $this->getTimezone()): []);
 
-        $messages =  array_merge($messages, $this->getProvider()->getYearGroupParentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getYearGroupParentMessages($showDate, $this->getTimezone()) : []);
 
         return $messages;
     }
@@ -257,11 +277,11 @@ class MessengerManager
      */
     public function getRollGroupMessages(string $showDate = 'today')
     {
-        $messages =  $this->getProvider()->getRollGroupStaffMessages($showDate, $this->getTimezone()) ;
+        $messages =   $this->isStaff() ? $this->getProvider()->getRollGroupStaffMessages($showDate, $this->getTimezone()) : [] ;
 
-        $messages =  array_merge($messages, $this->getProvider()->getRollGroupStudentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getRollGroupStudentMessages($showDate, $this->getTimezone()) : [] );
 
-        $messages =  array_merge($messages, $this->getProvider()->getRollGroupParentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getRollGroupParentMessages($showDate, $this->getTimezone()) : [] );
 
         return $messages;
     }
@@ -276,9 +296,9 @@ class MessengerManager
     {
         $messages =  $this->getProvider()->getCourseStaffMessages($showDate, $this->getTimezone()) ;
 
-        $messages =  array_merge($messages, $this->getProvider()->getCourseStudentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getCourseStudentMessages($showDate, $this->getTimezone()) : [] );
 
-        $messages =  array_merge($messages, $this->getProvider()->getCourseParentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getCourseParentMessages($showDate, $this->getTimezone()) : [] );
 
         return $messages;
     }
@@ -291,11 +311,11 @@ class MessengerManager
      */
     public function getCourseClassMessages(string $showDate = 'today')
     {
-        $messages =  $this->getProvider()->getCourseClassStaffMessages($showDate, $this->getTimezone()) ;
+        $messages =   $this->isStaff() ? $this->getProvider()->getCourseClassStaffMessages($showDate, $this->getTimezone()) : [] ;
 
-        $messages =  array_merge($messages, $this->getProvider()->getCourseClassStudentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getCourseClassStudentMessages($showDate, $this->getTimezone()) : [] );
 
-        $messages =  array_merge($messages, $this->getProvider()->getCourseClassParentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getCourseClassParentMessages($showDate, $this->getTimezone()) : [] );
 
         return $messages;
     }
@@ -308,11 +328,11 @@ class MessengerManager
      */
     public function getActivityMessages(string $showDate = 'today')
     {
-        $messages =  $this->getProvider()->getActivityStaffMessages($showDate, $this->getTimezone()) ;
+        $messages =   $this->isStaff() ? $this->getProvider()->getActivityStaffMessages($showDate, $this->getTimezone()) : [] ;
 
-        $messages =  array_merge($messages, $this->getProvider()->getActivityStudentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getActivityStudentMessages($showDate, $this->getTimezone()) : [] );
 
-        $messages =  array_merge($messages, $this->getProvider()->getActivityParentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getActivityParentMessages($showDate, $this->getTimezone()) : [] );
 
         return $messages;
     }
@@ -339,5 +359,61 @@ class MessengerManager
     {
         $messages =  $this->getProvider()->getHouseMessages($showDate, $this->getTimezone()) ;
         return $messages;
+    }
+
+    /**
+     * getAttendanceMessages
+     * @param string $showDate
+     * @return array
+     */
+    public function getAttendanceMessages(string $showDate = 'today')
+    {
+        $messages =  $this->isStudent() ? $this->getProvider()->getAttendanceStudentMessages($showDate, $this->getTimezone()) : [] ;
+
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getAttendanceParentMessages($showDate, $this->getTimezone()) : [] );
+
+        return $messages;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessagesByType(): array
+    {
+        return $this->messagesByType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStaff(): bool
+    {
+        if (is_null($this->staff)) {
+            UserHelper::getCurrentUser();
+            $this->staff = UserHelper::getProvider()->isStaff();
+        }return $this->staff;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStudent(): bool
+    {
+        if (is_null($this->student)) {
+            UserHelper::getCurrentUser();
+            $this->student = UserHelper::getProvider()->isStudent();
+        }
+        return $this->student;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParent(): bool
+    {
+        if (is_null($this->parent)) {
+            UserHelper::getCurrentUser();
+            $this->parent = UserHelper::getProvider()->isParent();
+        }return $this->parent;
     }
 }

@@ -324,6 +324,8 @@ class UserHelper
     public static function getActivitiesByStudent(?Person $person = null, string $returnStyle = 'entity')
     {
         self::getProvider()->setEntity($person ?: self::getCurrentUser());
+        if (! self::getProvider()->getEntity()->isStudent())
+            return [];
         $x = self::getProvider()->getActivitiesByStudents();
         if ($returnStyle === 'entity')
             return $x;
@@ -339,9 +341,33 @@ class UserHelper
      * @return array
      * @throws \Exception
      */
-    public static function getActivitiesByParent(string $returnStyle = 'entity')
+    public static function getActivitiesByParent(string $returnStyle = 'entity'): array
     {
+        if (!self::getCurrentUser()->isParent())
+            return [];
         $x = self::getProvider()->getActivitiesByParent();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
+
+    /**
+     * getStudentAttendance
+     * @param string $showDate
+     * @param Person|null $person
+     * @param string $returnStyle
+     * @return array
+     */
+    public static function getStudentAttendance(string $showDate = 'today', string $timezone = 'UTC', ?Person $person = null, string $returnStyle = 'entity'): array
+    {
+        $person = $person ?: self::getCurrentUser();
+        if (!$person->isStudent())
+            return [];
+        self::getProvider()->setEntity($person);
+        $x = self::getProvider()->getStudentAttendance($showDate, $timezone);
         if ($returnStyle === 'entity')
             return $x;
         $result = [];

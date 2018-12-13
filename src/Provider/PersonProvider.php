@@ -30,6 +30,7 @@
 namespace App\Provider;
 
 use App\Entity\Activity;
+use App\Entity\AttendanceLogPerson;
 use App\Entity\Course;
 use App\Entity\CourseClass;
 use App\Entity\CourseClassPerson;
@@ -59,6 +60,7 @@ class PersonProvider extends UserProvider
     /**
      * isStaff
      * @return bool
+     * @throws \Exception
      */
     public function isStaff(): bool
     {
@@ -82,8 +84,9 @@ class PersonProvider extends UserProvider
     }
 
     /**
-     * isStaff
+     * isParent
      * @return bool
+     * @throws \Exception
      */
     public function isParent(): bool
     {
@@ -347,7 +350,7 @@ class PersonProvider extends UserProvider
             ->select('DISTINCT a')
             ->leftJoin('a.students', 'a_s')
             ->where('a_s.person = :person')
-            ->setParameter('person', UserHelper::getCurrentUser())
+            ->setParameter('person', $this->getEntity())
             ->andWhere('a.schoolYear = :schoolYear')
             ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
             ->getQuery()
@@ -368,5 +371,25 @@ class PersonProvider extends UserProvider
             $rollGroups = array_merge($rollGroups, UserHelper::getActivitiesByStudents($child, 'id'));
 
         return array_unique($rollGroups);
+    }
+
+    /**
+     * getStudentAttendance
+     * @param string $showDate
+     * @return array
+     * @throws \Exception
+     */
+    public function getStudentAttendance(string $showDate, string $timezone): array
+    {
+        $showDate = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $showDate = $showDate->format('Y-m-d');
+        return $this->getRepository(AttendanceLogPerson::class)->createQueryBuilder('alp')
+            ->leftJoin('alp.studentEnrolment', 'se', 'WITH', 'alp.person = se.person')
+            ->where('alp.person = :person')
+            ->setParameter('person', $this->getEntity())
+            ->andWhere('alp.date = :showDate')
+            ->setParameter('showDate', $showDate)
+            ->getQuery()
+            ->getResult();
     }
 }

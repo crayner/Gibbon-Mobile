@@ -626,7 +626,7 @@ class MessengerProvider
     }
 
     /**
-     * getIndividualMessages
+     * getHouseMessages
      * @param string $showDate
      * @param string $timezone
      * @return array
@@ -653,5 +653,51 @@ class MessengerProvider
             ->setParameter('house', $house->getId())
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * getAttendanceStudentMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getAttendanceStudentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $attendanceType = [];
+        foreach(UserHelper::getStudentAttendance($showDate, $timezone) as $alp)
+            $attendanceType[] = $alp->getType().$alp->getDate()->format(' Y-m-d');
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.identifier IN (:attendanceType)')
+            ->setParameter('date', $date)
+            ->setParameter('messageType', 'Attendance')
+            ->setParameter('attendanceType', $attendanceType, Connection::PARAM_STR_ARRAY)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getAttendanceParentMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getAttendanceParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $results = [];
+        foreach(UserHelper::getChildrenOfParent() as $child)
+            $results = array_merge($results, UserHelper::getStudentAttendance($showDate, $timezone, $child));
+
+        return $results;
     }
 }
