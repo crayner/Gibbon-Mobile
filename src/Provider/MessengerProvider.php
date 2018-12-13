@@ -392,7 +392,7 @@ class MessengerProvider
     public function getCourseParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
         $children = UserHelper::getChildrenOfParent();
-        //Grab the student RollGroup
+
         $courses = [];
         foreach($children as $child)
             $courses = array_merge($courses, UserHelper::getCoursesByPerson($child,'id'));
@@ -406,12 +406,107 @@ class MessengerProvider
             ->leftJoin('mt.messenger', 'm')
             ->leftJoin('m.person', 'p')
             ->andWhere('mt.type = :messageType')
-            ->andWhere('mt.students = :yes')
+            ->andWhere('mt.parents = :yes')
             ->andWhere('mt.identifier IN (:courses)')
             ->setParameter('date', $date)
             ->setParameter('yes', 'Y')
             ->setParameter('messageType', 'Course')
             ->setParameter('courses', $courses, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult() ?: [];
+    }
+
+    /**
+     * getCourseClassStaffMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getCourseClassStaffMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $classes = UserHelper::getCourseClassesByPerson(null,'id');
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.staff = :yes')
+            ->andWhere('mt.identifier IN (:classes)')
+            ->setParameter('date', $date)
+            ->setParameter('yes', 'Y')
+            ->setParameter('messageType', 'Class')
+            ->setParameter('classes', $classes, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult() ?: [];
+    }
+
+    /**
+     * getCourseClassStaffMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getCourseClassStudentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $classes = UserHelper::getCourseClassesByPerson(null,'id');
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.students = :yes')
+            ->andWhere('mt.identifier IN (:classes)')
+            ->setParameter('date', $date)
+            ->setParameter('yes', 'Y')
+            ->setParameter('messageType', 'Class')
+            ->setParameter('classes', $classes, Connection::PARAM_INT_ARRAY)
+            ->getQuery()
+            ->getResult() ?: [];
+    }
+
+    /**
+     * getCourseClassStaffMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getCourseClassParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $children = UserHelper::getChildrenOfParent();
+
+        $classes = [];
+        foreach($children as $child)
+            $classes = array_merge($classes, UserHelper::getCourseClassesByPerson($child,'id'));
+
+
+        $date = new \DateTime($showDate, new \DateTimeZone($timezone));
+        $date = $date->format('Y-m-d');
+
+        return $this->getRepository(MessengerTarget::class)->createQueryBuilder('mt')
+            ->select('mt, m, p')
+            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
+            ->leftJoin('mt.messenger', 'm')
+            ->leftJoin('m.person', 'p')
+            ->andWhere('mt.type = :messageType')
+            ->andWhere('mt.parents = :yes')
+            ->andWhere('mt.identifier IN (:classes)')
+            ->setParameter('date', $date)
+            ->setParameter('yes', 'Y')
+            ->setParameter('messageType', 'Class')
+            ->setParameter('classes', $classes, Connection::PARAM_INT_ARRAY)
             ->getQuery()
             ->getResult() ?: [];
     }

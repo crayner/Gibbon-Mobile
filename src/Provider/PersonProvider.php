@@ -30,6 +30,7 @@
 namespace App\Provider;
 
 use App\Entity\Course;
+use App\Entity\CourseClass;
 use App\Entity\CourseClassPerson;
 use App\Entity\FamilyAdult;
 use App\Entity\Person;
@@ -132,6 +133,25 @@ class PersonProvider extends UserProvider
             ->select('DISTINCT c')
             ->leftJoin('c.courseClasses', 'cc')
             ->leftJoin('cc.courseClassPeople', 'ccp')
+            ->where('ccp.person = :person')
+            ->setParameter('person', $this->getEntity())
+            ->andWhere('c.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getCourseClassesByPerson
+     * @return array
+     * @throws \Exception
+     */
+    public function getCourseClassesByPerson(): array
+    {
+        return $this->getRepository(CourseClass::class)->createQueryBuilder('cc')
+            ->select('DISTINCT cc')
+            ->leftJoin('cc.courseClassPeople', 'ccp')
+            ->leftJoin('cc.course', 'c')
             ->where('ccp.person = :person')
             ->setParameter('person', $this->getEntity())
             ->andWhere('c.schoolYear = :schoolYear')

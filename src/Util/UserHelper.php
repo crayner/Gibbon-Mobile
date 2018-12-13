@@ -277,4 +277,24 @@ class UserHelper
             $result[] = $item->getId();
         return array_unique($result);
     }
+
+    /**
+     * getPersonCourses
+     * @param string $returnStyle
+     * @return array
+     * @throws \Exception
+     */
+    public static function getCourseClassesByPerson(?Person $person = null, string $returnStyle = 'entity')
+    {
+        $person = $person ?: self::getCurrentUser();
+        self::getProvider()->setEntity($person);
+
+        $x = self::getProvider()->getCourseClassesByPerson();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
 }
