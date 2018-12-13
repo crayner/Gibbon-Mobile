@@ -34,6 +34,7 @@ use App\Entity\Course;
 use App\Entity\CourseClass;
 use App\Entity\CourseClassPerson;
 use App\Entity\FamilyAdult;
+use App\Entity\House;
 use App\Entity\Person;
 use App\Entity\Role;
 use App\Entity\RollGroup;

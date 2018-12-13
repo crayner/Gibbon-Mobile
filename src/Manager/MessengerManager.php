@@ -135,12 +135,20 @@ class MessengerManager
                 if (!$messages->contains($message))
                     $messages->add($message);
 
+        // Applicants are ignored..  Only Email...
+
+        if ($this->hasMessagesByType('Houses'))
+            foreach($this->getHouseMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
+
+
         dump($messages);
         trigger_error('STOP HERE', E_USER_ERROR);
         $this->messages = new ArrayCollection($messages);
 
 
-//      'Applicants','Houses','Transport','Attendance','Group'
+//      'Houses','Transport','Attendance','Group'
         return $this;
     }
 
@@ -319,5 +327,17 @@ class MessengerManager
         if (empty($this->messagesByType[$type]))
             return false;
         return true;
+    }
+
+    /**
+     * getActivityMessages
+     * @param string $showDate
+     * @return array
+     * @throws \Exception
+     */
+    public function getHouseMessages(string $showDate = 'today')
+    {
+        $messages =  $this->getProvider()->getHouseMessages($showDate, $this->getTimezone()) ;
+        return $messages;
     }
 }
