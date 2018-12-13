@@ -29,10 +29,12 @@
  */
 namespace App\Provider;
 
+use App\Entity\Course;
 use App\Entity\CourseClassPerson;
 use App\Entity\FamilyAdult;
 use App\Entity\Person;
 use App\Entity\Role;
+use App\Entity\RollGroup;
 use App\Entity\StudentEnrolment;
 use App\Manager\Traits\EntityTrait;
 use App\Util\SchoolYearHelper;
@@ -120,25 +122,35 @@ class PersonProvider extends UserProvider
     }
 
     /**
-     * getStaffYearGroupsByCourse
+     * getCourseByPerson
      * @return array
      * @throws \Exception
      */
-    public function getStaffYearGroupsByCourse(): array
+    public function getCoursesByPerson(): array
     {
-        $x = $this->getRepository(CourseClassPerson::class)->createQueryBuilder('ccp')
-            ->select('c.yearGroupList')
-            ->leftJoin('ccp.courseClass', 'cc')
-            ->leftJoin('cc.course', 'c')
+        return $this->getRepository(Course::class)->createQueryBuilder('c')
+            ->select('DISTINCT c')
+            ->leftJoin('c.courseClasses', 'cc')
+            ->leftJoin('cc.courseClassPeople', 'ccp')
             ->where('ccp.person = :person')
             ->setParameter('person', $this->getEntity())
             ->andWhere('c.schoolYear = :schoolYear')
             ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * getStaffYearGroupsByCourse
+     * @return array
+     * @throws \Exception
+     */
+    public function getStaffYearGroupsByCourse(): array
+    {
+        $x = UserHelper::getCoursesByPerson();
         $results = [];
         foreach($x as $list)
-            $results = array_merge($results, explode(',',$list['yearGroupList']));
+            $results = array_merge($results, explode(',', $list->getYearGroupList()));
 
         return array_unique($results);
     }
@@ -198,7 +210,7 @@ class PersonProvider extends UserProvider
      */
     public function getParentYearGroups(): array
     {
-        $children = $this->getChildrenOfParent();
+        $children = UserHelper::getChildrenOfParent();
 
         $yearGroups = [];
         foreach($children as $child)
@@ -213,16 +225,15 @@ class PersonProvider extends UserProvider
      * @return array
      * @throws \Exception
      */
-    public function getChildrenOfParent(?Person $person = null): array
+    public function getChildrenOfParent(): array
     {
-        $person = $person ?: $this->getEntity();
         $x = $this->getRepository(FamilyAdult::class)->createQueryBuilder('fa')
             ->leftJoin('fa.family', 'f')
             ->leftJoin('f.children', 'fc')
             ->leftJoin('fc.person', 'p')
             ->select('fa,f,fc,p')
             ->where('fa.person = :person')
-            ->setParameter('person', $person)
+            ->setParameter('person', UserHelper::getCurrentUser())
             ->getQuery()
             ->getResult();
         $results = [];
@@ -232,5 +243,56 @@ class PersonProvider extends UserProvider
                     $results[$child->getPerson()->getId()] = $child->getPerson();
         }
         return $results;
+    }
+
+    /**
+     * getStaffRollGroups
+     * @return array
+     */
+    public function getStaffRollGroups(): array
+    {
+        return $this->getRepository(RollGroup::class)->createQueryBuilder('rg')
+            ->select('rg')
+            ->where('rg.tutor = :person OR rg.tutor2 = :person OR rg.tutor3 = :person OR rg.assistant = :person OR rg.assistant2 = :person OR rg.assistant3 = :person')
+            ->setParameter('person', UserHelper::getCurrentUser())
+            ->andWhere('rg.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getStudentRollGroups
+     * @return array
+     * @throws \Exception
+     */
+    public function getStudentRollGroups(?Person $person = null): array
+    {
+        $person = $person ?: UserHelper::getCurrentUser();
+        return $this->getRepository(RollGroup::class)->createQueryBuilder('rg')
+            ->select('rg')
+            ->leftJoin('rg.studentEnrolments', 'se')
+            ->where('se.person = :person')
+            ->setParameter('person', $person)
+            ->andWhere('rg.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getParentRollGroups
+     * @return array
+     * @throws \Exception
+     */
+    public function getParentRollGroups(): array
+    {
+        $children = UserHelper::getChildrenOfParent();
+
+        $rollGroups = [];
+        foreach($children as $child)
+            $rollGroups[] = $this->getStudentRollGroups($child);
+
+        return array_unique($rollGroups);
     }
 }

@@ -31,7 +31,10 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class Course
@@ -99,6 +102,12 @@ class Course
      * @ORM\Column(type="smallint", name="orderBy", columnDefinition="INT(3)")
      */
     private $orderBy;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\CourseClass", mappedBy="course")
+     */
+    private $courseClasses;
 
     /**
      * @return int|null
@@ -259,6 +268,31 @@ class Course
     public function setOrderBy(?int $orderBy): Course
     {
         $this->orderBy = $orderBy;
+        return $this;
+    }
+
+    /**
+     * getCourseClasses
+     * @return Collection
+     */
+    public function getCourseClasses(): Collection
+    {
+        if (empty($this->courseClasses))
+            $this->courseClasses = new ArrayCollection();
+
+        if ($this->courseClasses instanceof PersistentCollection)
+            $this->courseClasses->initialize();
+
+        return $this->courseClasses;
+    }
+
+    /**
+     * @param Collection|null $courseClasses
+     * @return Course
+     */
+    public function setCourseClasses(?Collection $courseClasses): Course
+    {
+        $this->courseClasses = $courseClasses;
         return $this;
     }
 }

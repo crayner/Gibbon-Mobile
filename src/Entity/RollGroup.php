@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class RollGroup
@@ -135,6 +138,12 @@ class RollGroup
      * @ORM\Column()
      */
     private $website;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\StudentEnrolment", mappedBy="rollGroup")
+     */
+    private $studentEnrolments;
 
     /**
      * @return int|null
@@ -385,6 +394,31 @@ class RollGroup
     public function setWebsite(?string $website): RollGroup
     {
         $this->website = $website;
+        return $this;
+    }
+
+    /**
+     * getStudentEnrolments
+     * @return Collection
+     */
+    public function getStudentEnrolments(): Collection
+    {
+        if (empty($this->studentEnrolments))
+            $this->studentEnrolments = new ArrayCollection();
+
+        if ($this->studentEnrolments instanceof PersistentCollection)
+            $this->studentEnrolments->initialize();
+
+        return $this->studentEnrolments;
+    }
+
+    /**
+     * @param Collection|null $studentEnrolments
+     * @return RollGroup
+     */
+    public function setStudentEnrolments(?Collection $studentEnrolments): RollGroup
+    {
+        $this->studentEnrolments = $studentEnrolments;
         return $this;
     }
 }

@@ -54,7 +54,7 @@ class StudentEnrolment
 
     /**
      * @var RollGroup|null
-     * @ORM\ManyToOne(targetEntity="RollGroup")
+     * @ORM\ManyToOne(targetEntity="RollGroup", inversedBy="stedentEnrolments")
      * @ORM\JoinColumn(name="gibbonRollGroupID", referencedColumnName="gibbonRollGroupID", nullable=false)
      */
     private $rollGroup;

@@ -191,4 +191,90 @@ class UserHelper
         self::$provider->setEntity(self::getCurrentUser());
         return self::$provider->getParentYearGroups();
     }
+
+    /**
+     * @var array
+     */
+    private static $childrenOfParent;
+
+    /**
+     * getChildrenOfParent
+     * @return array
+     * @throws \Exception
+     */
+    public static function getChildrenOfParent(): array
+    {
+        if (! empty(self::$childrenOfParent))
+            return self::$childrenOfParent;
+        self::$provider->setEntity(self::getCurrentUser());
+        return self::$childrenOfParent = self::$provider->getChildrenOfParent();
+    }
+
+    /**
+     * getStaffRollGroups
+     * @param string $returnStyle
+     * @return array
+     */
+    public static function getStaffRollGroups(string $returnStyle = 'entity'): array
+    {
+        $x = self::getProvider()->getStaffRollGroups();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
+
+    /**
+     * getStaffRollGroups
+     * @param string $returnStyle
+     * @return array
+     */
+    public static function getStudentRollGroups(string $returnStyle = 'entity'): array
+    {
+        $x = self::getProvider()->getStudentRollGroups();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
+
+    /**
+     * getParentRollGroups
+     * @param string $returnStyle
+     * @return array
+     */
+    public static function getParentRollGroups(string $returnStyle = 'entity'): array
+    {
+        $x = self::getProvider()->getParentRollGroups();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
+
+    /**
+     * getPersonCourses
+     * @param string $returnStyle
+     * @return array
+     * @throws \Exception
+     */
+    public static function getCoursesByPerson(?Person $person = null, string $returnStyle = 'entity')
+    {
+        $person = $person ?: self::getCurrentUser();
+        self::getProvider()->setEntity($person);
+
+        $x = self::getProvider()->getCoursesByPerson();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
 }

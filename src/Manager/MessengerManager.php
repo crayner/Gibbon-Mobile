@@ -108,12 +108,16 @@ class MessengerManager
             if (!$messages->contains($message))
                 $messages->add($message);
 
+        foreach($this->getCourseMessages($showDate) as $message)
+            if (!$messages->contains($message))
+                $messages->add($message);
+
         dump($messages);
         trigger_error('STOP HERE', E_USER_ERROR);
         $this->messages = new ArrayCollection($messages);
 
 
-     //   'Class','Course','Roll Group','Year Group','Activity','Role','Applicants','Houses','Transport','Attendance','Group'
+     //   'Class','Course','Roll Group','Activity','Role','Applicants','Houses','Transport','Attendance','Group'
         return $this;
     }
 
@@ -224,9 +228,26 @@ class MessengerManager
     {
         $messages =  $this->getProvider()->getRollGroupStaffMessages($showDate, $this->getTimezone()) ;
 
-//        $messages =  array_merge($messages, $this->getProvider()->getYearGroupStudentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->getProvider()->getRollGroupStudentMessages($showDate, $this->getTimezone()));
 
-//        $messages =  array_merge($messages, $this->getProvider()->getYearGroupParentMessages($showDate, $this->getTimezone()));
+        $messages =  array_merge($messages, $this->getProvider()->getRollGroupParentMessages($showDate, $this->getTimezone()));
+
+        return $messages;
+    }
+
+    /**
+     * getCourseMessages
+     * @param string $showDate
+     * @return array
+     * @throws \Exception
+     */
+    public function getCourseMessages(string $showDate = 'today')
+    {
+        $messages =  $this->getProvider()->getCourseStaffMessages($showDate, $this->getTimezone()) ;
+
+ //       $messages =  array_merge($messages, $this->getProvider()->getRollGroupStudentMessages($showDate, $this->getTimezone()));
+
+  //      $messages =  array_merge($messages, $this->getProvider()->getRollGroupParentMessages($showDate, $this->getTimezone()));
 
         return $messages;
     }

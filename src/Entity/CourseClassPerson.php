@@ -51,7 +51,7 @@ class CourseClassPerson
 
     /**
      * @var CourseClass|null
-     * @ORM\ManyToOne(targetEntity="CourseClass")
+     * @ORM\ManyToOne(targetEntity="CourseClass", inversedBy="courseClassPeople")
      * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;

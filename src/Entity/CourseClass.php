@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class CourseClass
@@ -41,6 +44,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseClass
 {
     use BooleanList;
+
     /**
      * @var integer|null
      * @ORM\Id()
@@ -51,7 +55,7 @@ class CourseClass
 
     /**
      * @var Course|null
-     * @ORM\ManyToOne(targetEntity="Course")
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="courseClasses")
      * @ORM\JoinColumn(name="gibbonCourseID", referencedColumnName="gibbonCourseID", nullable=false)
      */
     private $course;
@@ -86,6 +90,12 @@ class CourseClass
      * @ORM\JoinColumn(name="gibbonScaleIDTarget", referencedColumnName="gibbonScaleID")
      */
     private $scale;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\CourseClassPerson", mappedBy="courseClass")
+     */
+    private $courseClassPeople;
 
     /**
      * @return int|null
@@ -210,6 +220,31 @@ class CourseClass
     public function setScale(?Scale $scale): CourseClass
     {
         $this->scale = $scale;
+        return $this;
+    }
+
+    /**
+     * getCourseClassPeople
+     * @return Collection|null
+     */
+    public function getCourseClassPeople(): ?Collection
+    {
+        if (empty($this->courseClassPeople))
+            $this->courseClassPeople = new ArrayCollection();
+
+        if ($this->courseClassPeople instanceof PersistentCollection)
+            $this->courseClassPeople->initialize();
+
+        return $this->courseClassPeople;
+    }
+
+    /**
+     * @param Collection|null $courseClassPeople
+     * @return CourseClass
+     */
+    public function setCourseClassPeople(?Collection $courseClassPeople): CourseClass
+    {
+        $this->courseClassPeople = $courseClassPeople;
         return $this;
     }
 }
