@@ -343,7 +343,7 @@ class UserHelper
      */
     public static function getActivitiesByParent(string $returnStyle = 'entity'): array
     {
-        if (!self::getCurrentUser()->isParent())
+        if (!self::isParent())
             return [];
         $x = self::getProvider()->getActivitiesByParent();
         if ($returnStyle === 'entity')

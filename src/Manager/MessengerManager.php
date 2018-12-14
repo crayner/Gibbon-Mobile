@@ -163,12 +163,22 @@ class MessengerManager
                 if (!$messages->contains($message))
                     $messages->add($message);
 
+        if ($this->hasMessagesByType('Transport'))
+            foreach($this->getTransportMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
+
+        if ($this->hasMessagesByType('Group'))
+            foreach($this->getGroupMessages($showDate) as $message)
+                if (!$messages->contains($message))
+                    $messages->add($message);
+
         dump($messages);
         trigger_error('STOP HERE', E_USER_ERROR);
         $this->messages = new ArrayCollection($messages);
 
 
-//      'Transport','Attendance','Group'
+//      'Group' ignored Only Email
         return $this;
     }
 
@@ -388,10 +398,9 @@ class MessengerManager
      */
     public function isStaff(): bool
     {
-        if (is_null($this->staff)) {
-            UserHelper::getCurrentUser();
-            $this->staff = UserHelper::getProvider()->isStaff();
-        }return $this->staff;
+        if (is_null($this->staff))
+            $this->staff = UserHelper::isStaff();
+        return $this->staff;
     }
 
     /**
@@ -399,10 +408,8 @@ class MessengerManager
      */
     public function isStudent(): bool
     {
-        if (is_null($this->student)) {
-            UserHelper::getCurrentUser();
-            $this->student = UserHelper::getProvider()->isStudent();
-        }
+        if (is_null($this->student))
+            $this->student = UserHelper::isStudent();
         return $this->student;
     }
 
@@ -411,9 +418,41 @@ class MessengerManager
      */
     public function isParent(): bool
     {
-        if (is_null($this->parent)) {
-            UserHelper::getCurrentUser();
-            $this->parent = UserHelper::getProvider()->isParent();
-        }return $this->parent;
+        if (is_null($this->parent))
+            $this->parent = UserHelper::isParent();
+        return $this->parent;
+    }
+
+    /**
+     * getTransportMessages
+     * @param string $showDate
+     * @return array
+     * @throws \Exception
+     */
+    public function getTransportMessages(string $showDate = 'today')
+    {
+        $messages = $this->isStaff() ? $this->getProvider()->getTransportStaffMessages($showDate, $this->getTimezone(), UserHelper::getCurrentUser()->getTransport()) : [];
+
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getTransportStudentMessages($showDate, $this->getTimezone(), UserHelper::getCurrentUser()->getTransport()) : [] );
+
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getTransportParentMessages($showDate, $this->getTimezone(), UserHelper::getCurrentUser()->getTransport()) : [] );
+
+        return $messages;
+    }
+
+    /**
+     * getAttendanceMessages
+     * @param string $showDate
+     * @return array
+     */
+    public function getGroupMessages(string $showDate = 'today')
+    {
+        $messages = $this->isStaff() ? $this->getProvider()->getGroupStaffMessages($showDate, $this->getTimezone()) : [];
+
+        $messages =  array_merge($messages, $this->isStudent() ? $this->getProvider()->getGroupStudentMessages($showDate, $this->getTimezone()) : [] );
+
+        $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getGroupParentMessages($showDate, $this->getTimezone()) : [] );
+
+        return $messages;
     }
 }
