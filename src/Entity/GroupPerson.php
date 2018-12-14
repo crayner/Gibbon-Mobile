@@ -49,7 +49,7 @@ class GroupPerson
 
     /**
      * @var Group|null
-     * @ORM\ManyToOne(targetEntity="Group")
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="people")
      * @ORM\JoinColumn(name="gibbonGroupID", referencedColumnName="gibbonGroupID", nullable=false)
      */
     private $group;

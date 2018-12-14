@@ -375,4 +375,24 @@ class UserHelper
             $result[] = $item->getId();
         return array_unique($result);
     }
+
+    /**
+     * getStudentAttendance
+     * @param string $showDate
+     * @param Person|null $person
+     * @param string $returnStyle
+     * @return array
+     */
+    public static function getGroups(?Person $person = null, string $returnStyle = 'entity'): array
+    {
+        $person = $person ?: self::getCurrentUser();
+        self::getProvider()->setEntity($person);
+        $x = self::getProvider()->getGroups();
+        if ($returnStyle === 'entity')
+            return $x;
+        $result = [];
+        foreach($x as $item)
+            $result[] = $item->getId();
+        return array_unique($result);
+    }
 }

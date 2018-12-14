@@ -34,6 +34,7 @@ use App\Entity\AttendanceLogPerson;
 use App\Entity\Course;
 use App\Entity\CourseClass;
 use App\Entity\FamilyAdult;
+use App\Entity\Group;
 use App\Entity\Person;
 use App\Entity\Role;
 use App\Entity\RollGroup;
@@ -387,6 +388,24 @@ class PersonProvider extends UserProvider
             ->setParameter('person', $this->getEntity())
             ->andWhere('alp.date = :showDate')
             ->setParameter('showDate', $showDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * getStudentAttendance
+     * @param string $showDate
+     * @return array
+     * @throws \Exception
+     */
+    public function getGroups(): array
+    {
+        return $this->getRepository(Group::class)->createQueryBuilder('g')
+            ->leftJoin('g.people', 'gp')
+            ->where('gp.person = :person')
+            ->setParameter('person', $this->getEntity())
+            ->andWhere('g.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
             ->getQuery()
             ->getResult();
     }

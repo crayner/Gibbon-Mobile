@@ -467,4 +467,49 @@ class MessengerProvider
 
         return $results;
     }
+
+    /**
+     * getGroupStaffMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getGroupStaffMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $groups = UserHelper::getGroups( null, 'id');
+        return $this->getMatchingMessages('Group', $groups, $showDate, $timezone, 'staff');
+    }
+
+    /**
+     * getGroupStudentMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getGroupStudentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $groups = UserHelper::getGroups( null, 'id');
+        return $this->getMatchingMessages('Group', $groups, $showDate, $timezone, 'staff');
+    }
+
+    /**
+     * getGroupStudentMessages
+     * @param string $showDate
+     * @param string $timezone
+     * @return array
+     * @throws \Exception
+     */
+    public function getGroupParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
+    {
+        $groups = UserHelper::getGroups( null, 'id');
+
+        $results = $this->getMatchingMessages('Group', $groups, $showDate, $timezone, 'parents');
+        foreach(UserHelper::getChildrenOfParent() as $child){
+            $groups = UserHelper::getGroups($child, 'id');
+            $results = array_merge($results, $this->getMatchingMessages('Group', $groups, $showDate, $timezone, 'parents'));
+        }
+        return $results;
+    }
 }

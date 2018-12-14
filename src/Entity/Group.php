@@ -29,7 +29,10 @@
  */
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class Group
@@ -79,6 +82,12 @@ class Group
      * @ORM\Column(type="datetime", name="timestampUpdated", options={"default": "CURRENT_TIMESTAMP"}, nullable=true)
      */
     private $timestampUpdated;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\GroupPerson", mappedBy="group")
+     */
+    private $people;
 
     /**
      * @return int|null
@@ -191,6 +200,31 @@ class Group
     public function setTimestampUpdated(?\DateTime $timestampUpdated = null): Group
     {
         $this->timestampUpdated = $timestampUpdated ?: new \DateTime('now');
+        return $this;
+    }
+
+    /**
+     * getPeople
+     * @return Collection
+     */
+    public function getPeople(): Collection
+    {
+        if (empty($this->people))
+            $this->people = new ArrayCollection();
+
+        if ($this->people instanceof PersistentCollection)
+            $this->people->initialize();
+
+        return $this->people;
+    }
+
+    /**
+     * @param Collection|null $people
+     * @return Group
+     */
+    public function setPeople(?Collection $people): Group
+    {
+        $this->people = $people;
         return $this;
     }
 }
