@@ -40,6 +40,12 @@ class Kernel extends BaseKernel
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
         // Feel free to remove the "container.autowiring.strict_mode" parameter
         // if you are using symfony/dependency-injection 4.0+ as it's the default behavior
+        if (! $container->hasParameter('cookie_lifetime'))
+            $container->setParameter('cookie_lifetime', 1200);
+        if (! $container->hasParameter('google_client_id'))
+            $container->setParameter('google_client_id', null);
+        if (! $container->hasParameter('google_secret'))
+            $container->setParameter('google_secret', null);
         $container->setParameter('container.autowiring.strict_mode', true);
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';

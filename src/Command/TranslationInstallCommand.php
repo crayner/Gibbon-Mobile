@@ -51,7 +51,7 @@ class TranslationInstallCommand extends Command
     const METHOD_ABSOLUTE_SYMLINK = 'absolute symlink';
     const METHOD_RELATIVE_SYMLINK = 'relative symlink';
 
-    protected static $defaultName = 'translation:install';
+    protected static $defaultName = 'gibbon:translation:install';
 
     /**
      * @var Filesystem
