@@ -1,10 +1,10 @@
 security:
     encoders:
-        argon2i:
-            algorithm: argon2i
-            memory_cost:          16384     # Amount in KiB. 16 MiB
-            time_cost:            2         # Number of iterations
-            threads:              4         # Number of parallel threads
+#        argon2i:
+#            algorithm: argon2i
+#            memory_cost:          16384     # Amount in KiB. 16 MiB
+#            time_cost:            2         # Number of iterations
+#            threads:              4         # Number of parallel threads
         bcrypt:
             algorithm: sha256
             cost: 15

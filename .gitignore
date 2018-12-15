@@ -9,6 +9,7 @@
 /.idea/
 *.lock
 *.log
+.env
 /translations/
 gibbon_mobile.yaml
 /public/uploads/
