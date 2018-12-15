@@ -21,23 +21,23 @@
  *
  * Gibbon-Mobile
  *
- * (c) 20 Craig Rayner <craig@craigrayner.com>
+ * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 23/11/20
- * Time: 15:27
+ * Date: 15/12/2018
+ * Time: 17:50
  */
 namespace App\Repository;
 
-use App\Entity\IN;
+use App\Entity\IndividualNeeds;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class INRepository
+ * Class IndividualNeedsRepository
  * @package App\Repository
  */
-class INRepository extends ServiceEntityRepository
+class IndividualNeedsRepository extends ServiceEntityRepository
 {
     /**
      * ApplicationFormRepository constructor.
@@ -45,6 +45,6 @@ class INRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, IN::class);
+        parent::__construct($registry, IndividualNeeds::class);
     }
 }

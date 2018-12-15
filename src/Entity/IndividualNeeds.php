@@ -32,12 +32,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class IN
+ * Class IndividualNeeds
  * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\INRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\IndividualNeedsRepository")
  * @ORM\Table(name="IN", uniqueConstraints={@ORM\UniqueConstraint(name="gibbonPersonID", columns={"gibbonPersonID"})})
  */
-class IN
+class IndividualNeeds
 {
     /**
      * @var integer|null
