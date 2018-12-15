@@ -30,11 +30,12 @@
 namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class EnvironmentInstallCommand
@@ -64,14 +65,25 @@ class EnvironmentInstallCommand extends Command
         $fileSystem = new Filesystem();
         $projectDir = pathinfo($kernel->getProjectDir());
 
-        $helper = $this->getHelper('question');
-        $question = new Question('What is the Gibbon Document Root (absolute) (Default: '.$projectDir['dirname'] . DIRECTORY_SEPARATOR . 'core)'.'? ', $projectDir['dirname'] . DIRECTORY_SEPARATOR . 'core');
-
-        $gibbonRoot = $helper->ask($input, $output, $question);
-
+        $gibbonRoot = $input->getArgument('gibbonRoot');
+        if (empty($gibbonRoot)) {
+            $finder = new Finder();
+            $finder->in($projectDir['dirname']);
+            $finder->depth('<=1');
+            foreach ($finder as $file)
+                if ($file->isFile() && $file->getFilename() === 'composer.json') {
+                    $content = json_decode(file_get_contents($file->getPathname()));
+                    if (property_exists($content, 'name') && $content->name === 'gibbonedu/core') {
+                        $gibbonRoot = $file->getPath();
+                        $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
+                        if ($fileSystem->exists($config))
+                            break;
+                    }
+                }
+        }
         $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
         if (! $fileSystem->exists($config)) {
-            $io->error(sprintf('The Gibbon config.php file was not found at "%s"', $config));
+            $io->error(sprintf('The Gibbon config.php file was not found at "%s".  You may need to run the gibbon installation scripts manually as the automatic search for your Gibbon installation appears to have failed.  See "http://www.craigrayner.com/help/installation.php"', $config));
             return 1;
         } else {
             $io->success(sprintf('The Gibbon config.php file was found at "%s"', $config));
@@ -79,24 +91,40 @@ class EnvironmentInstallCommand extends Command
             include $config;
             // now build .env file
 
-            $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env');
-            if (!$fileSystem->exists($file))
-                $fileSystem->copy($file.'.dist', $file, false);
-
+            $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env';
+            if (!$fileSystem->exists($file)) {
+                $fileSystem->copy($kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env' . '.dist', $kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env', false);
+                $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env');
+            }
 
             $env = file($file);
 
             foreach($env as $q=>$line) {
-                if (strpos($line, 'DATABASE_URL=mysql://') === false)
+                if (strpos($line, 'DATABASE_URL=') === false)
                     continue;
 
                 $env[$q] = 'DATABASE_URL=mysql://'.$databaseUsername.':'.$databasePassword.'@'.$databaseServer.':3306/'.$databaseName."\n";
             }
+
+
             $content = implode('', $env);
 
             $fileSystem->dumpFile($file, $content);
             $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
         }
         return 0;
+    }
+
+    /**
+     * configure
+     *
+     */
+    protected function configure()
+    {
+        $this
+            // ...
+            ->addArgument('gibbonRoot', InputArgument::OPTIONAL, 'Define the Gibbon installation Root Directory?')
+
+        ;
     }
 }

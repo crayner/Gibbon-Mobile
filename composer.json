@@ -68,10 +68,10 @@
     },
     "scripts": {
         "auto-scripts": {
+            "gibbon:environment:install": "symfony-cmd",
             "cache:clear": "symfony-cmd",
-            "gibbon:environment:install %PUBLIC_DIR%": "symfony-cmd",
-            "gibbon:setting:install %PUBLIC_DIR%": "symfony-cmd",
-            "gibbon:translation:install %PUBLIC_DIR%": "symfony-cmd",
+            "gibbon:setting:install": "symfony-cmd",
+            "gibbon:translation:install": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [

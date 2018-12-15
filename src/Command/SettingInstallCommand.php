@@ -84,7 +84,7 @@ class SettingInstallCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->newLine();
 
-        $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
+        $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
 
         $fileSystem = new Filesystem();
         if (! $fileSystem->exists($file))

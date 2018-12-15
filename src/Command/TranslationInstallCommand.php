@@ -111,7 +111,7 @@ class TranslationInstallCommand extends Command
         $sourceDir = realpath($this->gibbonDocumentRoot);
 
         if (!is_dir($sourceDir)) {
-            throw new \InvalidArgumentException(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_mobile.yaml_x"' , $this->gibbonDocumentRoot));
+            throw new \InvalidArgumentException(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_mobile.yaml"' , $this->gibbonDocumentRoot));
         }
         $sourceDir = rtrim($sourceDir, "\\/") . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR;
         if (!is_dir($sourceDir)) {
