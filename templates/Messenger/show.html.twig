@@ -8,10 +8,19 @@
 {% block content %}
     <div class="container">
         {% if manager.count > 0 %}
-            {% for message in manager.toArray %}
+            {% for message in manager.messages %}
                 <div class="row">
-                    <div class="col-2 card">
-
+                    <div class="col-2 card text-center">
+                        <div>{{ message.person.renderImage(0)|raw }}</div>
+                        <!-- <div>Likes</div> -->
+                        <small><b><u>{{ 'Posted By'|trans }}</u></b><br>{{ message.person.formatName() }}</small>
+                        <small><br /><b><u>{{ 'Shared via'|trans }}</u></b><br>
+                            {% if manager.getSharedDetail(message) is iterable %}
+                                {{  manager.getSharedDetail(message)[0]|trans(manager.getSharedDetail(message)[1])|trans }}
+                            {% else %}
+                                {{  manager.getSharedDetail(message)|trans }}
+                            {% endif %}
+                        </small>
                     </div>
                     <div class="col-10 card">
                         <h4 class="alert alert-info">{{ message.subject }}</h4>

@@ -33,6 +33,7 @@
 namespace App\Entity;
 
 use App\Manager\Traits\BooleanList;
+use App\Util\FormatHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -2549,5 +2550,31 @@ class Person extends User
     {
         $this->courseClassPerson = $courseClassPerson;
         return $this;
+    }
+
+    /**
+     * renderImage
+     * @param int $dimension
+     * @param bool $asHeight
+     * @return string
+     */
+    public function renderImage(int $dimension = 75, bool $asHeight = false)
+    {
+        return FormatHelper::renderImage($this, $dimension, $asHeight);
+    }
+
+    /**
+     * formatName
+     * @param bool $preferredName
+     * @param bool $reverse
+     * @param bool $informal
+     * @param bool $initial
+     * @return string
+     */
+    public function formatName(bool $preferredName = true, $reverse = false, $informal = false, bool $initial = false)
+    {
+        $name = $preferredName ? $this->getPreferredName() : $this->getFirstName();
+        $name = $initial ? substr($name, 0, 1): $name;
+        return FormatHelper::name($this->getTitle(),$name,$this->getSurname(),$this->getPrimaryRole() ? $this->getPrimaryRole()->getCategory() : 'Staff', $reverse, $informal);
     }
 }

@@ -71,7 +71,7 @@ class MessengerProvider
         }
 
         $query = $this->getRepository()->createQueryBuilder('m')
-            ->select('m, p')
+            ->select('m, p, mt')
             ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
             ->leftJoin('m.targets', 'mt')
             ->leftJoin('m.person', 'p')
@@ -82,12 +82,14 @@ class MessengerProvider
         if (is_array($identifier))
         {
             $x = reset($identifier);
-            if (intval($x) > 0)
+            if (is_int($x))
                 $connectionType = Connection::PARAM_INT_ARRAY;
             else
                 $connectionType = Connection::PARAM_STR_ARRAY;
+
             $query->andWhere('mt.identifier IN (:identifier)')
                 ->setParameter('identifier', $identifier, $connectionType);
+
         } else
             $query->andWhere('mt.identifier = :identifier')
                 ->setParameter('identifier', $identifier);
@@ -161,7 +163,7 @@ class MessengerProvider
      */
     public function getYearGroupStaffMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
-        return $this->getMatchingMessages('Year Groups', array_merge(UserHelper::getStaffYearGroupsByCourse(),UserHelper::getStaffYearGroupsByRollGroup()), $showDate, $timezone, 'staff');
+        return $this->getMatchingMessages('Year Group', array_unique(array_merge(UserHelper::getStaffYearGroupsByCourse(),UserHelper::getStaffYearGroupsByRollGroup())), $showDate, $timezone, 'staff');
     }
 
     /**
@@ -173,7 +175,7 @@ class MessengerProvider
      */
     public function getYearGroupStudentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
-        return $this->getMatchingMessages('Year Groups', UserHelper::getStudentYearGroup(), $showDate, $timezone, 'students');
+        return $this->getMatchingMessages('Year Group', UserHelper::getStudentYearGroup(), $showDate, $timezone, 'students');
     }
 
     /**
@@ -185,7 +187,7 @@ class MessengerProvider
      */
     public function getYearGroupParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
-        return $this->getMatchingMessages('Year Groups', UserHelper::getParentYearGroups(), $showDate, $timezone, 'parents');
+        return $this->getMatchingMessages('Year Group', UserHelper::getParentYearGroups(), $showDate, $timezone, 'parents');
     }
 
     /**
@@ -197,7 +199,7 @@ class MessengerProvider
      */
     public function getRollGroupStaffMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
-        return $this->getMatchingMessages('Roll Groups', UserHelper::getStaffRollGroups('id'), $showDate, $timezone, 'staff');
+        return $this->getMatchingMessages('Roll Group', UserHelper::getStaffRollGroups('id'), $showDate, $timezone, 'staff');
     }
 
     /**
@@ -209,7 +211,7 @@ class MessengerProvider
      */
     public function getRollGroupStudentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
-        return $this->getMatchingMessages('Roll Groups', UserHelper::getStudentRollGroups('id'), $showDate, $timezone, 'students');
+        return $this->getMatchingMessages('Roll Group', UserHelper::getStudentRollGroups('id'), $showDate, $timezone, 'students');
     }
 
     /**
@@ -221,7 +223,7 @@ class MessengerProvider
      */
     public function getRollGroupParentMessages(string $showDate = 'today', string $timezone = 'UTC'): array
     {
-        return $this->getMatchingMessages('Roll Groups', UserHelper::getParentRollGroups('id'), $showDate, $timezone, 'parents');
+        return $this->getMatchingMessages('Roll Group', UserHelper::getParentRollGroups('id'), $showDate, $timezone, 'parents');
     }
 
     /**

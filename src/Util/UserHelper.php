@@ -135,27 +135,15 @@ class UserHelper
     }
 
     /**
-     * @var array
-     */
-    private static $staffYearGroupsByCourse;
-
-    /**
      * getYearGroups
      * @return array
      * @throws \Exception
      */
     public static function getStaffYearGroupsByCourse(): array
     {
-        if (! empty(self::$staffYearGroupsByCourse))
-            return self::$staffYearGroupsByCourse;
         self::$provider->setEntity(self::getCurrentUser());
         return self::$provider->getStaffYearGroupsByCourse();
     }
-
-    /**
-     * @var array
-     */
-    private static $staffYearGroupsByRollGroup;
 
     /**
      * getYearGroups
@@ -164,8 +152,6 @@ class UserHelper
      */
     public static function getStaffYearGroupsByRollGroup(): array
     {
-        if (! empty(self::$staffYearGroupsByRollGroup))
-            return self::$staffYearGroupsByRollGroup;
         self::$provider->setEntity(self::getCurrentUser());
         return self::$provider->getStaffYearGroupsByRollGroup();
     }

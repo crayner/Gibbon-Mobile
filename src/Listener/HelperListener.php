@@ -27,10 +27,10 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-
 namespace App\Listener;
 
 use App\Util\EntityHelper;
+use App\Util\FormatHelper;
 use App\Util\RelationshipHelper;
 use App\Util\SchoolYearHelper;
 use App\Util\UserHelper;
@@ -48,10 +48,13 @@ class HelperListener implements EventSubscriberInterface
 {
     /**
      * HelperListener constructor.
-     * Pre loads Helper classes so ALWAYS available in memory.
      * @param EntityHelper $helper
+     * @param UserHelper $userHelper
+     * @param RelationshipHelper $relationshipHelper
+     * @param SchoolYearHelper $schoolYearHelper
+     * @param FormatHelper $formatHelper
      */
-    public function __construct(EntityHelper $helper, UserHelper $userHelper, RelationshipHelper $relationshipHelper, SchoolYearHelper $schoolYearHelper)
+    public function __construct(EntityHelper $helper, UserHelper $userHelper, RelationshipHelper $relationshipHelper, SchoolYearHelper $schoolYearHelper, FormatHelper $formatHelper)
     {
     }
 

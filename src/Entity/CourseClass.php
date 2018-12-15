@@ -134,10 +134,14 @@ class CourseClass
     }
 
     /**
+     * getName
+     * @param bool $withCourse
      * @return string|null
      */
-    public function getName(): ?string
+    public function getName(bool $withCourse = false): ?string
     {
+        if ($withCourse)
+            return $this->getCourse()->getName() . '.' . $this->name;
         return $this->name;
     }
 
@@ -152,10 +156,14 @@ class CourseClass
     }
 
     /**
+     * getNameShort
+     * @param bool $withCourse
      * @return string|null
      */
-    public function getNameShort(): ?string
+    public function getNameShort(bool $withCourse = false): ?string
     {
+        if ($withCourse)
+            return $this->getCourse()->getNameShort() . '.' . $this->nameShort;
         return $this->nameShort;
     }
 

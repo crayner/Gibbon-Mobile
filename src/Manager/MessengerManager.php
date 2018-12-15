@@ -29,7 +29,16 @@
  */
 namespace App\Manager;
 
+use App\Entity\Activity;
+use App\Entity\Course;
+use App\Entity\CourseClass;
+use App\Entity\Group;
+use App\Entity\House;
+use App\Entity\Messenger;
+use App\Entity\Role;
+use App\Entity\RollGroup;
 use App\Provider\MessengerProvider;
+use App\Util\EntityHelper;
 use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -173,12 +182,11 @@ class MessengerManager
                 if (!$messages->contains($message))
                     $messages->add($message);
 
-        dump($messages);
-        trigger_error('STOP HERE', E_USER_ERROR);
-        $this->messages = new ArrayCollection($messages);
+        $this->messages = new ArrayCollection();
+        foreach($messages as $message)
+            if(! $this->messages->contains($message))
+                $this->messages->add($message);
 
-
-//      'Group' ignored Only Email
         return $this;
     }
 
@@ -454,5 +462,65 @@ class MessengerManager
         $messages =  array_merge($messages, $this->isParent() ? $this->getProvider()->getGroupParentMessages($showDate, $this->getTimezone()) : [] );
 
         return $messages;
+    }
+
+    /**
+     * getSharedDetail
+     * @param Messenger $message
+     * @return array|string
+     */
+    public function getSharedDetail(Messenger $message)
+    {
+        $mt = $message->getTargets()->first();
+        switch ($mt->getType()){
+            case 'Individuals':
+                return 'Individual: You';
+                break;
+            case 'Role':
+                $role = EntityHelper::getRepository(Role::class)->find($mt->getIdentifier());
+                return ['Role: %name%', ['%name%' => $role->getName()]];
+                break;
+            case 'Role Category':
+                return ['Role Category: %name%', ['%name%' => $mt->getIdentifier]];
+                break;
+            case 'Year Group':
+                return 'Year Groups';
+                break;
+            case 'Roll Group':
+                $roll = EntityHelper::getRepository(RollGroup::class)->find($mt->getIdentifier());
+                return ['Roll Group: %name%', ['%name%' => $roll->getNameShort()]];
+                break;
+            case 'Transport':
+                return ['Transport: %name%', ['%name%' => $message->getPerson()->getTransport()]];
+                break;
+            case 'Group':
+                $group = EntityHelper::getRepository(Group::class)->find($mt->getIdentifier());
+                return ['Group: %name%', ['%name%' => $group->getName()]];
+                break;
+            case 'Course':
+                $course = EntityHelper::getRepository(Course::class)->find($mt->getIdentifier());
+                return ['Course: %name%', ['%name%' => $course->getNameShort()]];
+                break;
+            case 'Class':
+                $class = EntityHelper::getRepository(CourseClass::class)->find($mt->getIdentifier());
+                return ['Class: %name%', ['%name%' => $class->getNameShort(true)]];
+                break;
+            case 'Activity':
+                $activity = EntityHelper::getRepository(Activity::class)->find($mt->getIdentifier());
+                return ['Activity: %name%', ['%name%' => $activity->getName()]];
+                break;
+            case 'Houses':
+                $house = EntityHelper::getRepository(House::class)->find($mt->getIdentifier());
+                return ['Houses: %name%', ['%name%' => $house->getName()]];
+                break;
+            case 'Attendance':
+                return ['Attendance: %name%', ['%name%' => $mt->getIdentifier()]];
+                break;
+            default:
+                //'Class','Course','Roll Group','Year Group','Activity','Role','Applicants','Individuals','Houses','Role Category','Transport','Attendance','Group'
+                dd($mt);
+        }
+
+        return '@todo';
     }
 }

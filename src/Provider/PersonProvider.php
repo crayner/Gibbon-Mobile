@@ -198,7 +198,7 @@ class PersonProvider extends UserProvider
             ->getResult();
         $results = [];
         foreach($x as $list)
-            $results = array_merge($results, explode(',',$list['yearGroupList']));
+            $results = array_merge($results, [str_pad($list['yearGroupList'],3, '0', STR_PAD_LEFT)]);
 
         return array_unique($results);
     }
