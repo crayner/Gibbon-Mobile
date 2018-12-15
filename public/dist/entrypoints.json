@@ -20,7 +20,7 @@
       ],
       "css": [
         "build/vendors~1aeabec8.2d1b2953.css",
-        "build/core.49b12085.css"
+        "build/core.585d2f21.css"
       ]
     },
     "notificationTray": {
@@ -28,7 +28,7 @@
         "build/runtime.d41d8cd9.js",
         "build/vendors~e6ac30b8.b248167b.js",
         "build/vendors~652e473b.c84a5ec5.js",
-        "build/notificationTray.4ab8b48d.js"
+        "build/notificationTray.d4349c2f.js"
       ]
     }
   }

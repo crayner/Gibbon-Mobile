@@ -143,7 +143,8 @@ class FormatHelper
     }
 
     /**
-     * @return UrlPackage
+     * getAssetPackages
+     * @return Packages
      */
     public static function getAssetPackages(): Packages
     {
