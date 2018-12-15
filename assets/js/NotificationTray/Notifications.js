@@ -19,12 +19,27 @@ export default function Notifications(props) {
     const colour = y === 0 ? 'grey' : 'tomato'
 
     const len = y.toString().length;
-    const rr = len > 1 ? (29 - (len * 4)) : 22
+
+    let rr = 0
+
+    switch (len) {
+        case 2:
+            rr = 1.25
+            break;
+        case 3:
+            rr = 1.0
+            break;
+        case 4:
+            rr = 0.65
+            break;
+        default:
+            rr = 1.3
+    }
 
     return (
-        <span className="fa-layers fa-fw" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Notifications')} onClick={() => showNotifications()}>
+        <span className="fa-layers fa-fw" style={{marginRight: '0.3rem', minHeight: '120%'}} title={translateMessage(translations,'Notifications')} onClick={() => showNotifications()}>
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'alert-success'} icon={faStickyNote} />
-            <span className={y === 0 ? 'fa-layers-counter text-counter-zero': 'fa-layers-counter text-tomato'} style={{margin: '26px ' + rr + 'px 0 0'}}>{y}</span>
+            <span className={y === 0 ? 'fa-layers-counter text-counter-zero': 'fa-layers-counter text-tomato'} style={{margin: '0.80rem ' + rr + 'rem 0 0'}}>{y}</span>
         </span>
     )
 }

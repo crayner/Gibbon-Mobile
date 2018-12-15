@@ -18,12 +18,27 @@ export default function Likes(props) {
     const colour = y === 0 ? 'grey' : 'tomato'
 
     const len = y.toString().length;
-    const rr = len > 1 ? (35 - (len * 4)) : 28
+
+    let rr = 0
+
+    switch (len) {
+        case 2:
+            rr = 1.45
+            break;
+        case 3:
+            rr = 1.2
+            break;
+        case 4:
+            rr = 0.8
+            break;
+        default:
+            rr = 1.5
+    }
 
     return (
-        <span className="fa-layers fa-fw" style={{marginRight: '10px', minHeight: '50px'}} title={translateMessage(translations,'Likes')}>
+        <span className="fa-layers fa-fw" style={{marginRight: '0.3rem', minHeight: '120%'}} title={translateMessage(translations,'Likes')}>
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'alert-success'} icon={faStar} />
-            <span className="fa-layers-counter" style={{background: colour, margin: '28px ' + rr + 'px 0 0'}}>{y}</span>
+            <span className="fa-layers-counter" style={{background: colour, margin: '0.80rem ' + rr + 'rem 0 0'}}>{y}</span>
         </span>
     )
 }

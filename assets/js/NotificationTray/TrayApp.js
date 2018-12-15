@@ -55,9 +55,7 @@ export default class TrayApp extends Component {
         this.messengerTime = setTimeout(() => {
             fetchJson('/messenger/details/', {method: 'GET'}, this.locale)
                 .then(data => {
-                    console.log(data,this.state)
                     if (data.count !== this.state.messengerCount) {
-                        console.log(data,this.state)
                         this.setState({
                             messengerCount: data.count,
                         })
@@ -82,7 +80,7 @@ export default class TrayApp extends Component {
             return (
                 <div className={'text-right'}>
                     <Notifications notificationCount={this.state.notificationCount} {...this.otherProps} showNotifications={this.showNotifications} />
-                    <Likes likeCount={this.state.likeCount} {...this.otherProps} />
+                    {/* <Likes likeCount={this.state.likeCount} {...this.otherProps} /> */}
                     <MessageWall messengerCount={this.state.messengerCount} {...this.otherProps} showMessenger={this.showMessenger} />
                 </div>
             )
