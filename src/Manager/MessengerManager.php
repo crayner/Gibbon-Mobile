@@ -41,6 +41,7 @@ use App\Provider\MessengerProvider;
 use App\Util\EntityHelper;
 use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -66,7 +67,7 @@ class MessengerManager
      * MessengerManager constructor.
      * @param MessengerProvider $provider
      */
-    public function __construct(MessengerProvider $provider, SettingManager $settingManager)
+    public function __construct(MessengerProvider $provider, SettingManager $settingManager, RequestStack $stack)
     {
         $this->provider = $provider;
         $this->setTimezone($settingManager->getSettingByScopeAsString('System', 'timezone'));
@@ -118,7 +119,7 @@ class MessengerManager
     {
         $messages = new ArrayCollection();
 
-        $this->messagesByType = $this->getProvider()->getMessagesByType($showDate,$this->getTimezone());
+        $this->messagesByType = $this->getMessagesByType($showDate);
 
         if ($this->hasMessagesByType('Individuals'))
             foreach($this->getIndividualMessages() as $message)
@@ -187,18 +188,39 @@ class MessengerManager
             if(! $this->messages->contains($message))
                 $this->messages->add($message);
 
+        $this->setMessageCount($this->messages->count());
+
         return $this;
     }
+
+    /**
+     * @var
+     */
+    private $messageCount;
 
     /**
      * getCount
      * @return int
      */
-    public function getCount(): int
+    public function getMessageCount(): int
     {
-        return $this->getMessages()->count();
+        return intval($this->messageCount);
     }
 
+    /**
+     * @param mixed $messageCount
+     * @return MessengerManager
+     */
+    public function setMessageCount($messageCount)
+    {
+        $this->messageCount = $messageCount;
+        return $this;
+    }
+
+    /**
+     * toArray
+     * @return array
+     */
     public function toArray()
     {
         $normalisers = [new DateTimeNormalizer(['datetime_timezone' => $this->getTimezone()]),new ObjectNormalizer()];
@@ -396,8 +418,10 @@ class MessengerManager
     /**
      * @return array
      */
-    public function getMessagesByType(): array
+    public function getMessagesByType(string $showDate = 'today'): array
     {
+        if (empty($this->messagesByType))
+            $this->messagesByType = $this->getProvider()->getMessagesByType($showDate, $this->getTimezone());
         return $this->messagesByType;
     }
 

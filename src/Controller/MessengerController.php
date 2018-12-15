@@ -33,6 +33,7 @@ use App\Manager\MessengerManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -49,13 +50,18 @@ class MessengerController extends Controller
      * @Route("/messenger/details/", name="api_messenger_details")
      * @IsGranted("ROLE_USER")
      */
-    public function details(MessengerManager $manager)
+    public function details(MessengerManager $manager, SessionInterface $session)
     {
-        $manager->setMessages();
+        if ($session->get('messenger_md5') !== md5(json_encode($manager->getMessagesByType()))) {
+            $manager->setMessages();
+            $session->set('messenger_md5', md5(json_encode($manager->getMessagesByType())));
+            $session->set('messenger_count', $manager->getMessageCount());
+        } else
+            $manager->setMessageCount(intval($session->get('messenger_count') ?: 0));
 
         return new JsonResponse(
             [
-                'count' => $manager->getCount(),
+                'count' => $manager->getMessageCount(),
             ],200);
     }
 
