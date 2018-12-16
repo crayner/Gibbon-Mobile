@@ -110,18 +110,18 @@ class LastActivityListener implements EventSubscriberInterface
         $session->start();
         $timezone = $this->container->getParameter('timezone') ?: 'UTC';
 
-        if ($session->has('last_activity_time') && $session->has('_security_main'))
-        {
-            $now = new \DateTime('now', new \DateTimeZone($timezone));
-            $interval = $now->diff($session->get('last_activity_time'));
-            if (abs($interval->format('%i')) > $this->container->getParameter('idle_timeout')) {
-                $session->remove('_security_main');
-                $flashBag = $session->getFlashBag();
-                $flashBag->add('info', 'Your session expired, so you were automatically logged out of the system.');
-                return new RedirectResponse('/');
+        if ($route !== 'login') {
+            if ($session->has('last_activity_time') && $session->has('_security_main')) {
+                $now = new \DateTime('now', new \DateTimeZone($timezone));
+                $interval = $now->diff($session->get('last_activity_time'));
+                if (abs($interval->format('%i')) > $this->container->getParameter('idle_timeout')) {
+                    $session->remove('_security_main');
+                    $flashBag = $session->getFlashBag();
+                    $flashBag->add('info', 'Your session expired, so you were automatically logged out of the system.');
+                    return new RedirectResponse('/');
+                }
             }
         }
-
-       $session->set('last_activity_time', new \DateTime('now', new \DateTimeZone($timezone)));
+        $session->set('last_activity_time', new \DateTime('now', new \DateTimeZone($timezone)));
     }
 }

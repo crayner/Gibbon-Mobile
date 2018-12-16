@@ -169,10 +169,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         //store the token blah blah blah
         $session = $request->getSession();
         $timezone = $this->entityManager->getRepository(Setting::class)->findOneBy(['scope' => 'System', 'name' => 'timezone']) ?: 'UTC';
-        $timezone = is_string($timezone) ? new \DateTimeZone($timezone) : $timezone;
+        $timezone = $timezone instanceof Setting ? new \DateTimeZone($timezone->getValue()) : new \DateTimeZone('UTC');
         $session->set('last_activity_time', new \DateTime('now', $timezone));
 
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey))
+        $session->save();
+        if ($targetPath = $this->getTargetPath($session, $providerKey))
             return new RedirectResponse($targetPath);
 
         return new RedirectResponse($this->getLoginUrl());

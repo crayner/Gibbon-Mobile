@@ -7,6 +7,7 @@ import Notifications from './Notifications'
 import PropTypes from 'prop-types'
 import {fetchJson} from '../Component/fetchJson'
 import {openPage} from '../Component/openPage'
+import Logout from './Logout'
 
 export default class TrayApp extends Component {
     constructor (props) {
@@ -23,6 +24,7 @@ export default class TrayApp extends Component {
         this.timeout = this.isStaff === true ? 10000 : 120000
         this.showNotifications = this.showNotifications.bind(this)
         this.showMessenger = this.showMessenger.bind(this)
+        this.handleLogout = this.handleLogout.bind(this)
     }
 
     componentDidMount () {
@@ -75,6 +77,10 @@ export default class TrayApp extends Component {
             openPage('/messenger/today/show/', {method: 'GET'}, this.locale);
     }
 
+    handleLogout() {
+        openPage('/logout/', {method: 'GET'}, this.locale);
+    }
+
     render () {
         if (this.displayTray) {
             return (
@@ -82,6 +88,7 @@ export default class TrayApp extends Component {
                     <Notifications notificationCount={this.state.notificationCount} {...this.otherProps} showNotifications={this.showNotifications} />
                     {/* <Likes likeCount={this.state.likeCount} {...this.otherProps} /> */}
                     <MessageWall messengerCount={this.state.messengerCount} {...this.otherProps} showMessenger={this.showMessenger} />
+                    <Logout handleLogout={this.handleLogout} {...this.otherProps} />
                 </div>
             )
         }

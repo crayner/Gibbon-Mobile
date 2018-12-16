@@ -14,10 +14,11 @@
         {% block titleBar %}
             <div id="titleBar">
                 <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}
-                    <div style="float: left;">{{ miscButton({title: 'Home', style: '', class: 'btn btn-transparent alert-success fas fa-home fa-fw fa-2x', windowOpen: {route: path('home')}})|raw }}</div>
-            {% block menuContent %}
-                <div id="notificationTray" style="float: right;"></div>
-            {% endblock menuContent %}
+                    <div style="float: left;">{{ miscButton({title: 'Home', style: '', class: 'btn btn-transparent alert-success fas fa-home fa-fw fa-2x', windowOpen: {route: path('home')}})|raw }}
+                    </div>
+                    {% block menuContent %}
+                        <div id="notificationTray" style="float: right;"></div>
+                    {% endblock menuContent %}
                 </h2></div>
         {% endblock titleBar %}
         {% block flashMessages %}
@@ -29,7 +30,7 @@
             <div class="container text-center mobileFooter">
                 <div class="row text-center text-charcoal">
                     <div class="col-3">
-                        <img src="{{ asset('images/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" />
+                        <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" />
                     </div>
                     <div class="col-6">
                         <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} &copy; Craig Rayner 2018</small>
