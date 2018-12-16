@@ -103,7 +103,12 @@ class EnvironmentInstallCommand extends Command
                 if (strpos($line, 'DATABASE_URL=') === false)
                     continue;
 
-                $env[$q] = str_replace('@@', '@', 'DATABASE_URL=mysql://'.$databaseUsername.':'.$databasePassword."@".$databaseServer.':3306/'.$databaseName."\n");
+                if (strpos($databasePassword, '@') !== false)
+                {
+                    $io->error(sprintf('The Gibbon password for the database contains a "@". This is an illegal character. Please arrange for a new database password.'));
+                    return 1;
+                }
+                $env[$q] = 'DATABASE_URL=mysql://'.$databaseUsername.':'.$databasePassword.'@'.$databaseServer.':3306/'.$databaseName."\n";
             }
 
 
