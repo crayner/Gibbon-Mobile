@@ -103,7 +103,7 @@ class EnvironmentInstallCommand extends Command
                 if (strpos($line, 'DATABASE_URL=') === false)
                     continue;
 
-                $env[$q] = 'DATABASE_URL=mysql://'.$databaseUsername.':'.$databasePassword.'@'.$databaseServer.':3306/'.$databaseName."\n";
+                $env[$q] = str_replace('@@', '@', 'DATABASE_URL=mysql://'.$databaseUsername.':'.$databasePassword."@".$databaseServer.':3306/'.$databaseName."\n");
             }
 
 

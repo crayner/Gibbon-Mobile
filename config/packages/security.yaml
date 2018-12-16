@@ -17,7 +17,7 @@ security:
             id: App\Provider\PersonProvider
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt|home)|css|images|js)/
+            pattern: ^/(_(profiler|wdt|home)|css|images|build|js)/
             security: false
         main:
             anonymous: ~
