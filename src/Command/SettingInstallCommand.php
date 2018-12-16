@@ -36,6 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -182,6 +183,13 @@ class SettingInstallCommand extends Command
             $fileSystem->dumpFile($file, $content);
             $io->success('Critical settings have been set into the Gibbon-Mobile framework.');
         }
+
+        $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'build' ;
+
+        $fileSystem->remove($file);
+
+        $fileSystem->mirror($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'dist', $file);
+
         return 0;
     }
 }
