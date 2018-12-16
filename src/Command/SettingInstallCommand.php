@@ -154,7 +154,7 @@ class SettingInstallCommand extends Command
             $gibbon['parameters']['google_secret'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientSecret', '');
             $gibbon['parameters']['timezone'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
             $gibbon['parameters']['gibbon_document_root'] = $gibbonRoot;
-            $gibbon['parameters']['gibbon_url_host'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL').'/';
+            $gibbon['parameters']['gibbon_host_url'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL').'/';
             $gibbon['parameters']['mailer_sender_address'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationEmail', null);
             $gibbon['parameters']['mailer_sender_name'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationName', null);
 
