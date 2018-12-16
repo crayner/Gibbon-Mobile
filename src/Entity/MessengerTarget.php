@@ -30,6 +30,7 @@
 
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -39,7 +40,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\MessengerTargetRepository")
  * @ORM\Table(name="MessengerTarget")
  */
-class MessengerTarget
+class MessengerTarget implements EntityInterface
 {
     use BooleanList;
 

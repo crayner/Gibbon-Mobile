@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Log")
  * @ORM\HasLifecycleCallbacks()
  */
-class Log
+class Log implements EntityInterface
 {
     /**
      * @var integer|null

@@ -28,6 +28,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,7 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\SettingRepository")
  * @ORM\Table(name="Setting", uniqueConstraints={@ORM\UniqueConstraint(name="scope", columns={"scope","nameDisplay"}), @ORM\UniqueConstraint(name="scope_2", columns={"scope","name"})})
  */
-class Setting
+class Setting implements EntityInterface
 {
     /**
      * @var integer|null

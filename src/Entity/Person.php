@@ -32,6 +32,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use App\Util\FormatHelper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,7 +46,7 @@ use Doctrine\ORM\PersistentCollection;
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\Table(name="Person", uniqueConstraints={@ORM\UniqueConstraint(name="username", columns={"username"})}, indexes={@ORM\Index(name="username_2", columns={"username", "email"})})
  */
-class Person extends User
+class Person extends User implements EntityInterface
 {
     use BooleanList;
 

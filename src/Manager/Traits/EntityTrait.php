@@ -15,6 +15,7 @@
  */
 namespace App\Manager\Traits;
 
+use App\Manager\EntityInterface;
 use App\Manager\MessageManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,7 +47,7 @@ trait EntityTrait
     static private $entityRepository;
 
     /**
-     * @var Object
+     * @var EntityInterface
      */
     private $entity;
 
@@ -107,12 +108,11 @@ trait EntityTrait
 
     /**
      * find
-     *
      * @param $id
-     * @return Object
+     * @return EntityInterface|null
      * @throws \Exception
      */
-    public function find($id)
+    public function find($id): ?EntityInterface
     {
         $this->entity = null;
         if ($id === 'Add')
@@ -195,7 +195,7 @@ trait EntityTrait
      *
      * @return null|object
      */
-    public function getEntity($entity = null): ?object
+    public function getEntity(EntityInterface $entity = null): ?EntityInterface
     {
         if ($entity instanceof $this->entityName)
             $this->setEntity($entity);
@@ -203,10 +203,10 @@ trait EntityTrait
     }
 
     /**
-     * @param DoctrineEntity $entity
+     * @param EntityInterface|null $entity
      * @return EntityTrait
      */
-    public function setEntity($entity)
+    public function setEntity(?EntityInterface $entity)
     {
         $this->entity = $entity;
         return $this;
@@ -287,13 +287,9 @@ trait EntityTrait
      *
      * @return bool
      */
-    public function isValidEntity(): bool
+    public function isValidEntity(bool $entityOnly = false): bool
     {
-        if ($this->getEntity() instanceof $this->entityName && intval($this->getEntity()->getId()) > 0)
-            return true;
-
-        // a new entity is NOT valid until saved.
-        return false;
+        return $this->getEntity() instanceof $this->entityName && (intval($this->getEntity()->getId()) > 0 || $entityOnly);
     }
 
     /**

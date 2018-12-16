@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\DaysOfWeekRepository")
  * @ORM\Table(name="DaysOfWeek", uniqueConstraints={@ORM\UniqueConstraint(name="name",columns={"name", "nameShort"}),@ORM\UniqueConstraint(name="nameShort",columns={"nameShort"}), @ORM\UniqueConstraint(name="sequenceNumber",columns={"sequenceNumber"}) })
  */
-class DaysOfWeek
+class DaysOfWeek implements EntityInterface
 {
     use BooleanList;
 

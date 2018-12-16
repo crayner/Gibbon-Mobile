@@ -30,6 +30,7 @@
 
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,7 +40,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ActivityAttendance")
  * @ORM\HasLifecycleCallbacks
  */
-class ActivityAttendance
+class ActivityAttendance implements EntityInterface
 {
     /**
      * @var integer|null
