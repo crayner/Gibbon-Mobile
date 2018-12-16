@@ -46,6 +46,8 @@ class Kernel extends BaseKernel
             $container->setParameter('google_client_id', null);
         if (! $container->hasParameter('google_secret'))
             $container->setParameter('google_secret', null);
+        if (! $container->hasParameter('session_name'))
+            $container->setParameter('session_name', 'set_by_kernel');
         $container->setParameter('container.autowiring.strict_mode', true);
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';
