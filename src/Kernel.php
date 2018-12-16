@@ -38,8 +38,7 @@ class Kernel extends BaseKernel
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
-        // Feel free to remove the "container.autowiring.strict_mode" parameter
-        // if you are using symfony/dependency-injection 4.0+ as it's the default behavior
+
         if (! $container->hasParameter('cookie_lifetime'))
             $container->setParameter('cookie_lifetime', 1200);
         if (! $container->hasParameter('google_client_id'))
@@ -50,7 +49,23 @@ class Kernel extends BaseKernel
             $container->setParameter('session_name', 'set_by_kernel');
         if (! $container->hasParameter('locale'))
             $container->setParameter('locale', 'en');
-        $container->setParameter('container.autowiring.strict_mode', true);
+        if (! $container->hasParameter('security.hierarchy.roles'))
+            $container->setParameter('security.hierarchy.roles', []);
+        if (! $container->hasParameter('mailer_transport'))
+            $container->setParameter('mailer_transport', null);
+        if (! $container->hasParameter('mailer_host'))
+            $container->setParameter('mailer_host', null);
+        if (! $container->hasParameter('mailer_port'))
+            $container->setParameter('mailer_port', null);
+        if (! $container->hasParameter('mailer_user'))
+            $container->setParameter('mailer_user', null);
+        if (! $container->hasParameter('mailer_password'))
+            $container->setParameter('mailer_password', null);
+        if (! $container->hasParameter('gibbon_document_root'))
+            $container->setParameter('gibbon_document_root', '');
+        if (! $container->hasParameter('db_prefix'))
+            $container->setParameter('db_prefix', 'gibbon');
+
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';
 
