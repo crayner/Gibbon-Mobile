@@ -45,7 +45,7 @@ Change to your new directory and run the composer require command.  This will in
 ```
 cd /var/www/mobile
 
-composer require crayner/gibbon-mobile
+composer require crayner/gibbon-mobile ^0.0
 ```
 On an apache system, create your sub-domain for Gibbon Mobile by pointing to the mobile document root and you should be ready to go.  If you are using Apache 2.4, ensure that you edit the .htaccess file as per the instructions within the .htaccess file.  If you are using other server technology, then the [Symfony Server Setup Document](https://symfony.com/doc/current/setup/web_server_configuration.html) will be helpful.
 
