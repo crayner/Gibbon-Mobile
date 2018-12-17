@@ -14,6 +14,7 @@
 gibbon_mobile.yaml
 /public/uploads/
 
+
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/

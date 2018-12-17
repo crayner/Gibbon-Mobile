@@ -66,7 +66,7 @@ class EnvironmentInstallCommand extends Command
         $projectDir = pathinfo($kernel->getProjectDir());
 
         $gibbonRoot = $input->getArgument('gibbonRoot');
-        if (empty($gibbonRoot)) {
+        if (empty($gibbonRoot) || ! $fileSystem->exists($gibbonRoot)) {
             $finder = new Finder();
             $finder->in($projectDir['dirname']);
             $finder->depth('<=1');
@@ -117,6 +117,12 @@ class EnvironmentInstallCommand extends Command
             $fileSystem->dumpFile($file, $content);
             $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
         }
+
+        //Create .htaccess File in public
+        $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . '.htaccess' ;
+        if (! $fileSystem->exists($file))
+            $fileSystem->copy($file . '.dist', $file);
+
         return 0;
     }
 
