@@ -85,10 +85,10 @@ export default class TrayApp extends Component {
         if (this.displayTray) {
             return (
                 <div className={'text-right'}>
+                    <Logout handleLogout={this.handleLogout} {...this.otherProps} />
+                    <MessageWall messengerCount={this.state.messengerCount} {...this.otherProps} showMessenger={this.showMessenger} />
                     <Notifications notificationCount={this.state.notificationCount} {...this.otherProps} showNotifications={this.showNotifications} />
                     {/* <Likes likeCount={this.state.likeCount} {...this.otherProps} /> */}
-                    <MessageWall messengerCount={this.state.messengerCount} {...this.otherProps} showMessenger={this.showMessenger} />
-                    <Logout handleLogout={this.handleLogout} {...this.otherProps} />
                 </div>
             )
         }

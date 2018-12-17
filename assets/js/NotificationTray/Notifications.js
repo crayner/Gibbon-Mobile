@@ -37,9 +37,9 @@ export default function Notifications(props) {
     }
 
     return (
-        <span className="fa-layers fa-fw" style={{marginRight: '0.3rem', minHeight: '120%'}} title={translateMessage(translations,'Notifications')} onClick={() => showNotifications()}>
+        <span className="fa-layers fa-fw" style={{marginRight: '0.3rem', minHeight: '120%', float: 'right', marginTop: '-0.15rem'}} title={translateMessage(translations,'Notifications')} onClick={() => showNotifications()}>
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'alert-success'} icon={faStickyNote} />
-            <span className={y === 0 ? 'fa-layers-counter text-counter-zero': 'fa-layers-counter text-tomato'} style={{margin: '0.80rem ' + rr + 'rem 0 0'}}>{y}</span>
+            <span className={y === 0 ? 'fa-layers-counter text-counter-zero': 'fa-layers-counter text-tomato'} style={{margin: '0.97rem ' + rr + 'rem 0 0'}}>{y}</span>
         </span>
     )
 }

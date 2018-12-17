@@ -53,6 +53,6 @@ class HomeController extends Controller
      */
     public function home(Request $request, SettingManager $manager)
     {
-        return $this->render('base.html.twig');
+        return $this->render('Default/home.html.twig');
     }
 }

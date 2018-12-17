@@ -1,4 +1,5 @@
 {
+    "name": "crayner/Gibbon-Mobile",
     "type": "project",
     "license": "proprietary",
     "require": {

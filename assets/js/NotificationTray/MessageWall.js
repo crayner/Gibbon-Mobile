@@ -36,7 +36,7 @@ export default function MessageWall(props) {
     }
 
     return (
-        <span className="fa-layers fa-fw" style={{marginRight: '0.3rem', minHeight: '120%'}} title={translateMessage(translations,'Message Wall')} onClick={() => showMessenger()}>
+        <span className="fa-layers fa-fw" style={{marginRight: '0.3rem', minHeight: '120%', float: 'right', marginTop: '0'}} title={translateMessage(translations,'Message Wall')} onClick={() => showMessenger()}>
             <FontAwesomeIcon className={y === 0 ? 'text-muted': 'alert-success'} icon={faCommentAlt} />
             <span className="fa-layers-counter" style={{background: colour, margin: '0.80rem ' + rr + 'rem 0 0'}}>{y}</span>
         </span>

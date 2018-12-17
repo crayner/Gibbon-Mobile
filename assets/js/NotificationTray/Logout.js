@@ -13,7 +13,7 @@ export default function Logout(props) {
     } = props
 
     return (
-        <span className="fa-fw" style={{marginRight: '0.3rem', minHeight: '120%'}} title={translateMessage(translations,'Logout')} onClick={() => handleLogout()}>
+        <span className="fa-fw" style={{minHeight: '120%', marginTop: '-0.45rem', float: 'right'}} title={translateMessage(translations,'Logout')} onClick={() => handleLogout()}>
             <FontAwesomeIcon className={'alert-success'} icon={faSignOutAlt} />
         </span>
     )
