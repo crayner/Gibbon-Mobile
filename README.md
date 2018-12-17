@@ -2,8 +2,9 @@
 
 This package is aimed at provision of resposive design for mobiles and tablets for core features of the Gibbon Education programme.
 
-###Version
-0.0.01
+###Version 0.0.01
+
+_**This package is currently in development, and changes made until release may not be backwards compatible.**_
 
 ###Installation
 ####Server Requirements
@@ -43,9 +44,10 @@ If your school runs the gibbon software with the school website, then in this ex
 Change to your new directory and run the composer require command.  This will install the package for you, complete with all dependencies.
 
 ```
-cd /var/www/mobile
+cd /var/www
 
-composer require crayner/gibbon-mobile ^0.0
+composer create-project crayner/gibbon-mobile <your-mobile-directory> ^0.0.* --stability dev
+composer create-project crayner/gibbon-mobile mobile ^0.0.* --stability dev
 ```
 On an apache system, create your sub-domain for Gibbon Mobile by pointing to the mobile document root and you should be ready to go.  If you are using Apache 2.4, ensure that you edit the .htaccess file as per the instructions within the .htaccess file.  If you are using other server technology, then the [Symfony Server Setup Document](https://symfony.com/doc/current/setup/web_server_configuration.html) will be helpful.
 

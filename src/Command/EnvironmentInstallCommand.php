@@ -83,7 +83,7 @@ class EnvironmentInstallCommand extends Command
         }
         $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
         if (! $fileSystem->exists($config)) {
-            $io->error(sprintf('The Gibbon config.php file was not found at "%s".  You may need to run the gibbon installation scripts manually as the automatic search for your Gibbon installation appears to have failed.  See "http://www.craigrayner.com/help/installation.php"', $config));
+            $io->error(sprintf('The Gibbon config.php file was not found at "%s".  You may need to run the gibbon installation scripts manually as the automatic search for your Gibbon installation appears to have failed.  I searched "%s" directory for the Gibbon installation.  See "http://www.craigrayner.com/help/installation.php"', $config, $projectDir['dirname']));
             return 1;
         } else {
             $io->success(sprintf('The Gibbon config.php file was found at "%s"', $config));
