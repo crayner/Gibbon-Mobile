@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\TTDayRowClassExceptionRepository")
  * @ORM\Table(name="TTDayRowClassException")
  */
-class TTDayRowClassException
+class TTDayRowClassException implements EntityInterface
 {
     /**
      * @var integer|null

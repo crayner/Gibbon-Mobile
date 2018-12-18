@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\UnitBlockStarRepository")
  * @ORM\Table(name="UnitBlockStar")
  */
-class UnitBlockStar
+class UnitBlockStar implements EntityInterface
 {
     /**
      * @var integer|null

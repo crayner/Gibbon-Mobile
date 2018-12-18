@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\TTSpaceBookingRepository")
  * @ORM\Table(name="TTSpaceBooking")
  */
-class TTSpaceBooking
+class TTSpaceBooking  implements EntityInterface
 {
     /**
      * @var integer|null

@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\TTDayRepository")
  * @ORM\Table(name="TTDay", indexes={@ORM\Index(name="gibbonTTColumnID", columns={"gibbonTTColumnID"})})
  */
-class TTDay
+class TTDay implements EntityInterface
 {
     /**
      * @var integer|null

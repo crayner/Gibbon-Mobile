@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\UnitRepository")
  * @ORM\Table(name="Unit")
  */
-class Unit
+class Unit implements EntityInterface
 {
     use BooleanList;
 

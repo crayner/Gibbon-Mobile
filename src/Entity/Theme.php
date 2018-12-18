@@ -32,6 +32,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,7 +41,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\ThemeRepository")
  * @ORM\Table(name="Theme")
  */
-class Theme
+class Theme implements EntityInterface
 {
     /**
      * @var integer|null
