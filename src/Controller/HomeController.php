@@ -32,11 +32,18 @@
  */
 namespace App\Controller;
 
+use App\Manager\MessageManager;
 use App\Manager\SettingManager;
+use App\Manager\StaffDashboardManager;
+use App\Util\UserHelper;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Container\ContainerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class HomeController
@@ -51,8 +58,17 @@ class HomeController extends Controller
      * @Route("/", name="home")
      * @IsGranted("ROLE_USER")
      */
-    public function home(Request $request, SettingManager $manager)
+    public function home(Request $request, SettingManager $manager,EntityManagerInterface $entityManager, MessageManager $messageManager,
+                         AuthorizationCheckerInterface $authorizationChecker,
+                         RouterInterface $router, ContainerInterface $container)
     {
-        return $this->render('Default/home.html.twig');
+        if (UserHelper::isStaff())
+            $manager = new StaffDashboardManager($entityManager, $messageManager, $authorizationChecker, $router, $container);
+
+        return $this->render('Default/home.html.twig',
+            [
+                'manager' => $manager,
+            ]
+        );
     }
 }

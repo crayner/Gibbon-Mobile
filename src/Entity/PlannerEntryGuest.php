@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PlannerEntryGuestRepository")
  * @ORM\Table(name="PlannerEntryGuest")
  */
-class PlannerEntryGuest
+class PlannerEntryGuest implements EntityInterface
 {
     /**
      * @var integer|null
@@ -49,7 +50,7 @@ class PlannerEntryGuest
 
     /**
      * @var PlannerEntry|null
-     * @ORM\ManyToOne(targetEntity="PlannerEntry")
+     * @ORM\ManyToOne(targetEntity="PlannerEntry", inversedBy="plannerEntryGuests")
      * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID", nullable=false)
      */
     private $plannerEntry;

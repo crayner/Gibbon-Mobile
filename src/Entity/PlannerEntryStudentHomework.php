@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PlannerEntryStudentHomeworkRepository")
  * @ORM\Table(name="PlannerEntryStudentHomework", indexes={@ORM\Index(name="gibbonPlannerEntryID", columns={"gibbonPlannerEntryID","gibbonPersonID"})})
  */
-class PlannerEntryStudentHomework
+class PlannerEntryStudentHomework implements EntityInterface
 {
     use BooleanList;
 
@@ -52,7 +53,7 @@ class PlannerEntryStudentHomework
 
     /**
      * @var PlannerEntry|null
-     * @ORM\ManyToOne(targetEntity="PlannerEntry")
+     * @ORM\ManyToOne(targetEntity="PlannerEntry", inversedBy="studentHomeworkEntries")
      * @ORM\JoinColumn(name="gibbonPlannerEntryID", referencedColumnName="gibbonPlannerEntryID", nullable=false)
      */
     private $plannerEntry;

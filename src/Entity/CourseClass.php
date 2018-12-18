@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,7 +42,7 @@ use Doctrine\ORM\PersistentCollection;
  * @ORM\Entity(repositoryClass="App\Repository\CourseClassRepository")
  * @ORM\Table(name="CourseClass", indexes={@ORM\Index(name="gibbonCourseID", columns={"gibbonCourseID"})})
  */
-class CourseClass
+class CourseClass implements EntityInterface
 {
     use BooleanList;
 

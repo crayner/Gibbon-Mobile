@@ -1,3 +1,10 @@
 {% trans_default_domain "messages" %}
 
 {% extends 'Default/template.html.twig' %}
+{% block content %}
+    {% include 'Default/dashboard.html.twig' %}
+{% endblock content %}
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock javascripts %}

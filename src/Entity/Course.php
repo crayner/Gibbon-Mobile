@@ -30,6 +30,7 @@
 
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -42,7 +43,7 @@ use Doctrine\ORM\PersistentCollection;
  * @ORM\Entity(repositoryClass="App\Repository\CourseRepository")
  * @ORM\Table(name="Course", indexes={@ORM\Index(name="gibbonSchoolYearID", columns={"gibbonSchoolYearID"})}, uniqueConstraints={@ORM\UniqueConstraint(name="nameYear",columns={ "gibbonSchoolYearID", "name"})})
  */
-class Course
+class Course implements EntityInterface
 {
     use BooleanList;
     /**

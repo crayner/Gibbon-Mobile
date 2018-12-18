@@ -73,6 +73,9 @@
         </script>
         {{ encore_entry_script_tags('core') }}
         {{ encore_entry_script_tags('notificationTray') }}
+        {% if manager is defined and hasTimetable(manager) %}
+            {{ encore_entry_script_tags('timetable') }}
+        {% endif %}
     {% endblock javascripts %}
     </body>
 </html>

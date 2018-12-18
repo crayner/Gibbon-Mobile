@@ -29,8 +29,12 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class PlannerEntry
@@ -38,7 +42,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PlannerEntryRepository")
  * @ORM\Table(name="PlannerEntry", indexes={@ORM\Index(name="gibbonCourseClassID", columns={"gibbonCourseClassID"})})
  */
-class PlannerEntry
+class PlannerEntry implements EntityInterface
 {
     use BooleanList;
 
@@ -238,6 +242,18 @@ class PlannerEntry
      * @ORM\JoinColumn(name="gibbonPersonIDLastEdit", referencedColumnName="gibbonPersonID", nullable=false)
      */
     private $lastEdit;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\PlannerEntryStudentHomework", mappedBy="plannerEntry")
+     */
+    private $studentHomeworkEntries;
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="App\Entity\PlannerEntryGuest", mappedBy="plannerEntry")
+     */
+    private $plannerEntryGuests;
 
     /**
      * @return int|null
@@ -793,5 +809,55 @@ class PlannerEntry
     public static function getHomeworkSubmissionRequiredList(): array
     {
         return self::$homeworkSubmissionRequiredList;
+    }
+
+    /**
+     * getStudentHomeworkEntries
+     * @return Collection|null
+     */
+    public function getStudentHomeworkEntries(): ?Collection
+    {
+        if (empty($this->studentHomeworkEntries))
+            $this->studentHomeworkEntries = new ArrayCollection();
+
+        if ($this->studentHomeworkEntries instanceof PersistentCollection)
+            $this->studentHomeworkEntries->initialize();
+
+        return $this->studentHomeworkEntries;
+    }
+
+    /**
+     * @param Collection|null $studentHomeworkEntries
+     * @return PlannerEntry
+     */
+    public function setStudentHomeworkEntries(?Collection $studentHomeworkEntries): PlannerEntry
+    {
+        $this->studentHomeworkEntries = $studentHomeworkEntries;
+        return $this;
+    }
+
+    /**
+     * getPlannerEntryGuests
+     * @return Collection|null
+     */
+    public function getPlannerEntryGuests(): ?Collection
+    {
+        if (empty($this->plannerEntryGuests))
+            $this->plannerEntryGuests = new ArrayCollection();
+
+        if ($this->plannerEntryGuests instanceof PersistentCollection)
+            $this->plannerEntryGuests->initialize();
+
+        return $this->plannerEntryGuests;
+    }
+
+    /**
+     * @param Collection|null $plannerEntryGuests
+     * @return PlannerEntry
+     */
+    public function setPlannerEntryGuests(?Collection $plannerEntryGuests): PlannerEntry
+    {
+        $this->plannerEntryGuests = $plannerEntryGuests;
+        return $this;
     }
 }
