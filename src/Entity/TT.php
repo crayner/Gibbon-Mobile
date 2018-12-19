@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\EntityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class TT
@@ -89,6 +92,12 @@ class TT implements EntityInterface
      * @ORM\Column(length=1)
      */
     private $active;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="TTDay", mappedBy="TT")
+     */
+    private $TTDays;
 
     /**
      * @return int|null
@@ -222,5 +231,30 @@ class TT implements EntityInterface
     public static function getNameShortDisplayList(): array
     {
         return self::$nameShortDisplayList;
+    }
+
+    /**
+     * getTTDays
+     * @return Collection
+     */
+    public function getTTDays(): Collection
+    {
+        if (empty($this->tTDays))
+            $this->tTDays = new ArrayCollection();
+
+        if ($this->tTDays instanceof PersistentCollection)
+            $this->tTDays->initialize();
+
+        return $this->tTDays;
+    }
+
+    /**
+     * @param Collection $tTDays
+     * @return TT
+     */
+    public function setTTDays(Collection $tTDays): TT
+    {
+        $this->tTDays = $tTDays;
+        return $this;
     }
 }

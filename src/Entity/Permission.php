@@ -57,7 +57,7 @@ class Permission
 
     /**
      * @var Action|null
-     * @ORM\ManyToOne(targetEntity="Action")
+     * @ORM\ManyToOne(targetEntity="Action", inversedBy="permissions")
      * @ORM\JoinColumn(name="gibbonActionID", referencedColumnName="gibbonActionID", nullable=false)
      */
     private $action;

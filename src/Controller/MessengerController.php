@@ -31,7 +31,7 @@ namespace App\Controller;
 
 use App\Manager\MessengerManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +40,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class MessengerController
  * @package App\Controller
  */
-class MessengerController extends Controller
+class MessengerController extends AbstractController
 {
 
     /**

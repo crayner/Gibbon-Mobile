@@ -35,5 +35,4 @@ namespace App\Manager;
  */
 interface EntityProviderInterface
 {
-
 }

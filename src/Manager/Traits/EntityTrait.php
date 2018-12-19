@@ -337,15 +337,29 @@ trait EntityTrait
     /**
      * findOneBy
      * @param array $criteria
-     * @return Object|null
+     * @return EntityInterface|null
      * @throws \Exception
      */
-    public function findOneBy(array $criteria)
+    public function findOneBy(array $criteria): ?EntityInterface
     {
         $this->entity = null;
         if ($this->getRepository() !== null)
             $this->entity = $this->getRepository()->findOneBy($criteria);
         return $this->entity;
+    }
+
+    /**
+     * findBy
+     * @param array $criteria
+     * @param array $orderBy
+     * @return EntityInterface|object|null
+     * @throws \Exception
+     */
+    public function findBy(array $criteria, array $orderBy = []): array
+    {
+        if ($this->getRepository() !== null)
+            $results = $this->getRepository()->findBy($criteria, $orderBy);
+        return $results;
     }
 
     /**

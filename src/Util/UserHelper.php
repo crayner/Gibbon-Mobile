@@ -20,6 +20,10 @@ use App\Provider\PersonProvider;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class UserHelper
+ * @package App\Util
+ */
 class UserHelper
 {
     /**
@@ -106,9 +110,9 @@ class UserHelper
      * isParent
      * @return bool
      */
-    public static function isParent(): bool
+    public static function isParent(Person $person = null): bool
     {
-        self::$provider->setEntity(self::getCurrentUser());
+        self::$provider->setEntity($person ?: self::getCurrentUser());
         return self::$provider->isParent();
     }
 
@@ -188,11 +192,11 @@ class UserHelper
      * @return array
      * @throws \Exception
      */
-    public static function getChildrenOfParent(): array
+    public static function getChildrenOfParent(Person $person = null): array
     {
         if (! empty(self::$childrenOfParent))
             return self::$childrenOfParent;
-        self::$provider->setEntity(self::getCurrentUser());
+        self::$provider->setEntity($person ?: self::getCurrentUser());
         return self::$childrenOfParent = self::$provider->getChildrenOfParent();
     }
 

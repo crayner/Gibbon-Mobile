@@ -34,7 +34,7 @@ use App\Manager\LoginManager;
 use App\Form\Security\AuthenticateType;
 use App\Util\EntityHelper;
 use Hillrange\Form\Util\FormManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,7 +44,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  * Class SecurityController
  * @package App\Controller
  */
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
     /**
      * login

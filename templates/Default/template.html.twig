@@ -49,6 +49,7 @@
         {% endblock footer %}
     </div>
     <div id="coreRender"></div>
+    <div id="dumpStuff"></div>
     {% block javascripts %}
         <script type="application/javascript" language="JavaScript">
             function cssLinks(){
@@ -74,6 +75,9 @@
         {{ encore_entry_script_tags('core') }}
         {{ encore_entry_script_tags('notificationTray') }}
         {% if manager is defined and hasTimetable(manager) %}
+            <script type="application/javascript" language="JavaScript">
+                window.TIMETABLE_PROPS = {{ manager.properties|json_encode|raw }}
+            </script>
             {{ encore_entry_script_tags('timetable') }}
         {% endif %}
     {% endblock javascripts %}

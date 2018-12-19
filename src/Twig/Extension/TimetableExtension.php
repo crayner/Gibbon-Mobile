@@ -23,55 +23,51 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * UserProvider: craig
- * Date: 24/11/2018
- * Time: 16:38
+ * User: craig
+ * Date: 19/12/2018
+ * Time: 10:03
  */
-namespace App\Manager\Traits;
+namespace App\Twig\Extension;
+
+use App\Manager\DashboardInterface;
+use Twig\Extension\AbstractExtension;
 
 /**
- * Trait BooleanList
- * @package App\Manager\Traits
+ * Class TimetableExtension
+ * @package App\Twig\Extension
  */
-trait BooleanList
+class TimetableExtension extends AbstractExtension
 {
     /**
-     * @var array
+     * getName
+     * @return string
      */
-    private static $booleanList = [
-        'Y',
-        'N',
-    ];
-
-    /**
-     * getBooleanList
-     * @return array
-     */
-    public static function getBooleanList(): array
+    public function getName()
     {
-        return self::$booleanList;
+        return 'timetable_extension';
     }
 
     /**
-     * checkBoolean
-     * @param string $value
-     * @param string|null $default
-     * @return string|null
+     * getFunctions
+     * @return array|\Twig_Function[]
      */
-    private static function checkBoolean(string $value, ?string $default = 'Y')
+    public function getFunctions()
     {
-        return in_array($value, self::getBooleanList()) ? $value : $default;
+        return [
+            new \Twig_SimpleFunction('hasTimetable', array($this, 'hasTimetable')),
+        ];
     }
 
     /**
-     * isTrueOrFalse
-     * @param string $yesOrNo
+     * hasTimetable
+     * @param $manager
      * @return bool
      */
-    private function isTrueOrFalse(string $yesOrNo): bool
+    public function hasTimetable($manager): bool
     {
-        if ($yesOrNo === 'Y')
-            return true;
+        if (method_exists($manager,'hasTimetable'))
+            return $manager->hasTimetable();
+
         return false;
     }
 }

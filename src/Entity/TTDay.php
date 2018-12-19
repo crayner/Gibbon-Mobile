@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\EntityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class TTDay
@@ -50,7 +53,7 @@ class TTDay implements EntityInterface
 
     /**
      * @var TT|null
-     * @ORM\ManyToOne(targetEntity="TT")
+     * @ORM\ManyToOne(targetEntity="TT", inversedBy="TTDays")
      * @ORM\JoinColumn(name="gibbonTTID", referencedColumnName="gibbonTTID", nullable=false)
      */
     private $TT;
@@ -85,6 +88,12 @@ class TTDay implements EntityInterface
      * @ORM\Column(length=6, name="fontColor")
      */
     private $fontColour;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="TTDayRowClass", mappedBy="TTDay")
+     */
+    private $TTDayRowClasses;
 
     /**
      * @return int|null
@@ -209,6 +218,31 @@ class TTDay implements EntityInterface
     public function setFontColour(?string $fontColour): TTDay
     {
         $this->fontColour = $fontColour;
+        return $this;
+    }
+
+    /**
+     * getTTDayRowClasses
+     * @return Collection
+     */
+    public function getTTDayRowClasses(): Collection
+    {
+        if (empty($this->TTDayRowClasses))
+            $this->TTDayRowClasses = new ArrayCollection();
+
+        if ($this->TTDayRowClasses instanceof PersistentCollection)
+            $this->TTDayRowClasses->initialize();
+
+        return $this->TTDayRowClasses;
+    }
+
+    /**
+     * @param Collection $TTDayRowClasses
+     * @return TTDay
+     */
+    public function setTTDayRowClasses(Collection $TTDayRowClasses): TTDay
+    {
+        $this->TTDayRowClasses = $TTDayRowClasses;
         return $this;
     }
 }

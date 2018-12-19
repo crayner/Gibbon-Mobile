@@ -32,8 +32,8 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Null_;
 
 /**
  * Class SchoolYear
@@ -41,7 +41,7 @@ use phpDocumentor\Reflection\Types\Null_;
  * @ORM\Entity(repositoryClass="App\Repository\SchoolYearRepository")
  * @ORM\Table(name="SchoolYear", uniqueConstraints={@ORM\UniqueConstraint(name="academicYearName", columns={"name"}), @ORM\UniqueConstraint(name="sequenceNumber", columns={"sequenceNumber"})})
  */
-class SchoolYear
+class SchoolYear implements EntityInterface
 {
     /**
      * @var integer|null
@@ -201,5 +201,27 @@ class SchoolYear
     {
         $this->sequenceNumber = $sequenceNumber;
         return $this;
+    }
+
+    /**
+     * isEqualTo
+     * @param $entity
+     * @return bool
+     */
+    public function isEqualTo($entity): bool
+    {
+        if ($this->getId() !== $entity->getId())
+            return false;
+
+        if ($this->getName() !== $entity->getName())
+            return false;
+
+        if ($this->getFirstDay() !== $entity->getFirstDay())
+            return false;
+
+        if ($this->getLastDay() !== $entity->getLastDay())
+            return false;
+
+        return true;
     }
 }

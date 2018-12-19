@@ -10,9 +10,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TranslationManager implements TranslatorInterface, TranslatorBagInterface
+class TranslationManager implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
       public static $languages = [
         'nl_NL' => 'Dutch - Nederland',

@@ -23,43 +23,37 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * UserProvider: craig
- * Date: 23/11/2018
- * Time: 12:32
+ * User: craig
+ * Date: 19/12/2018
+ * Time: 11:23
  */
 namespace App\Controller;
 
-use App\Manager\StaffDashboardManager;
-use App\Util\UserHelper;
+use App\Entity\Person;
+use App\Manager\TimetableRenderManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class HomeController
- * @package App\Controller
+ * Class TimetableController
+ * @package App\Command
  */
-class HomeController extends AbstractController
+class TimetableController extends AbstractController
 {
     /**
-     * home
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/", name="home")
+     * myTimetable
+     * @param string $date
+     * @return JsonResponse
+     * @Route("/timetable/{date}/{person}/display/", name="api_timetable_display")
      * @IsGranted("ROLE_USER")
      */
-    public function home(StaffDashboardManager $staffDashboardManager)
+    public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
     {
-        if (UserHelper::isStaff())
-            $manager = $staffDashboardManager;
-
-        return $this->render('Default/home.html.twig',
-            [
-                'manager' => $manager,
-            ]
-        );
+        return new JsonResponse([
+            'date' => $date,
+            'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
+        ],200);
     }
 }

@@ -16,6 +16,7 @@
 namespace App\Util;
 
 use App\Entity\SchoolYear;
+use App\Entity\SchoolYearTerm;
 use App\Manager\SchoolYearManager;
 use App\Repository\SchoolYearRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -110,5 +111,16 @@ class SchoolYearHelper
             ->getOneOrNullResult();
 
         return self::$nextSchoolYear;
+    }
+
+    /**
+     * getWeekNumber
+     * @param \DateTime $date
+     * @return int|string
+     */
+    public static function getWeekNumber(\DateTime $date): int
+    {
+        $week = $date->format('W');
+        return $week - self::getCurrentSchoolYear()->getFirstDay()->format('W') + 1;
     }
 }

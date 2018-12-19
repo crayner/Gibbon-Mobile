@@ -23,28 +23,26 @@
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
- * UserProvider: craig
- * Date: 23/11/2018
- * Time: 13:24
+ * User: craig
+ * Date: 19/12/2018
+ * Time: 12:21
  */
-namespace App\Special\Controller;
+namespace App\Provider;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Module;
+use App\Manager\EntityProviderInterface;
+use App\Manager\Traits\EntityTrait;
 
 /**
- * Class LocaleController
- * @package App\Controller
+ * Class ModuleProvider
+ * @package App\Provider
  */
-class LocaleController extends Controller
+class ModuleProvider implements EntityProviderInterface
 {
+    use EntityTrait;
+
     /**
-     * home
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @var string
      */
-    public function home()
-    {
-        return $this->redirectToRoute('home');
-    }
+    private $entityName = Module::class;
 }

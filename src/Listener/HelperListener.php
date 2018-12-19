@@ -33,6 +33,7 @@ use App\Util\EntityHelper;
 use App\Util\FormatHelper;
 use App\Util\RelationshipHelper;
 use App\Util\SchoolYearHelper;
+use App\Util\SecurityHelper;
 use App\Util\UserHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -53,10 +54,16 @@ class HelperListener implements EventSubscriberInterface
      * @param RelationshipHelper $relationshipHelper
      * @param SchoolYearHelper $schoolYearHelper
      * @param FormatHelper $formatHelper
+     * @param SecurityHelper $securityHelper
      */
-    public function __construct(EntityHelper $helper, UserHelper $userHelper, RelationshipHelper $relationshipHelper, SchoolYearHelper $schoolYearHelper, FormatHelper $formatHelper)
-    {
-    }
+    public function __construct(
+        EntityHelper $helper,
+        UserHelper $userHelper,
+        RelationshipHelper $relationshipHelper,
+        SchoolYearHelper $schoolYearHelper,
+        FormatHelper $formatHelper,
+        SecurityHelper $securityHelper
+    ){}
 
     /**
      * getSubscribedEvents

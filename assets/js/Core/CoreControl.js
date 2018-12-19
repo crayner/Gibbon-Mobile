@@ -111,7 +111,7 @@ export default class CoreControl extends Component {
     }
 
     logout () {
-        openPage('/logout/', {method: 'GET'}, this.locale)
+        openPage('/logout/', {method: 'GET'}, false)
     }
 }
 

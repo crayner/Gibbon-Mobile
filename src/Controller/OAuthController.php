@@ -1,21 +1,23 @@
 <?php
-namespace App\Special\Controller;
+namespace App\Controller;
 
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class OAuthController extends Controller
+class OAuthController extends AbstractController
 {
-	/**
-	 * Link to this controller to start the "connect" process
-	 *
-	 * @Route("/connect/google/", name="google_oauth")
-	 */
-	public function connectGoogle()
+    /**
+     * connectGoogle
+     * @param ClientRegistry $registry
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/google/connect/", name="google_oauth")
+     */
+	public function connectGoogle(ClientRegistry $registry)
 	{
 		// will redirect to Google!
-		return $this->get('oauth2.registry')
+		return $registry
 			->getClient('google') // key used in config.yml
 			->redirect();
 	}

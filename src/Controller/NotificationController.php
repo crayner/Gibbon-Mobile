@@ -32,7 +32,7 @@ namespace App\Controller;
 use App\Entity\Notification;
 use App\Manager\NotificationManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,7 +40,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class NotificationController
  * @package App\Controller
  */
-class NotificationController extends Controller
+class NotificationController extends AbstractController
 {
     /**
      * notificationShow

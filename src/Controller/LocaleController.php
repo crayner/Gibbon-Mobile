@@ -24,54 +24,26 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * UserProvider: craig
- * Date: 24/11/2018
- * Time: 16:38
+ * Date: 23/11/2018
+ * Time: 13:24
  */
-namespace App\Manager\Traits;
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Trait BooleanList
- * @package App\Manager\Traits
+ * Class LocaleController
+ * @package App\Controller
  */
-trait BooleanList
+class LocaleController extends AbstractController
 {
     /**
-     * @var array
+     * home
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private static $booleanList = [
-        'Y',
-        'N',
-    ];
-
-    /**
-     * getBooleanList
-     * @return array
-     */
-    public static function getBooleanList(): array
+    public function home()
     {
-        return self::$booleanList;
-    }
-
-    /**
-     * checkBoolean
-     * @param string $value
-     * @param string|null $default
-     * @return string|null
-     */
-    private static function checkBoolean(string $value, ?string $default = 'Y')
-    {
-        return in_array($value, self::getBooleanList()) ? $value : $default;
-    }
-
-    /**
-     * isTrueOrFalse
-     * @param string $yesOrNo
-     * @return bool
-     */
-    private function isTrueOrFalse(string $yesOrNo): bool
-    {
-        if ($yesOrNo === 'Y')
-            return true;
-        return false;
+        return $this->redirectToRoute('home');
     }
 }

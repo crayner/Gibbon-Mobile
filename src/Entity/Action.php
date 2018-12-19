@@ -32,7 +32,10 @@ namespace App\Entity;
 
 use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class Action
@@ -53,6 +56,121 @@ class Action implements EntityInterface
     private $id;
 
     /**
+     * @var Module|null
+     * @ORM\ManyToOne(targetEntity="Module")
+     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID", nullable=false)
+     */
+    private $module;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=50, options={"comment": "The action name should be unqiue to the module that it is related to"})
+     */
+    private $name;
+
+    /**
+     * @var integer|null
+     * @ORM\Column(type="smallint", columnDefinition="INT(2)")
+     */
+    private $precedence;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=20)
+     */
+    private $category;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=255)
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="text", name="URLList", options={"comment": "Comma seperated list of all URLs that make up this action"})
+     */
+    private $URLList;
+
+    /**
+     * @var string|null
+     * @ORM\Column(length=255, name="entryURL")
+     */
+    private $entryURL;
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="entrySidebar", options={"default": "Y"})
+     */
+    private $entrySidebar = 'Y';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="menuShow", options={"default": "Y"})
+     */
+    private $menuShow = 'Y';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="defaultPermissionAdmin", options={"default": "N"})
+     */
+    private $defaultPermissionAdmin = 'N';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="defaultPermissionTeacher", options={"default": "N"})
+     */
+    private $defaultPermissionTeacher = 'N';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="defaultPermissionStudent", options={"default": "N"})
+     */
+    private $defaultPermissionStudent = 'N';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="defaultPermissionParent", options={"default": "N"})
+     */
+    private $defaultPermissionParent = 'N';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="defaultPermissionSupport", options={"default": "N"})
+     */
+    private $defaultPermissionSupport = 'N';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="categoryPermissionStaff", options={"default": "Y"})
+     */
+    private $categoryPermissionStaff = 'Y';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="categoryPermissionStudent", options={"default": "Y"})
+     */
+    private $categoryPermissionStudent = 'Y';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="categoryPermissionParent", options={"default": "Y"})
+     */
+    private $categoryPermissionParent = 'Y';
+
+    /**
+     * @var string
+     * @ORM\Column(length=1, name="categoryPermissionOther", options={"default": "Y"})
+     */
+    private $categoryPermissionOther = 'Y';
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="Permission", mappedBy="action")
+     */
+    private $permissions;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -69,13 +187,6 @@ class Action implements EntityInterface
         $this->id = $id;
         return $this;
     }
-
-    /**
-     * @var Module|null
-     * @ORM\ManyToOne(targetEntity="Module")
-     * @ORM\JoinColumn(name="gibbonModuleID",referencedColumnName="gibbonModuleID", nullable=false)
-     */
-    private $module;
 
     /**
      * @return Module|null
@@ -96,12 +207,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(length=50, options={"comment": "The action name should be unqiue to the module that it is related to"})
-     */
-    private $name;
-
-    /**
      * @return string|null
      */
     public function getName(): ?string
@@ -118,12 +223,6 @@ class Action implements EntityInterface
         $this->name = mb_substr($name, 0, 50);
         return $this;
     }
-
-    /**
-     * @var integer|null
-     * @ORM\Column(type="smallint", columnDefinition="INT(2)")
-     */
-    private $precedence;
 
     /**
      * @return int|null
@@ -144,12 +243,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(length=20)
-     */
-    private $category;
-
-    /**
      * @return string|null
      */
     public function getCategory(): ?string
@@ -166,12 +259,6 @@ class Action implements EntityInterface
         $this->category = mb_substr($category, 0, 20);
         return $this;
     }
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=255)
-     */
-    private $description;
 
     /**
      * @return string|null
@@ -192,12 +279,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string|null
-     * @ORM\Column(type="text", name="URLList", options={"comment": "Comma seperated list of all URLs that make up this action"})
-     */
-    private $URLList;
-
-    /**
      * @return string|null
      */
     public function getURLList(): ?string
@@ -214,12 +295,6 @@ class Action implements EntityInterface
         $this->URLList = $URLList;
         return $this;
     }
-
-    /**
-     * @var string|null
-     * @ORM\Column(length=255, name="entryURL")
-     */
-    private $entryURL;
 
     /**
      * @return string|null
@@ -241,12 +316,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=1, name="entrySidebar", options={"default": "Y"})
-     */
-    private $entrySidebar = 'Y';
-
-    /**
      * @return string
      */
     public function getEntrySidebar(): string
@@ -263,12 +332,6 @@ class Action implements EntityInterface
         $this->entrySidebar = in_array($entrySidebar, self::getBooleanList()) ? $entrySidebar : 'Y';
         return $this;
     }
-
-    /**
-     * @var string
-     * @ORM\Column(length=1, name="menuShow", options={"default": "Y"})
-     */
-    private $menuShow = 'Y';
 
     /**
      * @return string
@@ -289,12 +352,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=1, name="defaultPermissionAdmin", options={"default": "N"})
-     */
-    private $defaultPermissionAdmin = 'N';
-
-    /**
      * @return string
      */
     public function getDefaultPermissionAdmin(): string
@@ -311,12 +368,6 @@ class Action implements EntityInterface
         $this->defaultPermissionAdmin = self::checkBoolean($defaultPermissionAdmin, 'N');
         return $this;
     }
-
-    /**
-     * @var string
-     * @ORM\Column(length=1, name="defaultPermissionTeacher", options={"default": "N"})
-     */
-    private $defaultPermissionTeacher = 'N';
 
     /**
      * @return string
@@ -337,12 +388,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=1, name="defaultPermissionStudent", options={"default": "N"})
-     */
-    private $defaultPermissionStudent = 'N';
-
-    /**
      * @return string
      */
     public function getDefaultPermissionStudent(): string
@@ -359,12 +404,6 @@ class Action implements EntityInterface
         $this->defaultPermissionStudent = self::checkBoolean($defaultPermissionStudent, 'N');
         return $this;
     }
-
-    /**
-     * @var string
-     * @ORM\Column(length=1, name="defaultPermissionParent", options={"default": "N"})
-     */
-    private $defaultPermissionParent = 'N';
 
     /**
      * @return string
@@ -385,12 +424,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=1, name="defaultPermissionSupport", options={"default": "N"})
-     */
-    private $defaultPermissionSupport = 'N';
-
-    /**
      * @return string
      */
     public function getDefaultPermissionSupport(): string
@@ -407,12 +440,6 @@ class Action implements EntityInterface
         $this->defaultPermissionSupport = self::checkBoolean($defaultPermissionSupport, 'N');
         return $this;
     }
-
-    /**
-     * @var string
-     * @ORM\Column(length=1, name="categoryPermissionStaff", options={"default": "Y"})
-     */
-    private $categoryPermissionStaff = 'Y';
 
     /**
      * @return string
@@ -433,12 +460,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=1, name="categoryPermissionStudent", options={"default": "Y"})
-     */
-    private $categoryPermissionStudent = 'Y';
-
-    /**
      * @return string
      */
     public function getCategoryPermissionStudent(): string
@@ -455,12 +476,6 @@ class Action implements EntityInterface
         $this->categoryPermissionStudent = self::checkBoolean($categoryPermissionStudent, 'Y');
         return $this;
     }
-
-    /**
-     * @var string
-     * @ORM\Column(length=1, name="categoryPermissionParent", options={"default": "Y"})
-     */
-    private $categoryPermissionParent = 'Y';
 
     /**
      * @return string
@@ -481,12 +496,6 @@ class Action implements EntityInterface
     }
 
     /**
-     * @var string
-     * @ORM\Column(length=1, name="categoryPermissionOther", options={"default": "Y"})
-     */
-    private $categoryPermissionOther = 'Y';
-
-    /**
      * @return string
      */
     public function getCategoryPermissionOther(): string
@@ -501,6 +510,31 @@ class Action implements EntityInterface
     public function setCategoryPermissionOther(string $categoryPermissionOther): Action
     {
         $this->categoryPermissionOther = self::checkBoolean($categoryPermissionOther, 'Y');
+        return $this;
+    }
+
+    /**
+     * getPermissions
+     * @return Collection
+     */
+    public function getPermissions(): Collection
+    {
+        if (empty($this->permissions))
+            $this->permissions = new ArrayCollection();
+
+        if ($this->permissions instanceof PersistentCollection)
+            $this->permissions->initialize();
+
+        return $this->permissions;
+    }
+
+    /**
+     * @param Collection $permissions
+     * @return Action
+     */
+    public function setPermissions(Collection $permissions): Action
+    {
+        $this->permissions = $permissions;
         return $this;
     }
 }

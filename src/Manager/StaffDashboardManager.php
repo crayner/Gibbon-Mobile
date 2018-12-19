@@ -70,4 +70,13 @@ class StaffDashboardManager extends DashboardManager
     {
         return true;
     }
+
+    /**
+     * getProperties
+     * @return array
+     */
+    public function getProperties(): array
+    {
+        return $this->getTimetableProps();
+    }
 }

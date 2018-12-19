@@ -98,4 +98,170 @@ class DaysOfWeek implements EntityInterface
      * @ORM\Column(type="time", name="schoolClose", nullable=true)
      */
     private $schoolClose;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     * @return DaysOfWeek
+     */
+    public function setId(?int $id): DaysOfWeek
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return DaysOfWeek
+     */
+    public function setName(string $name): DaysOfWeek
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameShort(): string
+    {
+        return $this->nameShort;
+    }
+
+    /**
+     * @param string $nameShort
+     * @return DaysOfWeek
+     */
+    public function setNameShort(string $nameShort): DaysOfWeek
+    {
+        $this->nameShort = $nameShort;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSequenceNumber(): ?int
+    {
+        return $this->sequenceNumber;
+    }
+
+    /**
+     * @param int|null $sequenceNumber
+     * @return DaysOfWeek
+     */
+    public function setSequenceNumber(?int $sequenceNumber): DaysOfWeek
+    {
+        $this->sequenceNumber = $sequenceNumber;
+        return $this;
+    }
+
+    public function isSchoolDay(): bool
+    {
+        return $this->isTrueOrFalse($this->getSchoolDay());
+    }
+    /**
+     * @return string
+     */
+    public function getSchoolDay(): string
+    {
+        return $this->schoolDay = self::checkBoolean($this->schoolDay, 'Y');
+    }
+
+    /**
+     * @param string $schoolDay
+     * @return DaysOfWeek
+     */
+    public function setSchoolDay(string $schoolDay): DaysOfWeek
+    {
+        $this->schoolDay = self::checkBoolean($schoolDay, 'Y');
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getSchoolOpen(): ?\DateTime
+    {
+        return $this->schoolOpen;
+    }
+
+    /**
+     * @param \DateTime|null $schoolOpen
+     * @return DaysOfWeek
+     */
+    public function setSchoolOpen(?\DateTime $schoolOpen): DaysOfWeek
+    {
+        $this->schoolOpen = $schoolOpen;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getSchoolStart(): ?\DateTime
+    {
+        return $this->schoolStart;
+    }
+
+    /**
+     * @param \DateTime|null $schoolStart
+     * @return DaysOfWeek
+     */
+    public function setSchoolStart(?\DateTime $schoolStart): DaysOfWeek
+    {
+        $this->schoolStart = $schoolStart;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getSchoolEnd(): ?\DateTime
+    {
+        return $this->schoolEnd;
+    }
+
+    /**
+     * @param \DateTime|null $schoolEnd
+     * @return DaysOfWeek
+     */
+    public function setSchoolEnd(?\DateTime $schoolEnd): DaysOfWeek
+    {
+        $this->schoolEnd = $schoolEnd;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getSchoolClose(): ?\DateTime
+    {
+        return $this->schoolClose;
+    }
+
+    /**
+     * @param \DateTime|null $schoolClose
+     * @return DaysOfWeek
+     */
+    public function setSchoolClose(?\DateTime $schoolClose): DaysOfWeek
+    {
+        $this->schoolClose = $schoolClose;
+        return $this;
+    }
 }

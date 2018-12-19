@@ -29,11 +29,16 @@
  */
 namespace App\Manager;
 
+use App\Entity\User;
+use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class DashboardManager
@@ -67,6 +72,16 @@ abstract class DashboardManager implements DashboardInterface
     private $timezone;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var Request
+     */
+    private $stack;
+
+    /**
      * DashboardManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param MessageManager $messageManager
@@ -76,13 +91,15 @@ abstract class DashboardManager implements DashboardInterface
      */
     public function __construct(EntityManagerInterface $entityManager, MessageManager $messageManager,
                                 AuthorizationCheckerInterface $authorizationChecker,
-                                RouterInterface $router, ContainerInterface $container)
+                                RouterInterface $router, ContainerInterface $container, TranslatorInterface $translator, RequestStack $stack)
     {
         $this->entityManager = $entityManager;
         $this->messageManager = $messageManager;
         $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
         $this->timezone = $container->getParameter('timezone');
+        $this->translator = $translator;
+        $this->stack = $stack;
     }
 
     /**
@@ -165,5 +182,38 @@ abstract class DashboardManager implements DashboardInterface
     public function getTimezone(): string
     {
         return $this->timezone;
+    }
+
+    /**
+     * getTimetableProps
+     * @return array
+     */
+    public function getTimetableProps(): array
+    {
+        $translations['My Timetable'] = $this->getTranslator()->trans('My Timetable');
+        $translations['Loading'] = $this->getTranslator()->trans('Loading');
+
+        $properties['translations'] = $translations;
+        $properties['locale'] = $this->getRequest()->get('_locale');
+        $properties['person'] = UserHelper::getCurrentUser()->getId();
+        return $properties;
+    }
+
+    /**
+     * getTranslator
+     * @return TranslatorInterface
+     */
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
+    }
+
+    /**
+     * getRequest
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->stack->getCurrentRequest();
     }
 }

@@ -78,7 +78,7 @@ export default class TrayApp extends Component {
     }
 
     handleLogout() {
-        openPage('/logout/', {method: 'GET'}, this.locale);
+        openPage('/logout/', {method: 'GET'}, false);
     }
 
     render () {
@@ -98,13 +98,13 @@ export default class TrayApp extends Component {
     }
 }
 
-Notifications.propTypes = {
+TrayApp.propTypes = {
     displayTray: PropTypes.bool,
     isStaff: PropTypes.bool.isRequired,
     locale: PropTypes.string,
 }
 
-Notifications.defaultProps = {
+TrayApp.defaultProps = {
     displayTray: false,
     locale: 'en_GB',
 }
