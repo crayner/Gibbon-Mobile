@@ -376,4 +376,21 @@ trait EntityTrait
         }
         return $this;
     }
+
+    /**
+     * findAsArray
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
+    public function findAsArray($id): array
+    {
+        $result = $this->getRepository()->createQueryBuilder('e')
+            ->select('e')
+            ->where('e.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult();
+        return reset($result);
+    }
 }

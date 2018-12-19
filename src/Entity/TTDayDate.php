@@ -50,7 +50,7 @@ class TTDayDate implements EntityInterface
 
     /**
      * @var TTDay|null
-     * @ORM\ManyToOne(targetEntity="TTDay")
+     * @ORM\ManyToOne(targetEntity="TTDay", inversedBy="timetabeDayDates")
      * @ORM\JoinColumn(name="gibbonTTDayID", referencedColumnName="gibbonTTDayID", nullable=false)
      */
     private $TTDay;

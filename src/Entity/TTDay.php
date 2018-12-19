@@ -96,6 +96,12 @@ class TTDay implements EntityInterface
     private $TTDayRowClasses;
 
     /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="TTDayDate", mappedBy="TTDay")
+     */
+    private $timetableDayDates;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -243,6 +249,31 @@ class TTDay implements EntityInterface
     public function setTTDayRowClasses(Collection $TTDayRowClasses): TTDay
     {
         $this->TTDayRowClasses = $TTDayRowClasses;
+        return $this;
+    }
+
+    /**
+     * getTimetableDayDates
+     * @return Collection
+     */
+    public function getTimetableDayDates(): Collection
+    {
+        if (empty($this->timetableDayDates))
+            $this->timetableDayDates = new ArrayCollection();
+        
+        if ($this->timetableDayDates instanceof PersistentCollection)
+            $this->timetableDayDates->initialize();
+        
+        return $this->timetableDayDates;
+    }
+
+    /**
+     * @param Collection $timetableDayDates
+     * @return TTDay
+     */
+    public function setTimetableDayDates(Collection $timetableDayDates): TTDay
+    {
+        $this->timetableDayDates = $timetableDayDates;
         return $this;
     }
 }

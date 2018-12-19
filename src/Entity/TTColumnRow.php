@@ -50,7 +50,7 @@ class TTColumnRow implements EntityInterface
 
     /**
      * @var TTColumn|null
-     * @ORM\ManyToOne(targetEntity="TTColumn")
+     * @ORM\ManyToOne(targetEntity="TTColumn", inversedBy="timetableColumnRows")
      * @ORM\JoinColumn(name="gibbonTTColumnID", referencedColumnName="gibbonTTColumnID", nullable=false)
      */
     private $TTColumn;

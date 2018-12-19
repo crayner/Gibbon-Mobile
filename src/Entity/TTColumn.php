@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\EntityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class TTColumn
@@ -59,6 +62,12 @@ class TTColumn implements EntityInterface
      * @ORM\Column(length=12, name="nameShort")
      */
     private $nameShort;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="TTColumnRow", mappedBy="TTColumn")
+     */
+    private $timetableColumnRows;
 
     /**
      * @return int|null
@@ -111,6 +120,31 @@ class TTColumn implements EntityInterface
     public function setNameShort(?string $nameShort): TTColumn
     {
         $this->nameShort = $nameShort;
+        return $this;
+    }
+
+    /**
+     * getTimetableColumnRows
+     * @return Collection
+     */
+    public function getTimetableColumnRows(): Collection
+    {
+        if (empty($this->timetableColumnRows))
+            $this->timetableColumnRows = new ArrayCollection();
+
+        if ($this->timetableColumnRows instanceof PersistentCollection)
+            $this->timetableColumnRows->initialize();
+
+        return $this->timetableColumnRows;
+    }
+
+    /**
+     * @param Collection $timetableColumnRows
+     * @return TTColumn
+     */
+    public function setTimetableColumnRows(Collection $timetableColumnRows): TTColumn
+    {
+        $this->timetableColumnRows = $timetableColumnRows;
         return $this;
     }
 }

@@ -35,7 +35,7 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FormatHelper
 {
@@ -48,6 +48,11 @@ class FormatHelper
      * @var string
      */
     private static $gibbonUrl;
+
+    /**
+     * @var string
+     */
+    private static $timezone;
 
     /**
      * @var Packages
@@ -72,6 +77,7 @@ class FormatHelper
     {
         self::$translator = $translator;
         self::$gibbonUrl = $container->getParameter('gibbon_host_url');
+        self::$timezone = $container->getParameter('timezone');
     }
 
     /**
@@ -161,5 +167,21 @@ class FormatHelper
                 ]
             );
         return self::$assetPackages;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getGibbonUrl(): string
+    {
+        return self::$gibbonUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTimezone(): string
+    {
+        return self::$timezone;
     }
 }

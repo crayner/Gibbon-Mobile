@@ -65,7 +65,7 @@ class TimetableProvider implements EntityProviderInterface
             ->andWhere('t.active = :active')
             ->setParameters($criteria)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /**
@@ -82,7 +82,7 @@ class TimetableProvider implements EntityProviderInterface
             ->andWhere('t.active = :active')
             ->setParameters($criteria)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /**
@@ -104,6 +104,6 @@ class TimetableProvider implements EntityProviderInterface
             ->andWhere('t.id = :timetable')
             ->setParameters($criteria)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 }

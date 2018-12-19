@@ -123,4 +123,22 @@ class SchoolYearHelper
         $week = $date->format('W');
         return $week - self::getCurrentSchoolYear()->getFirstDay()->format('W') + 1;
     }
+
+    /**
+     * isDayInTerm
+     * @param \DateTime $date
+     * @return bool
+     */
+    public static function isDayInTerm(\DateTime $date): bool
+    {
+        if (EntityHelper::getRepository(SchoolYearTerm::class)->createQueryBuilder('syt')
+            ->select('COUNT(syt)')
+            ->where('syt.firstDay <= :date and syt.lastDay >= :date')
+            ->andWhere('syt.schoolYear = :schoolYear')
+            ->setParameters(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'date' => $date])
+            ->getQuery()
+            ->getSingleScalarResult() > 0)
+            return true;
+        return false;
+    }
 }
