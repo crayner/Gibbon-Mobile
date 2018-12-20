@@ -50,7 +50,11 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         {
             $session = $request->getSession();
             $flash = $session->getFlashBag()->all();
-            $session->invalidate();
+            try {
+                $session->invalidate();
+            } catch(\ErrorException $e) {
+                $flash = null;
+            }
             if (! empty($flash))
                 $session->getFlashBag()->setAll($flash);
         }
