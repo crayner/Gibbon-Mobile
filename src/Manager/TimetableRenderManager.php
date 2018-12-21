@@ -27,7 +27,6 @@
  * Date: 19/12/2018
  * Time: 12:13
  */
-
 namespace App\Manager;
 
 use App\Entity\DaysOfWeek;
@@ -117,8 +116,7 @@ class TimetableRenderManager
         $result['week'] = SchoolYearHelper::getWeekNumber($result['date']);
         $result['schoolOpen'] = true;
 
-        $result['specialDay'] = $this->getTimetableProvider()->getRepository(SchoolYearSpecialDay::class)->findBy(['date' => $result['date']]);
-
+        $result['specialDay'] = $this->getTimetableProvider()->getRepository(SchoolYearSpecialDay::class)->findOneBy(['date' => $result['date']]);
         if (SchoolYearHelper::isDayInTerm($startDayStamp)) {
             if ($result['specialDay'] instanceof SchoolYearSpecialDay) {
                 if ($result['specialDay']->getType() === 'School Closure') {
@@ -140,8 +138,9 @@ class TimetableRenderManager
         $diff = $result['timeEnd']->diff($result['timeStart']);
         $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
 
-        $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']->getId());
-        $result['schoolYear'] =  SchoolYearHelper::getSchoolYearAsArray();
+        $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
+        $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
+        $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         return $result;
     }
 
@@ -191,7 +190,7 @@ class TimetableRenderManager
         if ($result['schoolOpen'])
             return $result;
         $result['day'] = $this->getTimetableProvider()->getRepository(TTDay::class)->findByDateTT($result['date'], $result['tt']);
-
+        $result['day'] = $this->getTimetableProvider()->findAsArray($result['day']);
         return $result;
     }
 

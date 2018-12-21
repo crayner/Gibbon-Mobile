@@ -35,7 +35,7 @@ export default function SchoolDayClosed(props) {
             />
             <div className={'row'}>
                 <div className={'col-10 offset-1 card'}>
-                    <div style={{height: content.timeDiff + 'px', margin: "0 -15px"}} className={'schoolDayClosed d-flex justify-content-center align-self-center"'}><span style={{position: 'relative', top: '45%'}} title={description + 'This is a test description'}>{name}</span></div>
+                    <div style={{height: content.timeDiff + 'px', margin: "0 -15px"}} className={'schoolDayClosed d-flex justify-content-center align-self-center"'}><span style={{position: 'relative', top: '45%'}} title={description}>{name}</span></div>
                 </div>
             </div>
         </span>

@@ -379,16 +379,20 @@ trait EntityTrait
 
     /**
      * findAsArray
-     * @param $id
+     * @param EntityInterface|null $entity
      * @return array
      * @throws \Exception
      */
-    public function findAsArray($id): array
+    public function findAsArray(?EntityInterface $entity): array
     {
-        $result = $this->getRepository()->createQueryBuilder('e')
+        if (empty($entity))
+            return [];
+        $className = get_class($entity);
+
+        $result = $this->getRepository($className)->createQueryBuilder('e')
             ->select('e')
             ->where('e.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $entity->getId())
             ->getQuery()
             ->getArrayResult();
         return reset($result);

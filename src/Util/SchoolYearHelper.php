@@ -150,6 +150,6 @@ class SchoolYearHelper
     public static function getSchoolYearAsArray(?SchoolYear $schoolYear = null)
     {
         $schoolYear = $schoolYear ?: self::getCurrentSchoolYear();
-        return self::$manager->getProvider()->findAsArray($schoolYear->getId());
+        return self::$manager->getProvider()->findAsArray($schoolYear);
     }
 }

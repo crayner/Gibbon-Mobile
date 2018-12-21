@@ -31,7 +31,7 @@ namespace App\Controller;
 
 use App\Entity\Person;
 use App\Manager\TimetableRenderManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,7 +47,7 @@ class TimetableController extends AbstractController
      * @param string $date
      * @return JsonResponse
      * @Route("/timetable/{date}/{person}/display/", name="api_timetable_display")
-     * @IsGranted("ROLE_USER")
+     * @Security("ROLE_ACTION", ['/modules/Timetable/tt.php'])
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
     {
