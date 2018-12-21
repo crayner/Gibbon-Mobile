@@ -201,6 +201,8 @@ class TimetableRenderManager
      */
     public function manageDateChange(string $date): string
     {
+        if ($date === 'undefined')
+            return 'today';
         if (strpos($date, 'prev-') === 0)
         {
             $days = $this->getDaysOFWeek();

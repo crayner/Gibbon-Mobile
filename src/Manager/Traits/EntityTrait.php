@@ -389,6 +389,9 @@ trait EntityTrait
             return [];
         $className = get_class($entity);
 
+        if (method_exists($entity, '__toArray'))
+            return $entity->__toArray();
+
         $result = $this->getRepository($className)->createQueryBuilder('e')
             ->select('e')
             ->where('e.id = :id')
