@@ -3,32 +3,43 @@
     "form": {
       "js": [
         "build/runtime.d41d8cd9.js",
-        "build/vendors~e6ac30b8.b248167b.js",
-        "build/vendors~652e473b.de36f26c.js",
-        "build/form.6212eae8.js"
+        "build/vendors~dfe491aa.b248167b.js",
+        "build/vendors~9072dba1.de36f26c.js",
+        "build/form.866a379f.js"
       ],
       "css": [
-        "build/form.7d67586e.css"
+        "build/form.8732e750.css"
       ]
     },
     "core": {
       "js": [
         "build/runtime.d41d8cd9.js",
-        "build/vendors~e6ac30b8.b248167b.js",
+        "build/vendors~dfe491aa.b248167b.js",
         "build/vendors~1aeabec8.18677e1f.js",
         "build/core.2053cf44.js"
       ],
       "css": [
         "build/vendors~1aeabec8.2d1b2953.css",
-        "build/core.585d2f21.css"
+        "build/core.4dea3c5c.css"
+      ]
+    },
+    "timetable": {
+      "js": [
+        "build/runtime.d41d8cd9.js",
+        "build/vendors~dfe491aa.b248167b.js",
+        "build/vendors~9072dba1.de36f26c.js",
+        "build/timetable.0c7846f4.js"
+      ],
+      "css": [
+        "build/timetable.6a8c7aac.css"
       ]
     },
     "notificationTray": {
       "js": [
         "build/runtime.d41d8cd9.js",
-        "build/vendors~e6ac30b8.b248167b.js",
-        "build/vendors~652e473b.de36f26c.js",
-        "build/notificationTray.9dabd129.js"
+        "build/vendors~dfe491aa.b248167b.js",
+        "build/vendors~9072dba1.de36f26c.js",
+        "build/notificationTray.aae1a175.js"
       ]
     }
   }
