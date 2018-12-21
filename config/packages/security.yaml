@@ -33,6 +33,7 @@ security:
                 password_parameter:     'authenticate[_password]'
                 failure_path_parameter: login
                 provider:               security_user_provider
+            access_denied_handler:      App\Security\AccessDeniedHandler
             logout:
                 path:                   logout
                 target:                 home

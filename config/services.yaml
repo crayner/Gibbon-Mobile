@@ -66,3 +66,7 @@ services:
         tags:
             - { name: monolog.logger, channel: mailer }
             - { name: "swiftmailer.default.plugin" }
+
+    App\Security\Voter\MobileVoter:
+        arguments:
+            - "@monolog.logger.security"

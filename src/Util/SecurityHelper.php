@@ -162,7 +162,7 @@ class SecurityHelper
                     try {
                         if (count(self::getActionProvider()->findByURLListModuleRole(
                             [
-                                'name' => "%".$address."%",
+                                'name' => "%".self::getActionName($address)."%",
                                 "module" => $module,
                                 'role' => UserHelper::getCurrentUser()->getPrimaryRole(),
                                 'sub' => $sub,

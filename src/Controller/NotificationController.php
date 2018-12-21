@@ -47,6 +47,7 @@ class NotificationController extends AbstractController
      * @param NotificationManager $manager
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/notification/show/", name="notifications_show")
+     * @IsGranted("ROLE_USER")
      */
     public function show(NotificationManager $manager)
     {

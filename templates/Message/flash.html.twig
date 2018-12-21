@@ -29,6 +29,10 @@
         {% include 'Message/flashSplit.html.twig' with {'theMessage': flashMessage, level: 'info'} %}
     {% endfor %}
 
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        {% include 'Message/flashSplit.html.twig' with {'theMessage': flashMessage, level: 'warning'} %}
+    {% endfor %}
+
     {% for flashMessage in app.session.flashbag.get('success') %}
         {% include 'Message/flashSplit.html.twig' with {'theMessage': flashMessage, level: 'success'} %}
     {% endfor %}

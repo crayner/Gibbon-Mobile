@@ -30,7 +30,7 @@
 namespace App\Controller;
 
 use App\Manager\MessengerManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -48,7 +48,7 @@ class MessengerController extends AbstractController
      * @param MessengerManager $manager
      * @return JsonResponse
      * @Route("/messenger/details/", name="api_messenger_details")
-     * @IsGranted("ROLE_USER")
+     * @Security("is_granted('ROLE_ACTION', ['/modules/Messenger/messageWall_view.php'])")
      */
     public function details(MessengerManager $manager, SessionInterface $session)
     {
@@ -70,7 +70,7 @@ class MessengerController extends AbstractController
      * @param MessengerManager $manager
      * @return mixed
      * @Route("/messenger/{showDate}/show/", name="messenger_show")
-     * @IsGranted("ROLE_USER")
+     * @Security("is_granted('ROLE_ACTION', ['/modules/Messenger/messageWall_view.php'])")
      */
     public function show(MessengerManager $manager, string $showDate = 'today')
     {

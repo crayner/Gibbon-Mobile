@@ -47,7 +47,7 @@ class TimetableController extends AbstractController
      * @param string $date
      * @return JsonResponse
      * @Route("/timetable/{date}/{person}/display/", name="api_timetable_display")
-     * @Security("ROLE_ACTION", ['/modules/Timetable/tt.php'])
+     * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
     {
