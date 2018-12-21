@@ -89,7 +89,7 @@ export default class CoreControl extends Component {
 
     refreshPage(){
         if (this.state.elapsed > this.state.timeout)
-            openPage('/logout/', {method: 'GET'}, this.locale)
+            openPage('/logout/', {method: 'GET'}, false)
         this.reset()
     }
 

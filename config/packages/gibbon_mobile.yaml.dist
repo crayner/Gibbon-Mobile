@@ -1,6 +1,6 @@
 parameters:
     db_prefix: gibbon
-    locale: en
+    locale: en_GB
     session_name: 'gibbon_mobile'
     timezone: UTC
     idle_timeout: 20

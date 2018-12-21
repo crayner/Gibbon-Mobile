@@ -74,7 +74,7 @@ class PlannerEntryProvider implements EntityProviderInterface
 
         // with UNION of
 
-        $results = array_merge($results,
+        return array_merge($results,
             $this->getRepository()->createQueryBuilder('pe')
                 ->select('pe, cc, c, peg')
                 ->join('pe.courseClass', 'cc')
@@ -89,8 +89,5 @@ class PlannerEntryProvider implements EntityProviderInterface
                 ->getQuery()
                 ->getResult()
             );
-        dump($results);
-
-        return $results;
     }
 }

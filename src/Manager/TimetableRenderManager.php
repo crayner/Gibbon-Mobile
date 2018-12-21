@@ -92,7 +92,7 @@ class TimetableRenderManager
 
         if (is_array($result['tt']))
             $result['tt'] = reset($result['tt']);
-        $days = $this->getTimetableProvider()->getRepository(DaysOfWeek::class)->findBy([],['sequenceNumber' => 'ASC']);
+        $days = $this->getDaysOfWeek();
         $result['timeStart'] = '';
         $result['timeEnd'] = '';
         foreach ($days as $day) {
@@ -107,7 +107,6 @@ class TimetableRenderManager
                         $result['timeEnd'] = $day->getSchoolEnd();
                 }
             }
-            $days[$day->getNameShort()] = $day;
         }
 
         //move to next schoolDay
@@ -142,6 +141,7 @@ class TimetableRenderManager
         $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
 
         $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']->getId());
+        $result['schoolYear'] =  SchoolYearHelper::getSchoolYearAsArray();
         return $result;
     }
 
@@ -193,5 +193,55 @@ class TimetableRenderManager
         $result['day'] = $this->getTimetableProvider()->getRepository(TTDay::class)->findByDateTT($result['date'], $result['tt']);
 
         return $result;
+    }
+
+    /**
+     * manageDateChange
+     * @param string $date
+     * @return string
+     */
+    public function manageDateChange(string $date): string
+    {
+        if (strpos($date, 'prev-') === 0)
+        {
+            $days = $this->getDaysOFWeek();
+            $date = new \DateTime(substr($date, 5));
+            $date->sub(new \DateInterval('P1D'));
+            //move to next schoolDay
+            while (! $days[$date->format('D')]->isSchoolDay())
+                $date->sub(new \DateInterval('P1D'));
+            return $date->format('Y-m-d');
+        }
+        if (strpos($date, 'next-') === 0)
+        {
+            $days = $this->getDaysOFWeek();
+            $date = new \DateTime(substr($date, 5));
+            $date->add(new \DateInterval('P1D'));
+            //move to next schoolDay
+            while (! $days[$date->format('D')]->isSchoolDay())
+                $date->add(new \DateInterval('P1D'));
+            return $date->format('Y-m-d');
+        }
+        return $date;
+    }
+
+    /**
+     * @var array|null
+     */
+    private $daysOfWeek;
+
+    /**
+     * getDaysOFWeek
+     * @return array
+     * @throws \Exception
+     */
+    private function getDaysOFWeek(): array
+    {
+        if (! empty($this->daysOfWeek))
+            return $this->daysOfWeek;
+        $x = $this->getTimetableProvider()->getRepository(DaysOfWeek::class)->findBy([],['sequenceNumber' => 'ASC']);
+        foreach($x as $day)
+            $this->daysOfWeek[$day->getNameShort()] = $day;
+        return $this->daysOfWeek;
     }
 }

@@ -51,6 +51,7 @@ class TimetableController extends AbstractController
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
     {
+        $date = $manager->manageDateChange($date);
         return new JsonResponse([
             'date' => $date,
             'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),

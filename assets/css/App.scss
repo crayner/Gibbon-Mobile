@@ -114,22 +114,22 @@
 
 @include r(240)  {
     html {
-        font-size: 0.2rem;
+        font-size: 0.4rem;
     }
 }
 @include r(320)  {
     html {
-        font-size: 0.35rem;
+        font-size: 0.5rem;
     }
 }
 @include r(480)  {
     html {
-        font-size: 0.5rem;
+        font-size: 0.6rem;
     }
 }
 @include r(600)  {
     html {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
     }
 }
 @include r(768)  {

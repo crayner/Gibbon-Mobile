@@ -18,21 +18,21 @@ export default class TimetableApp extends Component {
             content: {},
         }
         this.timeout = 120000
+        this.changeDate = this.changeDate.bind(this)
     }
 
     componentDidMount () {
-        this.loadTimetable(100)
+        this.loadTimetable(100, this.state.date)
     }
 
     componentWillUnmount() {
         clearTimeout(this.timetableLoad);
     }
 
-    loadTimetable(timeout){
+    loadTimetable(timeout, date){
         this.timetableLoad = setTimeout(() => {
-            fetchJson('/timetable/' + this.state.date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
+            fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
                 .then(data => {
-                    console.log(data)
                     if (data.content.render === true && data.content !== this.state.content) {
                         this.setState({
                             date: data.date,
@@ -42,6 +42,22 @@ export default class TimetableApp extends Component {
                 })
             this.loadTimetable(this.timeout)
         }, timeout)
+    }
+
+    changeDate(change, e){
+        let date = change
+        if (typeof(date) === 'object') {
+            date = new Date(e)
+            date = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+        }
+
+        if (date === 'prev')
+            date = 'prev-' + this.state.date
+        if (date === 'next')
+            date = 'next-' + this.state.date
+
+        clearTimeout(this.timetableLoad);
+        this.loadTimetable(1, date);
     }
 
     render () {
@@ -68,7 +84,7 @@ export default class TimetableApp extends Component {
                             </div>
                         </div>
                     </div>
-                : <TimetableRender {...this.state} {...this.otherProps} translations={this.translations} locale={this.locale} /> }
+                : <TimetableRender changeDate={this.changeDate} {...this.state} {...this.otherProps} translations={this.translations} locale={this.locale} /> }
             </div>
         )
     }

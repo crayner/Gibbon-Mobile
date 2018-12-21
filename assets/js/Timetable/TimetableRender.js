@@ -2,9 +2,7 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCommentAlt} from '@fortawesome/free-regular-svg-icons'
-import {translateMessage} from '../Component/MessageTranslator'
+import SchoolDayClosed from './SchoolDayClosed'
 
 export default function TimetableRender(props) {
     const {
@@ -12,9 +10,15 @@ export default function TimetableRender(props) {
         ...otherProps
     } = props
 
+    if (content.schoolOpen === false)
+    {
+        return (
+            <SchoolDayClosed content={content} {...otherProps}/>
+        )
+    }
+
     const error = typeof(content.error) === 'string' ? <div className={'row'}><div className={'col-12 alert-danger'}><p>{content.error}</p></div></div> : '' ;
 
-    console.log(content)
     return (
         <span>
             {error}

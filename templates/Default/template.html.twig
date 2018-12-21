@@ -14,7 +14,7 @@
         {% block titleBar %}
             <div id="titleBar">
                 <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}
-                    <div style="float: left;">{{ miscButton({title: 'Home', style: '', class: 'btn btn-transparent alert-success fas fa-home fa-fw fa-2x', windowOpen: {route: path('home')}})|raw }}
+                    <div style="float: left;">{{ miscButton({title: 'Home', style: 'margin-top: -0.6rem;', class: 'btn btn-transparent alert-success fas fa-home fa-fw fa-2x', windowOpen: {route: path('home')}})|raw }}
                     </div>
                     {% block menuContent %}
                         <div id="notificationTray" style="float: right;"></div>
@@ -63,7 +63,7 @@
                     document.head.appendChild(newLink)
                 {% endfor %}
             }
-            window.addEventListener('load', cssLinks);
+            window.addEventListener('load', cssLinks());
             {% if props is not defined %}{% set props = {timeOut: timeOut} %}{% endif %}
             {% set props = props|merge({timeOut: timeOut}) %}
             {% set props = props|merge({enableTimeout: app.user|default('empty')}) %}
@@ -76,6 +76,18 @@
         {{ encore_entry_script_tags('notificationTray') }}
         {% if manager is defined and hasTimetable(manager) %}
             <script type="application/javascript" language="JavaScript">
+                function cssTimetableLinks(){
+                    {% set link = encore_entry_css_files('timetable') %}
+                    {% for css in link %}
+                    var newLink = document.createElement("link");
+                    newLink.href = '{{ asset(css) }}'
+                    newLink.rel = 'stylesheet'
+                    newLink.type = 'text/css'
+                    newLink.media = 'screen'
+                    document.head.appendChild(newLink)
+                    {% endfor %}
+                }
+                window.addEventListener('load', cssTimetableLinks());
                 window.TIMETABLE_PROPS = {{ manager.properties|json_encode|raw }}
             </script>
             {{ encore_entry_script_tags('timetable') }}

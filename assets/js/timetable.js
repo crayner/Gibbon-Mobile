@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { render } from 'react-dom'
+import '../css/Timetable/timetable.scss'
 import TimetableApp from './Timetable/TimetableApp'
 
 const target = document.getElementById('tt')
