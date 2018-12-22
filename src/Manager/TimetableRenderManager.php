@@ -33,6 +33,7 @@ use App\Entity\DaysOfWeek;
 use App\Entity\Person;
 use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TTDay;
+use App\Entity\TTDayDate;
 use App\Provider\TimetableProvider;
 use App\Util\SchoolYearHelper;
 use App\Util\SecurityHelper;
@@ -187,9 +188,21 @@ class TimetableRenderManager
      */
     public function renderDay(array $result): array
     {
-        if ($result['schoolOpen'])
+        if (! $result['schoolOpen'])
             return $result;
         $result['day'] = $this->getTimetableProvider()->getRepository(TTDay::class)->findByDateTT($result['date'], $result['tt']);
+
+        foreach($result['day']->getTTColumn()->getTimetableColumnRows() as $row)
+        {
+            if ($row->getTimeStart()->format('His') < $result['timeStart']->format('His'))
+                $result['timeStart'] = clone $row->getTimeStart();
+            if ($row->getTimeEnd()->format('His') > $result['timeEnd']->format('His'))
+                $result['timeEnd'] = clone $row->getTimeEnd();
+        }
+
+
+
+
         $result['day'] = $this->getTimetableProvider()->findAsArray($result['day']);
         return $result;
     }
@@ -236,7 +249,7 @@ class TimetableRenderManager
      * @return array
      * @throws \Exception
      */
-    private function getDaysOFWeek(): array
+    private function getDaysOfWeek(): array
     {
         if (! empty($this->daysOfWeek))
             return $this->daysOfWeek;

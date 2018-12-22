@@ -34,6 +34,7 @@ use App\Manager\NotificationManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -68,8 +69,12 @@ class NotificationController extends AbstractController
      * @Route("/notification/details/", name="api_notification_details")
      * @IsGranted("ROLE_USER")
      */
-    public function details(NotificationManager $manager)
+    public function details(Request $request, NotificationManager $manager)
     {
+        dump($request->getContentType());
+        if ($request->getContentType() !== 'json')
+            return $this->redirectToRoute('home');
+
         $manager->setNotifications();
         return new JsonResponse(
             [

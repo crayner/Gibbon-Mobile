@@ -120,8 +120,27 @@ class SchoolYearHelper
      */
     public static function getWeekNumber(\DateTime $date): int
     {
-        $week = $date->format('W');
-        return $week - self::getCurrentSchoolYear()->getFirstDay()->format('W') + 1;
+        $results = EntityHelper::getRepository(SchoolYearTerm::class)->findBy(['schoolYear' => self::getCurrentSchoolYear()],['sequenceNumber' => 'ASC']);
+        $week = 0;
+        foreach($results as $term){
+            $firstDayStamp = clone $term->getFirstDay();
+            $lastDayStamp = clone $term->getLastDay();
+            while ($firstDayStamp->format('N') !== '1')  //   This will work regardless of i18n settings.
+                $firstDayStamp->sub(new \DateInterval('P1D'));
+
+            $lastDayStamp->add(new \DateInterval('PT23H59M59S'));
+
+            while ($firstDayStamp <= $date && $firstDayStamp < $lastDayStamp) {
+                $firstDayStamp->add(new \DateInterval('P1W'));
+                $week++;
+            }
+            if ($firstDayStamp < $lastDayStamp)
+                break;
+        }
+        return $week;
+
+//        $week = $date->format('W');
+//        return $week - self::getCurrentSchoolYear()->getFirstDay()->format('W') + 1;
     }
 
     /**

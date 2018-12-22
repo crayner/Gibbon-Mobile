@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import {translateMessage} from '../Component/MessageTranslator'
 import DateHeader from './DateHeader'
 import TimetableControls from './TimetableControls'
+import TimeDisplayColumn from './TimeDisplayColumn'
 
 export default function SchoolDayClosed(props) {
     const {
@@ -17,6 +18,7 @@ export default function SchoolDayClosed(props) {
 
     const name = Object.keys(content.specialDay).length === 0 ? translateMessage(translations, 'School Closed') : content.specialDay.name
     const description = Object.keys(content.specialDay).length === 0 ? '' : content.specialDay.description
+    console.log(content)
 
     return (
         <span>
@@ -31,10 +33,12 @@ export default function SchoolDayClosed(props) {
             <DateHeader
                 {...otherProps}
                 content={content.date}
+                weekNumber={content.week}
                 translations={translations}
             />
             <div className={'row'}>
-                <div className={'col-10 offset-1 card'}>
+                <TimeDisplayColumn {...otherProps} content={content} />
+                <div className={'col-8 card'}>
                     <div style={{height: content.timeDiff + 'px', margin: "0 -15px"}} className={'schoolDayClosed d-flex justify-content-center align-self-center"'}><span style={{position: 'relative', top: '45%'}} title={description}>{name}</span></div>
                 </div>
             </div>

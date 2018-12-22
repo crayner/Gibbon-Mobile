@@ -61,7 +61,6 @@ export default class TimetableApp extends Component {
     }
 
     render () {
-        console.log(this.state)
         return (
             <div>
                 <div className={'row border-bottom'}>

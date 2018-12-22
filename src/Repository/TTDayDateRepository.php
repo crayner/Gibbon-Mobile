@@ -30,6 +30,7 @@
 namespace App\Repository;
 
 use App\Entity\TTDayDate;
+use App\Manager\EntityInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

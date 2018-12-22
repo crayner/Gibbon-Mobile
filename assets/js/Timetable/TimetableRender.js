@@ -18,6 +18,7 @@ export default function TimetableRender(props) {
     }
 
     const error = typeof(content.error) === 'string' ? <div className={'row'}><div className={'col-12 alert-danger'}><p>{content.error}</p></div></div> : '' ;
+    console.log(content)
 
     return (
         <span>

@@ -135,6 +135,16 @@ class TTColumn implements EntityInterface
         if ($this->timetableColumnRows instanceof PersistentCollection)
             $this->timetableColumnRows->initialize();
 
+        $iterator = $this->timetableColumnRows->getIterator();
+        $iterator->uasort(
+            function ($a, $b) {
+                return ($a->getTimeStart()->format('His') < $b->getTimeStart()->format('His')) ? -1 : 1;
+            }
+        );
+
+        $this->timetableColumnRows = new ArrayCollection(iterator_to_array($iterator, false));
+
+
         return $this->timetableColumnRows;
     }
 
