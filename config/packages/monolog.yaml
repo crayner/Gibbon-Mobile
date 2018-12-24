@@ -37,7 +37,7 @@ monolog:
             max_files: 1
         gibbon:
             level:    debug
-            type:     fingers_crossed
+            type:     service
             channels: [gibbon]
             id:     'App\Logger\MonologDBHandler'
         setting:
