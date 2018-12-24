@@ -50,7 +50,7 @@ class TTDayRowClass implements EntityInterface
 
     /**
      * @var TTColumnRow|null
-     * @ORM\ManyToOne(targetEntity="TTColumnRow")
+     * @ORM\ManyToOne(targetEntity="TTColumnRow", inversedBy="TTDayRowClasses")
      * @ORM\JoinColumn(name="gibbonTTColumnRowID", referencedColumnName="gibbonTTColumnRowID", nullable=false)
      */
     private $TTColumnRow;
@@ -64,7 +64,7 @@ class TTDayRowClass implements EntityInterface
 
     /**
      * @var CourseClass|null
-     * @ORM\ManyToOne(targetEntity="CourseClass")
+     * @ORM\ManyToOne(targetEntity="CourseClass", inversedBy="TTDayRowClasses")
      * @ORM\JoinColumn(name="gibbonCourseClassID", referencedColumnName="gibbonCourseClassID", nullable=false)
      */
     private $courseClass;

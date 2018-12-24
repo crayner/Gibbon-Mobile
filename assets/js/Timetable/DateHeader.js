@@ -3,7 +3,6 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import {translateMessage} from '../Component/MessageTranslator'
-import TimetableRender from './TimetableRender'
 
 export default function DateHeader(props) {
     const {

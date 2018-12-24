@@ -30,7 +30,10 @@
 namespace App\Entity;
 
 use App\Manager\EntityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class TTColumnRow
@@ -89,6 +92,12 @@ class TTColumnRow implements EntityInterface
      * @var array
      */
     private static $typeList = ['Lesson','Pastoral','Sport','Break','Service','Other'];
+
+    /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="TTDayRowClass", mappedBy="TTColumnRow")
+     */
+    private $TTDayRowClasses;
 
     /**
      * @return int|null
@@ -222,5 +231,30 @@ class TTColumnRow implements EntityInterface
     public static function getTypeList(): array
     {
         return self::$typeList;
+    }
+
+    /**
+     * getTTDayRowClasses
+     * @return Collection|null
+     */
+    public function getTTDayRowClasses(): ?Collection
+    {
+        if (empty($this->TTDayRowClasses))
+            $this->TTDayRowClasses = new ArrayCollection();
+
+        if ($this->TTDayRowClasses instanceof PersistentCollection)
+            $this->TTDayRowClasses->initialize();
+
+        return $this->TTDayRowClasses;
+    }
+
+    /**
+     * @param Collection|null $TTDayRowClasses
+     * @return TTColumnRow
+     */
+    public function setTTDayRowClasses(?Collection $TTDayRowClasses): TTColumnRow
+    {
+        $this->TTDayRowClasses = $TTDayRowClasses;
+        return $this;
     }
 }

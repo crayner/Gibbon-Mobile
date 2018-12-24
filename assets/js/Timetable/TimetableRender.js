@@ -3,6 +3,7 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import SchoolDayClosed from './SchoolDayClosed'
+import SchoolDayOpen from './SchoolDayOpen'
 
 export default function TimetableRender(props) {
     const {
@@ -17,14 +18,8 @@ export default function TimetableRender(props) {
         )
     }
 
-    const error = typeof(content.error) === 'string' ? <div className={'row'}><div className={'col-12 alert-danger'}><p>{content.error}</p></div></div> : '' ;
-    console.log(content)
-
     return (
-        <span>
-            {error}
-
-        </span>
+        <SchoolDayOpen {...otherProps} content={content} />
     )
 }
 

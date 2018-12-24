@@ -1,7 +1,9 @@
 'use strict';
 
 import React from "react"
-import { FormGroup } from 'react-bootstrap'
+import "bootstrap/scss/bootstrap.scss";
+import "bootstrap/scss/bootstrap-grid.scss";
+import "bootstrap/dist/js/bootstrap.bundle";
 import FormLabel from './FormLabel'
 import FormRequired from './FormRequired'
 import FormErrors from './FormErrors'

@@ -99,6 +99,12 @@ class CourseClass implements EntityInterface
     private $courseClassPeople;
 
     /**
+     * @var Collection|null
+     * @ORM\OneToMany(targetEntity="TTDayRowClass", mappedBy="courseClass")
+     */
+    private $TTDayRowClasses;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -254,6 +260,31 @@ class CourseClass implements EntityInterface
     public function setCourseClassPeople(?Collection $courseClassPeople): CourseClass
     {
         $this->courseClassPeople = $courseClassPeople;
+        return $this;
+    }
+
+    /**
+     * getTTDayRowClasses
+     * @return Collection|null
+     */
+    public function getTTDayRowClasses(): ?Collection
+    {
+        if (empty($this->TTDayRowClasses))
+            $this->TTDayRowClasses = new ArrayCollection();
+
+        if ($this->TTDayRowClasses instanceof PersistentCollection)
+            $this->TTDayRowClasses-> initialize();
+
+        return $this->TTDayRowClasses;
+    }
+
+    /**
+     * @param Collection|null $TTDayRowClasses
+     * @return CourseClass
+     */
+    public function setTTDayRowClasses(?Collection $TTDayRowClasses): CourseClass
+    {
+        $this->TTDayRowClasses = $TTDayRowClasses;
         return $this;
     }
 }

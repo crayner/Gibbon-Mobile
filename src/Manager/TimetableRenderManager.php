@@ -32,8 +32,8 @@ namespace App\Manager;
 use App\Entity\DaysOfWeek;
 use App\Entity\Person;
 use App\Entity\SchoolYearSpecialDay;
+use App\Entity\TTColumnRow;
 use App\Entity\TTDay;
-use App\Entity\TTDayDate;
 use App\Provider\TimetableProvider;
 use App\Util\SchoolYearHelper;
 use App\Util\SecurityHelper;
@@ -72,76 +72,80 @@ class TimetableRenderManager
 
         if (! $proceed)
             $result['error'] = $this->getTranslator()->trans('You do not have permission to access this timetable at this time.');
+        else {
+            $result['person'] = $person;
+            $blank = true;
 
-        $blank = true;
+            //Find out which timetables I am involved in this year
+            $result['tt'] = $this->getTimetableProvider()->findByPersonSchoolYearActive(['person' => $person, 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
 
-        //Find out which timetables I am involved in this year
-        $result['tt'] = $this->getTimetableProvider()->findByPersonSchoolYearActive(['person' => $person, 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
+            //If I am not involved in any timetables display all within the year
+            if (empty($result))
+                $result['tt'] = $this->getTimetableProvider()->findBySchoolYearActive(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
 
-        //If I am not involved in any timetables display all within the year
-        if (empty($result))
-            $result['tt'] = $this->getTimetableProvider()->findBySchoolYearActive(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
-
-        if (! empty($timetableID)) {
-            if (SecurityHelper::isActionAccessible('/modules/Timetable/tt_master.php', 'View Master Timetable')) {
-                $result['tt'] = $this->getTimetableProvider()->find($timetableID);
-            } else {
-                $result['tt'] = $this->getTimetableProvider()->findByPersonSchoolYearTimetable(['timetable' => $timetableID, 'person' => $person, 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear()]);
-            }
-        }
-
-        if (is_array($result['tt']))
-            $result['tt'] = reset($result['tt']);
-        $days = $this->getDaysOfWeek();
-        $result['timeStart'] = '';
-        $result['timeEnd'] = '';
-        foreach ($days as $day) {
-            if ($day->isSchoolDay()) {
-                if ($result['timeStart'] == '' || $result['timeEnd'] == '') {
-                    $result['timeStart'] = $day->getSchoolStart();
-                    $result['timeEnd'] = $day->getSchoolEnd();
+            if (!empty($timetableID)) {
+                if (SecurityHelper::isActionAccessible('/modules/Timetable/tt_master.php', 'View Master Timetable')) {
+                    $result['tt'] = $this->getTimetableProvider()->find($timetableID);
                 } else {
-                    if ($day->getSchoolStart() < $result['timeStart'])
-                        $result['timeStart'] = $day->getSchoolStart();
-                    if ($day->getSchoolEnd() > $result['timeEnd'])
-                        $result['timeEnd'] = $day->getSchoolEnd();
+                    $result['tt'] = $this->getTimetableProvider()->findByPersonSchoolYearTimetable(['timetable' => $timetableID, 'person' => $person, 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear()]);
                 }
             }
-        }
 
-        //move to next schoolDay
-        while (! $days[$startDayStamp->format('D')]->isSchoolDay())
-            $startDayStamp->add(new \DateInterval('P1D'));
-        $result['date'] = clone $startDayStamp;
+            if (is_array($result['tt']))
+                $result['tt'] = reset($result['tt']);
+            $days = $this->getDaysOfWeek();
+            $result['timeStart'] = '';
+            $result['timeEnd'] = '';
+            foreach ($days as $day) {
+                if ($day->isSchoolDay()) {
+                    if ($result['timeStart'] == '' || $result['timeEnd'] == '') {
+                        $result['timeStart'] = $day->getSchoolStart();
+                        $result['timeEnd'] = $day->getSchoolEnd();
+                    } else {
+                        if ($day->getSchoolStart() < $result['timeStart'])
+                            $result['timeStart'] = $day->getSchoolStart();
+                        if ($day->getSchoolEnd() > $result['timeEnd'])
+                            $result['timeEnd'] = $day->getSchoolEnd();
+                    }
+                }
+            }
 
-        $result['week'] = SchoolYearHelper::getWeekNumber($result['date']);
-        $result['schoolOpen'] = true;
+            //move to next schoolDay
+            while (!$days[$startDayStamp->format('D')]->isSchoolDay())
+                $startDayStamp->add(new \DateInterval('P1D'));
+            $result['date'] = clone $startDayStamp;
 
-        $result['specialDay'] = $this->getTimetableProvider()->getRepository(SchoolYearSpecialDay::class)->findOneBy(['date' => $result['date']]);
-        if (SchoolYearHelper::isDayInTerm($startDayStamp)) {
-            if ($result['specialDay'] instanceof SchoolYearSpecialDay) {
-                if ($result['specialDay']->getType() === 'School Closure') {
-                    $result['schoolOpen'] = false;
-                    $result = $this->renderDay($result);
-                } elseif ($result['specialDay']->getType() === 'Timing Change') {
+            $result['week'] = SchoolYearHelper::getWeekNumber($result['date']);
+            $result['schoolOpen'] = true;
+
+            $result['specialDay'] = $this->getTimetableProvider()->getRepository(SchoolYearSpecialDay::class)->findOneBy(['date' => $result['date']]);
+            if (SchoolYearHelper::isDayInTerm($startDayStamp)) {
+                if ($result['specialDay'] instanceof SchoolYearSpecialDay) {
+                    if ($result['specialDay']->getType() === 'School Closure') {
+                        $result['schoolOpen'] = false;
+                        $result = $this->renderDay($result);
+                    } elseif ($result['specialDay']->getType() === 'Timing Change') {
+                        $result = $this->renderDay($result);
+                    }
+                } else {
                     $result = $this->renderDay($result);
                 }
             } else {
+                $result['schoolOpen'] = false;
                 $result = $this->renderDay($result);
             }
-        } else {
-            $result['schoolOpen'] = false;
-            $result = $this->renderDay($result);
+
+            $result['render'] = $proceed;
+
+            $diff = $result['timeEnd']->diff($result['timeStart']);
+            $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
+
+            $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
+            $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
+            $result['person'] = $this->getTimetableProvider()->findAsArray($result['person']);
+            $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         }
 
-        $result['render'] = true;
-
-        $diff = $result['timeEnd']->diff($result['timeStart']);
-        $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
-
-        $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
-        $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
-        $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         return $result;
     }
 
@@ -202,8 +206,15 @@ class TimetableRenderManager
 
 
 
-
+        $day = $result['day'];
         $result['day'] = $this->getTimetableProvider()->findAsArray($result['day']);
+        $result['day']['TTColumn'] = $this->getTimetableProvider()->findAsArray($day->getTTColumn());
+        foreach($day->getTTColumn()->getTimetableColumnRows() as $row)
+                        $result['day']['TTColumn']['timetableColumnRows'][$row->getId()] = $this->getTimetableProvider()->findAsArray($row);
+
+        foreach($this->getTimetableProvider()->getRepository(TTColumnRow::class)->findPersonPeriods($day, $result['person'], true) as $row)
+            $result['day']['TTColumn']['timetableColumnRows'][$row['id']] = $row;
+
         return $result;
     }
 

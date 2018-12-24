@@ -2,12 +2,12 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import {translateMessage} from '../Component/MessageTranslator'
 import DateHeader from './DateHeader'
 import TimetableControls from './TimetableControls'
 import TimeDisplayColumn from './TimeDisplayColumn'
+import DisplayPeriods from './DisplayPeriods'
 
-export default function SchoolDayClosed(props) {
+export default function SchoolDayOpen(props) {
     const {
         content,
         translations,
@@ -15,9 +15,6 @@ export default function SchoolDayClosed(props) {
     } = props
 
     const error = typeof(content.error) === 'string' ? <div className={'row'}><div className={'col-12 alert-danger'}><p>{content.error}</p></div></div> : '' ;
-
-    const name = Object.keys(content.specialDay).length === 0 ? translateMessage(translations, 'School Closed') : content.specialDay.name
-    const description = Object.keys(content.specialDay).length === 0 ? '' : content.specialDay.description
 
     return (
         <span>
@@ -32,22 +29,21 @@ export default function SchoolDayClosed(props) {
             <DateHeader
                 {...otherProps}
                 content={content.date}
+                day={content.day}
                 weekNumber={content.week}
                 translations={translations}
             />
             <div className={'row'}>
                 <TimeDisplayColumn {...otherProps} content={content} />
-                <div className={'col-8 card'}>
-                    <div style={{height: content.timeDiff + 'px', margin: "0 -15px"}} className={'schoolDayClosed d-flex justify-content-center align-self-center"'}><span style={{position: 'relative', top: '45%'}} title={description}>{name}</span></div>
-                </div>
+                <DisplayPeriods {...otherProps} content={content} translations={translations} />
             </div>
         </span>
     )
 }
 
-SchoolDayClosed.propTypes = {
+SchoolDayOpen.propTypes = {
     content: PropTypes.object.isRequired,
     translations: PropTypes.object.isRequired,
 }
 
-SchoolDayClosed.defaultProps = {}
+SchoolDayOpen.defaultProps = {}
