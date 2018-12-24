@@ -29,6 +29,7 @@
  */
 namespace App\Logger;
 
+use App\Entity\Log;
 use Doctrine\ORM\EntityManagerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -45,6 +46,16 @@ class MonologDBHandler extends AbstractProcessingHandler
     protected $em;
 
     /**
+     * @var bool
+     */
+    private $initialized = false;
+
+    /**
+     * @var string
+     */
+    private $channel = 'gibbon';
+
+    /**
      * MonologDBHandler constructor.
      * @param EntityManagerInterface $em
      */
@@ -54,22 +65,29 @@ class MonologDBHandler extends AbstractProcessingHandler
         $this->em = $em;
     }
 
-    /**
-     * Called when writing to our database
-     * @param array $record
-     */
     protected function write(array $record)
     {
-        var_dump($record);
- /*       $logEntry = new Log();
-        $logEntry->setMessage($record['message']);
-        $logEntry->setLevel($record['level']);
-        $logEntry->setLevelName($record['level_name']);
-        $logEntry->setExtra($record['extra']);
-        $logEntry->setContext($record['context']);
+        if (!$this->initialized) {
+            $this->initialize();
+        }
 
-        $this->em->persist($logEntry);
-        $this->em->flush();
- */
+        if ($this->channel != $record['channel']) {
+            return;
+        }
+var_dump($record);
+        $log = new Log();
+//        $log->setMessage($record['message']);
+  //      $log->setLevel($record['level_name']);
+
+    //    $this->em->persist($log);
+      //  $this->em->flush();
+    }
+
+    /**
+     * initialize
+     */
+    private function initialize()
+    {
+        $this->initialized = true;
     }
 }
