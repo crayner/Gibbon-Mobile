@@ -39,7 +39,7 @@ monolog:
             level:    debug
             type:     database
             channels: [gibbon]
-            max_files: 1
+            handler: 'App\Logger\MonologDBHandler'
         setting:
             level:    debug
             type:     rotating_file
