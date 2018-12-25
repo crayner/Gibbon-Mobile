@@ -12,8 +12,9 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 
-class TranslationManager implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
+class TranslationManager implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, LegacyTranslatorInterface
 {
       public static $languages = [
         'nl_NL' => 'Dutch - Nederland',

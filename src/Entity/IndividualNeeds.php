@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Manager\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\IndividualNeedsRepository")
  * @ORM\Table(name="IN", uniqueConstraints={@ORM\UniqueConstraint(name="gibbonPersonID", columns={"gibbonPersonID"})})
  */
-class IndividualNeeds
+class IndividualNeeds implements EntityInterface
 {
     /**
      * @var integer|null
@@ -84,7 +85,7 @@ class IndividualNeeds
      * @param int|null $id
      * @return In
      */
-    public function setId(?int $id): In
+    public function setId(?int $id): IndividualNeeds
     {
         $this->id = $id;
         return $this;
@@ -102,7 +103,7 @@ class IndividualNeeds
      * @param Person|null $person
      * @return In
      */
-    public function setPerson(?Person $person): In
+    public function setPerson(?Person $person): IndividualNeeds
     {
         $this->person = $person;
         return $this;
@@ -120,7 +121,7 @@ class IndividualNeeds
      * @param string|null $strategies
      * @return In
      */
-    public function setStrategies(?string $strategies): In
+    public function setStrategies(?string $strategies): IndividualNeeds
     {
         $this->strategies = $strategies;
         return $this;
@@ -138,7 +139,7 @@ class IndividualNeeds
      * @param string|null $targets
      * @return In
      */
-    public function setTargets(?string $targets): In
+    public function setTargets(?string $targets): IndividualNeeds
     {
         $this->targets = $targets;
         return $this;
@@ -156,7 +157,7 @@ class IndividualNeeds
      * @param string|null $notes
      * @return In
      */
-    public function setNotes(?string $notes): In
+    public function setNotes(?string $notes): IndividualNeeds
     {
         $this->notes = $notes;
         return $this;

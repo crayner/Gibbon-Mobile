@@ -2,7 +2,7 @@
 namespace App\Manager;
 
 use App\Manager\Objects\Message;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MessageManager
 {

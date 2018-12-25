@@ -71,7 +71,6 @@ class NotificationController extends AbstractController
      */
     public function details(Request $request, NotificationManager $manager)
     {
-        dump($request->getContentType());
         if ($request->getContentType() !== 'json')
             return $this->redirectToRoute('home');
 
