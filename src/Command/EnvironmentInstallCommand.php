@@ -36,6 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class EnvironmentInstallCommand
@@ -89,33 +90,23 @@ class EnvironmentInstallCommand extends Command
             $io->success(sprintf('The Gibbon config.php file was found at "%s"', $config));
 
             include $config;
-            // now build .env file
 
-            $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env';
+            // now build .env.local file
+
+            $file = $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
             if (!$fileSystem->exists($file)) {
-                $fileSystem->copy($kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env' . '.dist', $kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env', false);
-                $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . '.env');
+                $fileSystem->copy($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml' . '.dist', $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml', false);
             }
+            $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
 
-            $env = file($file);
+            $content = Yaml::parse(file_get_contents($file));
+            $content['parameters']['db_host'] = $databaseServer;
+            $content['parameters']['db_name'] = $databaseName;
+            $content['parameters']['db_user'] = $databaseUsername;
+            $content['parameters']['db_pass'] = $databasePassword;
 
-            foreach($env as $q=>$line) {
-                if (strpos($line, 'DATABASE_URL=') === false)
-                    continue;
-
-                if (strpos($databasePassword, '@') !== false)
-                {
-                    $io->error(sprintf('The Gibbon password for the database contains a "@". This is an illegal character. Please arrange for a new database password.'));
-                    return 1;
-                }
-                $env[$q] = 'DATABASE_URL=mysql://'.$databaseUsername.':'.$databasePassword.'@'.$databaseServer.':3306/'.$databaseName."\n";
-            }
-
-
-            $content = implode('', $env);
-
-            $fileSystem->dumpFile($file, $content);
-            $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
+            $fileSystem->dumpFile($file, Yaml::dump($content, 8));
+            $io->success('Database settings have been transferred from Gibbon to the Gibbon-Mobile framework.');
         }
 
         //Create .htaccess File in public

@@ -10,10 +10,10 @@ if (!array_key_exists('APP_ENV', $_SERVER)) {
 
 if ('prod' !== $_SERVER['APP_ENV']) {
     if (!class_exists(Dotenv::class)) {
-        throw new RuntimeException('The "APP_ENV" environment variable is not set to "prod". Please run "composer require symfony/dotenv" to load the ".env" files configuring the application.');
+        throw new RuntimeException('The "APP_ENV" environment variable is not set to "prod". Please run "composer require symfony/dotenv" to load the ".env.local" files configuring the application.');
     }
 
-    $path = dirname(__DIR__).'/.env';
+    $path = dirname(__DIR__) . '/.env.local';
     $dotenv = new Dotenv();
 
     if (method_exists($dotenv, 'loadEnv')) {

@@ -99,50 +99,53 @@ class SettingInstallCommand extends Command
             return 1;
         } else {
             $io->success(sprintf('The Gibbon config.php file was found at "%s"', $config));
-            // now build .env file for the mailer
-            if ($this->getSettingManager()->getSettingByScopeAsString('System', 'enableMailerSMTP', 'N') === 'Y') {
+            // now build .env.local file for the mailer
+            if ($this->getSettingManager()->getSettingByScopeAsBoolean('System', 'enableMailerSMTP', 'N')) {
 
-                $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . '.env');
+                $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
 
-                $env = file($file);
 
-                foreach ($env as $q => $line) {
-                    if (strpos($line, 'MAILER_URL=') === false)
-                        continue;
+                $content = Yaml::parse(file_get_contents($file));
 
-                    //MAILER_URL=smtp://localhost:25?encryption=ssl&auth_mode=login&username=&password=
-                    $host = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPHost', null);
-                    $port = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPort', null);
-                    $encryption = 'none';
-                    if ($port === '465')
-                        $encryption = 'ssl';
-                    if ($port === '587')
-                        $encryption = 'tls';
-                    $username = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPUsername', null);
-                    $password = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPassword', null);
-
-                    $env[$q] = 'MAILER_URL=smtp://'.$host.':'.$port.'?encryption='.$encryption.'&auth_mode=login&username='.$username.'&password='.$password."\n";
+                $content['parameters']['mailer_host'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPHost', null);
+                $content['parameters']['mailer_transport'] = 'smtp';
+                $content['parameters']['mailer_auth_mode'] = null;
+                if (strpos($content['parameters']['mailer_host'], 'gmail') !== false)
+                    $content['parameters']['mailer_transport'] = 'gmail';
+                if ($content['parameters']['mailer_transport'] === 'smtp') {
+                    $content['parameters']['mailer_port'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPort', null);
+                    $content['parameters']['mailer_encryption'] = 'none';
+                    if ($content['parameters']['mailer_port'] === '465')
+                        $content['parameters']['mailer_encryption'] = 'ssl';
+                    if ($content['parameters']['mailer_port'] === '587')
+                        $content['parameters']['mailer_encryption'] = 'tls';
                 }
+                $content['parameters']['mailer_user'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPUsername', null);
+                $content['parameters']['mailer_password'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPassword', null);
+                $content['parameters']['mailer_spool'] = ['type' => 'memory'];
 
-                $content = implode('', $env);
 
-                $fileSystem->dumpFile($file, $content);
-                $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
+                $fileSystem->dumpFile($file, Yaml::dump($content,8));
+                $io->success('Email settings have been copied from the Gibbon Setup');
             }else {
-                $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . '.env');
+                $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
 
-                $env = file($file);
 
-                foreach ($env as $q => $line) {
-                    if (strpos($line, 'MAILER_URL=') === false)
-                        continue;
-                    $env[$q] = "MAILER_URL=null://localhost\n";
-                }
+                $content = Yaml::parse(file_get_contents($file));
 
-                $content = implode('', $env);
+                $content['parameters']['mailer_host'] = null;
+                $content['parameters']['mailer_transport'] = null;
+                $content['parameters']['mailer_auth_mode'] = null;
+                $content['parameters']['mailer_transport'] = null;
+                $content['parameters']['mailer_port'] = null;
+                $content['parameters']['mailer_encryption'] = 'none';
+                $content['parameters']['mailer_user'] = null;
+                $content['parameters']['mailer_password'] = null;
+                $content['parameters']['mailer_spool'] = ['type' => 'memory'];
 
-                $fileSystem->dumpFile($file, $content);
-                $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
+
+                $fileSystem->dumpFile($file, Yaml::dump($content,8));
+                $io->success('Email settings have been set as default and turned off.');
             }
 
             $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
@@ -159,29 +162,10 @@ class SettingInstallCommand extends Command
             $gibbon['parameters']['mailer_sender_address'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationEmail', null);
             $gibbon['parameters']['mailer_sender_name'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationName', null);
 
-            if ($this->getSettingManager()->getSettingByScopeAsString('System', 'enableMailerSMTP', 'N') === 'Y') {
-                $gibbon['parameters']['mailer_transport'] = 'smtp';
-                $gibbon['parameters']['mailer_host'] = $host;
-                $gibbon['parameters']['mailer_port'] = $port;
-                $gibbon['parameters']['mailer_user'] = $username;
-                $gibbon['parameters']['mailer_password'] = $password;
-                $gibbon['parameters']['mailer_encryption'] = $encryption;
-                $gibbon['parameters']['mailer_auth_mode'] = 'login';
-            } else {
-
-                $gibbon['parameters']['mailer_transport'] = null;
-                $gibbon['parameters']['mailer_host'] = null;
-                $gibbon['parameters']['mailer_port'] = '25';
-                $gibbon['parameters']['mailer_user'] = null;
-                $gibbon['parameters']['mailer_password'] = 'null';
-                $gibbon['parameters']['mailer_encryption'] = 'none';
-                $gibbon['parameters']['mailer_auth_mode'] = 'plain';
-            }
-
             $content = Yaml::dump($gibbon, 8);
 
             $fileSystem->dumpFile($file, $content);
-            $io->success('Critical settings have been set into the Gibbon-Mobile framework.');
+            $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
         }
 
         $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'build' ;
@@ -189,6 +173,9 @@ class SettingInstallCommand extends Command
         $fileSystem->remove($file);
 
         $fileSystem->mirror($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'dist', $file);
+
+        $io->success('Assets have been copied from dist to build directory!');
+
 
         return 0;
     }
