@@ -36,7 +36,6 @@ parameters:
     # How often should the translations be copied from Gibbon in DAYS
     translation_refresh: 90
     # Mailer Settings .... @todo
-    translation_refresh: 90
     mailer_transport: ~
     mailer_host: ~
     mailer_user: ~
