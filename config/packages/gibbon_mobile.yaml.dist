@@ -31,8 +31,8 @@ parameters:
         ROLE_ADMIN: [ROLE_ALLOWED_TO_SWITCH]
         ROLE_REGISTRAR: [ROLE_PRINCIPAL, ROLE_ADMIN]
         ROLE_SYSTEM_ADMIN: [ROLE_REGISTRAR, ROLE_PARENT]
-    gibbon_document_root: ~
-    gibbon_host_url: ~
+    gibbon_document_root: ''
+    gibbon_host_url: ''
     # How often should the translations be copied from Gibbon in DAYS
     translation_refresh: 90
     # Mailer Settings .... @todo
