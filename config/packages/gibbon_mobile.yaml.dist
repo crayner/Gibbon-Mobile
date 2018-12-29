@@ -50,4 +50,3 @@ parameters:
     # Google Settings .... @todo
     google_client_id: ~
     google_secret: ~
-    gibbon_host_url: ~
