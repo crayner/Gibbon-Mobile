@@ -7,6 +7,11 @@ export function translateMessage(translations, messageId, parameters = {}) {
             message = message.replace(elem, parameters[elem] + '')
         }
         return message
+    } else {
+        for (let elem in parameters) {
+            console.log(elem,parameters)
+            messageId = messageId.replace(elem, parameters[elem] + '')
+        }
     }
 
     return messageId

@@ -10,10 +10,18 @@ export default function DateHeader(props) {
         day,
         weekNumber,
         translations,
+        showPersonalCalendar,
+        showSchoolCalendar,
         ...otherProps
     } = props
 
     const date = new Date(content.date)
+
+    let columns = 1
+    if (showPersonalCalendar)
+        columns = columns + 1
+    if (showSchoolCalendar)
+        columns = columns + 1
 
     let style = {}
     style.backgroundColor = 'rgba(0,0,0,.03)'
@@ -36,7 +44,7 @@ export default function DateHeader(props) {
                 {translateMessage(translations,'Week')}&nbsp;{weekNumber}
                 <i>{translateMessage(translations,'Time')}</i>
             </div>
-            <div className={'col-8 card card-header text-center font-weight-bold'} style={style} data-help="sfhkasdjghfijhfwnf iugdfiuwhdgf">
+            <div className={'col-8 card card-header text-center font-weight-bold'} style={style}>
                 {name}
                 <br />
                 {new Intl.DateTimeFormat(otherProps.locale.replace('_', '-'), {
@@ -45,6 +53,16 @@ export default function DateHeader(props) {
                     day: '2-digit',
                     timezone: content.date.timezone,
                 }).format(date)}
+                <div className={'row'}>
+                    <div className={'col-' + (12/columns)}>
+                    </div>
+                    {showPersonalCalendar === true ? <div className={'col-' + (12/columns)}>
+                        {translateMessage(translations, 'Personal Calendar')}
+                    </div> : ''}
+                    {showSchoolCalendar === true ? <div className={'col-' + (12/columns)}>
+                        {translateMessage(translations, 'School Calendar')}
+                    </div> : ''}
+                </div>
             </div>
         </div>
     )
@@ -55,6 +73,8 @@ DateHeader.propTypes = {
     day: PropTypes.object,
     translations: PropTypes.object.isRequired,
     weekNumber: PropTypes.number.isRequired,
+    showPersonalCalendar: PropTypes.bool.isRequired,
+    showSchoolCalendar: PropTypes.bool.isRequired,
 }
 
 DateHeader.defaultProps = {

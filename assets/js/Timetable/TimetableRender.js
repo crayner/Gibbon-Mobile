@@ -14,7 +14,7 @@ export default function TimetableRender(props) {
     if (content.schoolOpen === false)
     {
         return (
-            <SchoolDayClosed content={content} {...otherProps}/>
+            <SchoolDayClosed {...otherProps} content={content}/>
         )
     }
 

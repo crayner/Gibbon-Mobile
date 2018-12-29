@@ -17,15 +17,19 @@ export default class TimetableApp extends Component {
             date: 'today',
             content: {},
             tooltipOpen: {},
+            showPersonalCalendar: true,
+            showSchoolCalendar: true,
         }
 
         this.timeout = 120000
         this.changeDate = this.changeDate.bind(this)
         this.toggleTooltip = this.toggleTooltip.bind(this)
+        this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
+        this.toggleSchoolCalendar = this.toggleSchoolCalendar.bind(this)
     }
 
     componentDidMount () {
-        this.loadTimetable(100, this.state.date)
+        this.loadTimetable(10, this.state.date)
     }
 
     componentWillUnmount() {
@@ -72,6 +76,18 @@ export default class TimetableApp extends Component {
         this.loadTimetable(1, date);
     }
 
+    togglePersonalCalendar() {
+        this.setState({
+            showPersonalCalendar: ! this.state.showPersonalCalendar,
+        })
+    }
+
+    toggleSchoolCalendar() {
+        this.setState({
+            showSchoolCalendar: ! this.state.showSchoolCalendar,
+        })
+    }
+
     toggleTooltip(toggleId) {
         let tooltipOpen = this.state.tooltipOpen
         if (tooltipOpen.hasOwnProperty(toggleId))
@@ -108,7 +124,16 @@ export default class TimetableApp extends Component {
                             </div>
                         </div>
                     </div>
-                : <TimetableRender changeDate={this.changeDate} {...this.state} {...this.otherProps} translations={this.translations} locale={this.locale} toggleTooltip={this.toggleTooltip} /> }
+                : <TimetableRender
+                        {...this.state}
+                        {...this.otherProps}
+                        translations={this.translations}
+                        locale={this.locale}
+                        toggleTooltip={this.toggleTooltip}
+                        changeDate={this.changeDate}
+                        togglePersonalCalendar={this.togglePersonalCalendar}
+                        toggleSchoolCalendar={this.toggleSchoolCalendar}
+                    /> }
             </div>
         )
     }

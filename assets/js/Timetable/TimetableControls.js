@@ -4,7 +4,8 @@ import React from "react"
 import PropTypes from 'prop-types'
 import ButtonManager from '../Component/Button/ButtonManager'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar, faCalendarCheck, faCalendarPlus, faCalendarMinus } from '@fortawesome/free-regular-svg-icons'
+import { faCalendar, faCalendarCheck, faCalendarPlus, faCalendarMinus, faUser } from '@fortawesome/free-regular-svg-icons'
+import { faSchool } from '@fortawesome/free-solid-svg-icons'
 import DatePicker from 'react-date-picker'
 import {translateMessage} from '../Component/MessageTranslator'
 
@@ -14,6 +15,8 @@ export default function TimetableControls(props) {
         changeDate,
         translations,
         schoolYear,
+        togglePersonalCalendar,
+        toggleSchoolCalendar,
         ...otherProps
     } = props
 
@@ -56,9 +59,25 @@ export default function TimetableControls(props) {
         title: translateMessage(translations, 'Next Day'),
     }
 
+    const personal = {
+        icon: faUser,
+        type: 'misc',
+        colour: 'warning',
+        mergeClass: 'btn-sm',
+        title: translateMessage(translations, 'Personal Calendar'),
+    }
+
+    const school = {
+        icon: faSchool,
+        type: 'misc',
+        colour: 'success',
+        mergeClass: 'btn-sm',
+        title: translateMessage(translations, 'School Calendar'),
+    }
+
     return (
         <div className={'row'}>
-            <div className={'col-10 offset-1'}>
+            <div className={'col-8 offset-1'}>
                 <div className="input-group">
                     <div className="input-group-prepend">
                         <ButtonManager button={{...prev}} miscButtonHandler={() => changeDate('prev')} />
@@ -70,6 +89,12 @@ export default function TimetableControls(props) {
                     </div>
                 </div>
             </div>
+            <div className={'col-2'}>
+                <div>
+                    <ButtonManager button={{...personal}} miscButtonHandler={() => togglePersonalCalendar()} />
+                    <ButtonManager button={{...school}} miscButtonHandler={() => toggleSchoolCalendar()} />
+                </div>
+            </div>
         </div>
     )
 }
@@ -77,6 +102,8 @@ export default function TimetableControls(props) {
 TimetableControls.propTypes = {
     content: PropTypes.object.isRequired,
     changeDate: PropTypes.func.isRequired,
+    togglePersonalCalendar: PropTypes.func.isRequired,
+    toggleSchoolCalendar: PropTypes.func.isRequired,
     translations: PropTypes.object.isRequired,
     schoolYear: PropTypes.object.isRequired,
 }
