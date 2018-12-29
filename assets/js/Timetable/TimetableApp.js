@@ -66,6 +66,9 @@ export default class TimetableApp extends Component {
             date = 'next-' + this.state.date
 
         clearTimeout(this.timetableLoad);
+        this.setState({
+            content: {},
+        })
         this.loadTimetable(1, date);
     }
 
