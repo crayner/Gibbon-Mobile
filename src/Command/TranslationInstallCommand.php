@@ -78,15 +78,15 @@ class TranslationInstallCommand extends Command
      * @param Finder $finder
      * @param string $gibbonDocumentRoot
      */
-    public function __construct(string $gibbonDocumentRoot, SettingManager $manager)
+    public function __construct(SettingManager $manager)
     {
         parent::__construct();
 
         $this->finder = new Finder();
-        $this->gibbonDocumentRoot = $gibbonDocumentRoot;
+        $this->manager = $manager;
+        $this->gibbonDocumentRoot = $this->getSettingManager()->getSettingByScopeAsString('System', 'absolutePath') ?: '';
         $this->filesystem = new Filesystem();
         $this->finder->exclude(['LC_MESSAGES']);
-        $this->manager = $manager;
     }
 
     /**
