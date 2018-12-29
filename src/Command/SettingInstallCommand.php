@@ -114,7 +114,7 @@ class SettingInstallCommand extends Command
                     $content['parameters']['mailer_transport'] = 'gmail';
                 if ($content['parameters']['mailer_transport'] === 'smtp') {
                     $content['parameters']['mailer_port'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPort', null);
-                    $content['parameters']['mailer_encryption'] = 'none';
+                    $content['parameters']['mailer_encryption'] = null;
                     if ($content['parameters']['mailer_port'] === '465')
                         $content['parameters']['mailer_encryption'] = 'ssl';
                     if ($content['parameters']['mailer_port'] === '587')
@@ -138,7 +138,7 @@ class SettingInstallCommand extends Command
                 $content['parameters']['mailer_auth_mode'] = null;
                 $content['parameters']['mailer_transport'] = null;
                 $content['parameters']['mailer_port'] = null;
-                $content['parameters']['mailer_encryption'] = 'none';
+                $content['parameters']['mailer_encryption'] = null;
                 $content['parameters']['mailer_user'] = null;
                 $content['parameters']['mailer_password'] = null;
                 $content['parameters']['mailer_spool'] = ['type' => 'memory'];
