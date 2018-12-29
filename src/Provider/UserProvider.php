@@ -87,7 +87,7 @@ abstract class UserProvider implements UserProviderInterface
         if ($this->supportsClass(get_class($user)) && $this->getUser() && $this->getUser()->isEqualTo($user))
             return $this->getUser();
         if (! $this->supportsClass(get_class($user)))
-            throw new UnsupportedUserException(sprintf('The '));
+            throw new UnsupportedUserException(sprintf('The user provided was not valid.'));
         if ($user instanceof UserInterface)
             $this->loadUserByUsername($user->getUsername());
         if ($user->isEqualTo($this->getUser()))

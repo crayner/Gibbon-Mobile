@@ -224,16 +224,16 @@ abstract class User implements UserInterface, EncoderAwareInterface, EquatableIn
      */
     private function getMappedRole(Role $role): string
     {
-        switch ($role->getNameShort()) {
-            case 'Adm':
+        switch (strtoupper($role->getNameShort())) {
+            case 'ADM':
                 return 'ROLE_ADMIN';
-            case 'Tcr':
+            case 'TCR':
                 return 'ROLE_TEACHER';
-            case 'Std':
+            case 'STD':
                 return 'ROLE_STUDENT';
-            case 'Prt':
+            case 'PRT':
                 return 'ROLE_PARENT';
-            case 'SSt':
+            case 'SST':
                 return 'ROLE_STAFF';
             default:
                 return 'ROLE_USER';

@@ -80,7 +80,7 @@ class TimetableRenderManager
             $result['tt'] = $this->getTimetableProvider()->findByPersonSchoolYearActive(['person' => $person, 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
 
             //If I am not involved in any timetables display all within the year
-            if (empty($result))
+            if (empty($result['tt']))
                 $result['tt'] = $this->getTimetableProvider()->findBySchoolYearActive(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
 
             if (!empty($timetableID)) {
