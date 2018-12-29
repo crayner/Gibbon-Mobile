@@ -35,5 +35,5 @@ namespace App\Util;
  */
 class VersionHelper
 {
-    CONST VERSION = '0.0.00';
+    CONST VERSION = '0.0.02';
 }

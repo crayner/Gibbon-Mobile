@@ -37,6 +37,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class MobileVoter
@@ -81,7 +82,10 @@ class MobileVoter implements VoterInterface
             if (SecurityHelper::isActionAccessible($subject[0], $subject[1]))
                 return VoterInterface::ACCESS_GRANTED;
             else {
-                self::$logger->info(sprintf('The user "%s" attempted to access the action "%s" and was denied.', $token->getUser()->formatName(), $subject[0]), $subject);
+                if (empty($token->getUser()) || ! $token->getUser() instanceof UserInterface)
+                    self::$logger->info(sprintf('The user was not correctly authenticated to authorise for action "%s".', $subject[0]), $subject);
+                else
+                    self::$logger->info(sprintf('The user "%s" attempted to access the action "%s" and was denied.', $token->getUser()->formatName(), $subject[0]), $subject);
                 return VoterInterface::ACCESS_DENIED;
             }
         }
