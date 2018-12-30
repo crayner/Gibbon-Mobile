@@ -65,3 +65,7 @@ services:
     App\Security\Voter\MobileVoter:
         arguments:
             - "@monolog.logger.security"
+
+    App\Security\GoogleAuthenticator:
+        arguments:
+            $logger: '@monolog.logger.security'

@@ -139,10 +139,18 @@ class TimetableRenderManager
 
             $diff = $result['timeEnd']->diff($result['timeStart']);
             $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
+            $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth');
+            $schoolAvailable = empty($this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed')) ? false : true ;
+            $result['allowSchoolCalendar'] = $result['person']->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
+            $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
+            $result['allowSpaceBookingCalendar'] = $result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
 
             $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
             $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
             $result['person'] = $this->getTimetableProvider()->findAsArray($result['person']);
+            $googleManager = new GoogleAPIManager($person, $this->getSettingManager());
+            $result['schoolCalendar'] = $schoolAvailable ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false ;
+            $result['personalCalendar'] = false;
             $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         }
 
@@ -152,7 +160,7 @@ class TimetableRenderManager
     /**
      * @var TranslatorInterface
      */
-    private  $translator;
+    private $translator;
 
     /**
      * @var TimetableProvider
@@ -160,14 +168,21 @@ class TimetableRenderManager
     private $timetableProvider;
 
     /**
+     * @var SettingManager
+     */
+    private $settingManager;
+
+    /**
      * TimetableRenderManager constructor.
      * @param TranslatorInterface $translator
      * @param TimetableProvider $timetableProvider
+     * @param SettingManager $settingManager
      */
-    public function __construct(TranslatorInterface $translator, TimetableProvider $timetableProvider)
+    public function __construct(TranslatorInterface $translator, TimetableProvider $timetableProvider, SettingManager $settingManager)
     {
         $this->translator = $translator;
         $this->timetableProvider = $timetableProvider;
+        $this->settingManager = $settingManager;
     }
 
     /**
@@ -268,5 +283,13 @@ class TimetableRenderManager
         foreach($x as $day)
             $this->daysOfWeek[$day->getNameShort()] = $day;
         return $this->daysOfWeek;
+    }
+
+    /**
+     * @return SettingManager
+     */
+    public function getSettingManager(): SettingManager
+    {
+        return $this->settingManager;
     }
 }

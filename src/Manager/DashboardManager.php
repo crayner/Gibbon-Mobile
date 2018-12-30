@@ -82,16 +82,25 @@ abstract class DashboardManager implements DashboardInterface
     private $stack;
 
     /**
+     * @var SettingManager
+     */
+    private $settingManager;
+
+    /**
      * DashboardManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param MessageManager $messageManager
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param RouterInterface $router
      * @param ContainerInterface $container
+     * @param TranslatorInterface $translator
+     * @param RequestStack $stack
+     * @param SettingManager $settingManager
      */
     public function __construct(EntityManagerInterface $entityManager, MessageManager $messageManager,
                                 AuthorizationCheckerInterface $authorizationChecker,
-                                RouterInterface $router, ContainerInterface $container, TranslatorInterface $translator, RequestStack $stack)
+                                RouterInterface $router, ContainerInterface $container, TranslatorInterface $translator,
+                                RequestStack $stack, SettingManager $settingManager)
     {
         $this->entityManager = $entityManager;
         $this->messageManager = $messageManager;
@@ -100,6 +109,7 @@ abstract class DashboardManager implements DashboardInterface
         $this->timezone = $container->getParameter('timezone');
         $this->translator = $translator;
         $this->stack = $stack;
+        $this->settingManager = $settingManager;
     }
 
     /**
@@ -200,10 +210,17 @@ abstract class DashboardManager implements DashboardInterface
         $translations['Personal Calendar'] = $this->getTranslator()->trans('Personal Calendar');
         $translations['School Calendar'] = $this->getTranslator()->trans('School Calendar');
         $translations['All Day%1$s Events'] = $this->getTranslator()->trans('All Day%1$s Events', ['%1$s' => '']);
+        $translations['Bookings'] = $this->getTranslator()->trans('Bookings');
 
         $properties['translations'] = $translations;
         $properties['locale'] = $this->getRequest()->get('_locale');
         $properties['person'] = UserHelper::getCurrentUser()->getId();
+
+        $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth');
+        $schoolAvailable = empty($this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed')) ? false : true ;
+        $properties['allowSchoolCalendar'] = $this->getPerson()->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
+        $properties['allowPersonalCalendar'] = $this->getPerson()->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
+        $properties['allowSpaceBookingCalendar'] = $this->getPerson()->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
         return $properties;
     }
 
@@ -223,5 +240,13 @@ abstract class DashboardManager implements DashboardInterface
     public function getRequest(): Request
     {
         return $this->stack->getCurrentRequest();
+    }
+
+    /**
+     * @return SettingManager
+     */
+    public function getSettingManager(): SettingManager
+    {
+        return $this->settingManager;
     }
 }

@@ -12,6 +12,7 @@ export default function DateHeader(props) {
         translations,
         showPersonalCalendar,
         showSchoolCalendar,
+        showSpaceBookingCalendar,
         ...otherProps
     } = props
 
@@ -21,6 +22,8 @@ export default function DateHeader(props) {
     if (showPersonalCalendar)
         columns = columns + 1
     if (showSchoolCalendar)
+        columns = columns + 1
+    if (showSpaceBookingCalendar)
         columns = columns + 1
 
     let style = {}
@@ -62,6 +65,9 @@ export default function DateHeader(props) {
                     {showSchoolCalendar === true ? <div className={'col-' + (12/columns)}>
                         {translateMessage(translations, 'School Calendar')}
                     </div> : ''}
+                    {showSpaceBookingCalendar === true ? <div className={'col-' + (12/columns)}>
+                        {translateMessage(translations, 'Bookings')}
+                    </div> : ''}
                 </div>
             </div>
         </div>
@@ -75,6 +81,7 @@ DateHeader.propTypes = {
     weekNumber: PropTypes.number.isRequired,
     showPersonalCalendar: PropTypes.bool.isRequired,
     showSchoolCalendar: PropTypes.bool.isRequired,
+    showSpaceBookingCalendar: PropTypes.bool.isRequired,
 }
 
 DateHeader.defaultProps = {

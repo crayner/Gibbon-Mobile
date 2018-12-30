@@ -2105,10 +2105,15 @@ class Person extends User implements EntityInterface
     private $viewCalendarSchool;
 
     /**
-     * @return null|string
+     * getViewCalendarSchool
+     * @param bool $googleAvailable
+     * @param bool $schoolCalendarFeed
+     * @return string|null
      */
-    public function getViewCalendarSchool(): ?string
+    public function getViewCalendarSchool(bool $googleAvailable = false, bool $schoolCalendarFeed = false): ?string
     {
+        if (!$schoolCalendarFeed || !$googleAvailable)
+            return 'N';
         return $this->viewCalendarSchool;
     }
 
@@ -2129,10 +2134,14 @@ class Person extends User implements EntityInterface
     private $viewCalendarPersonal;
 
     /**
-     * @return null|string
+     * getViewCalendarPersonal
+     * @param bool $googleAvailable
+     * @return string|null
      */
-    public function getViewCalendarPersonal(): ?string
+    public function getViewCalendarPersonal(bool $googleAvailable = false): ?string
     {
+        if (empty($this->getCalendarFeedPersonal()) || !$googleAvailable)
+            return 'N';
         return $this->viewCalendarPersonal;
     }
 

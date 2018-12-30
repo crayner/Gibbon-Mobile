@@ -29,7 +29,9 @@
  */
 namespace App\Manager;
 
+use App\Entity\Person;
 use App\Provider\PlannerEntryProvider;
+use App\Util\UserHelper;
 
 /**
  * Class StaffDashboardManager
@@ -78,5 +80,19 @@ class StaffDashboardManager extends DashboardManager
     public function getProperties(): array
     {
         return $this->getTimetableProps();
+    }
+
+    /**
+     * @var Person
+     */
+    private $person;
+
+    /**
+     * getPerson
+     * @return Person
+     */
+    public function getPerson(): Person
+    {
+        return $this->person = $this->person ?: UserHelper::getCurrentUser();
     }
 }

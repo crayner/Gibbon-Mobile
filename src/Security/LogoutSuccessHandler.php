@@ -49,6 +49,9 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         if ($request->hasSession())
         {
             $session = $request->getSession();
+            $session->remove('googleAPIAccessToken');
+            $session->remove('knpu.oauth2_client_state');
+            $session->remove('last_activity_time');
             $flash = $session->getFlashBag()->all();
             try {
                 $session->invalidate();

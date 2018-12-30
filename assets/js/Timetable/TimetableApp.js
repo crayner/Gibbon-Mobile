@@ -9,6 +9,7 @@ import TimetableRender from './TimetableRender'
 export default class TimetableApp extends Component {
     constructor (props) {
         super(props)
+        console.log(props);
         this.translations = props.translations
         this.locale = props.locale
         this.person = props.person
@@ -17,8 +18,9 @@ export default class TimetableApp extends Component {
             date: 'today',
             content: {},
             tooltipOpen: {},
-            showPersonalCalendar: true,
-            showSchoolCalendar: true,
+            showPersonalCalendar:false,
+            showSchoolCalendar: false,
+            showSpaceBookingCalendar: false,
         }
 
         this.timeout = 120000
@@ -26,6 +28,7 @@ export default class TimetableApp extends Component {
         this.toggleTooltip = this.toggleTooltip.bind(this)
         this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
         this.toggleSchoolCalendar = this.toggleSchoolCalendar.bind(this)
+        this.toggleSpaceBookingCalendar = this.toggleSpaceBookingCalendar.bind(this)
     }
 
     componentDidMount () {
@@ -42,6 +45,7 @@ export default class TimetableApp extends Component {
                 .then(data => {
                     if (data.content.render === true && data.content !== this.state.content) {
                         date = this.getDateString(data.content.date.date)
+                        console.log(data)
                         this.setState({
                             date: date,
                             content: data.content,
@@ -85,6 +89,12 @@ export default class TimetableApp extends Component {
     toggleSchoolCalendar() {
         this.setState({
             showSchoolCalendar: ! this.state.showSchoolCalendar,
+        })
+    }
+
+    toggleSpaceBookingCalendar() {
+        this.setState({
+            showSpaceBookingCalendar: ! this.state.showSpaceBookingCalendar,
         })
     }
 
@@ -133,6 +143,7 @@ export default class TimetableApp extends Component {
                         changeDate={this.changeDate}
                         togglePersonalCalendar={this.togglePersonalCalendar}
                         toggleSchoolCalendar={this.toggleSchoolCalendar}
+                        toggleSpaceBookingCalendar={this.toggleSpaceBookingCalendar}
                     /> }
             </div>
         )

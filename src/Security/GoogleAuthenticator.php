@@ -1,16 +1,14 @@
 <?php
 namespace App\Security;
 
+use App\Entity\Person;
 use App\Manager\MessageManager;
 use App\Manager\SettingManager;
 use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
-use KnpU\OAuth2ClientBundle\Exception\MissingAuthorizationCodeException;
-use KnpU\OAuth2ClientBundle\Security\Exception\NoAuthCodeAuthenticationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -23,10 +21,6 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 class GoogleAuthenticator implements AuthenticatorInterface
 {
     use TargetPathTrait;
-	/**
-	 * @var ClientRegistry
-	 */
-	private $clientRegistry;
 
 	/**
 	 * @var EntityManagerInterface
@@ -58,21 +52,22 @@ class GoogleAuthenticator implements AuthenticatorInterface
 	 */
 	private $google_user;
 
-	/**
-	 * GoogleAuthenticator constructor.
-	 *
-	 * @param ClientRegistry         $clientRegistry
-	 * @param EntityManagerInterface $em
-	 * @param RouterInterface        $router
-	 */
-	public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger)
+    /**
+     * GoogleAuthenticator constructor.
+     * @param EntityManagerInterface $em
+     * @param RouterInterface $router
+     * @param MessageManager $messageManager
+     * @param SettingManager $settingManager
+     * @param LoggerInterface $logger
+     */
+	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger)
 	{
-		$this->clientRegistry = $clientRegistry;
 		$this->em = $em;
 		$this->router = $router;
 		$this->messageManager = $messageManager;
 		$this->settingManager = $settingManager;
-		$this->logger = $logger->withName('security');
+		$this->logger = $logger;
+		$this->getClient();
 	}
 
 	public function getCredentials(Request $request)
@@ -88,41 +83,54 @@ class GoogleAuthenticator implements AuthenticatorInterface
      * @return UserInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider): UserInterface
-	{
-		/** @var GoogleUser $googleUser */
-		$this->google_user = $this->getGoogleClient()
-			->fetchUserFromToken($credentials);
+    {
+        $user = $userProvider->getRepository(Person::class)->findOneBy(['googleAPIRefreshToken' => $this->google_user->getId()]);
+        // 1) have they logged in with Google before? Easy!
+        /*		$existingUser = $this->em->getRepository(Person::class)
+                    ->findOneBy(['googleId' => $googleUser->getId()]);
+                if ($existingUser) {
+                    return $existingUser;
+                }
+        */
+        if (empty($user)) {
+            // 2) do we have a matching user by email?
+            $user = $userProvider->loadUserByUsername($this->google_user->getEmail());
 
-		// 1) have they logged in with Google before? Easy!
-/*		$existingUser = $this->em->getRepository(Person::class)
-			->findOneBy(['googleId' => $googleUser->getId()]);
-		if ($existingUser) {
-			return $existingUser;
-		}
-*/
-		// 2) do we have a matching user by email?
-		$user = $userProvider->loadUserByUsername($this->google_user->getEmail());
+            $user->setGoogleAPIRefreshToken($this->google_user->getId());
+
+            $this->em->persist($user);
+            $this->em->flush();
+        }
 
 		// 3) Maybe you just want to "register" them by creating
 		// a UserProvider object
 //		$user->setGoogleId($googleUser->getId());
 //		$this->em->persist($user);
 //		$this->em->flush();
+        $this->logger->debug(sprintf('Google Authentication: The user "%s" authenticated using Google.', $this->google_user->getName()));
+
+        $this->getSettingManager()->getSession()->set('googleAPIAccessToken', $credentials);
 
 		return $user;
 	}
 
-	/**
-	 * @return
-	 */
-	private function getGoogleClient()
-	{
-		return $this->clientRegistry
-			// "google" is the key used in knpu_oauth2_client.yaml
-			->getClient('google');
-	}
+	private $token;
 
-	/**
+    /**
+     * getGoogleClient
+     * @return mixed
+     * @throws \Google_Exception
+     */
+    private function getGoogleClient()
+    {
+        $this->token = $this->getClient()->fetchAccessTokenWithAuthCode($this->getSettingManager()->getRequest()->query->get('code'));// to get code
+        $this->getClient()->setAccessToken($this->token); // to get access token by setting of $code
+        $service = new \Google_Service_Oauth2($this->getClient());
+        $this->google_user = $service->userinfo->get();   // to get user detail by using access token
+        return $this->google_user;
+    }
+
+    /**
 	 * @param Request                 $request
 	 * @param AuthenticationException $exception
 	 *
@@ -210,19 +218,14 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		return true;
 	}
 
-	/**
-	 * @param OAuth2Client $client
-	 *
-	 * @return \League\OAuth2\Client\Token\AccessToken
-	 * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
-	 */
-	protected function fetchAccessToken(OAuth2Client $client)
+    /**
+     * fetchAccessToken
+     * @return array
+     * @throws \Google_Exception
+     */
+	protected function fetchAccessToken()
 	{
-		try {
-			return $client->getAccessToken();
-		} catch (MissingAuthorizationCodeException $e) {
-			throw new NoAuthCodeAuthenticationException();
-		}
+	    return $this->getClient()->getAccessToken();
 	}
 
 	/**
@@ -240,5 +243,89 @@ class GoogleAuthenticator implements AuthenticatorInterface
     protected function getLoginUrl()
     {
         return $this->router->generate('login');
+    }
+
+    /**
+     * @return SettingManager
+     */
+    public function getSettingManager(): SettingManager
+    {
+        return $this->settingManager;
+    }
+
+    /**
+     * @var array
+     */
+    private $clientSecrets = [];
+
+    /**
+     * getClientSecrets
+     * @return array
+     */
+    public function getClientSecrets(): array
+    {
+        if (! empty($this->clientSecrets))
+            return $this->clientSecrets;
+        $clientSecrets = [];
+        $clientSecrets['web']['client_id'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientID');
+        $clientSecrets['web']['project_id'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleDeveloperKey');
+        $clientSecrets['web']['auth_uri'] = 'https://accounts.google.com/o/oauth2/auth';
+        $clientSecrets['web']['token_uri'] = 'https://www.googleapis.com/oauth2/v3/token';
+        $clientSecrets['web']['auth_provider_x509_cert_url'] = 'https://www.googleapis.com/oauth2/v1/certs';
+        $clientSecrets['web']['client_secret'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientSecret');
+        $clientSecrets['web']['redirect_uris'] = [$this->getSettingManager()->getSettingByScopeAsString('System', 'googleRedirectUri')];
+        return $this->clientSecrets = $clientSecrets;
+    }
+
+    /**
+     * getConfig
+     * @return array
+     * @throws \Exception
+     */
+    public function getConfig(): array {
+        return [
+            'application_name' => $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientName'),
+            'access_type' => 'offline',
+            'include_granted_scopes' => true,
+        ];
+    }
+
+    /**
+     * connect
+     * @return string
+     * @throws \Google_Exception
+     */
+    public function connectUrl(): string
+    {
+        return $this->getClient()->createAuthUrl();
+    }
+
+    /**
+     * @var \Google_Client|null
+     */
+    private $client;
+
+    /**
+     * getClient
+     * @return \Google_Client
+     * @throws \Google_Exception
+     */
+    public function getClient(): \Google_Client
+    {
+        if (! empty($this->client))
+            return $this->client;
+        $client = new \Google_Client($this->getConfig());
+        $client->setAuthConfig($this->getClientSecrets());
+        $client->addScope(['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.me', 'https://www.googleapis.com/auth/calendar']);
+        $client->setRedirectUri($this->getRouter()->generate('connect_google_check',[],UrlGeneratorInterface::ABSOLUTE_URL));
+        return $this->client = $client;
+    }
+
+    /**
+     * @return RouterInterface
+     */
+    public function getRouter(): RouterInterface
+    {
+        return $this->router;
     }
 }

@@ -14,6 +14,7 @@ export default function SchoolDayClosed(props) {
         translations,
         showPersonalCalendar,
         showSchoolCalendar,
+        showSpaceBookingCalendar,
         ...otherProps
     } = props
 
@@ -26,6 +27,8 @@ export default function SchoolDayClosed(props) {
     if (showPersonalCalendar)
         columns = columns + 1
     if (showSchoolCalendar)
+        columns = columns + 1
+    if (showSpaceBookingCalendar)
         columns = columns + 1
 
     return (
@@ -45,6 +48,7 @@ export default function SchoolDayClosed(props) {
                 translations={translations}
                 showPersonalCalendar={showPersonalCalendar}
                 showSchoolCalendar={showSchoolCalendar}
+                showSpaceBookingCalendar={showSpaceBookingCalendar}
             />
             <AllDayEvents {...otherProps} translations={translations}/>
             <div className={'row'}>
@@ -66,6 +70,7 @@ SchoolDayClosed.propTypes = {
     translations: PropTypes.object.isRequired,
     showPersonalCalendar: PropTypes.bool.isRequired,
     showSchoolCalendar: PropTypes.bool.isRequired,
+    showSpaceBookingCalendar: PropTypes.bool.isRequired,
 }
 
 SchoolDayClosed.defaultProps = {}
