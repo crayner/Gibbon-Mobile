@@ -330,7 +330,7 @@ class SettingManager implements ContainerAwareInterface
      * @return bool|null
      * @throws \Exception
      */
-    function getSettingByScopeAsBoolean(string $scope, string $name, ?bool $default = null)
+    function getSettingByScopeAsBoolean(string $scope, string $name, ?bool $default = false)
     {
         $result = $this->getSettingByScope($scope, $name);
         if (empty($result))

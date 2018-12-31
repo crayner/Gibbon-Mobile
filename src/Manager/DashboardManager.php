@@ -218,8 +218,8 @@ abstract class DashboardManager implements DashboardInterface
 
         $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth');
         $schoolAvailable = empty($this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed')) ? false : true ;
-        $properties['allowSchoolCalendar'] = $this->getPerson()->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
-        $properties['allowPersonalCalendar'] = $this->getPerson()->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
+        $properties['allowSchoolCalendar'] = $this->getPerson()->getViewCalendarSchool() === 'Y' ? (true && $googleAvailable && ! empty($schoolAvailable)) : false ;
+        $properties['allowPersonalCalendar'] = $this->getPerson()->getViewCalendarPersonal() === 'Y' ? (true && $googleAvailable && ! empty($this->getPerson()->getCalendarFeedPersonal())) : false ;
         $properties['allowSpaceBookingCalendar'] = $this->getPerson()->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
         return $properties;
     }

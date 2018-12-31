@@ -66,7 +66,7 @@ export default function TimetableControls(props) {
     const personal = {
         icon: faUser,
         type: 'misc',
-        colour: 'warning',
+        colour: 'primary',
         mergeClass: 'btn-sm',
         title: translateMessage(translations, 'Personal Calendar'),
     }
@@ -82,7 +82,7 @@ export default function TimetableControls(props) {
     const space = {
         icon: faCubes,
         type: 'misc',
-        colour: 'primary',
+        colour: 'warning',
         mergeClass: 'btn-sm',
         title: translateMessage(translations, 'Bookings'),
     }

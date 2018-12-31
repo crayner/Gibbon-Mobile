@@ -35,6 +35,7 @@ use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TTColumnRow;
 use App\Entity\TTDay;
 use App\Provider\TimetableProvider;
+use App\Security\GoogleAuthenticator;
 use App\Util\SchoolYearHelper;
 use App\Util\SecurityHelper;
 use App\Util\UserHelper;
@@ -48,6 +49,11 @@ class TimetableRenderManager
 {
     /**
      * render
+     * @param Person $person
+     * @param \DateTime $startDayStamp
+     * @param int|null $timetableID
+     * @return mixed
+     * @throws \Exception
      */
     public function render(Person $person, \DateTime $startDayStamp, ?int $timetableID = null)
     {
@@ -139,8 +145,8 @@ class TimetableRenderManager
 
             $diff = $result['timeEnd']->diff($result['timeStart']);
             $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
-            $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth');
-            $schoolAvailable = empty($this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed')) ? false : true ;
+            $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth', false);
+            $schoolAvailable = $this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed', false);
             $result['allowSchoolCalendar'] = $result['person']->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
             $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
             $result['allowSpaceBookingCalendar'] = $result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
@@ -148,8 +154,8 @@ class TimetableRenderManager
             $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
             $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
             $result['person'] = $this->getTimetableProvider()->findAsArray($result['person']);
-            $googleManager = new GoogleAPIManager($person, $this->getSettingManager());
-            $result['schoolCalendar'] = $schoolAvailable ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false ;
+            $googleManager = new GoogleAPIManager($person, $this->getGoogleAuthenticator());
+            $result['schoolCalendar'] = $result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false ;
             $result['personalCalendar'] = false;
             $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         }
@@ -173,16 +179,22 @@ class TimetableRenderManager
     private $settingManager;
 
     /**
+     * @var GoogleAuthenticator
+     */
+    private $googleAuthenticator;
+
+    /**
      * TimetableRenderManager constructor.
      * @param TranslatorInterface $translator
      * @param TimetableProvider $timetableProvider
-     * @param SettingManager $settingManager
+     * @param GoogleAuthenticator $googleAuthenticator
      */
-    public function __construct(TranslatorInterface $translator, TimetableProvider $timetableProvider, SettingManager $settingManager)
+    public function __construct(TranslatorInterface $translator, TimetableProvider $timetableProvider, GoogleAuthenticator $googleAuthenticator)
     {
         $this->translator = $translator;
         $this->timetableProvider = $timetableProvider;
-        $this->settingManager = $settingManager;
+        $this->settingManager = $googleAuthenticator->getSettingManager();
+        $this->googleAuthenticator = $googleAuthenticator;
     }
 
     /**
@@ -291,5 +303,13 @@ class TimetableRenderManager
     public function getSettingManager(): SettingManager
     {
         return $this->settingManager;
+    }
+
+    /**
+     * @return GoogleAuthenticator
+     */
+    public function getGoogleAuthenticator(): GoogleAuthenticator
+    {
+        return $this->googleAuthenticator;
     }
 }

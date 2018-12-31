@@ -18,6 +18,10 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * Class GoogleAuthenticator
+ * @package App\Security
+ */
 class GoogleAuthenticator implements AuthenticatorInterface
 {
     use TargetPathTrait;
@@ -68,8 +72,15 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$this->settingManager = $settingManager;
 		$this->logger = $logger;
 		$this->getClient();
+		$this->getClient()->setLogger($logger);
 	}
 
+    /**
+     * getCredentials
+     * @param Request $request
+     * @return array|mixed
+     * @throws \Google_Exception
+     */
 	public function getCredentials(Request $request)
 	{
 		$this->logger->debug("Google Authentication: Google authentication attempted.");
@@ -109,7 +120,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 //		$this->em->flush();
         $this->logger->debug(sprintf('Google Authentication: The user "%s" authenticated using Google.', $this->google_user->getName()));
 
-        $this->getSettingManager()->getSession()->set('googleAPIAccessToken', $credentials);
+        $this->setAccessToken($credentials);
 
 		return $user;
 	}
@@ -154,12 +165,6 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$user = $token->getUser();
 		$this->logger->notice("Google Authentication: UserProvider #" . $user->getId() . " (" . $user->getEmail() . ") The user authenticated via Google.");
 
-
-		$user->setGoogleAPIRefreshToken($this->google_user->getId());
-
-		$this->em->persist($user);
-		$this->em->flush();
-
 		if (null !== $user->getLocale())
 			$request->setLocale($user->getLocale());
 
@@ -175,7 +180,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
 	{
-		return new RedirectResponse($this->router->generate($this->settingManager->getParameter('security.routes.security_user_login')));
+		return new RedirectResponse($this->router->generate('login'));
 	}
 
 	/**
@@ -194,14 +199,19 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		);
 	}
 
-	/**
-	 * @param mixed         $credentials
-	 * @param UserInterface $user
-	 *
-	 * @return bool
-	 */
+    /**
+     * checkCredentials
+     * @param mixed $credentials
+     * @param UserInterface $user
+     * @return bool
+     * @throws \Google_Exception
+     */
 	public function checkCredentials($credentials, UserInterface $user)
 	{
+        $service = new \Google_Service_Oauth2($this->getClient());
+        $this->google_user = $service->userinfo->get();   // to get user detail by using access token
+        if ($this->google_user->getEmail() !== $user->getEmail())
+            return false;
 		return true;
 	}
 
@@ -261,6 +271,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
     /**
      * getClientSecrets
      * @return array
+     * @throws \Exception
      */
     public function getClientSecrets(): array
     {
@@ -287,6 +298,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
             'application_name' => $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientName'),
             'access_type' => 'offline',
             'include_granted_scopes' => true,
+            'developer_key' => $this->getSettingManager()->getSettingByScopeAsString('System', 'googleDeveloperKey'),
         ];
     }
 
@@ -327,5 +339,54 @@ class GoogleAuthenticator implements AuthenticatorInterface
     public function getRouter(): RouterInterface
     {
         return $this->router;
+    }
+
+    /**
+     * isAuthenticated
+     * @return bool
+     * @throws \Google_Exception
+     */
+    public function isAuthenticated(): bool
+    {
+        if ($this->getAccessToken())
+        {
+            $this->getClient()->setAccessToken(json_encode($this->getAccessToken()));
+            if ($this->getClient()->isAccessTokenExpired()) { //Need to refresh the token
+                //Re-establish $client
+                if (empty($this->getUser($this->getAccessToken())->getGoogleAPIAccessToken())) {
+                    $this->getSettingManager()->getMessageManager()->add('danger', 'Your request failed due to a database error.');
+                    return false;
+                } else {
+                    $this->getClient()->refreshToken($this->getUser($this->getAccessToken())->getGoogleAPIRefreshToken());
+                    $this->setAccessToken($this->getClient()->getAccessToken());
+                    return true;
+                }
+            } else {
+                $this->getClient()->fetchAccessTokenWithRefreshToken($this->getClient()->getAccessToken());
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * getAccessToken
+     * @return mixed
+     */
+    public function getAccessToken()
+    {
+        $googleAPIAccessToken = $this->getSettingManager()->getSession()->get('googleAPIAccessToken', false);
+        return $googleAPIAccessToken;
+    }
+
+    /**
+     * getAccessToken
+     * @return mixed
+     */
+    public function setAccessToken($googleAPIAccessToken)
+    {
+        $this->getSettingManager()->getSession()->set('googleAPIAccessToken', $googleAPIAccessToken);
+        return $this;
     }
 }
