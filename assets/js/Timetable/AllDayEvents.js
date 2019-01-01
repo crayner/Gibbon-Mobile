@@ -10,12 +10,13 @@ export default function AllDayEvents(props) {
         content,
         columns,
         hasAllDaySchoolEvents,
+        showSchoolCalendar,
+        showPersonalCalendar,
         hasAllDayPersonalEvents,
         ...otherProps
     } = props
 
-    console.log(content,columns,hasAllDaySchoolEvents,hasAllDayPersonalEvents)
-    if (hasAllDaySchoolEvents === false && hasAllDayPersonalEvents === false)
+    if (! (showSchoolCalendar && hasAllDaySchoolEvents) && ! (showPersonalCalendar && hasAllDayPersonalEvents))
         return (<div></div>)
 
     let columnContent = []
@@ -24,27 +25,27 @@ export default function AllDayEvents(props) {
         cc = ''
         switch (x) {
             case 2:
-                if (columns[x] === 'school' && hasAllDaySchoolEvents === true) {
-                    cc = (<div className={'col-' + (12/columns.number)} key={x}>{getAllDayEvents(content.schoolCalendar)}</div>)
+                if (columns[x] === 'school' && hasAllDaySchoolEvents) {
+                    cc = (<div className={'col-' + (12/columns.number)} key={'school' + x}>{getAllDayEvents(content.schoolCalendar, 'success')}</div>)
                 }
-                if (columns[x] === 'personal' && hasAllDayPersonalEvents === true) {
-                    cc = (<div className={'col-' + (12/columns.number)} key={x}>{getAllDayEvents(content.personalCalendar)}</div>)
+                if (columns[x] === 'personal' && hasAllDayPersonalEvents) {
+                    cc = (<div className={'col-' + (12/columns.number)} key={'personal' + x}>{getAllDayEvents(content.personalCalendar, 'primary')}</div>)
                 }
                 break;
             case 3:
-                if (columns[x] === 'school' && hasAllDaySchoolEvents === true) {
-                    cc = (<div className={'col-' + (12/columns.number)} key={x}>{getAllDayEvents(content.schoolCalendar)}</div>)
+                if (columns[x] === 'school' && hasAllDaySchoolEvents) {
+                    cc = (<div className={'col-' + (12/columns.number)} key={'school' + x}>{getAllDayEvents(content.schoolCalendar, 'success')}</div>)
                 }
-                if (columns[x] === 'personal' && hasAllDayPersonalEvents === true) {
-                    cc = (<div className={'col-' + (12/columns.number)} key={x}>{getAllDayEvents(content.personalCalendar)}</div>)
+                if (columns[x] === 'personal' && hasAllDayPersonalEvents) {
+                    cc = (<div className={'col-' + (12/columns.number)} key={'personal' + x}>{getAllDayEvents(content.personalCalendar, 'primary')}</div>)
                 }
                 break;
             case 4:
-                if (columns[x] === 'school' && hasAllDaySchoolEvents === true) {
-                    cc = (<div className={'col-' + (12/columns.number)} key={x}>{getAllDayEvents(content.schoolCalendar)}</div>)
+                if (columns[x] === 'school' && hasAllDaySchoolEvents) {
+                    cc = (<div className={'col-' + (12/columns.number)} key={'school' + x}>{getAllDayEvents(content.schoolCalendar, 'success')}</div>)
                 }
-                if (columns[x] === 'personal' && hasAllDayPersonalEvents === true) {
-                    cc = (<div className={'col-' + (12/columns.number)} key={x}>{getAllDayEvents(content.personalCalendar)}</div>)
+                if (columns[x] === 'personal' && hasAllDayPersonalEvents) {
+                    cc = (<div className={'col-' + (12/columns.number)} key={'personal' + x}>{getAllDayEvents(content.personalCalendar, 'primary')}</div>)
                 }
                 break;
         }
@@ -74,13 +75,15 @@ AllDayEvents.propTypes = {
     columns: PropTypes.object.isRequired,
     hasAllDayPersonalEvents: PropTypes.bool.isRequired,
     hasAllDaySchoolEvents: PropTypes.bool.isRequired,
+    showSchoolCalendar: PropTypes.bool.isRequired,
+    showPersonalCalendar: PropTypes.bool.isRequired,
 }
 
-function getAllDayEvents(events){
+function getAllDayEvents(events, colour){
     const allDayEvents = events.filter(event => {
         return event.eventType === 'All Day'
     })
     return allDayEvents.map((event, key) => {
-        return (<div className={'alert alert-success text-center'} key={key}>{event.summary}</div>)
+        return (<div className={'alert alert-' + colour + ' text-center'} key={key}>{event.summary}</div>)
     })
 }

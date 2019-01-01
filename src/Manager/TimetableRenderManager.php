@@ -147,6 +147,7 @@ class TimetableRenderManager
             $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
             $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth', false);
             $schoolAvailable = $this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed', false);
+            $personalAvailable = $person->getCalendarFeedPersonal() ?: false;
             $result['allowSchoolCalendar'] = $result['person']->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
             $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
             $result['allowSpaceBookingCalendar'] = $result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
@@ -156,7 +157,8 @@ class TimetableRenderManager
             $result['person'] = $this->getTimetableProvider()->findAsArray($result['person']);
             $googleManager = new GoogleAPIManager($person, $this->getGoogleAuthenticator());
             $result['schoolCalendar'] = $result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false ;
-            $result['personalCalendar'] = false;
+            $result['personalCalendar'] = $result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : false ;
+            $result = $this->checkTimes($result);
             $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         }
 
@@ -311,5 +313,73 @@ class TimetableRenderManager
     public function getGoogleAuthenticator(): GoogleAuthenticator
     {
         return $this->googleAuthenticator;
+    }
+
+    /**
+     * checkTimes
+     * @param $result
+     * @return mixed
+     * @throws \Exception
+     */
+    private function checkTimes($result)
+    {
+        $result['timeStart'] = new \DateTime($result['date']->format('Y-m-d ').$result['timeStart']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
+        $result['timeEnd'] = new \DateTime($result['date']->format('Y-m-d ').$result['timeEnd']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
+        $result{'timeOffset'} = 0;
+        $result{'timeAdditional'} = 0;
+
+        if ($result['schoolCalendar'])
+        {
+            foreach($result['schoolCalendar'] as $event)
+            {
+                if ($event['eventType'] === 'Specified Time')
+                {
+                    if (date('H:i', strtotime($event['start'])) < $result['timeStart']->format('H:i'))
+                    {
+                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['start'])), new \DateTimeZone($this->getTimeZone()));
+                        $result['timeOffset'] += abs(($result['timeStart']->getTimestamp() - $date->getTimestamp())/60);
+                        $result['timeStart'] = clone $date;
+                    }
+                    if (date('H:i', strtotime($event['end'])) > $result['timeEnd']->format('H:i'))
+                    {
+                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['end'])), new \DateTimeZone($this->getTimeZone()));
+                        $result['timeAdditional'] += abs(($date->getTimestamp() - $result['timeEnd']->getTimestamp())/60);
+                        $result['timeEnd'] = clone $date;
+                    }
+                }
+            }
+        }
+        if ($result['personalCalendar'])
+        {
+            foreach($result['personalCalendar'] as $event)
+            {
+                if ($event['eventType'] === 'Specified Time')
+                {
+                    if (date('H:i', strtotime($event['start'])) < $result['timeStart']->format('H:i'))
+                    {
+                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['start'])), new \DateTimeZone($this->getTimeZone()));
+                        $result['timeOffset'] += abs(($result['timeStart']->getTimestamp() - $date->getTimestamp())/60);
+                        $result['timeStart'] = clone $date;
+                    }
+                    if (date('H:i', strtotime($event['end'])) > $result['timeEnd']->format('H:i'))
+                    {
+                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['end'])), new \DateTimeZone($this->getTimeZone()));
+                        $result['timeAdditional'] += abs(($date->getTimestamp() - $result['timeEnd']->getTimestamp())/60);
+                        $result['timeEnd'] = clone $date;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * getTimeZone
+     * @return string
+     * @throws \Exception
+     */
+    private function getTimeZone(): string
+    {
+        return $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
     }
 }

@@ -78,5 +78,24 @@ class TimetableController extends AbstractController
         ],200);
     }
 
+    /**
+     * personalTimetable
+     * @param TimetableRenderManager $manager
+     * @param Person $person
+     * @param string $date
+     * @return JsonResponse
+     * @throws \Exception
+     * @Route("/timetable/{date}/{person}/personal/", name="api_timetable_personal_display")
+     * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
+     */
+    public function personalTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
+    {
+        $date = $manager->manageDateChange($date);
+        $googleManager = new GoogleAPIManager($person, $manager->getGoogleAuthenticator());
+        $personalAvailable = $person->getCalendarFeedPersonal() ?: false ;
+        return new JsonResponse([
+            'content' => $googleManager->getCalendarEvents($personalAvailable, new \DateTime($date)),
+        ],200);
+    }
 }
 

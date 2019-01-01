@@ -11,9 +11,6 @@ export default function DateHeader(props) {
         weekNumber,
         translations,
         columns,
-        showPersonalCalendar,
-        showSchoolCalendar,
-        showSpaceBookingCalendar,
         ...otherProps
     } = props
 
@@ -76,9 +73,6 @@ DateHeader.propTypes = {
     day: PropTypes.object,
     translations: PropTypes.object.isRequired,
     weekNumber: PropTypes.number.isRequired,
-    showPersonalCalendar: PropTypes.bool.isRequired,
-    showSchoolCalendar: PropTypes.bool.isRequired,
-    showSpaceBookingCalendar: PropTypes.bool.isRequired,
 }
 
 DateHeader.defaultProps = {

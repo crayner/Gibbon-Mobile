@@ -6,6 +6,7 @@ import "bootstrap/scss/bootstrap.scss";
 import "bootstrap/scss/bootstrap-grid.scss";
 import {translateMessage} from '../Component/MessageTranslator'
 import { Tooltip } from 'reactstrap';
+import { getTimeString } from '../Component/getTimeString'
 
 export default function DisplayPeriod(props) {
     const {
@@ -34,7 +35,7 @@ export default function DisplayPeriod(props) {
 
     let startTime = new Date(period.timeStart.date)
     let endTime = new Date(period.timeEnd.date)
-    const time = getDateTime(startTime) + ' - ' + getDateTime(endTime)
+    const time = getTimeString(startTime) + ' - ' + getTimeString(endTime)
     if (size + 15 >= minutes)
         title.push((<p className={'font-italic text-center'} key={'time_' + period.id}>{time}</p>))
     else
@@ -101,11 +102,6 @@ DisplayPeriod.propTypes = {
 }
 
 DisplayPeriod.defaultProps = {}
-
-function getDateTime(date)
-{
-    return ('0' + (date.getHours())).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)
-}
 
 function getNameShort(details)
 {

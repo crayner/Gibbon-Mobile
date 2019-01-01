@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import {fetchJson} from '../Component/fetchJson'
 import {translateMessage} from '../Component/MessageTranslator'
 import TimetableRender from './TimetableRender'
+import {getDateString} from '../Component/getDateString'
 
 export default class TimetableApp extends Component {
     constructor (props) {
@@ -18,10 +19,11 @@ export default class TimetableApp extends Component {
             date: 'today',
             content: {},
             tooltipOpen: {},
-            showPersonalCalendar:false,
+            showPersonalCalendar: false,
             showSchoolCalendar: false,
             showSpaceBookingCalendar: false,
             schoolCalendar: {},
+            personalCalendar: {},
             hasAllDaySchoolEvents: false,
             hasAllDayPersonalEvents: false,
             columns: {
@@ -32,7 +34,6 @@ export default class TimetableApp extends Component {
             },
         }
 
-        this.timeout = 120000
         this.changeDate = this.changeDate.bind(this)
         this.toggleTooltip = this.toggleTooltip.bind(this)
         this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
@@ -43,75 +44,43 @@ export default class TimetableApp extends Component {
     }
 
     componentDidMount () {
-        this.loadTimetable(10, this.state.date)
-        this.loadSchoolTimetable(100, this.state.date, this.state.showSchoolCalendar)
+        this.loadTimetable(this.state.date)
     }
 
     componentWillUnmount() {
-        clearTimeout(this.timetableLoad);
-        clearTimeout(this.timetableSchoolLoad);
     }
 
-    loadTimetable(timeout, date){
-        this.timetableLoad = setTimeout(() => {
-            fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
-                .then(data => {
-                    if (data.content.render === true && data.content !== this.state.content) {
-                        date = this.getDateString(data.content.date.date)
-                        this.setState({
-                            date: date,
-                            content: data.content,
-                        })
-                    }
-                    this.loadTimetable(this.timeout, date)
-                })
-        }, timeout)
-    }
-
-    loadSchoolTimetable(timeout, date, display){
-        if (display) {
-            this.timetableSchoolLoad = setTimeout(() => {
-                fetchJson('/timetable/' + date + '/school/', {method: 'GET'}, this.locale)
-                    .then(data => {
-                        if (data.content !== this.state.schoolCalendar) {
-                            const hasAllDayEvents = this.hasAllDayEvents(data.content)
-                            this.setState({
-                                hasAllDaySchoolEvents: hasAllDayEvents,
-                                schoolCalendar: data.content,
-                            })
-                        }
-                        this.loadSchoolTimetable(this.timeout, date)
-                    })
-            }, timeout)
-        } else {
-            this.timetableSchoolLoad = null
-        }
-    }
-
-    getDateString(date)
-    {
-        if (typeof(date) === 'string')
-            date = new Date(date)
-        return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+    loadTimetable(date){
+        this.setState({
+            content: {},
+        })
+        let state = {}
+        fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
+            .then(data => {
+                if (data.content.render === true && data.content !== this.state.content) {
+                    date = getDateString(data.content.date.date)
+                    state.date = date
+                    state.content = data.content,
+                    state.schoolCalendar = data.content.schoolCalendar
+                    state.personalCalendar = data.content.personalCalendar
+                    state.hasAllDaySchoolEvents = this.hasAllDayEvents(data.content.schoolCalendar)
+                    state.hasAllDayPersonalEvents = this.hasAllDayEvents(data.content.personalCalendar)
+                    this.setState({...state})
+                }
+            })
     }
 
     changeDate(change, e){
         let date = change
         if (typeof(date) === 'object')
-            date = this.getDateString(e)
+            date = getDateString(e)
 
         if (date === 'prev')
             date = 'prev-' + this.state.date
         if (date === 'next')
             date = 'next-' + this.state.date
 
-        clearTimeout(this.timetableLoad);
-        clearTimeout(this.timetableSchoolLoad);
-        this.setState({
-            content: {},
-        })
-        this.loadTimetable(10, date);
-        this.loadSchoolTimetable(101, date, this.state.showSchoolCalendar);
+        this.loadTimetable(date);
     }
 
     togglePersonalCalendar() {
@@ -119,25 +88,20 @@ export default class TimetableApp extends Component {
         state.showPersonalCalendar = ! state.showPersonalCalendar
         const columns = this.allocateColumns(state)
         this.setState({
-            showPersonalCalendar: ! this.state.showPersonalCalendar,
+            showPersonalCalendar: state.showPersonalCalendar,
             columns: columns,
+            hasAllDayPersonalEvents: this.state.hasAllDayPersonalEvents && state.showPersonalCalendar,
         })
     }
 
     toggleSchoolCalendar() {
-        clearTimeout(this.timetableSchoolLoad);
         let state = {...this.state}
         state.showSchoolCalendar = ! state.showSchoolCalendar
         const columns = this.allocateColumns(state)
-        this.loadSchoolTimetable(1, this.state.date, ! this.state.showSchoolCalendar)
-        let hasAllDaySchoolEvents = this.state.hasAllDaySchoolEvents
-        if (state.showSchoolCalendar === false) {
-            hasAllDaySchoolEvents = false
-        }
         this.setState({
-            showSchoolCalendar: ! this.state.showSchoolCalendar,
+            showSchoolCalendar: state.showSchoolCalendar,
             columns: columns,
-            hasAllDaySchoolEvents: hasAllDaySchoolEvents,
+            hasAllDaySchoolEvents: this.state.hasAllDaySchoolEvents && state.showSchoolCalendar,
         })
     }
 
@@ -199,7 +163,6 @@ export default class TimetableApp extends Component {
         }
         return columns
     }
-
 
     render () {
         return (

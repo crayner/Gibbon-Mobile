@@ -46,15 +46,32 @@ export default function SchoolDayClosed(props) {
                 showSchoolCalendar={showSchoolCalendar}
                 showSpaceBookingCalendar={showSpaceBookingCalendar}
             />
-            <AllDayEvents {...otherProps} content={content} translations={translations} columns={columns}/>
+            <AllDayEvents
+                {...otherProps}
+                content={content}
+                translations={translations}
+                columns={columns}
+                showPersonalCalendar={showPersonalCalendar}
+                showSchoolCalendar={showSchoolCalendar}
+            />
             <div className={'row'}>
                 <TimeDisplayColumn {...otherProps} content={content} />
                 <div className={'col-8 card'}>
                     <div className={'row'}>
                         <div className={'col-' + (12/columns.number)}>
+                            <div style={{height: content.timeOffset + 'px', margin: "0 -15px"}}></div>
                             <div style={{height: content.timeDiff + 'px', margin: "0 -15px"}} className={'schoolDayClosed d-flex justify-content-center align-self-center"'}><span style={{position: 'relative', top: '45%'}} title={description}>{name}</span></div>
+                            <div style={{height: content.timeAdditional + 'px', margin: "0 -15px"}}></div>
                         </div>
-                        <OtherCalendarContent {...otherProps} content={content} translations={translations}/>
+                        <OtherCalendarContent
+                            {...otherProps}
+                            content={content}
+                            columns={columns}
+                            translations={translations}
+                            showPersonalCalendar={showPersonalCalendar}
+                            showSchoolCalendar={showSchoolCalendar}
+                            showSpaceBookingCalendar={showSpaceBookingCalendar}
+                        />
                     </div>
                 </div>
             </div>
