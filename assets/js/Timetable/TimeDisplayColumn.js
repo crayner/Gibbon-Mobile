@@ -6,11 +6,21 @@ import PropTypes from 'prop-types'
 export default function TimeDisplayColumn(props) {
     const {
         content,
+        columns,
     } = props
 
+
+    let timeAdditional = content.timeAdditional
+    let timeStart = new Date(content.timeStart.date)
+
+    if (columns.number === 1) {
+        timeStart = timeStart.getTime() + content.timeOffset * 60000
+        timeAdditional = 0
+    }
+
     let times = []
-    for(let time = 0; time <= content.timeDiff + content.timeOffset + content.timeAdditional; time += 60) {
-        let theTime = new Date(new Date(content.timeStart.date).getTime() - content.timeOffset * 60000)
+    for(let time = 0; time <= content.timeDiff + timeAdditional; time += 60) {
+        let theTime = new Date(timeStart)
         theTime = new Date(theTime.getTime() + (time * 60000))
         times.push  (
             <div className='col-12 card text-center' style={{height: '60px'}} key={time}>
@@ -30,6 +40,5 @@ export default function TimeDisplayColumn(props) {
 
 TimeDisplayColumn.propTypes = {
     content: PropTypes.object.isRequired,
+    columns: PropTypes.object.isRequired,
 }
-
-TimeDisplayColumn.defaultProps = {}

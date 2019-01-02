@@ -84,6 +84,6 @@ function getAllDayEvents(events, colour){
         return event.eventType === 'All Day'
     })
     return allDayEvents.map((event, key) => {
-        return (<div className={'alert alert-' + colour + ' text-center'} key={key}>{event.summary}</div>)
+        return (<div className={'alert alert-' + colour + ' text-center allDayEvent'} key={key}>{event.summary}</div>)
     })
 }

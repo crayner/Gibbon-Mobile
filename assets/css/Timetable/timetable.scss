@@ -24,3 +24,19 @@
 .period-now {
     background-color: rgba(147, 237, 169, 0.3);
 }
+.displayCalendar {
+    max-height: 575px;
+    overflow-y: overlay;
+    overflow-x: hidden
+}
+.allDayEvent {
+    margin: 0 -15px;
+    overflow: hidden;
+    line-height: 15px;
+    font-size: 11px;
+}
+.externalCalendarEvent {
+    overflow: hidden;
+    line-height: 15px;
+    font-size: 11px;
+}

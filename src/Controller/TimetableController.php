@@ -48,7 +48,7 @@ class TimetableController extends AbstractController
      * myTimetable
      * @param string $date
      * @return JsonResponse
-     * @Route("/timetable/{date}/{person}/display/", name="api_timetable_display")
+     * @Route("/timetable/{date}/{person}/display/", name="timetable_display")
      * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
@@ -65,7 +65,7 @@ class TimetableController extends AbstractController
      * @param string $date
      * @return JsonResponse
      * @throws \Exception
-     * @Route("/timetable/{date}/school/", name="api_timetable_school_display")
+     * @Route("/timetable/{date}/school/", name="timetable_school_display")
      * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
      */
     public function schoolTimetable(TimetableRenderManager $manager, string $date = 'today')
@@ -85,7 +85,7 @@ class TimetableController extends AbstractController
      * @param string $date
      * @return JsonResponse
      * @throws \Exception
-     * @Route("/timetable/{date}/{person}/personal/", name="api_timetable_personal_display")
+     * @Route("/timetable/{date}/{person}/personal/", name="timetable_personal_display")
      * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
      */
     public function personalTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')

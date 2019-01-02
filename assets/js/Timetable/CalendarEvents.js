@@ -43,9 +43,10 @@ function getSpecifiedTimeEvents(events, colour, start){
         const diff = Math.abs(new Date(event.start) - new Date(event.end)) / 60000
         const offset = Math.abs(new Date(start) - new Date(event.start)) / 60000
 
-        return (<div className={'alert alert-' + colour + ' text-center'} style={{height: diff + 'px', margin: '0 -15px', position: 'relative', top: offset + 'px'}} key={key}>
+        return (<div className={'alert alert-' + colour + ' text-center externalCalendarEvent'} style={{height: diff + 'px', margin: '0 -15px', position: 'relative', top: offset + 'px'}} key={key}>
             {event.summary}<br />
-            {getTimeString(event.start)} - {getTimeString(event.end)}
+            {getTimeString(event.start)} - {getTimeString(event.end)}<br/>
+            {event.location}
         </div>)
     })
 }

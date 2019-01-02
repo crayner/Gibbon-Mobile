@@ -41,7 +41,6 @@ export default function OtherCalendarContent(props) {
         }
     }
 
-    console.log(content,columns)
     const number = 12 - 12/columns.number
     return (
         <div className={'col-' + number}>
