@@ -5,18 +5,11 @@
 }
 .period {
     border: 1px solid black;
-    margin-top: -1px;
-    margin-left: -1px;
+    margin: -1px -15px 0 -15px;
     overflow: hidden;
     line-height: 15px;
     font-size: 11px;
-}
-.period p, .timetable-tooltip p {
-    line-height: 15px;
-    height: 15px;
-    font-size: 11px;
-    margin: 0;
-    padding: 0;
+
 }
 .period-class {
     background-color: rgba(150, 190, 234, 0.3);
@@ -39,4 +32,15 @@
     overflow: hidden;
     line-height: 15px;
     font-size: 11px;
+    margin: 0 -15px;
+    position: absolute;
+    width: 100%;
+    border: 1px solid black;
+}
+.period p, .timetable-tooltip p, .externalCalendarEvent p {
+    line-height: 15px;
+    height: 15px;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
 }

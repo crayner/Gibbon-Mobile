@@ -20,11 +20,10 @@ export default function DisplayPeriods(props) {
         return (<DisplayPeriod {...otherProps} period={period} key={key} today={today} />)
     })
 
-
     return (
-        <div className={'col-8 card'}>
+        <span>
             {periods}
-        </div>
+        </span>
     )
 }
 

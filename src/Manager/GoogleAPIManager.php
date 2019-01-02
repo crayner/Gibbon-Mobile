@@ -87,6 +87,7 @@ class GoogleAPIManager
             } else {
                 $count = 0;
                 foreach ($calendarListEntry->getItems() as $entry) {
+                    $eventsSchool[$count]['id'] = $entry->getId();
                     $multiDay = false;
                     if (substr($entry->start->dateTime, 0, 10) != substr($entry->end->dateTime, 0, 10)) {
                         $multiDay = true;

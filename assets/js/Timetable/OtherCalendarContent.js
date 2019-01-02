@@ -12,7 +12,6 @@ export default function OtherCalendarContent(props) {
     const {
         content,
         columns,
-        translations,
         showPersonalCalendar,
         showSchoolCalendar,
         showSpaceBookingCalendar,
@@ -28,13 +27,13 @@ export default function OtherCalendarContent(props) {
     for(let x = 2; x <= columns.number; x++) {
         cc = ''
         if (columns[x] === 'school') {
-            cc = (<CalendarEvents content={content.schoolCalendar} colour={'success'} key={'school'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
+            cc = (<CalendarEvents {...otherProps} content={content.schoolCalendar} colour={'success'} key={'school'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
         }
         if (columns[x] === 'personal') {
-            cc = (<CalendarEvents content={content.personalCalendar} colour={'primary'} key={'personal'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
+            cc = (<CalendarEvents {...otherProps} content={content.personalCalendar} colour={'primary'} key={'personal'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
         }
         if (columns[x] === 'space') {
-            cc = (<CalendarEvents content={content.bookingCalendar} colour={'warning'} key={'space'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
+            cc = (<CalendarEvents {...otherProps} content={content.bookingCalendar} colour={'warning'} key={'space'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
         }
         if (cc !== '') {
             columnContent.push(cc)
@@ -54,7 +53,6 @@ export default function OtherCalendarContent(props) {
 OtherCalendarContent.propTypes = {
     columns: PropTypes.object.isRequired,
     content: PropTypes.object.isRequired,
-    translations: PropTypes.object.isRequired,
     showPersonalCalendar: PropTypes.bool.isRequired,
     showSchoolCalendar: PropTypes.bool.isRequired,
     showSpaceBookingCalendar: PropTypes.bool.isRequired,

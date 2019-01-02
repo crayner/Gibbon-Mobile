@@ -35,7 +35,7 @@ export default function SchoolDayClosed(props) {
     }
 
     return (
-        <span>
+        <div id={'timetable'}>
             {error}
             <TimetableControls
                 {...otherProps}
@@ -85,7 +85,7 @@ export default function SchoolDayClosed(props) {
                     </div>
                 </div>
             </div>
-        </span>
+        </div>
     )
 }
 

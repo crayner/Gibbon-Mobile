@@ -101,7 +101,7 @@ export default function TimetableControls(props) {
                     </div>
                 </div>
             </div>
-            <div className={'col-2'}>
+            <div className={'col-2 text-right'}>
                 <div>
                     {allowPersonalCalendar ? <ButtonManager button={{...personal}} miscButtonHandler={() => togglePersonalCalendar()} /> : ''}
                     {allowSchoolCalendar ? <ButtonManager button={{...school}} miscButtonHandler={() => toggleSchoolCalendar()} /> : ''}

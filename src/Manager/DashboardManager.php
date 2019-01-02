@@ -36,6 +36,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -211,12 +212,13 @@ abstract class DashboardManager implements DashboardInterface
         $translations['School Calendar'] = $this->getTranslator()->trans('School Calendar');
         $translations['All Day%1$s Events'] = $this->getTranslator()->trans('All Day%1$s Events', ['%1$s' => '']);
         $translations['Bookings'] = $this->getTranslator()->trans('Bookings');
+        $translations['View Details'] = $this->getTranslator()->trans('View Details');
 
         $properties['translations'] = $translations;
         $properties['locale'] = $this->getRequest()->get('_locale');
         $properties['person'] = UserHelper::getCurrentUser()->getId();
 
-        $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth');
+        $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth') && $this->getSession()->get('googleAPIAccessToken', false) !== false;
         $schoolAvailable = empty($this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed')) ? false : true ;
         $properties['allowSchoolCalendar'] = $this->getPerson()->getViewCalendarSchool() === 'Y' ? (true && $googleAvailable && ! empty($schoolAvailable)) : false ;
         $properties['allowPersonalCalendar'] = $this->getPerson()->getViewCalendarPersonal() === 'Y' ? (true && $googleAvailable && ! empty($this->getPerson()->getCalendarFeedPersonal())) : false ;
@@ -249,4 +251,16 @@ abstract class DashboardManager implements DashboardInterface
     {
         return $this->settingManager;
     }
+
+    /**
+     * getSession
+     * @return SessionInterface|null
+     */
+    public function getSession(): ?SessionInterface
+    {
+        if ($this->getRequest()->hasSession())
+            return $this->getRequest()->getSession();
+        return null;
+    }
+
 }

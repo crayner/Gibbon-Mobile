@@ -4,6 +4,7 @@ namespace App\Security;
 use App\Entity\Person;
 use App\Manager\MessageManager;
 use App\Manager\SettingManager;
+use App\Provider\PersonProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -57,6 +58,11 @@ class GoogleAuthenticator implements AuthenticatorInterface
 	private $google_user;
 
     /**
+     * @var PersonProvider
+     */
+	private $provider;
+
+    /**
      * GoogleAuthenticator constructor.
      * @param EntityManagerInterface $em
      * @param RouterInterface $router
@@ -64,7 +70,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
      * @param SettingManager $settingManager
      * @param LoggerInterface $logger
      */
-	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger)
+	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger, PersonProvider $provider)
 	{
 		$this->em = $em;
 		$this->router = $router;
@@ -73,6 +79,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$this->logger = $logger;
 		$this->getClient();
 		$this->getClient()->setLogger($logger);
+        $this->provider = $provider;
 	}
 
     /**
@@ -353,11 +360,11 @@ class GoogleAuthenticator implements AuthenticatorInterface
             $this->getClient()->setAccessToken(json_encode($this->getAccessToken()));
             if ($this->getClient()->isAccessTokenExpired()) { //Need to refresh the token
                 //Re-establish $client
-                if (empty($this->getUser($this->getAccessToken())->getGoogleAPIAccessToken())) {
+                if (empty($this->getUser($this->getAccessToken(), $this->getProvider())->getGoogleAPIAccessToken())) {
                     $this->getSettingManager()->getMessageManager()->add('danger', 'Your request failed due to a database error.');
                     return false;
                 } else {
-                    $this->getClient()->refreshToken($this->getUser($this->getAccessToken())->getGoogleAPIRefreshToken());
+                    $this->getClient()->refreshToken($this->getUser($this->getAccessToken(), $this->getProvider())->getGoogleAPIRefreshToken());
                     $this->setAccessToken($this->getClient()->getAccessToken());
                     return true;
                 }
@@ -388,5 +395,14 @@ class GoogleAuthenticator implements AuthenticatorInterface
     {
         $this->getSettingManager()->getSession()->set('googleAPIAccessToken', $googleAPIAccessToken);
         return $this;
+    }
+
+    /**
+     * getProvider
+     * @return PersonProvider
+     */
+    public function getProvider(): PersonProvider
+    {
+        return $this->provider;
     }
 }
