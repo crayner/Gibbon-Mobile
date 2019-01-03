@@ -269,4 +269,18 @@ class TTSpaceBooking  implements EntityInterface
         $this->libraryItem = $libraryItem;
         return $this;
     }
+
+    /**
+     * getName
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        if ($this->getForeignKey() === 'gibbonSpaceID' && $this->getSpace() instanceof Space)
+            return $this->getSpace()->getName();
+        if ($this->getLibraryItem() instanceof LibraryItem)
+            return $this->getLibraryItem()->getName();
+        return null;
+
+    }
 }

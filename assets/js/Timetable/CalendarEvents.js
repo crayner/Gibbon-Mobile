@@ -33,22 +33,19 @@ export default function CalendarEvents(props) {
     const eventContent = specifiedTimeEvents.map((event, key) => {
         const diff = Math.abs(new Date(event.start) - new Date(event.end)) / 60000
         const offset = Math.abs(new Date(start) - new Date(event.start)) / 60000
-        const tooltipID = 'external' + event.id
+        const tooltipID = 'external' + colour + event.id
         const isOpen = tooltipOpen.hasOwnProperty(tooltipID) ? tooltipOpen[tooltipID] : false
 
-        const eventContent = (
-            <span>
-                <p>{event.summary}</p>
-                <p>{getTimeString(event.start)} - {getTimeString(event.end)}</p>
-                <p>{event.location}</p>
-            </span>
-        )
 
-        return (<div id={tooltipID} className={'alert alert-' + colour + ' text-center externalCalendarEvent'} style={{height: diff + 'px', top: offset + 'px'}} key={key}>
-            <FontAwesomeIcon style={{float: 'right'}} icon={faEye} onClick={() => window.open(event.link,'_blank')} size={'2x'} title={translateMessage(translations, 'View Details')} />
-            {eventContent}
+        return (<div id={tooltipID} className={'alert-' + colour + ' externalCalendarEvent'} style={{height: diff + 'px', top: offset + 'px'}} key={key}>
+            <FontAwesomeIcon style={{float: 'right'}} icon={faEye} onClick={() => window.open(event.link,'_blank')} title={translateMessage(translations, 'View Details')} />
+                <p className={'text-center text-truncate'}>{event.summary}</p>
+                <p className={'text-center text-truncate'}>{getTimeString(event.start)} - {getTimeString(event.end)}</p>
+                <p className={'text-center text-truncate'}>{event.location}</p>
             <Tooltip target={tooltipID} className={'timetable-tooltip'} placement={'top'} isOpen={isOpen} toggle={() => toggleTooltip(tooltipID)} >
-                {eventContent}
+                <p className={'text-center'}>{event.summary}</p>
+                <p className={'text-center'}>{getTimeString(event.start)} - {getTimeString(event.end)}</p>
+                <p className={'text-center'}>{event.location}</p>
             </Tooltip>
         </div>)
     })

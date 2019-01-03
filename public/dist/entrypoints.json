@@ -20,7 +20,7 @@
       ],
       "css": [
         "build/vendors~1aeabec8.9ae8728c.css",
-        "build/core.add4ca67.css"
+        "build/core.99211c67.css"
       ]
     },
     "timetable": {
@@ -28,10 +28,10 @@
         "build/runtime.d41d8cd9.js",
         "build/vendors~dfe491aa.b248167b.js",
         "build/vendors~9072dba1.f1a296f4.js",
-        "build/timetable.bccbcf71.js"
+        "build/timetable.5e978117.js"
       ],
       "css": [
-        "build/timetable.19b130a2.css"
+        "build/timetable.f1b1db8d.css"
       ]
     },
     "notificationTray": {

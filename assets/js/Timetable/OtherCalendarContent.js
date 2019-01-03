@@ -2,11 +2,8 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import DateHeader from './DateHeader'
-import TimetableControls from './TimetableControls'
-import TimeDisplayColumn from './TimeDisplayColumn'
-import DisplayPeriods from './DisplayPeriods'
 import CalendarEvents from './CalendarEvents'
+import SpaceBooking from './SpaceBooking'
 
 export default function OtherCalendarContent(props) {
     const {
@@ -33,7 +30,7 @@ export default function OtherCalendarContent(props) {
             cc = (<CalendarEvents {...otherProps} content={content.personalCalendar} colour={'primary'} key={'personal'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
         }
         if (columns[x] === 'space') {
-            cc = (<CalendarEvents {...otherProps} content={content.bookingCalendar} colour={'warning'} key={'space'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
+            cc = (<SpaceBooking {...otherProps} content={content.spaceBooking} key={'space'} start={content.timeStart.date} timeDiff={content.timeDiff + content.timeOffset} columnClass={'col-' + 12/(columns.number - 1)} />)
         }
         if (cc !== '') {
             columnContent.push(cc)

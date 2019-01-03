@@ -24,6 +24,7 @@ export default class TimetableApp extends Component {
             showSpaceBookingCalendar: false,
             schoolCalendar: {},
             personalCalendar: {},
+            spaceBooking: {},
             hasAllDaySchoolEvents: false,
             hasAllDayPersonalEvents: false,
             columns: {
@@ -63,6 +64,7 @@ export default class TimetableApp extends Component {
                     state.content = data.content,
                     state.schoolCalendar = data.content.schoolCalendar
                     state.personalCalendar = data.content.personalCalendar
+                    state.spaceBooking = data.content.spaceBooking
                     state.hasAllDaySchoolEvents = this.hasAllDayEvents(data.content.schoolCalendar)
                     state.hasAllDayPersonalEvents = this.hasAllDayEvents(data.content.personalCalendar)
                     this.setState({...state})

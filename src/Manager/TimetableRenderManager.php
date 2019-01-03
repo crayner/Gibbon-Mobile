@@ -372,6 +372,25 @@ class TimetableRenderManager
                 }
             }
         }
+
+        if ($result['spaceBooking'])
+        {
+            foreach($result['spaceBooking'] as $event)
+            {
+                if ($event['timeStart']->format('H:i') < $result['timeStart']->format('H:i'))
+                {
+                    $date = new \DateTime($result['date']->format('Y-m-d ').$event['timeStart']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
+                    $result['timeOffset'] += abs(($result['timeStart']->getTimestamp() - $date->getTimestamp())/60);
+                    $result['timeStart'] = clone $date;
+                }
+                if ($event['timeEnd']->format('H:i') > $result['timeEnd']->format('H:i'))
+                {
+                    $date = new \DateTime($result['date']->format('Y-m-d ').$event['timeEnd']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
+                    $result['timeAdditional'] += abs(($date->getTimestamp() - $result['timeEnd']->getTimestamp())/60);
+                    $result['timeEnd'] = clone $date;
+                }
+            }
+        }
         return $result;
     }
 
