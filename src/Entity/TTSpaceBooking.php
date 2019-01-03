@@ -91,6 +91,16 @@ class TTSpaceBooking  implements EntityInterface
     private $timeEnd;
 
     /**
+     * @var Space|null
+     */
+    private $space;
+
+    /**
+     * @var LibraryItem|null
+     */
+    private $libraryItem;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -222,5 +232,41 @@ class TTSpaceBooking  implements EntityInterface
     public static function getForeignKeyList(): array
     {
         return self::$foreignKeyList;
+    }
+
+    /**
+     * @return Space|null
+     */
+    public function getSpace(): ?Space
+    {
+        return $this->space;
+    }
+
+    /**
+     * @param Space|null $space
+     * @return TTSpaceBooking
+     */
+    public function setSpace(?Space $space): TTSpaceBooking
+    {
+        $this->space = $space;
+        return $this;
+    }
+
+    /**
+     * @return LibraryItem|null
+     */
+    public function getLibraryItem(): ?LibraryItem
+    {
+        return $this->libraryItem;
+    }
+
+    /**
+     * @param LibraryItem|null $libraryItem
+     * @return TTSpaceBooking
+     */
+    public function setLibraryItem(?LibraryItem $libraryItem): TTSpaceBooking
+    {
+        $this->libraryItem = $libraryItem;
+        return $this;
     }
 }

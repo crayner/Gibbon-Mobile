@@ -34,6 +34,7 @@ use App\Entity\Person;
 use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TTColumnRow;
 use App\Entity\TTDay;
+use App\Entity\TTSpaceBooking;
 use App\Provider\TimetableProvider;
 use App\Security\GoogleAuthenticator;
 use App\Util\SchoolYearHelper;
@@ -150,7 +151,7 @@ class TimetableRenderManager
             $personalAvailable = $person->getCalendarFeedPersonal() ?: false;
             $result['allowSchoolCalendar'] = $result['person']->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
             $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
-            $result['allowSpaceBookingCalendar'] = $result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
+            $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false) && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php') ;
 
             $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
             $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
@@ -158,6 +159,7 @@ class TimetableRenderManager
             $googleManager = new GoogleAPIManager($person, $this->getGoogleAuthenticator());
             $result['schoolCalendar'] = $result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false ;
             $result['personalCalendar'] = $result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : false ;
+            $result['spaceBooking'] = $result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : false ;
             $result = $this->checkTimes($result);
             $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         }
@@ -381,5 +383,35 @@ class TimetableRenderManager
     private function getTimeZone(): string
     {
         return $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
+    }
+
+    /**
+     * getSpaceBookingEvents
+     * @param \DateTime $date
+     * @param Person|null $person
+     * @return array|bool
+     * @throws \Exception
+     */
+    function getSpaceBookingEvents(\DateTime $date, ?Person $person = null)
+    {
+        $resultSpaceBooking = $this->getTimetableProvider()->getRepository(TTSpaceBooking::class)->findByDatePerson($date, $person);
+        $return = false;
+
+        if (count($resultSpaceBooking) > 0) {
+            $return = [];
+            foreach($resultSpaceBooking as $rowSpaceBooking) {
+                $result = [];
+                $result['id'] = $rowSpaceBooking->getId();
+                $result['name'] = $rowSpaceBooking->getName();
+                $result['person'] = $rowSpaceBooking->getPerson() ? $rowSpaceBooking->getPerson()->getId() : null;
+                $result['date'] = $rowSpaceBooking->getDate();
+                $result['timeStart'] = $rowSpaceBooking->getTimeStart();
+                $result['timeEnd'] = $rowSpaceBooking->getTimeEnd();
+                $result['personName'] = $rowSpaceBooking->getPerson() ? $rowSpaceBooking->getPerson() ->formatName() : '';
+                $return[] = $result;
+            }
+        }
+
+        return $return;
     }
 }

@@ -31,6 +31,7 @@ namespace App\Repository;
 
 use App\Entity\Space;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -46,5 +47,21 @@ class SpaceRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Space::class);
+    }
+
+    /**
+     * findAllIn
+     * @param $spaces
+     * Array of Space ID's
+     * @return array
+     */
+    public function findAllIn($spaces): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.id IN (:spaces)')
+            ->setParameter('spaces', $spaces, Connection::PARAM_INT_ARRAY)
+            ->orderBy('s.name')
+            ->getQuery()
+            ->getResult();
     }
 }

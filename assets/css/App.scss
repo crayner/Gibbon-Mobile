@@ -114,27 +114,27 @@
 
 @include r(240)  {
     html {
-        font-size: 0.4rem;
+        font-size: 1rem;
     }
 }
 @include r(320)  {
     html {
-        font-size: 0.5rem;
+        font-size: 1rem;
     }
 }
 @include r(480)  {
     html {
-        font-size: 0.6rem;
+        font-size: 1rem;
     }
 }
 @include r(600)  {
     html {
-        font-size: 0.75rem;
+        font-size: 1rem;
     }
 }
 @include r(768)  {
     html {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 }
 @include r(1024)  {
