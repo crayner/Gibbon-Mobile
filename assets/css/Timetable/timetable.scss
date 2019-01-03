@@ -30,7 +30,16 @@
     margin: -1px -15px 0 -15px;
     position: absolute !important;
     width: 100%;
-    border: 1px solid black !important;
+    border-radius: 5px;
+}
+.externalCalendarEvent.alert-warning {
+    border: 1px solid #856404 !important;
+}
+.externalCalendarEvent.alert-success {
+    border: 1px solid #155724 !important;
+}
+.externalCalendarEvent.alert-primary {
+    border: 1px solid #004085 !important;
 }
 .period p, .timetable-tooltip p, .externalCalendarEvent p {
     line-height: 15px;

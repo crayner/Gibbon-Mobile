@@ -21,8 +21,6 @@ export default function SpaceBooking(props) {
     if (content === false)
         return ''
 
-    console.log(content)
-
     const eventContent = content.map((event, key) => {
         const diff = Math.abs(new Date(event.timeStart.date) - new Date(event.timeEnd.date)) / 60000
         const timeStart = getDateString(start) + ' ' + getTimeString(event.timeStart.date)

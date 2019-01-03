@@ -123,7 +123,7 @@ abstract class User implements UserInterface, EncoderAwareInterface, EquatableIn
      */
     public function getSalt()
     {
-        $salt = $this && ! empty($this->getPasswordStrongSalt()) ? $this->getPasswordStrongSalt() : null ;
+        $salt = ! empty($this->getPasswordStrongSalt()) ? $this->getPasswordStrongSalt() : null ;
         return $salt;
     }
 
