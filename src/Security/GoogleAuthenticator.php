@@ -141,7 +141,14 @@ class GoogleAuthenticator implements AuthenticatorInterface
      */
     private function getGoogleClient()
     {
-        $this->token = $this->getClient()->fetchAccessTokenWithAuthCode($this->getSettingManager()->getRequest()->query->get('code'));// to get code
+        // @todo For some reason the Request Query is not set correctly on some servers.  When the setting causing this is identified we can do something about this.
+        if (empty($code = $this->getSettingManager()->getRequest()->query->get('code'))) {
+            $uri = 'http://' . $this->getSettingManager()->getRequest()->getHttpHost() . $this->getSettingManager()->getRequest()->getRequestUri();
+            parse_str(parse_url($uri, PHP_URL_QUERY), $query);
+            $code = $query['code'];
+        }
+
+        $this->token = $this->getClient()->fetchAccessTokenWithAuthCode($code);// to get code
         $this->getClient()->setAccessToken($this->token); // to get access token by setting of $code
         $service = new \Google_Service_Oauth2($this->getClient());
         $this->google_user = $service->userinfo->get();   // to get user detail by using access token
