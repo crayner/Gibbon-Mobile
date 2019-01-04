@@ -5,12 +5,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>{% block title %}{{ 'Gibbon - Mobile'|trans }}{% endblock title %}</title>
-
         {% block stylesheets %}
         {% endblock stylesheets %}
     </head>
     <body>
-    <div class="container mobileContent">
+    <div class="container-fluid mobileContent">
         {% block titleBar %}
             <div id="titleBar">
                 <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}
@@ -27,22 +26,31 @@
         {% block content %}
         {% endblock content %}
         {% block footer %}
-            <div class="container text-center mobileFooter">
-                <div class="row text-center text-charcoal">
-                    <div class="col-3">
-                        <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" />
+            <div class="container-fluid text-center mobileFooter">
+                <div class="d-none d-sm-none d-md-block">
+                    <div class="row text-center text-charcoal">
+                        <div class="col-3">
+                            <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" />
+                        </div>
+                        <div class="col-9">
+                            <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} &copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
+                            <p class="small">
+                                {{ 'Created under the'|trans }} <a target='_blank' href='https://www.gnu.org/licenses/gpl.html' class="text-charcoal">GNU GPL</a>
+                                @ <a target='_blank' href='http://www.ichk.edu.hk' class="text-charcoal" title="Hill Range Services">HRS</a> |
+                                <a target='_blank' href='https://gibbonedu.org/about/#ourTeam' class="text-charcoal">{{ 'Credits'|trans }}</a> |
+                                <a target='_blank' href='https://gibbonedu.org/about/#translators' class="text-charcoal">{{ 'Translators'|trans }}</a>
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} &copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
-                        <p class="small">
-                            {{ 'Created under the'|trans }} <a target='_blank' href='https://www.gnu.org/licenses/gpl.html' class="text-charcoal">GNU GPL</a>
-                            @ <a target='_blank' href='http://www.ichk.edu.hk' class="text-charcoal" title="Hill Range Services">HRS</a> |
-                            <a target='_blank' href='https://gibbonedu.org/about/#ourTeam' class="text-charcoal">{{ 'Credits'|trans }}</a> |
-                            <a target='_blank' href='https://gibbonedu.org/about/#translators' class="text-charcoal">{{ 'Translators'|trans }}</a>
-                        </p>
-                    </div>
-                    <div class="col-3">
-
+                </div>
+                <div class="d-block d-sm-block d-md-none">
+                    <div class="row text-center text-charcoal">
+                        <div class="col-12">
+                            <div class="col-12">
+                                <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" style="float: left; height: 50px;"  />
+                            </div>
+                            <p class="small" style="padding-top: 0.5rem;">Gibbon-Mobile {{ getVersion() }}<br />&copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
+                        </div>
                     </div>
                 </div>
             </div>

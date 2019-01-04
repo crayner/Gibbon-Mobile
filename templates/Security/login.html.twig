@@ -6,6 +6,12 @@
     '@HillrangeForm/FormTheme/bootstrap.html.twig'
 %}
 
+        {% block titleBar %}
+            <div id="titleBar">
+                <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}</h2></div>
+        {% endblock titleBar %}
+
+
 {% block content %}
     <div id="loginForm">
         {{ form_start(form) }}
@@ -16,7 +22,6 @@
                         {% if getSetting('System', 'googleOAuth') is same as('Y') %}
                             {{ miscButton({class: 'btn btn-success fab fa-google', title: 'Sign in with Google', transDomain: 'messages', windowOpen: {route: path('google_oauth')}, style: {}})|raw }}
                         {% endif %}
-                        {{ saveButton({float: {}})|raw }}
                     </div>
                 </div>
                 {% if error %}
@@ -37,7 +42,14 @@
                 </div>
                 <div class="row">
                     <div class="col-12 card">
-                        {{ form_row(form._password) }}
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{ form_widget(form._password) }}
+                                <div class="input-group-append">{{ saveButton({style: {}, title: 'Login'})|raw }}</div>
+                            </div>
+                            {{ form_label(form._password) }}
+                            {{ form_errors(form._password) }}
+                        </div>
                     </div>
                 </div>
             </div>
