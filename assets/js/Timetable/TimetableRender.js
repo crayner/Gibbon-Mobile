@@ -1,32 +1,22 @@
 'use strict';
 
 import React from "react"
-import PropTypes from 'prop-types'
-import SchoolDayClosed from './SchoolDayClosed'
-import SchoolDayOpen from './SchoolDayOpen'
+import TimetableControls from './TimetableControls'
+import DateHeader from './DateHeader'
+import DayEvents from './DayEvents'
 
 export default function TimetableRender(props) {
     const {
-        content,
         ...otherProps
     } = props
 
-    if (content.schoolOpen === false)
-    {
-        return (
-            <SchoolDayClosed {...otherProps} content={content}/>
-        )
-    }
-
     return (
-        <SchoolDayOpen {...otherProps} content={content} />
+        <div className={'container-fluid timetable'}>
+            <TimetableControls {...otherProps} />
+            <DateHeader {...otherProps} />
+            <DayEvents {...otherProps} />
+        </div>
     )
 }
-
-TimetableRender.propTypes = {
-    content: PropTypes.object.isRequired,
-}
-
-TimetableRender.defaultProps = {}
 
 

@@ -16,23 +16,14 @@ export default class TimetableApp extends Component {
         this.person = props.person
         this.otherProps = {...props}
         this.state = {
-            date: 'today',
-            content: {},
+            day: {},
+            events: [],
             tooltipOpen: {},
             showPersonalCalendar: false,
             showSchoolCalendar: false,
             showSpaceBookingCalendar: false,
-            schoolCalendar: {},
-            personalCalendar: {},
-            spaceBooking: {},
-            hasAllDaySchoolEvents: false,
-            hasAllDayPersonalEvents: false,
-            columns: {
-                number: 1,
-                2: false,
-                3: false,
-                4: false,
-            },
+            schoolOpen: true,
+            loadEvents: true,
         }
 
         this.changeDate = this.changeDate.bind(this)
@@ -40,34 +31,26 @@ export default class TimetableApp extends Component {
         this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
         this.toggleSchoolCalendar = this.toggleSchoolCalendar.bind(this)
         this.toggleSpaceBookingCalendar = this.toggleSpaceBookingCalendar.bind(this)
-        this.allocateColumns = this.allocateColumns.bind(this)
-        this.hasAllDayEvents = this.hasAllDayEvents.bind(this)
     }
 
     componentDidMount () {
-        this.loadTimetable(this.state.date)
+        this.loadTimetable(this.state.day)
     }
 
-    componentWillUnmount() {
-    }
-
-    loadTimetable(date){
+    loadTimetable(day){
         this.setState({
-            content: {},
+            loadEvents: true,
         })
-        let state = {}
+        const date = typeof(day) === 'object' && Object.keys(day).length > 0 ? getDateString(day.date.date) : (typeof(day) === 'string' ? day : 'today')
         fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
             .then(data => {
-                if (data.content.render === true && data.content !== this.state.content) {
-                    date = getDateString(data.content.date.date)
-                    state.date = date
-                    state.content = data.content,
-                    state.schoolCalendar = data.content.schoolCalendar
-                    state.personalCalendar = data.content.personalCalendar
-                    state.spaceBooking = data.content.spaceBooking
-                    state.hasAllDaySchoolEvents = this.hasAllDayEvents(data.content.schoolCalendar)
-                    state.hasAllDayPersonalEvents = this.hasAllDayEvents(data.content.personalCalendar)
-                    this.setState({...state})
+                if (data.content.day !== this.state.day) {
+                    this.setState({
+                        day: data.content.day,
+                        events: data.content.events,
+                        schoolOpen: data.content.schoolOpen,
+                        loadEvents: false,
+                    })
                 }
             })
     }
@@ -86,34 +69,20 @@ export default class TimetableApp extends Component {
     }
 
     togglePersonalCalendar() {
-        let state = {...this.state}
-        state.showPersonalCalendar = ! state.showPersonalCalendar
-        const columns = this.allocateColumns(state)
         this.setState({
-            showPersonalCalendar: state.showPersonalCalendar,
-            columns: columns,
-            hasAllDayPersonalEvents: this.state.hasAllDayPersonalEvents && state.showPersonalCalendar,
+            showPersonalCalendar: ! this.state.showPersonalCalendar,
         })
     }
 
     toggleSchoolCalendar() {
-        let state = {...this.state}
-        state.showSchoolCalendar = ! state.showSchoolCalendar
-        const columns = this.allocateColumns(state)
         this.setState({
-            showSchoolCalendar: state.showSchoolCalendar,
-            columns: columns,
-            hasAllDaySchoolEvents: this.state.hasAllDaySchoolEvents && state.showSchoolCalendar,
+            showSchoolCalendar: ! this.state.showSchoolCalendar,
         })
     }
 
     toggleSpaceBookingCalendar() {
-        let state = {...this.state}
-        state.showSpaceBookingCalendar = ! state.showSpaceBookingCalendar
-        const columns = this.allocateColumns(state)
         this.setState({
             showSpaceBookingCalendar: ! this.state.showSpaceBookingCalendar,
-            columns: columns,
         })
     }
 
@@ -129,43 +98,6 @@ export default class TimetableApp extends Component {
         });
     }
 
-    hasAllDayEvents(content)
-    {
-        if (content.length > 0)
-        {
-            let result = content.filter(event => {
-                return event.eventType === 'All Day'
-            })
-            if (result.length > 0) {
-                return true
-            }
-        }
-        return false
-    }
-
-    allocateColumns(state){
-        let columns = {
-            number: 1,
-            2: false,
-            3: false,
-            4: false,
-        }
-
-        if (state.showPersonalCalendar) {
-            ++columns.number
-            columns[columns.number] = 'personal'
-        }
-        if (state.showSchoolCalendar) {
-            ++columns.number
-            columns[columns.number] = 'school'
-        }
-        if (state.showSpaceBookingCalendar) {
-            ++columns.number
-            columns[columns.number] = 'space'
-        }
-        return columns
-    }
-
     render () {
         return (
             <div>
@@ -174,7 +106,7 @@ export default class TimetableApp extends Component {
                         <p className="text-lg-left text-uppercase">{translateMessage(this.translations,"My Timetable")}</p>
                     </div>
                 </div>
-                {Object.keys(this.state.content).length === 0 ?
+                {this.state.loadEvents ?
                     <div>
                         <div className={'row'}>
                             <div className="col-12">
@@ -200,7 +132,6 @@ export default class TimetableApp extends Component {
                         togglePersonalCalendar={this.togglePersonalCalendar}
                         toggleSchoolCalendar={this.toggleSchoolCalendar}
                         toggleSpaceBookingCalendar={this.toggleSpaceBookingCalendar}
-                        allocateColumns={this.allocateColumns}
                     /> }
             </div>
         )

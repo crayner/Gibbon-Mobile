@@ -1,50 +1,12 @@
-.schoolDayClosed {
-    background-color: rgb(255,196,202);
-    color: rgb(255,0,0);
-    border: 1px solid rgb(136,136,136);
+.timetable p {
+    margin: 0;
+}
+.className {
+    color: #c00;
 }
 .period {
-    border: 1px solid black;
-    margin: -1px -15px 0 -15px;
-    overflow: hidden;
+    border-bottom: 1px dashed darkslategrey!important;
 }
-.period-class {
-    background-color: rgba(150, 190, 234, 0.3);
-}
-.period-now {
-    background-color: rgba(147, 237, 169, 0.3);
-}
-.displayCalendar {
-    max-height: 575px;
-    overflow-y: overlay;
-    overflow-x: hidden
-}
-.allDayEvent {
-    margin: 0 -15px;
-    overflow: hidden;
-    line-height: 15px;
-    font-size: 11px;
-}
-.externalCalendarEvent {
-    overflow: hidden;
-    margin: -1px -15px 0 -15px;
-    position: absolute !important;
-    width: 100%;
-    border-radius: 5px;
-}
-.externalCalendarEvent.alert-warning {
-    border: 1px solid #856404 !important;
-}
-.externalCalendarEvent.alert-success {
-    border: 1px solid #155724 !important;
-}
-.externalCalendarEvent.alert-primary {
-    border: 1px solid #004085 !important;
-}
-.period p, .timetable-tooltip p, .externalCalendarEvent p {
-    line-height: 15px;
-    height: 15px;
-    font-size: 11px;
-    margin: 0;
-    padding: 0;
+.react-date-picker__inputGroup {
+    min-width: calc((4px * 3) + 0.54em * 8 + 0.217em * 2 + 0.75em);
 }

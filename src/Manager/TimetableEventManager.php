@@ -1,0 +1,167 @@
+<?php
+/**
+ * Created by PhpStorm.
+ *
+ * Gibbon, Flexible & Open School System
+ * Copyright (C) 2010, Ross Parker
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program in the LICENCE file.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Gibbon-Mobile
+ *
+ * (c) 2018 Craig Rayner <craig@craigrayner.com>
+ *
+ * User: craig
+ * Date: 5/01/2019
+ * Time: 10:27
+ */
+namespace App\Manager;
+
+
+use App\Entity\TimetableEvent;
+use App\Util\SchoolYearHelper;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class TimetableEventManager
+{
+    /**
+     * @var ArrayCollection
+     */
+    private $events;
+
+    /**
+     * getEvents
+     * @return ArrayCollection
+     */
+    public function getEvents(): ArrayCollection
+    {
+        if (empty($this->events))
+            $this->events = new ArrayCollection();
+
+        return $this->events;
+    }
+
+    /**
+     * setEvents
+     * @param ArrayCollection|null $events
+     * @return TimetableEventManager
+     */
+    public function setEvents(?ArrayCollection $events): TimetableEventManager
+    {
+        $this->events = $events;
+        return $this;
+    }
+
+    /**
+     * addEvent
+     * @param TimetableEvent $event
+     * @return TimetableEventManager
+     */
+    public function addEvent(TimetableEvent $event): TimetableEventManager
+    {
+        if ($this->getEvents()->contains($event))
+            return $this;
+
+        $this->events->add($event);
+
+        return $this;
+    }
+
+    /**
+     * @var array
+     */
+    private $day;
+
+    /**
+     * @return array
+     */
+    public function getDay(): array
+    {
+        return $this->day;
+    }
+
+    /**
+     * @param array $day
+     * @return TimetableEventManager
+     */
+    public function setDay(array $day): TimetableEventManager
+    {
+        $resolver = new OptionsResolver();
+        $resolver->setRequired([
+            'date',
+            'name',
+            'week',
+        ]);
+        $resolver->setDefaults([
+            'colour' => '#e4e4e4',
+            'fontColour' => '#666666',
+        ]);
+        $day['week'] = SchoolYearHelper::getWeekNumber($day['date']);
+        $resolver->setAllowedTypes('date', \DateTime::class);
+        $resolver->setAllowedTypes('name', 'string');
+        $resolver->setAllowedTypes('colour', 'string');
+        $resolver->setAllowedTypes('fontColour', 'string');
+        $resolver->setAllowedTypes('week', 'integer');
+
+        $this->day = $resolver->resolve($day);
+        return $this;
+    }
+
+    /**
+     * @var bool
+     */
+    private $schoolOpen = false;
+
+    /**
+     * @return bool
+     */
+    public function isSchoolOpen(): bool
+    {
+        return $this->schoolOpen;
+    }
+
+    /**
+     * @param bool $schoolOpen
+     * @return TimetableEventManager
+     */
+    public function setSchoolOpen(bool $schoolOpen): TimetableEventManager
+    {
+        $this->schoolOpen = $schoolOpen;
+        return $this;
+    }
+
+    /**
+     * sortEvents
+     * @return ArrayCollection
+     */
+    public function sortEvents(): ArrayCollection
+    {
+        $iterator = $this->getEvents()->getIterator();
+
+        $iterator->uasort(
+            function ($a, $b) {
+                if ($a->isAllDayEvent() && ! $b->isAllDayEvent()) return -1;
+                if (! $a->isAllDayEvent() && $b->isAllDayEvent()) return 1;
+                if ($a->isAllDayEvent() && $b->isAllDayEvent()) return $a->getName().$a->getId() < $b->getName().$b->getId() ? -1 : 1 ;
+                return $a->getStart()->format('Hi').$a->getName().$a->getId() < $b->getStart()->format('Hi').$b->getName().$b->getId() ? -1 : 1 ;
+            }
+        );
+
+       $this->setEvents(new ArrayCollection(iterator_to_array($iterator, false)));
+
+       return $this->getEvents();
+    }
+}

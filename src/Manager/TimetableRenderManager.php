@@ -32,6 +32,7 @@ namespace App\Manager;
 use App\Entity\DaysOfWeek;
 use App\Entity\Person;
 use App\Entity\SchoolYearSpecialDay;
+use App\Entity\TimetableEvent;
 use App\Entity\TTColumnRow;
 use App\Entity\TTDay;
 use App\Entity\TTSpaceBooking;
@@ -48,6 +49,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TimetableRenderManager
 {
+    /**
+     * @var TimetableEventManager
+     */
+    private $events;
+
     /**
      * render
      * @param Person $person
@@ -101,21 +107,6 @@ class TimetableRenderManager
             if (is_array($result['tt']))
                 $result['tt'] = reset($result['tt']);
             $days = $this->getDaysOfWeek();
-            $result['timeStart'] = '';
-            $result['timeEnd'] = '';
-            foreach ($days as $day) {
-                if ($day->isSchoolDay()) {
-                    if ($result['timeStart'] == '' || $result['timeEnd'] == '') {
-                        $result['timeStart'] = $day->getSchoolStart();
-                        $result['timeEnd'] = $day->getSchoolEnd();
-                    } else {
-                        if ($day->getSchoolStart() < $result['timeStart'])
-                            $result['timeStart'] = $day->getSchoolStart();
-                        if ($day->getSchoolEnd() > $result['timeEnd'])
-                            $result['timeEnd'] = $day->getSchoolEnd();
-                    }
-                }
-            }
 
             //move to next schoolDay
             while (!$days[$startDayStamp->format('D')]->isSchoolDay())
@@ -144,8 +135,8 @@ class TimetableRenderManager
 
             $result['render'] = $proceed;
 
-            $diff = $result['timeEnd']->diff($result['timeStart']);
-            $result['timeDiff'] = $diff->format('%a') * 1440 + $diff->format('%h') * 60 + $diff->format('%i');
+            $this->convertLessonsToEvents($result);
+
             $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth', false);
             $schoolAvailable = $this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed', false);
             $personalAvailable = $person->getCalendarFeedPersonal() ?: false;
@@ -153,18 +144,14 @@ class TimetableRenderManager
             $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
             $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false) && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php') ;
 
-            $result['tt'] = $this->getTimetableProvider()->findAsArray($result['tt']);
-            $result['specialDay'] = $this->getTimetableProvider()->findAsArray($result['specialDay']);
-            $result['person'] = $this->getTimetableProvider()->findAsArray($result['person']);
             $googleManager = new GoogleAPIManager($person, $this->getGoogleAuthenticator());
-            $result['schoolCalendar'] = $result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false ;
-            $result['personalCalendar'] = $result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : false ;
-            $result['spaceBooking'] = $result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : false ;
-            $result = $this->checkTimes($result);
-            $result['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
+            $this->convertGoogleCalendarEvents($result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false, 'school');
+            $this->convertGoogleCalendarEvents($result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : false, 'personal');
+            $this->convertSpaceBookingEvents($result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : false );
+
         }
 
-        return $result;
+        return $this->getEventsAsArray();
     }
 
     /**
@@ -226,14 +213,6 @@ class TimetableRenderManager
         if (! $result['schoolOpen'])
             return $result;
         $result['day'] = $this->getTimetableProvider()->getRepository(TTDay::class)->findByDateTT($result['date'], $result['tt']);
-
-        foreach($result['day']->getTTColumn()->getTimetableColumnRows() as $row)
-        {
-            if ($row->getTimeStart()->format('His') < $result['timeStart']->format('His'))
-                $result['timeStart'] = clone $row->getTimeStart();
-            if ($row->getTimeEnd()->format('His') > $result['timeEnd']->format('His'))
-                $result['timeEnd'] = clone $row->getTimeEnd();
-        }
 
 
 
@@ -318,93 +297,6 @@ class TimetableRenderManager
     }
 
     /**
-     * checkTimes
-     * @param $result
-     * @return mixed
-     * @throws \Exception
-     */
-    private function checkTimes($result)
-    {
-        $result['timeStart'] = new \DateTime($result['date']->format('Y-m-d ').$result['timeStart']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
-        $result['timeEnd'] = new \DateTime($result['date']->format('Y-m-d ').$result['timeEnd']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
-        $result{'timeOffset'} = 0;
-        $result{'timeAdditional'} = 0;
-
-        if ($result['schoolCalendar'])
-        {
-            foreach($result['schoolCalendar'] as $event)
-            {
-                if ($event['eventType'] === 'Specified Time')
-                {
-                    if (date('H:i', strtotime($event['start'])) < $result['timeStart']->format('H:i'))
-                    {
-                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['start'])), new \DateTimeZone($this->getTimeZone()));
-                        $result['timeOffset'] += abs(($result['timeStart']->getTimestamp() - $date->getTimestamp())/60);
-                        $result['timeStart'] = clone $date;
-                    }
-                    if (date('H:i', strtotime($event['end'])) > $result['timeEnd']->format('H:i'))
-                    {
-                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['end'])), new \DateTimeZone($this->getTimeZone()));
-                        $result['timeAdditional'] += abs(($date->getTimestamp() - $result['timeEnd']->getTimestamp())/60);
-                        $result['timeEnd'] = clone $date;
-                    }
-                }
-            }
-        }
-        if ($result['personalCalendar'])
-        {
-            foreach($result['personalCalendar'] as $event)
-            {
-                if ($event['eventType'] === 'Specified Time')
-                {
-                    if (date('H:i', strtotime($event['start'])) < $result['timeStart']->format('H:i'))
-                    {
-                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['start'])), new \DateTimeZone($this->getTimeZone()));
-                        $result['timeOffset'] += abs(($result['timeStart']->getTimestamp() - $date->getTimestamp())/60);
-                        $result['timeStart'] = clone $date;
-                    }
-                    if (date('H:i', strtotime($event['end'])) > $result['timeEnd']->format('H:i'))
-                    {
-                        $date = new \DateTime($result['date']->format('Y-m-d ').date('H:i', strtotime($event['end'])), new \DateTimeZone($this->getTimeZone()));
-                        $result['timeAdditional'] += abs(($date->getTimestamp() - $result['timeEnd']->getTimestamp())/60);
-                        $result['timeEnd'] = clone $date;
-                    }
-                }
-            }
-        }
-
-        if ($result['spaceBooking'])
-        {
-            foreach($result['spaceBooking'] as $event)
-            {
-                if ($event['timeStart']->format('H:i') < $result['timeStart']->format('H:i'))
-                {
-                    $date = new \DateTime($result['date']->format('Y-m-d ').$event['timeStart']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
-                    $result['timeOffset'] += abs(($result['timeStart']->getTimestamp() - $date->getTimestamp())/60);
-                    $result['timeStart'] = clone $date;
-                }
-                if ($event['timeEnd']->format('H:i') > $result['timeEnd']->format('H:i'))
-                {
-                    $date = new \DateTime($result['date']->format('Y-m-d ').$event['timeEnd']->format('H:i'), new \DateTimeZone($this->getTimeZone()));
-                    $result['timeAdditional'] += abs(($date->getTimestamp() - $result['timeEnd']->getTimestamp())/60);
-                    $result['timeEnd'] = clone $date;
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * getTimeZone
-     * @return string
-     * @throws \Exception
-     */
-    private function getTimeZone(): string
-    {
-        return $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
-    }
-
-    /**
      * getSpaceBookingEvents
      * @param \DateTime $date
      * @param Person|null $person
@@ -432,5 +324,134 @@ class TimetableRenderManager
         }
 
         return $return;
+    }
+
+    /**
+     * @return TimetableEventManager
+     */
+    private function getEvents(): TimetableEventManager
+    {
+        if (empty($this->events))
+            $this->events = new TimetableEventManager();
+        return $this->events;
+    }
+
+    /**\
+     * convertLessonsToEvents
+     * @param array $result
+     * @return TimetableRenderManager
+     */
+    private function convertLessonsToEvents(array $result): TimetableRenderManager
+    {
+        $this->getEvents();
+        $day['date'] = $result['date'];
+        $day['name'] = $result['date']->format('D');
+        if (isset($result['day']))
+        {
+            $day['name'] = $result['day']['nameShort'];
+            $day['colour'] =  $result['day']['colour'];
+            $day['fontColour'] =  $result['day']['fontColour'];
+        }
+        $this->getEvents()->setSchoolOpen(true);
+        $this->getEvents()->setDay($day);
+        if (!$result['schoolOpen'] && $result['specialDay'])
+        {
+            $event = new TimetableEvent($result['specialDay']['name']);
+            $this->getEvents()->setSchoolOpen(false);
+            $event->setSchoolDay(false);
+            $this->getEvents()->addEvent($event);
+        }
+        elseif (!$result['schoolOpen'])
+        {
+            $event = new TimetableEvent('School Closed');
+            $this->getEvents()->setSchoolOpen(false);
+            $event->setAllDayEvent();
+            $event->setSchoolDay(false);
+            $this->getEvents()->addEvent($event);
+        }
+        else
+        {
+            foreach($result['day']['TTColumn']['timetableColumnRows'] as $row)
+            {
+                if (isset($row['TTDayRowClasses']))
+                {
+                    $event = new TimetableEvent($row['name']);
+                    $class = $row['TTDayRowClasses'][0];
+                    $event->setStart($row['timeStart'])
+                        ->setEnd($row['timeEnd'])
+                        ->setLocation($class['space']['name'])
+                        ->setPhone($class['space']['phoneInt'])
+                        ->setClassName($class['courseClass']['course']['nameShort'].'.'.$class['courseClass']['nameShort']);
+                    $event->setId('class_' . $class['id']);
+                    $this->getEvents()->addEvent($event);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * convertGoogleCalendarEvents
+     * @param array $events
+     * @param string $eventType
+     * @throws \Exception
+     */
+    private function convertGoogleCalendarEvents(array $events, string $eventType)
+    {
+        foreach($events as $event)
+        {
+            $entity = new TimetableEvent($event['summary']);
+            $entity->setId($eventType.'_'.$event['id'])
+                ->setLocation($event['location'])
+                ->setLink($event['link'])
+                ->setEventType($eventType);
+            if ($event['eventType'] !== 'Specified Time') {
+                $entity->setAllDayEvent();
+            } else {
+                $entity->setStart(new \DateTime($event['start']))
+                    ->setEnd(new \DateTime($event['end']));
+            }
+            $this->getEvents()->addEvent($entity);
+        }
+    }
+
+    /**
+     * convertSpaceBookingEvents
+     * @param $events
+     */
+    private function convertSpaceBookingEvents($events)
+    {
+        if (empty($events))
+            return ;
+        foreach($events as $event)
+        {
+            $entity = new TimetableEvent($event['personName']);
+            $entity->setId('space_' . $event['id'])
+                ->setLocation($event['name'])
+                ->setEventType('booking')
+                ->setStart($event['timeStart'])
+                ->setEnd($event['timeEnd']);
+            $this->getEvents()->addEvent($entity);
+        }
+    }
+
+    /**
+     * getEventsAsArray
+     * @return array
+     */
+    private function getEventsAsArray(): array
+    {
+        $this->getEvents()->sortEvents();
+
+        $events = [];
+        $events['schoolOpen'] = $this->getEvents()->isSchoolOpen();
+        $events['day'] = $this->getEvents()->getDay();
+        $events['events'] = [];
+        foreach($this->getEvents()->getEvents() as $event)
+        {
+            $events['events'][] = $event->__toArray();
+        }
+        return $events;
     }
 }

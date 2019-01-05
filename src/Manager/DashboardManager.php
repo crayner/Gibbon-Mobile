@@ -29,7 +29,9 @@
  */
 namespace App\Manager;
 
+use App\Entity\SchoolYear;
 use App\Entity\User;
+use App\Util\SchoolYearHelper;
 use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -210,7 +212,7 @@ abstract class DashboardManager implements DashboardInterface
         $translations['Phone'] = $this->getTranslator()->trans('Phone');
         $translations['Personal Calendar'] = $this->getTranslator()->trans('Personal Calendar');
         $translations['School Calendar'] = $this->getTranslator()->trans('School Calendar');
-        $translations['All Day%1$s Events'] = $this->getTranslator()->trans('All Day%1$s Events', ['%1$s' => '']);
+        $translations['All Day Event'] = $this->getTranslator()->trans('All Day Event');
         $translations['Bookings'] = $this->getTranslator()->trans('Bookings');
         $translations['View Details'] = $this->getTranslator()->trans('View Details');
 
@@ -223,6 +225,7 @@ abstract class DashboardManager implements DashboardInterface
         $properties['allowSchoolCalendar'] = $this->getPerson()->getViewCalendarSchool() === 'Y' ? (true && $googleAvailable && ! empty($schoolAvailable)) : false ;
         $properties['allowPersonalCalendar'] = $this->getPerson()->getViewCalendarPersonal() === 'Y' ? (true && $googleAvailable && ! empty($this->getPerson()->getCalendarFeedPersonal())) : false ;
         $properties['allowSpaceBookingCalendar'] = $this->getPerson()->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
+        $properties['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         return $properties;
     }
 
