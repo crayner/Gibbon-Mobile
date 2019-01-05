@@ -399,6 +399,8 @@ class TimetableRenderManager
      */
     private function convertGoogleCalendarEvents(array $events, string $eventType)
     {
+        if (empty($events))
+            return ;
         foreach($events as $event)
         {
             $entity = new TimetableEvent($event['summary']);
