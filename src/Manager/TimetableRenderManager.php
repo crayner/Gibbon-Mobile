@@ -145,9 +145,9 @@ class TimetableRenderManager
             $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false) && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php') ;
 
             $googleManager = new GoogleAPIManager($person, $this->getGoogleAuthenticator());
-            $this->convertGoogleCalendarEvents($result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : false, 'school');
-            $this->convertGoogleCalendarEvents($result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : false, 'personal');
-            $this->convertSpaceBookingEvents($result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : false );
+            $this->convertGoogleCalendarEvents($result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : [], 'school');
+            $this->convertGoogleCalendarEvents($result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : [], 'personal');
+            $this->convertSpaceBookingEvents($result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : [] );
 
         }
 
@@ -412,7 +412,7 @@ class TimetableRenderManager
      * convertSpaceBookingEvents
      * @param $events
      */
-    private function convertSpaceBookingEvents($events)
+    private function convertSpaceBookingEvents(array $events)
     {
         if (empty($events))
             return ;
