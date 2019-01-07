@@ -60,7 +60,6 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
     {
         // If Route is api_*
         if (strpos($request->get('_route'), 'api_') === 0){
-            dump($request->get('_route'));
             return new JsonResponse(
                 [
                     'error' => $this->translator->trans('Your request failed because you do not have access to this action.'),

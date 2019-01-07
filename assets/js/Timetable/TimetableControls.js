@@ -3,11 +3,12 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import ButtonManager from '../Component/Button/ButtonManager'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar, faUser } from '@fortawesome/free-regular-svg-icons'
+import { faCalendarPlus, faCalendarMinus, faUser } from '@fortawesome/free-regular-svg-icons'
 import { faSchool, faCubes, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
-import DatePicker from 'react-date-picker'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import 'react-day-picker/lib/style.css';
 import {translateMessage} from '../Component/MessageTranslator'
+import {getDateString} from '../Component/getDateString'
 
 export default function TimetableControls(props) {
     const {
@@ -21,35 +22,64 @@ export default function TimetableControls(props) {
         allowSpaceBookingCalendar,
         translations,
         changeDate,
-        ...otherProps
+        locale,
     } = props
 
     const date = new Date(day.date.date)
 
-    let picker = {};
-    picker.value = date
-    picker.minDate = new Date(schoolYear.firstDay.date)
-    picker.maxDate = new Date(schoolYear.lastDay.date)
-    picker.clearIcon = null
-    picker.calendarIcon = <FontAwesomeIcon icon={faCalendar} />
-    picker.onChange = (e) => changeDate(picker,e)
-    picker.style = {}
+    let picker = {}
+    picker.modifiers = {}
+    picker.modifiers.from = new Date(schoolYear.firstDay.date)
+    picker.modifiers.to = new Date(schoolYear.lastDay.date)
+    picker.className = 'form-control form-control-lg'
+    picker.value = getDateString(date)
+    picker.inputProps = {
+        className: 'form-control form-control-lg',
+    }
+    picker.dayPickerProps = {
+        locale: locale,
+        disabledDays: {
+            daysOfWeek: [0, 6],
+        },
+        style: {
+            zIndex: 2000,
+        },
+        showOutsideDays: true,
+    }
 
-    const today = {
+    const prev = {
+        icon: faCalendarMinus,
+        iconAttr: {size: '2x'},
+        type: 'misc',
+        colour: 'info',
+        attr: {'data-date': picker.value, 'data-type': 'prevDay'},
+        title: translateMessage(translations, 'Previous Day'),
+    }
+
+    const home = {
         icon: faCalendarDay,
         type: 'misc',
         colour: 'info',
         attr: {'data-date': picker.value, 'data-type': 'today'},
-        mergeClass: 'btn-sm',
         title: translateMessage(translations, 'Today'),
+        iconAttr: {size: '2x'},
         disabled: false,
+    }
+
+    const next = {
+        icon: faCalendarPlus,
+        type: 'misc',
+        colour: 'info',
+        attr: {'data-date': picker.value, 'data-type': 'nextDay'},
+        iconAttr: {size: '2x'},
+        title: translateMessage(translations, 'Next Day'),
     }
 
     const personal = {
         icon: faUser,
         type: 'misc',
         colour: 'primary',
-        mergeClass: 'btn-sm',
+        iconAttr: {size: '2x'},
         title: translateMessage(translations, 'Personal Calendar'),
     }
 
@@ -57,7 +87,7 @@ export default function TimetableControls(props) {
         icon: faSchool,
         type: 'misc',
         colour: 'success',
-        mergeClass: 'btn-sm',
+        iconAttr: {size: '2x'},
         title: translateMessage(translations, 'School Calendar'),
     }
 
@@ -65,7 +95,7 @@ export default function TimetableControls(props) {
         icon: faCubes,
         type: 'misc',
         colour: 'warning',
-        mergeClass: 'btn-sm',
+        iconAttr: {size: '2x'},
         title: translateMessage(translations, 'Bookings'),
     }
 
@@ -74,10 +104,12 @@ export default function TimetableControls(props) {
             <div className={'col-10 offset-1'}>
                 <div className="input-group">
                     <div className="input-group-prepend">
-                        <ButtonManager button={{...today}} miscButtonHandler={() => changeDate('today')} />
+                        <ButtonManager button={{...prev}} miscButtonHandler={() => changeDate('prev')} />
+                        <ButtonManager button={{...home}} miscButtonHandler={() => changeDate('today')} />
                     </div>
-                    <DatePicker {...picker} />
+                    <DayPickerInput {...picker} onDayChange={changeDate} />
                     <div className="input-group-append">
+                        <ButtonManager button={{...next}} miscButtonHandler={() => changeDate('next')} />
                         {allowPersonalCalendar ? <ButtonManager button={{...personal}} miscButtonHandler={() => togglePersonalCalendar()} /> : ''}
                         {allowSchoolCalendar ? <ButtonManager button={{...school}} miscButtonHandler={() => toggleSchoolCalendar()} /> : ''}
                         {allowSpaceBookingCalendar ? <ButtonManager button={{...space}} miscButtonHandler={() => toggleSpaceBookingCalendar()} /> : ''}
@@ -90,6 +122,7 @@ export default function TimetableControls(props) {
 
 TimetableControls.propTypes = {
     day: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
     changeDate: PropTypes.func.isRequired,
     togglePersonalCalendar: PropTypes.func.isRequired,
     toggleSpaceBookingCalendar: PropTypes.func.isRequired,

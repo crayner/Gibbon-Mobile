@@ -67,18 +67,25 @@ class NotificationController extends AbstractController
      * @return JsonResponse
      * @throws \Exception
      * @Route("/notification/details/", name="api_notification_details")
-     * @IsGranted("ROLE_USER")
      */
     public function details(Request $request, NotificationManager $manager)
     {
-        if ($request->getContentType() !== 'json')
-            return $this->redirectToRoute('home');
+        if ($this->isGranted('ROLE_USER')) {
+            if ($request->getContentType() !== 'json')
+                return $this->redirectToRoute('home');
 
-        $manager->setNotifications();
+            $manager->setNotifications();
+            return new JsonResponse(
+                [
+                    'count' => $manager->getCount(),
+                    'redirect' => false,
+                ], 200);
+        }
         return new JsonResponse(
             [
-                'count' => $manager->getCount(),
-            ],200);
+                'count' => 0,
+                'redirect' => true,
+            ], 200);
     }
 
     /**

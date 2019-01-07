@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * Class GoogleAuthenticator
@@ -182,7 +181,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		if (null !== $user->getLocale())
 			$request->setLocale($user->getLocale());
 
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey))
+        if ($targetPath = $this->getTargetPath($request, $providerKey))
             return new RedirectResponse($targetPath);
         return new RedirectResponse($this->getLoginUrl());
 	}

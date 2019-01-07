@@ -14,9 +14,15 @@ export default class TimetableApp extends Component {
         this.translations = props.translations
         this.locale = props.locale
         this.person = props.person
+        this.daysOfWeek = props.daysOfWeek
         this.otherProps = {...props}
+        const today = new Date()
         this.state = {
-            day: {},
+            day: {
+                date: {
+                    date: getDateString(today),
+                },
+            },
             events: [],
             tooltipOpen: {},
             showPersonalCalendar: false,
@@ -26,6 +32,9 @@ export default class TimetableApp extends Component {
             loadEvents: true,
         }
 
+        this.days = {}
+        this.preLoad = []
+        this.schoolYear = this.otherProps.schoolYear
         this.changeDate = this.changeDate.bind(this)
         this.toggleTooltip = this.toggleTooltip.bind(this)
         this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
@@ -34,17 +43,99 @@ export default class TimetableApp extends Component {
     }
 
     componentDidMount () {
-        this.loadTimetable(this.state.day)
+        this.getDay(this.state.day, true)
     }
 
-    loadTimetable(day){
+    isDateInSchoolYear(date) {
+        this.direction = ! this.direction
+        if (date < getDateString(this.schoolYear.firstDay.date))
+            return false
+        if (date > getDateString(this.schoolYear.lastDay.date))
+            return false
+        this.direction = ! this.direction
+        return true
+    }
+
+    selectAnotherDay(day){
+        if (this.direction)
+            this.getDay(this.incrementDate(day), true)
+        else {
+            this.getDay(this.decrementDate(day), false)
+        }
+    }
+
+    getDay(day) {
+        let date = new Date()
+        if (typeof(day) === 'object' && day.hasOwnProperty('date')) {
+            date = new Date(day.date.date)
+        }
+
+        else if (typeof(day) === 'object' && typeof date.getMonth === 'function') {
+            date = day
+        }
+
+        else if (typeof(day) === 'string')
+        {
+            date = new Date(day)
+        }
+
+        date = getDateString(date)
+
+        if (! this.isDateInSchoolYear(date)) {
+            this.selectAnotherDay(date)
+            return
+        }
+        if (this.days.hasOwnProperty(date)) {
+            if (this.days[date].valid) {
+                this.setPreLoadDates(this.days[date].day.date.date)
+                this.setState({
+                    day: this.days[date].day,
+                    events: this.days[date].events,
+                    schoolOpen: this.days[date].schoolOpen,
+                })
+            } else {
+                this.selectAnotherDay(date)
+                return
+            }
+        } else {
+            if (this.isNotASchoolDay(date)) {
+                this.selectAnotherDay(date)
+                return
+            }
+            this.loadTimetable(date)
+        }
+    }
+
+    isNotASchoolDay(date)
+    {
+        let day = new Date(date)
+        day = day.getDay() > 0 ? day.getDay() : 7
+        let theDay = Object.keys(this.daysOfWeek).filter(key => {
+            const item = this.daysOfWeek[key]
+            if (item.sequenceNumber === day)
+                return item
+        })
+        theDay = this.daysOfWeek[theDay]
+        if (theDay.schoolDay === 'N')
+            return true
+        return false
+    }
+
+    loadTimetable(date){
         this.setState({
             loadEvents: true,
         })
-        const date = typeof(day) === 'object' && Object.keys(day).length > 0 ? getDateString(day.date.date) : (typeof(day) === 'string' ? day : 'today')
         fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
             .then(data => {
+                if (data.content.valid === 'error')
+                    return
                 if (data.content.day !== this.state.day) {
+                    const newDate = getDateString(data.content.day.date.date)
+                    this.days[newDate] = data.content
+                    if (date !== newDate) {
+                        this.insertEmptyDay(date)
+                    }
+                    this.setPreLoadDates(data.content.day.date.date)
                     this.setState({
                         day: data.content.day,
                         events: data.content.events,
@@ -55,17 +146,102 @@ export default class TimetableApp extends Component {
             })
     }
 
-    changeDate(change, e){
+    insertEmptyDays(newDate, date) {
+        while (newDate !== date) {
+            this.days[newDate] = {
+                schoolOpen: false,
+                day: {
+                    date: {date: newDate},
+                },
+                events: [],
+                valid: false,
+            }
+            newDate = this.incrementDate(newDate)
+        }
+    }
+
+    incrementDate(date){
+        date = new Date(date)
+        date.setDate(date.getDate() + 1)
+        date = getDateString(date)
+        return date
+    }
+
+    decrementDate(date){
+        date = new Date(date)
+        date.setDate(date.getDate() - 1)
+        date = getDateString(date)
+        return date
+    }
+
+    dateDiffInDays(a, b) {
+        a = new Date(a)
+        b = new Date(b)
+        // Discard the time and time-zone information.
+        const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+        const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+        return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    }
+
+    setPreLoadDates(date)
+    {
+        const count = this.preLoad.length
+        for(let x=0; x<5; x++)
+        {
+            date = this.incrementDate(date)
+            if (! this.days.hasOwnProperty(date) && ! this.preLoad.includes(date))
+                this.preLoad.push(date)
+        }
+        if (count === 0)
+            this.preLoadTimetableDays()
+    }
+
+    preLoadTimetableDays()
+    {
+        if (this.preLoad.length === 0)
+            return
+
+        let newDate = this.preLoad[0]
+        this.preLoad.shift()
+
+        if (! this.isDateInSchoolYear(newDate)) {
+            this.preLoadTimetableDays()
+            return
+        }
+        if (this.days.hasOwnProperty(newDate)) {
+            this.preLoadTimetableDays()
+            return
+        }
+        fetchJson('/timetable/' + newDate + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
+            .then(data => {
+                if (data.content.day !== this.state.day) {
+                    let date = getDateString(data.content.day.date.date)
+                    if (newDate !== date)
+                        this.insertEmptyDays(newDate, date)
+                    this.days[date] = data.content
+                }
+                this.preLoadTimetableDays()
+            })
+    }
+
+    changeDate(change){
+        this.direction = true
+
         let date = change
-        if (typeof(date) === 'object')
-            date = getDateString(e)
 
-        if (date === 'prev')
-            date = 'prev-' + this.state.date
-        if (date === 'next')
-            date = 'next-' + this.state.date
+        if (date === 'next') {
+            date = this.incrementDate(this.state.day.date.date)
+        }
+        if (date === 'prev') {
+            date = this.decrementDate(this.state.day.date.date)
+            this.direction = false
+        }
 
-        this.loadTimetable(date);
+        if (date === 'today')
+            date = getDateString(new Date())
+
+        this.getDay(date);
     }
 
     togglePersonalCalendar() {
@@ -142,6 +318,7 @@ TimetableApp.propTypes = {
     translations: PropTypes.object.isRequired,
     locale: PropTypes.string,
     person: PropTypes.number.isRequired,
+    daysOfWeek: PropTypes.object.isRequired,
 }
 
 TimetableApp.defaultProps = {

@@ -30,9 +30,7 @@
 namespace App\Controller;
 
 use App\Entity\Person;
-use App\Manager\GoogleAPIManager;
 use App\Manager\TimetableRenderManager;
-use App\Util\UserHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,49 +51,17 @@ class TimetableController extends AbstractController
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
     {
-        $date = $manager->manageDateChange($date);
+        if ($this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php'])) {
+            $date = $manager->manageDateChange($date);
+            return new JsonResponse([
+                'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
+            ], 200);
+        }
         return new JsonResponse([
-            'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
-        ],200);
-    }
-
-    /**
-     * schoolTimetable
-     * @param TimetableRenderManager $manager
-     * @param string $date
-     * @return JsonResponse
-     * @throws \Exception
-     * @Route("/timetable/{date}/school/", name="timetable_school_display")
-     * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
-     */
-    public function schoolTimetable(TimetableRenderManager $manager, string $date = 'today')
-    {
-        $date = $manager->manageDateChange($date);
-        $googleManager = new GoogleAPIManager(UserHelper::getCurrentUser(), $manager->getGoogleAuthenticator());
-        $schoolAvailable = $manager->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed', false);
-        return new JsonResponse([
-            'content' => $googleManager->getCalendarEvents($schoolAvailable, new \DateTime($date)),
-        ],200);
-    }
-
-    /**
-     * personalTimetable
-     * @param TimetableRenderManager $manager
-     * @param Person $person
-     * @param string $date
-     * @return JsonResponse
-     * @throws \Exception
-     * @Route("/timetable/{date}/{person}/personal/", name="timetable_personal_display")
-     * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
-     */
-    public function personalTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
-    {
-        $date = $manager->manageDateChange($date);
-        $googleManager = new GoogleAPIManager($person, $manager->getGoogleAuthenticator());
-        $personalAvailable = $person->getCalendarFeedPersonal() ?: false ;
-        return new JsonResponse([
-            'content' => $googleManager->getCalendarEvents($personalAvailable, new \DateTime($date)),
-        ],200);
+            'content' => [
+                'valid' => 'error',
+            ],
+        ], 200);
     }
 }
 

@@ -45,7 +45,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * Class LoginFormAuthenticator
@@ -173,7 +172,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $session->set('last_activity_time', new \DateTime('now', $timezone));
 
         $session->save();
-        if ($targetPath = $this->getTargetPath($session, $providerKey))
+        if ($targetPath = $this->getTargetPath($request, $providerKey))
             return new RedirectResponse($targetPath);
 
         return new RedirectResponse($this->getLoginUrl());

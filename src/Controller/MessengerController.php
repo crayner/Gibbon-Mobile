@@ -46,12 +46,20 @@ class MessengerController extends AbstractController
     /**
      * details
      * @param MessengerManager $manager
+     * @param SessionInterface $session
      * @return JsonResponse
+     * @throws \Exception
      * @Route("/messenger/details/", name="api_messenger_details")
-     * @Security("is_granted('ROLE_ACTION', ['/modules/Messenger/messageWall_view.php'])")
      */
     public function details(MessengerManager $manager, SessionInterface $session)
     {
+        if (! $this->isGranted('ROLE_ACTION', ['/modules/Messenger/messageWall_view.php']))
+            return new JsonResponse(
+                [
+                    'count' => 0,
+                    'redirect' => true,
+                ],200);
+
         if ($session->get('messenger_md5') !== md5(json_encode($manager->getMessagesByType()))) {
             $manager->setMessages();
             $session->set('messenger_md5', md5(json_encode($manager->getMessagesByType())));
@@ -62,6 +70,7 @@ class MessengerController extends AbstractController
         return new JsonResponse(
             [
                 'count' => $manager->getMessageCount(),
+                'redirect' => false,
             ],200);
     }
 

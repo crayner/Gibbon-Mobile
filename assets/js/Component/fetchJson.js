@@ -10,7 +10,7 @@ export function fetchJson(url, options, locale) {
     headers = ({...headers, 'Content-Type': 'application/json; charset=utf-8'})
 
     if (locale === null)
-        locale = 'en'
+        locale = 'en_GB'
 
     if (locale === false || url === '')
         locale = ''

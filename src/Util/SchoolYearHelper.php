@@ -15,6 +15,7 @@
  */
 namespace App\Util;
 
+use App\Entity\DaysOfWeek;
 use App\Entity\SchoolYear;
 use App\Entity\SchoolYearTerm;
 use App\Manager\SchoolYearManager;
@@ -170,5 +171,24 @@ class SchoolYearHelper
     {
         $schoolYear = $schoolYear ?: self::getCurrentSchoolYear();
         return self::$manager->getProvider()->findAsArray($schoolYear);
+    }
+
+    /**
+     * @var array|null
+     */
+    private static $daysOfWeek;
+
+    /**
+     * getDaysOfWeek
+     * @return array
+     */
+    public static function getDaysOfWeek(): array
+    {
+        if (! empty(self::$daysOfWeek))
+            return self::$daysOfWeek;
+        self::$daysOfWeek = EntityHelper::getRepository(DaysOfWeek::class)->createQueryBuilder('dow', 'dow.nameShort')
+            ->getQuery()
+            ->getArrayResult();
+        return self::$daysOfWeek;
     }
 }

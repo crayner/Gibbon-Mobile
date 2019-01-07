@@ -48,6 +48,8 @@ export default class TrayApp extends Component {
                             notificationCount: data.count,
                         })
                     }
+                    if (data.redirect)
+                        openPage('/')
                 })
             this.loadNotification(this.timeout)
         }, timeout)
@@ -62,6 +64,8 @@ export default class TrayApp extends Component {
                             messengerCount: data.count,
                         })
                     }
+                    if (data.redirect)
+                        openPage('/')
                 })
             this.loadMessenger(this.timeout)
         }, timeout)

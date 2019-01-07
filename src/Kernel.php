@@ -39,32 +39,6 @@ class Kernel extends BaseKernel
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
 
-        if (! $container->hasParameter('cookie_lifetime'))
-            $container->setParameter('cookie_lifetime', 1200);
-        if (! $container->hasParameter('google_client_id'))
-            $container->setParameter('google_client_id', null);
-        if (! $container->hasParameter('google_secret'))
-            $container->setParameter('google_secret', null);
-        if (! $container->hasParameter('session_name'))
-            $container->setParameter('session_name', 'set_by_kernel');
-        if (! $container->hasParameter('locale'))
-            $container->setParameter('locale', 'en');
-        if (! $container->hasParameter('security.hierarchy.roles'))
-            $container->setParameter('security.hierarchy.roles', []);
-        if (! $container->hasParameter('mailer_transport'))
-            $container->setParameter('mailer_transport', null);
-        if (! $container->hasParameter('mailer_host'))
-            $container->setParameter('mailer_host', null);
-        if (! $container->hasParameter('mailer_port'))
-            $container->setParameter('mailer_port', null);
-        if (! $container->hasParameter('mailer_user'))
-            $container->setParameter('mailer_user', null);
-        if (! $container->hasParameter('mailer_password'))
-            $container->setParameter('mailer_password', null);
-        if (! $container->hasParameter('gibbon_document_root'))
-            $container->setParameter('gibbon_document_root', '');
-        if (! $container->hasParameter('db_prefix'))
-            $container->setParameter('db_prefix', 'gibbon');
 
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';

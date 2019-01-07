@@ -16,7 +16,7 @@ export function openPage(url, options, locale) {
         locale = ''
 
     if (locale === null || typeof(locale) === 'undefined')
-        locale = 'en'
+        locale = 'en_GB'
 
     if (locale !== '')
         locale = '/' + locale

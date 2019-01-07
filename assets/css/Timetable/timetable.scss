@@ -7,6 +7,9 @@
 .period {
     border-bottom: 1px dashed darkslategrey!important;
 }
-.react-date-picker__inputGroup {
-    min-width: calc((4px * 3) + 0.54em * 8 + 0.217em * 2 + 0.75em);
+.DayPickerInput-Overlay {
+    z-index: 99;
+}
+.DayPickerInput input {
+    width: 9rem;
 }

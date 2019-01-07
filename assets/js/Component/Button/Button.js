@@ -51,6 +51,9 @@ export default function Button(props) {
     if (button.disabled !== undefined && button.disabled === true)
         attr.disabled = true
 
+    if (button.icon && ! button.iconAttr)
+        button.iconAttr = {}
+
     if (button.colour === 'transparent') {
         delete attr.className
         delete attr.type
@@ -65,7 +68,7 @@ export default function Button(props) {
     return (
         <button {...attr}>
             {button.prompt ? button.prompt : null}
-            {button.icon ? <FontAwesomeIcon icon={button.icon} fixedWidth={true}/> : null}
+            {button.icon ? <FontAwesomeIcon icon={button.icon} {...button.iconAttr} fixedWidth={true}/> : null}
         </button>
     )
 }

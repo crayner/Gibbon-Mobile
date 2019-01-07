@@ -109,7 +109,7 @@ class TimetableRenderManager
             $days = $this->getDaysOfWeek();
 
             //move to next schoolDay
-            while (!$days[$startDayStamp->format('D')]->isSchoolDay())
+            while ($days[$startDayStamp->format('D')]['schoolDay'] === 'N')
                 $startDayStamp->add(new \DateInterval('P1D'));
             $result['date'] = clone $startDayStamp;
 
@@ -261,23 +261,13 @@ class TimetableRenderManager
     }
 
     /**
-     * @var array|null
-     */
-    private $daysOfWeek;
-
-    /**
      * getDaysOFWeek
      * @return array
      * @throws \Exception
      */
     private function getDaysOfWeek(): array
     {
-        if (! empty($this->daysOfWeek))
-            return $this->daysOfWeek;
-        $x = $this->getTimetableProvider()->getRepository(DaysOfWeek::class)->findBy([],['sequenceNumber' => 'ASC']);
-        foreach($x as $day)
-            $this->daysOfWeek[$day->getNameShort()] = $day;
-        return $this->daysOfWeek;
+        return SchoolYearHelper::getDaysOfWeek();
     }
 
     /**
@@ -356,7 +346,7 @@ class TimetableRenderManager
         $this->getEvents()->setDay($day);
         if (!$result['schoolOpen'] && $result['specialDay'])
         {
-            $event = new TimetableEvent($result['specialDay']['name']);
+            $event = new TimetableEvent($result['specialDay']->getName());
             $this->getEvents()->setSchoolOpen(false);
             $event->setSchoolDay(false);
             $this->getEvents()->addEvent($event);
@@ -454,6 +444,7 @@ class TimetableRenderManager
         {
             $events['events'][] = $event->__toArray();
         }
+        $events['valid'] = true;
         return $events;
     }
 }

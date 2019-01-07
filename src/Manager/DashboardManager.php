@@ -226,6 +226,7 @@ abstract class DashboardManager implements DashboardInterface
         $properties['allowPersonalCalendar'] = $this->getPerson()->getViewCalendarPersonal() === 'Y' ? (true && $googleAvailable && ! empty($this->getPerson()->getCalendarFeedPersonal())) : false ;
         $properties['allowSpaceBookingCalendar'] = $this->getPerson()->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
         $properties['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
+        $properties['daysOfWeek'] = SchoolYearHelper::getDaysOfWeek();
         return $properties;
     }
 
