@@ -2,7 +2,7 @@
 
 This package is aimed at provision of responsive design for mobiles and tablets for core features of the Gibbon Education programme.
 
-### Version 0.0.03
+### Version 0.0.04
 
 _**This package is currently in development, and changes made until release may not be backwards compatible.**_
 
