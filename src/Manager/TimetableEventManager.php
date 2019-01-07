@@ -117,6 +117,13 @@ class TimetableEventManager
         $resolver->setAllowedTypes('week', 'integer');
 
         $this->day = $resolver->resolve($day);
+
+        if (strlen($this->day['colour']) === 6 && preg_match('/^(?:[0-9a-fA-F]{3}){1,2}$/', $this->day['colour']))
+            $this->day['colour'] = '#' . $this->day['colour'];
+
+        if (strlen($this->day['fontColour']) === 6 && preg_match('/^(?:[0-9a-fA-F]{3}){1,2}$/', $this->day['fontColour']))
+            $this->day['fontColour'] = '#' . $this->day['fontColour'];
+
         return $this;
     }
 

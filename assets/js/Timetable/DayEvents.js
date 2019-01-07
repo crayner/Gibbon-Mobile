@@ -72,12 +72,12 @@ export default function DayEvents(props) {
 
         return (
             <div className={'row'} key={event.id}>
-                <div className={'col-2 text-center'}>
+                <div className={'col-2 text-center card'}>
                     {event.allDayEvent ?
                     translateMessage(translations, 'All Day Event')
                     : getTimeString(event.start.date) }
                 </div>
-                <div className={'col-9 ' + colour}>
+                <div className={'col-10 card ' + colour}>
                     {content}
                 </div>
             </div>

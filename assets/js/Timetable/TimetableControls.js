@@ -101,8 +101,8 @@ export default function TimetableControls(props) {
 
     return (
         <div className={'row'}>
-            <div className={'col-10 offset-1'}>
-                <div className="input-group">
+            <div className={'col-12'}>
+                <div className="text-right input-group">
                     <div className="input-group-prepend">
                         <ButtonManager button={{...prev}} miscButtonHandler={() => changeDate('prev')} />
                         <ButtonManager button={{...home}} miscButtonHandler={() => changeDate('today')} />

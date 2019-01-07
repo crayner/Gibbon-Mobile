@@ -29,7 +29,6 @@
  */
 namespace App\Manager;
 
-use App\Entity\DaysOfWeek;
 use App\Entity\Person;
 use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TimetableEvent;
@@ -293,10 +292,10 @@ class TimetableRenderManager
      * @return array|bool
      * @throws \Exception
      */
-    function getSpaceBookingEvents(\DateTime $date, ?Person $person = null)
+    function getSpaceBookingEvents(\DateTime $date, ?Person $person = null): array
     {
         $resultSpaceBooking = $this->getTimetableProvider()->getRepository(TTSpaceBooking::class)->findByDatePerson($date, $person);
-        $return = false;
+        $return = [];
 
         if (count($resultSpaceBooking) > 0) {
             $return = [];

@@ -21,6 +21,8 @@ export default class TimetableApp extends Component {
             day: {
                 date: {
                     date: getDateString(today),
+                    colour: '#e4e4e4',
+                    fontColour: '#666666',
                 },
             },
             events: [],
@@ -152,6 +154,8 @@ export default class TimetableApp extends Component {
                 schoolOpen: false,
                 day: {
                     date: {date: newDate},
+                    colour: '#e4e4e4',
+                    fontColour: '#666666',
                 },
                 events: [],
                 valid: false,

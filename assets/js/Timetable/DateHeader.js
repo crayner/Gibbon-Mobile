@@ -13,12 +13,14 @@ export default function DateHeader(props) {
 
     const date = new Date(day.date.date)
 
+    console.log(day)
+
     return (
         <div className={'row'}>
             <div className={'col-2 card card-header text-center font-weight-bold'}>
                 {translateMessage(translations,'Week')}<br />{day.week}
             </div>
-            <div className={'col-9 card card-header text-center font-weight-bold'} style={{color: '#' + day.fontColour, backgroundColor: '#' + day.colour}}>
+            <div className={'col-10 card card-header text-center font-weight-bold'} style={{color: day.fontColour, backgroundColor: day.colour}}>
                 {day.name}
                 <br />
                 {new Intl.DateTimeFormat(otherProps.locale.replace('_', '-'), {
