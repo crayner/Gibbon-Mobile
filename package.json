@@ -44,23 +44,5 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
-    },
-    "eslintConfig": {
-        "parser": "babel-eslint",
-        "plugins": [
-            "babel",
-            "react"
-        ],
-        "extends": [
-            "eslint:recommended",
-            "plugin:react/recommended"
-        ],
-        "rules": {
-            "comma-dangle": [
-                2,
-                "always-multiline"
-            ],
-            "react/jsx-uses-react": 1
-        }
     }
 }

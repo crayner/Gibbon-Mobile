@@ -37,6 +37,7 @@ export default class TimetableApp extends Component {
         this.days = {}
         this.preLoad = []
         this.schoolYear = this.otherProps.schoolYear
+        this.preLoadIsOn = false
         this.changeDate = this.changeDate.bind(this)
         this.toggleTooltip = this.toggleTooltip.bind(this)
         this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
@@ -46,6 +47,14 @@ export default class TimetableApp extends Component {
 
     componentDidMount () {
         this.getDay(this.state.day, true)
+        let date = this.state.day.date.date
+        for(let x=0; x<5; x++)
+        {
+            date = this.decrementDate(date)
+            if (! this.days.hasOwnProperty(date) && ! this.preLoad.includes(date))
+                this.preLoad.push(date)
+        }
+        this.startPreLoad()
     }
 
     isDateInSchoolYear(date) {
@@ -190,21 +199,28 @@ export default class TimetableApp extends Component {
 
     setPreLoadDates(date)
     {
-        const count = this.preLoad.length
         for(let x=0; x<5; x++)
         {
             date = this.incrementDate(date)
             if (! this.days.hasOwnProperty(date) && ! this.preLoad.includes(date))
                 this.preLoad.push(date)
         }
-        if (count === 0)
-            this.preLoadTimetableDays()
+        this.startPreLoad()
+    }
+
+    startPreLoad() {
+        if (this.preLoadIsOn)
+            return
+        this.preLoadIsOn = true
+        this.preLoadTimetableDays()
     }
 
     preLoadTimetableDays()
     {
-        if (this.preLoad.length === 0)
+        if (this.preLoad.length === 0) {
+            this.preLoadIsOn = false
             return
+        }
 
         let newDate = this.preLoad[0]
         this.preLoad.shift()

@@ -13,8 +13,6 @@ export default function DateHeader(props) {
 
     const date = new Date(day.date.date)
 
-    console.log(day)
-
     return (
         <div className={'row'}>
             <div className={'col-2 card card-header text-center font-weight-bold'}>
