@@ -74,7 +74,7 @@ class MonologDBHandler extends AbstractProcessingHandler
         if ($this->channel != $record['channel']) {
             return;
         }
-var_dump($record);
+
         $log = new Log();
 //        $log->setMessage($record['message']);
   //      $log->setLevel($record['level_name']);
