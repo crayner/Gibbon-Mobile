@@ -148,7 +148,6 @@ class Notification implements EntityInterface
     public function setStatus(?string $status): Notification
     {
         $this->status = in_array($status, self::getStatusList()) ? $status: 'New' ;
-        dump($this);
         return $this;
     }
 
