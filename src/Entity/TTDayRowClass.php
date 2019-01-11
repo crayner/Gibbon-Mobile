@@ -30,6 +30,7 @@
 namespace App\Entity;
 
 use App\Manager\EntityInterface;
+use App\Util\EntityHelper;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +38,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\TTDayRowClassRepository")
  * @ORM\Table(name="TTDayRowClass", indexes={@ORM\Index(name="gibbonCourseClassID", columns={"gibbonCourseClassID"}), @ORM\Index(name="gibbonSpaceID", columns={"gibbonSpaceID"}), @ORM\Index(name="gibbonTTColumnRowID", columns={"gibbonTTColumnRowID"})})
+ * @ORM\HasLifecycleCallbacks()
  */
 class TTDayRowClass implements EntityInterface
 {
@@ -164,5 +166,15 @@ class TTDayRowClass implements EntityInterface
     {
         $this->space = $space;
         return $this;
+    }
+
+    /**
+     * __toArray
+     * @param array $ignore
+     * @return array
+     */
+    public function __toArray(array $ignore = []): array
+    {
+        return EntityHelper::__toArray(TTDayRowClass::class, $this, $ignore);
     }
 }

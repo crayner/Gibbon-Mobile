@@ -588,8 +588,10 @@ class Person extends User implements EntityInterface
     /**
      * @return null|string
      */
-    public function getImage240(): ?string
+    public function getImage240(bool $default = false): ?string
     {
+        if (empty($this->image_240) && $default)
+            return 'build/static/DefaultPerson.png';
         return $this->image_240;
     }
 
@@ -2575,10 +2577,20 @@ class Person extends User implements EntityInterface
      * @param bool $initial
      * @return string
      */
-    public function formatName(bool $preferredName = true, $reverse = false, $informal = false, bool $initial = false)
+    public function formatName(bool $preferredName = true, bool $reverse = false, bool $informal = false, bool $initial = false)
     {
         $name = $preferredName ? $this->getPreferredName() : $this->getFirstName();
         $name = $initial ? substr($name, 0, 1): $name;
         return FormatHelper::name($this->getTitle(),$name,$this->getSurname(),$this->getPrimaryRole() ? $this->getPrimaryRole()->getCategory() : 'Staff', $reverse, $informal);
+    }
+
+    /**
+     * getFullName
+     * This is used for sorting purposes.
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->getSurname().$this->getFirstName();
     }
 }

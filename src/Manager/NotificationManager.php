@@ -200,9 +200,8 @@ class NotificationManager
         $first = $this->notifications->getNotifications()->first();
         $first = $first ? $first->getTimestamp() : '2000-01-01 00:00:00';
         $this->notifications->setLastNotificationTime($first);
-
         if ($this->hasSession())
-            $this->getSession()->set('notifications', $this->getSerialiser()->serialize($this->notifications, 'json'));
+            $this->getSession()->set('notifications', $this->getSerialiser()->serialize($this->notifications, 'json', ['attributes' => ['count', 'timezone', 'lastNotificationTime', 'notifications' => ['id', 'status','count','text','actionLink','timestamp','module'=>['id'],'person' => ['id']]]]));
         return $this;
     }
 

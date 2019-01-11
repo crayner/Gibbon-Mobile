@@ -29,7 +29,11 @@
  */
 namespace App\Manager;
 
+use App\Entity\AttendanceLogCourseClass;
+use App\Entity\AttendanceLogRollGroup;
+use App\Entity\CourseClass;
 use App\Entity\Person;
+use App\Entity\RollGroup;
 use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TimetableEvent;
 use App\Entity\TTColumnRow;
@@ -40,6 +44,7 @@ use App\Security\GoogleAuthenticator;
 use App\Util\SchoolYearHelper;
 use App\Util\SecurityHelper;
 use App\Util\UserHelper;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -213,8 +218,6 @@ class TimetableRenderManager
             return $result;
         $result['day'] = $this->getTimetableProvider()->getRepository(TTDay::class)->findByDateTT($result['date'], $result['tt']);
 
-
-
         $day = $result['day'];
         $result['day'] = $this->getTimetableProvider()->findAsArray($result['day']);
         $result['day']['TTColumn'] = $this->getTimetableProvider()->findAsArray($day->getTTColumn());
@@ -370,8 +373,11 @@ class TimetableRenderManager
                         ->setEnd($row['timeEnd'])
                         ->setLocation($class['space']['name'])
                         ->setPhone($class['space']['phoneInt'])
+                        ->addLink('attendance', '/attendance/timetable/'.$class['id'].'/class/'.$day['date']->format('Y-m-d').'/date/take/')
+                        ->setAttendanceStatus($this->isAttendanceTaken($class['courseClass']['id'], $day['date']))
                         ->setClassName($class['courseClass']['course']['nameShort'].'.'.$class['courseClass']['nameShort']);
                     $event->setId('class_' . $class['id']);
+                    $event->setDayDate($day['date']);
                     $this->getEvents()->addEvent($event);
                 }
             }
@@ -395,7 +401,7 @@ class TimetableRenderManager
             $entity = new TimetableEvent($event['summary']);
             $entity->setId($eventType.'_'.$event['id'])
                 ->setLocation($event['location'])
-                ->setLink($event['link'])
+                ->addLink('external', $event['link'])
                 ->setEventType($eventType);
             if ($event['eventType'] !== 'Specified Time') {
                 $entity->setAllDayEvent();
@@ -445,5 +451,32 @@ class TimetableRenderManager
         }
         $events['valid'] = true;
         return $events;
+    }
+
+    /**
+     * isAttendanceTaken
+     * @param int $id
+     * @param \DateTime $date
+     * @param string $type
+     * @return bool
+     * @throws \Exception
+     */
+    private function isAttendanceTaken(int $id, \DateTime $date, string $type = 'CourseClass'): bool
+    {
+        if ($type === 'CourseClass') {
+            return $this->getRepository(AttendanceLogCourseClass::class)->isAttendanceTaken($id, $date);
+        }
+        return $this->getRepository(AttendanceLogRollGroup::class)->isAttendanceTaken($id, $date);
+    }
+
+    /**
+     * getRepository
+     * @param string|null $className
+     * @return ObjectRepository
+     * @throws \Exception
+     */
+    private function getRepository(?string $className = null): ObjectRepository
+    {
+        return $this->getTimetableProvider()->getRepository($className);
     }
 }

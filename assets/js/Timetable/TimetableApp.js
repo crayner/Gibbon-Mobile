@@ -3,19 +3,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {fetchJson} from '../Component/fetchJson'
-import {translateMessage} from '../Component/MessageTranslator'
 import TimetableRender from './TimetableRender'
 import {getDateString} from '../Component/getDateString'
+import AttendanceRender from '../Attendance/AttendanceRender'
+import {openPage} from '../Component/openPage'
 
 export default class TimetableApp extends Component {
     constructor (props) {
         super(props)
-
-        this.translations = props.translations
-        this.locale = props.locale
-        this.person = props.person
-        this.daysOfWeek = props.daysOfWeek
         this.otherProps = {...props}
+        this.locale = this.otherProps.locale
         const today = new Date()
         this.state = {
             day: {
@@ -32,17 +29,23 @@ export default class TimetableApp extends Component {
             showSpaceBookingCalendar: false,
             schoolOpen: true,
             loadEvents: true,
+            showStatus: 'timetable',
+            messages: [],
         }
 
         this.days = {}
         this.preLoad = []
-        this.schoolYear = this.otherProps.schoolYear
         this.preLoadIsOn = false
+        this.schoolYear = this.otherProps.schoolYear
+        this.daysOfWeek = this.otherProps.daysOfWeek
+        this.person = this.otherProps.person
         this.changeDate = this.changeDate.bind(this)
         this.toggleTooltip = this.toggleTooltip.bind(this)
         this.togglePersonalCalendar = this.togglePersonalCalendar.bind(this)
         this.toggleSchoolCalendar = this.toggleSchoolCalendar.bind(this)
         this.toggleSpaceBookingCalendar = this.toggleSpaceBookingCalendar.bind(this)
+        this.takeAttendance = this.takeAttendance.bind(this)
+        this.takeStudentAttendance = this.takeStudentAttendance.bind(this)
     }
 
     componentDidMount () {
@@ -103,6 +106,7 @@ export default class TimetableApp extends Component {
                     day: this.days[date].day,
                     events: this.days[date].events,
                     schoolOpen: this.days[date].schoolOpen,
+                    showStatus: 'timetable',
                 })
             } else {
                 this.selectAnotherDay(date)
@@ -135,6 +139,7 @@ export default class TimetableApp extends Component {
     loadTimetable(date){
         this.setState({
             loadEvents: true,
+            showStatus: 'timetable',
         })
         fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
             .then(data => {
@@ -294,51 +299,80 @@ export default class TimetableApp extends Component {
         });
     }
 
+    takeAttendance(url){
+        this.setState({
+            loadEvents: true,
+            showStatus: 'attendance',
+            attendance: {},
+            messages: [],
+        })
+        fetchJson(url, {method: 'GET'}, this.locale)
+            .then(data => {
+                this.setState({
+                    showStatus: 'attendance',
+                    attendance: data.content,
+                    messages: data.messages,
+                    loadEvents: false,
+                })
+                if (data.redirect)
+                    openPage('/', {}, this.locale)
+            })
+    }
+
+    takeStudentAttendance(event, student){
+        const value = event.currentTarget.value
+        let attendance = {...this.state.attendance}
+        const id = student.person.id
+        if (attendance.students.hasOwnProperty(id)) {
+            student.attendance.code = parseInt(value)
+            attendance.students[id] = student
+            this.setState({
+                attendance: attendance,
+            })
+            if(attendance.type === 'courseClass'){
+                fetchJson('/attendance/class/record/', {body: JSON.stringify(attendance), method: 'POST'}, this.locale)
+                    .then(data => {
+                        this.setState({
+                            showStatus: 'attendance',
+                            attendance: data.content,
+                            messages: data.messages,
+                        })
+                    })
+            }
+
+        }
+
+    }
+
     render () {
-        return (
-            <div>
-                <div className={'row border-bottom'}>
-                    <div className="col-12">
-                        <p className="text-lg-left text-uppercase">{translateMessage(this.translations,"My Timetable")}</p>
-                    </div>
-                </div>
-                {this.state.loadEvents ?
-                    <div>
-                        <div className={'row'}>
-                            <div className="col-12">
-                                <div className="progress" title={translateMessage(this.translations, 'Loading')}>
-                                    <div className="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style={{width: "100%"}}
-                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={'row'}>
-                            <div className="col-12">
-                                <div className={'text-center'}>{translateMessage(this.translations, 'Loading')}...</div>
-                            </div>
-                        </div>
-                    </div>
-                : <TimetableRender
-                        {...this.state}
-                        {...this.otherProps}
-                        translations={this.translations}
-                        locale={this.locale}
-                        toggleTooltip={this.toggleTooltip}
-                        changeDate={this.changeDate}
-                        togglePersonalCalendar={this.togglePersonalCalendar}
-                        toggleSchoolCalendar={this.toggleSchoolCalendar}
-                        toggleSpaceBookingCalendar={this.toggleSpaceBookingCalendar}
-                    /> }
-            </div>
-        )
+        if (this.state.showStatus === 'timetable') {
+            return (
+                <TimetableRender
+                    {...this.otherProps}
+                    {...this.state}
+                    toggleTooltip={this.toggleTooltip}
+                    changeDate={this.changeDate}
+                    togglePersonalCalendar={this.togglePersonalCalendar}
+                    toggleSchoolCalendar={this.toggleSchoolCalendar}
+                    toggleSpaceBookingCalendar={this.toggleSpaceBookingCalendar}
+                    takeAttendance={this.takeAttendance}
+                />
+            )
+        }
+        else if (this.state.showStatus === 'attendance') {
+            return (
+                <AttendanceRender
+                    {...this.otherProps}
+                    {...this.state}
+                    takeStudentAttendance={this.takeStudentAttendance}
+                />
+            )
+        }
     }
 }
 
 TimetableApp.propTypes = {
-    translations: PropTypes.object.isRequired,
     locale: PropTypes.string,
-    person: PropTypes.number.isRequired,
-    daysOfWeek: PropTypes.object.isRequired,
 }
 
 TimetableApp.defaultProps = {

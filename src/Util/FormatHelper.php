@@ -140,10 +140,7 @@ class FormatHelper
 
         $title = self::name($person->getTitle(), $person->getPreferredName(), $person->getSurname(), $person->getPrimaryRole()->getCategory());
 
-        if (empty($person->getImage240()))
-            $src = self::getAssetPackages()->getUrl('/build/static/DefaultPerson.png');
-        else
-            $src = self::getAssetPackages()->getUrl($person->getImage240(), 'gibbon');
+        $src = self::getAssetPackages()->getUrl($person->getImage240(true), 'gibbon');
 
         return sprintf('<img src="%s" alt="%s" %s />', $src, $title, $size);
     }

@@ -31,6 +31,7 @@ namespace App\Entity;
 
 use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
+use App\Util\EntityHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -286,5 +287,46 @@ class CourseClass implements EntityInterface
     {
         $this->TTDayRowClasses = $TTDayRowClasses;
         return $this;
+    }
+
+    /**
+     * @var Collection
+     */
+    private $students;
+
+    /**
+     * getStudents
+     * @return Collection
+     */
+    public function getStudents(): Collection
+    {
+        if (! $this->students instanceof Collection || $this->students->count() === 0)
+        {
+            $this->students = $this->getCourseClassPeople()->filter(function($entry) {
+                return $entry->getRole() === 'Student';
+            });
+        }
+
+        $iterator = $this->students->getIterator();
+        $iterator->uasort(
+            function ($a, $b) {
+                return $a->getPerson()->getFullName() < $b->getPerson()->getFullName() ? -1 : 1 ;
+            }
+        );
+
+        $this->students  = new ArrayCollection(iterator_to_array($iterator, false));
+
+
+        return $this->students;
+    }
+
+    /**
+     * __toArray
+     * @param array $ignore
+     * @return array
+     */
+    public function __toArray(array $ignore = []): array
+    {
+        return EntityHelper::__toArray(CourseClass::class, $this, $ignore);
     }
 }

@@ -86,6 +86,5 @@ class RoleProvider
     private function additionalConstruct()
     {
         $this->getAllRoles();
-        dump($this);
     }
 }

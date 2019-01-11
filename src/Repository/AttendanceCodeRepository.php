@@ -47,4 +47,34 @@ class AttendanceCodeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AttendanceCode::class);
     }
+
+    /**
+     * findActive
+     * @return array
+     */
+    public function findActive(bool $asArray = false): array
+    {
+        $query = $this->createQueryBuilder('a', 'a.id')
+            ->where('a.active = :yes')
+            ->setParameter('yes', 'Y')
+            ->orderBy('a.sequenceNumber', 'ASC')
+            ->getQuery();
+        if ($asArray)
+            return $query->getArrayResult();
+        return $query->getResult();
+    }
+
+    /**
+     * findDefaultAttendanceCode
+     * @return AttendanceCode|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findDefaultAttendanceCode(): ?AttendanceCode
+    {
+        return $this->createQueryBuilder('ac')
+            ->orderBy('ac.sequenceNumber', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

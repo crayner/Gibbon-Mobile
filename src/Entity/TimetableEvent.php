@@ -29,6 +29,8 @@
  */
 namespace App\Entity;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 class TimetableEvent
 {
     /**
@@ -62,6 +64,7 @@ class TimetableEvent
     {
         $this->setName($name);
         $this->setId(uniqid('mob_'));
+        $this->setLinks([]);
     }
 
     /**
@@ -226,28 +229,9 @@ class TimetableEvent
     }
 
     /**
-     * @var string|null
+     * __toArray
+     * @return array
      */
-    private $link = '';
-
-    /**
-     * @return string|null
-     */
-    public function getLink(): ?string
-    {
-        return $this->link;
-    }
-
-    /**
-     * @param string|null $link
-     * @return TimetableEvent
-     */
-    public function setLink(?string $link): TimetableEvent
-    {
-        $this->link = $link ?: '';
-        return $this;
-    }
-
     public function __toArray(): array
     {
         $event = (array) $this;
@@ -325,6 +309,97 @@ class TimetableEvent
     public function setDescription(string $description): TimetableEvent
     {
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @var array
+     */
+    private $links;
+
+    /**
+     * @return array|bool
+     */
+    public function getLinks(): array
+    {
+        if (empty($this->links))
+            $this->links = [];
+        $resolver = new OptionsResolver();
+        $resolver->setDefaults([
+            'attendance' => false,
+            'external' => false,
+        ]);
+        $this->links = $resolver->resolve($this->links);
+        return $this->links;
+    }
+
+    /**
+     * @param array $links
+     * @return TimetableEvent
+     */
+    public function setLinks(array $links): TimetableEvent
+    {
+        $this->links = $links;
+        $this->getLinks();
+        return $this;
+    }
+
+    /**
+     * addLink
+     * @param string $name
+     * @param string $link
+     * @return TimetableEvent
+     */
+    public function addLink(string $name, string $link): TimetableEvent
+    {
+        $links = $this->getLinks();
+        $links[$name] = $link;
+        return $this->setLinks($links);
+    }
+
+    /**
+     * @var \DateTime
+     */
+    private $dayDate;
+
+    /**
+     * @return \DateTime
+     */
+    public function getDayDate(): \DateTime
+    {
+        return $this->dayDate;
+    }
+
+    /**
+     * @param \DateTime $dayDate
+     * @return TimetableEvent
+     */
+    public function setDayDate(\DateTime $dayDate): TimetableEvent
+    {
+        $this->dayDate = $dayDate;
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    private $attendanceStatus = 'orange';
+
+    /**
+     * @return string
+     */
+    public function getAttendanceStatus(): string
+    {
+        return $this->attendanceStatus;
+    }
+
+    /**
+     * @param string $attendanceStatus
+     * @return TimetableEvent
+     */
+    public function setAttendanceStatus(bool $attendanceStatus): TimetableEvent
+    {
+        $this->attendanceStatus = $attendanceStatus ? 'green' : 'orange' ;
         return $this;
     }
 }

@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Util\UserHelper;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,7 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AttendanceLogPersonRepository")
  * @ORM\Table(name="AttendanceLogPerson", indexes={@ORM\Index(name="date", columns={"date"}),@ORM\Index(name="dateAndPerson", columns={"date","gibbonPersonID"}),@ORM\Index(name="gibbonPersonID", columns={"gibbonPersonID"})})
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class AttendanceLogPerson
 {
@@ -149,16 +150,17 @@ class AttendanceLogPerson
     /**
      * @return Person|null
      */
-    public function getAttendanceCode(): ?Person
+    public function getAttendanceCode(): ?AttendanceCode
     {
         return $this->attendanceCode;
     }
 
     /**
-     * @param Person|null $attendanceCode
+     * setAttendanceCode
+     * @param AttendanceCode|null $attendanceCode
      * @return AttendanceLogPerson
      */
-    public function setAttendanceCode(?Person $attendanceCode): AttendanceLogPerson
+    public function setAttendanceCode(?AttendanceCode $attendanceCode): AttendanceLogPerson
     {
         $this->attendanceCode = $attendanceCode;
         return $this;
@@ -187,7 +189,7 @@ class AttendanceLogPerson
      */
     public function getDirection(): ?string
     {
-        return $this->direction;
+        return $this->direction ?: ($this->getAttendanceCode() ? $this->getAttendanceCode()->getDirection() : null);
     }
 
     /**
@@ -196,7 +198,7 @@ class AttendanceLogPerson
      */
     public function setDirection(?string $direction): AttendanceLogPerson
     {
-        $this->direction = $direction;
+        $this->direction = $direction ?: ($this->getAttendanceCode() ? $this->getAttendanceCode()->getDirection() : null);;
         return $this;
     }
 
@@ -205,7 +207,7 @@ class AttendanceLogPerson
      */
     public function getType(): ?string
     {
-        return $this->type;
+        return $this->type ?: ($this->getAttendanceCode() ? $this->getAttendanceCode()->getName() : null);
     }
 
     /**
@@ -214,7 +216,7 @@ class AttendanceLogPerson
      */
     public function setType(?string $type): AttendanceLogPerson
     {
-        $this->type = $type;
+        $this->type = $type ?: ($this->getAttendanceCode() ? $this->getAttendanceCode()->getName() : null);
         return $this;
     }
 
@@ -364,11 +366,21 @@ class AttendanceLogPerson
      * updateTakenTime
      * @return AttendanceLogPerson
      * @throws \Exception
-     * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
     public function updateTakenTime()
     {
         return $this->setTimestampTaken(new \DateTime('now'));
+    }
+
+    /**
+     * setTakerTime
+     * @return AttendanceLogPerson
+     * @throws \Exception
+     * @ORM\PrePersist()
+     */
+    public function setTakerTime(): AttendanceLogPerson
+    {
+        return $this->setTimestampTaken(new \DateTime('now'))->setPersonTaker(UserHelper::getCurrentUser())->setDirection(null)->setType(null);
     }
 }

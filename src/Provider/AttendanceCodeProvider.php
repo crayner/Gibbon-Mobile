@@ -24,46 +24,55 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 23/11/2018
- * Time: 15:27
+ * Date: 8/01/2019
+ * Time: 10:57
  */
-namespace App\Repository;
+namespace App\Provider;
 
-use App\Entity\DaysOfWeek;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\AttendanceCode;
+use App\Manager\Traits\EntityTrait;
 
 /**
- * Class DaysOfWeekRepository
- * @package App\Repository
+ * Class AttendanceCodeProvider
+ * @package App\Provider
  */
-class DaysOfWeekRepository extends ServiceEntityRepository
+class AttendanceCodeProvider
 {
+    use EntityTrait;
+
     /**
-     * DaysOfWeekRepository constructor.
-     * @param RegistryInterface $registry
+     * @var string
      */
-    public function __construct(RegistryInterface $registry)
+    private $entityName = AttendanceCode::class;
+
+    /**
+     * findActive
+     * @return array
+     * @throws \Exception
+     */
+    public function findActive(bool $asArray = false): array
     {
-        parent::__construct($registry, DaysOfWeek::class);
+        return $this->getRepository()->findActive($asArray);
     }
 
     /**
-     * @var array
+     * @var array|null
      */
-    private $daysOfWeek;
+    private $selectArray;
 
     /**
-     * getDaysOfWeek
+     * createSelectArray
      * @return array
+     * @throws \Exception
      */
-    public function findAllAsArray(): array
+    public function createSelectArray(): array
     {
-        if (! empty($this->daysOfWeek))
-            return $this->daysOfWeek;
-        $this->daysOfWeek = $this->createQueryBuilder('dow', 'dow.nameShort')
-            ->getQuery()
-            ->getArrayResult();
-        return $this->daysOfWeek;
+        if (! empty($this->selectArray)) {
+            $this->selectArray = [];
+            foreach ($this->findActive() as $item) {
+                $this->selectArray[$item->getId()] = $item->getName();
+            }
+        }
+        return $this->selectArray;
     }
 }

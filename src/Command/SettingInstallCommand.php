@@ -29,14 +29,13 @@
  */
 namespace App\Command;
 
+use App\Entity\I18n;
 use App\Manager\SettingManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -161,6 +160,12 @@ class SettingInstallCommand extends Command
             $gibbon['parameters']['gibbon_host_url'] = ($this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL') ?: '').'/';
             $gibbon['parameters']['mailer_sender_address'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationEmail', null);
             $gibbon['parameters']['mailer_sender_name'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationName', null);
+            $gibbon['parameters']['locale'] = $this->getSettingManager()->getRepository(I18n::class)->createQueryBuilder('i')
+                ->where('i.systemDefault = :yes')
+                ->setParameter('yes', 'Y')
+                ->select('i.code')
+                ->getQuery()
+                ->getSingleScalarResult() ?: 'en_GB';
 
             $content = Yaml::dump($gibbon, 8);
 

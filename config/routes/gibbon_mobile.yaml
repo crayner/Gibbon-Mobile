@@ -1,6 +1,9 @@
 _home:
     path: /
     controller: App\Controller\LocaleController::home
+_ntp:
+    path: /ntp/
+    controller: App\Controller\LocaleController::ntp
 google_oauth:
     path: "/connect/google/"
     controller: App\Controller\OAuthController::connectGoogle

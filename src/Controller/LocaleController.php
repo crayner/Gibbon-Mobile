@@ -30,6 +30,8 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class LocaleController
@@ -45,5 +47,17 @@ class LocaleController extends AbstractController
     public function home()
     {
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * ntp
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function ntp(Request $request)
+    {
+        return new JsonResponse([
+            'data' => (string) round($request->server->get('REQUEST_TIME_FLOAT')* 1000),
+        ], 200);
     }
 }

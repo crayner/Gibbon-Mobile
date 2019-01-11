@@ -6,6 +6,9 @@ import {translateMessage} from '../Component/MessageTranslator'
 import {getTimeString} from '../Component/getTimeString'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
+import {faUsers,faCheck} from '@fortawesome/free-solid-svg-icons'
+import {openPage} from '../Component/openPage'
+import {getDateString} from '../Component/getDateString'
 
 export default function DayEvents(props) {
     const {
@@ -14,7 +17,8 @@ export default function DayEvents(props) {
         showSchoolCalendar,
         showSpaceBookingCalendar,
         events,
-        ...otherProps
+        locale,
+        takeAttendance,
     } = props
 
     if (events.length === 0)
@@ -49,7 +53,15 @@ export default function DayEvents(props) {
                 }
                 content.push(<p className={'font-weight-bold'} key={'name'}>{event.name}</p>)
             } else {
-                content.push(<p className={'font-weight-bold'} key={'name'}>{event.name}</p>)
+
+                const stuff = event.links.attendance && eventDateInPast(event) ? (
+                    <span style={{float: 'right'}} className="fa-layers fa-fw" title={translateMessage(translations,'Take Attendance by Class')} onClick={() => takeAttendance(event.links.attendance)}>
+                        <FontAwesomeIcon icon={faUsers} color={event.attendanceStatus} />
+                        <FontAwesomeIcon icon={faCheck} color={'black'} transform={'shrink-3 down-3 right-6'} />
+                    </span>
+                ) : ''
+
+                content.push(<p className={'font-weight-bold'} key={'name'}>{stuff}{event.name}</p>)
                 content.push(<p className={'font-italic text-truncate'} key={'timeLocation'}>{getTimeString(event.start.date)} - {getTimeString(event.end.date)}{event.location !== '' ? (' @ ' + event.location) : ''}</p>)
                 content.push(<p className={'font-weight-bold className'} key={'className'}>{event.className}</p>)
                 if (event.phone !== '') {
@@ -60,7 +72,7 @@ export default function DayEvents(props) {
 
         if (event.eventType === 'school' || event.eventType === 'personal')
         {
-            content.push(<p className={'font-weight-bold'} key={'name'}><FontAwesomeIcon style={{float: 'right'}} icon={faEye} onClick={() => window.open(event.link,'_blank')} title={translateMessage(translations, 'View Details')} />{event.name}</p>)
+            content.push(<p className={'font-weight-bold'} key={'name'}><FontAwesomeIcon style={{float: 'right'}} icon={faEye} onClick={() => window.open(event.links.external,'_blank')} title={translateMessage(translations, 'View Details')} />{event.name}</p>)
             if (event.allDayEvent && event.location !== '') {
                 content.push(<p className={'font-italic text-truncate'} key={'location'}> @ {event.location}</p>)
             } else if (! event.allDayEvent && event.location !== '') {
@@ -68,7 +80,6 @@ export default function DayEvents(props) {
 
             }
         }
-
 
         return (
             <div className={'row'} key={event.id}>
@@ -93,8 +104,20 @@ export default function DayEvents(props) {
 
 DayEvents.propTypes = {
     translations: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
     events: PropTypes.array.isRequired,
     showPersonalCalendar: PropTypes.bool.isRequired,
     showSchoolCalendar: PropTypes.bool.isRequired,
     showSpaceBookingCalendar: PropTypes.bool.isRequired,
+    takeAttendance: PropTypes.func.isRequired,
+}
+
+function eventDateInPast(event){
+    //To allow for server /client time slip, a 5 minute buffer is added.
+    const date = new Date(getDateString(event.dayDate.date) + 'T' + getTimeString(event.start.date))
+    const now = new Date()
+    now.setMinutes(now.getMinutes() - 5)
+    if (date < now)
+        return true
+    return false
 }

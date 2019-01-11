@@ -215,6 +215,9 @@ abstract class DashboardManager implements DashboardInterface
         $translations['All Day Event'] = $this->getTranslator()->trans('All Day Event');
         $translations['Bookings'] = $this->getTranslator()->trans('Bookings');
         $translations['View Details'] = $this->getTranslator()->trans('View Details');
+        $translations['Take Attendance by Class'] = $this->getTranslator()->trans('Take Attendance by Class');
+        $translations['Take Attendance'] = $this->getTranslator()->trans('Take Attendance');
+        $translations['on'] = $this->getTranslator()->trans('on');
 
         $properties['translations'] = $translations;
         $properties['locale'] = $this->getRequest()->get('_locale');
@@ -227,6 +230,7 @@ abstract class DashboardManager implements DashboardInterface
         $properties['allowSpaceBookingCalendar'] = $this->getPerson()->getViewCalendarSpaceBooking() === 'Y' ? true : false ;
         $properties['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         $properties['daysOfWeek'] = SchoolYearHelper::getDaysOfWeek();
+        $properties['gibbonHost'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL');
         return $properties;
     }
 

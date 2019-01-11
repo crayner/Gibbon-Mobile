@@ -30,6 +30,7 @@
 namespace App\Repository;
 
 use App\Entity\AttendanceLogCourseClass;
+use App\Entity\CourseClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -46,5 +47,25 @@ class AttendanceLogCourseClassRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, AttendanceLogCourseClass::class);
+    }
+
+    /**
+     * isAttendanceTaken
+     * @param int $class
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function isAttendanceTaken(int $class, \DateTime $date): bool
+    {
+        if (empty($this->createQueryBuilder('alcc')
+            ->join('alcc.courseClass', 'cc')
+            ->where('alcc.date = :date')
+            ->setParameter('date', $date)
+            ->andWhere('cc.id = :ccid')
+            ->setParameter('ccid', $class)
+            ->getQuery()
+            ->getResult()))
+            return false;
+        return true;
     }
 }

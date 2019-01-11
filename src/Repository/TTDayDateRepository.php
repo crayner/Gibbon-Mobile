@@ -30,7 +30,6 @@
 namespace App\Repository;
 
 use App\Entity\TTDayDate;
-use App\Manager\EntityInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -47,5 +46,23 @@ class TTDayDateRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, TTDayDate::class);
+    }
+
+    /**
+     * isSchoolOpen
+     * @param \DateTime $date
+     * @return bool
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isSchoolOpen(\DateTime $date): bool
+    {
+        if (intval($this->createQueryBuilder('tdd')
+                ->select('COUNT(tdd.id)')
+                ->where('tdd.date LIKE :date')
+                ->setParameter('date', $date->format('Y-m-d').'%')
+                ->getQuery()
+                ->getSingleScalarResult()) > 0)
+            return true;
+        return false;
     }
 }

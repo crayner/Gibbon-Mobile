@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Util\UserHelper;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AttendanceLogCourseClassRepository")
  * @ORM\Table(name="AttendanceLogCourseClass")
+ * @ORM\HasLifecycleCallbacks()
  */
 class AttendanceLogCourseClass
 {
@@ -158,12 +160,31 @@ class AttendanceLogCourseClass
      * @param \DateTime|null $timestampTaken
      * @return AttendanceLogCourseClass
      * @throws \Exception
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
      */
     public function setTimestampTaken(?\DateTime $timestampTaken = null): AttendanceLogCourseClass
     {
         $this->timestampTaken = $timestampTaken ?: new \DateTime('now');
         return $this;
+    }
+
+    /**
+     * updateTimestamp
+     * @return AttendanceLogCourseClass
+     * @throws \Exception
+     */
+    public function updateTimestamp(): AttendanceLogCourseClass
+    {
+        return $this->setTimestampTaken(new \DateTime('now'));
+    }
+
+    /**
+     * setTakerTime
+     * @return AttendanceLogCourseClass
+     * @throws \Exception
+     * @ORM\PrePersist()
+     */
+    public function setTakerTime(): AttendanceLogCourseClass
+    {
+        return $this->setTimestampTaken(new \DateTime('now'))->setPerson(UserHelper::getCurrentUser());
     }
 }

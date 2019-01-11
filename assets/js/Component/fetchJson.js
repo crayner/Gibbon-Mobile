@@ -26,7 +26,14 @@ export function fetchJson(url, options, locale) {
         .then(response => {
             // decode JSON, but avoid problems with empty responses
             return response.text()
-                .then(text => text ? JSON.parse(text) : '')
+                .then(text => {
+                    if (text.includes('window.Sfdump'))
+                    {
+                        console.log(text)
+                        return ''
+                    }
+                    return typeof(text) === 'string' ? JSON.parse(text) : ''
+                })
         })
 }
 

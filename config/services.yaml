@@ -43,7 +43,7 @@ services:
 
     App\Util\LocaleHelper:
         arguments:
-            - '%locale%'
+            $locale: '%locale%'
 
     app.manager.translation_manager:
         class: App\Manager\TranslationManager
@@ -66,6 +66,14 @@ services:
         arguments:
             $logger: "@monolog.logger.security"
 
+    App\Util\SecurityHelper:
+        arguments:
+            $logger: "@monolog.logger.security"
+
     App\Security\GoogleAuthenticator:
         arguments:
             $logger: '@monolog.logger.security'
+
+    App\Listener\HelperListener:
+        arguments:
+            $logger: "@monolog.logger.security"

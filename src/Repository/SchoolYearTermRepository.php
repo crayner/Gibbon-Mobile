@@ -30,6 +30,7 @@
 namespace App\Repository;
 
 use App\Entity\SchoolYearTerm;
+use App\Util\SchoolYearHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -46,5 +47,23 @@ class SchoolYearTermRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, SchoolYearTerm::class);
+    }
+
+    /**
+     * isDayInTerm
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function isDayInTerm(\DateTime $date): bool
+    {
+        if ($this->createQueryBuilder('syt')
+        ->select('COUNT(syt)')
+        ->where('syt.firstDay <= :date and syt.lastDay >= :date')
+        ->andWhere('syt.schoolYear = :schoolYear')
+        ->setParameters(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'date' => $date])
+        ->getQuery()
+        ->getSingleScalarResult() > 0)
+            return true;
+        return false;
     }
 }

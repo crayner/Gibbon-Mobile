@@ -24,46 +24,40 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 23/11/2018
- * Time: 15:27
+ * Date: 8/01/2019
+ * Time: 13:21
  */
-namespace App\Repository;
 
-use App\Entity\DaysOfWeek;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+namespace App\Util;
 
-/**
- * Class DaysOfWeekRepository
- * @package App\Repository
- */
-class DaysOfWeekRepository extends ServiceEntityRepository
+
+use App\Entity\TTDayDate;
+use App\Provider\TimetableProvider;
+
+class TimetableHelper
 {
     /**
-     * DaysOfWeekRepository constructor.
-     * @param RegistryInterface $registry
+     * @var TimetableProvider
      */
-    public function __construct(RegistryInterface $registry)
+    private static $provider;
+
+    /**
+     * TimetableHelper constructor.
+     * @param TimetableProvider $provider
+     */
+    public function __construct(TimetableProvider $provider)
     {
-        parent::__construct($registry, DaysOfWeek::class);
+        self::$provider = $provider;
     }
 
     /**
-     * @var array
+     * isSchoolOpen
+     * @param \DateTime $date
+     * @return bool
+     * @throws \Exception
      */
-    private $daysOfWeek;
-
-    /**
-     * getDaysOfWeek
-     * @return array
-     */
-    public function findAllAsArray(): array
+    public static function isSchoolOpen(\DateTime $date): bool
     {
-        if (! empty($this->daysOfWeek))
-            return $this->daysOfWeek;
-        $this->daysOfWeek = $this->createQueryBuilder('dow', 'dow.nameShort')
-            ->getQuery()
-            ->getArrayResult();
-        return $this->daysOfWeek;
+        return self::$provider->getRepository(TTDayDate::class)->isSchoolOpen($date);
     }
 }

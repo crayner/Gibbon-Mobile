@@ -35,6 +35,7 @@ use App\Entity\Module;
 use App\Provider\ActionProvider;
 use App\Provider\ModuleProvider;
 use Doctrine\DBAL\Driver\PDOException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class SecurityHelper
@@ -50,14 +51,21 @@ class SecurityHelper
     private static $moduleProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private static $logger;
+
+    /**
      * SecurityHelper constructor.
      * @param ActionProvider $actionProvider
      * @param ModuleProvider $moduleProvider
+     * @param LoggerInterface $logger
      */
-    public function __construct(ActionProvider $actionProvider, ModuleProvider $moduleProvider)
+    public function __construct(ActionProvider $actionProvider, ModuleProvider $moduleProvider, LoggerInterface $logger)
     {
         self::$actionProvider = $actionProvider;
         self::$moduleProvider = $moduleProvider;
+        self::$logger = $logger;
     }
 
     /**
@@ -149,31 +157,41 @@ class SecurityHelper
      * @return bool
      * @throws \Exception
      */
-    public static function isActionAccessible(string $address, string $sub = '%'): bool
+    public static function isActionAccessible(string $address, string $sub = '%', ?LoggerInterface $logger = null): bool
     {
+        $action = '';
+        $module = '';
+        $role = '';
         //Check user is logged in
         if (UserHelper::getCurrentUser() instanceof UserInterface) {
             //Check user has a current role set
             if (! empty(UserHelper::getCurrentUser()->getPrimaryRole())) {
                 //Check module ready
                 $module = self::checkModuleReady($address);
+                $action = self::getActionName($address);
                 if ($module instanceof Module) {
                     //Check current role has access rights to the current action.
                     try {
+                        $role = UserHelper::getCurrentUser()->getPrimaryRole();
                         if (count(self::getActionProvider()->findByURLListModuleRole(
                             [
-                                'name' => "%".self::getActionName($address)."%",
+                                'name' => "%".$action."%",
                                 "module" => $module,
-                                'role' => UserHelper::getCurrentUser()->getPrimaryRole(),
+                                'role' => $role,
                                 'sub' => $sub,
                             ]
                             )) > 0)
                                 return true;
                     } catch (PDOException $e) {
                     }
+                } else {
+                    self::$logger->warning(sprintf('No module was linked to the address "%s"', $address));
                 }
             }
+        } else {
+            self::$logger->debug(sprintf('The user was not valid!' ));
         }
+        self::$logger->debug(sprintf('The action "%s", role "%s" and sub-action "%s" combination is not accessible.', $action, $role, $sub ));
 
         return false;
     }

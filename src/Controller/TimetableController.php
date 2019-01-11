@@ -34,6 +34,8 @@ use App\Manager\TimetableRenderManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -45,22 +47,35 @@ class TimetableController extends AbstractController
     /**
      * myTimetable
      * @param string $date
-     * @return JsonResponse
+     * @return JsonResponse|Response
      * @Route("/timetable/{date}/{person}/display/", name="timetable_display")
-     * @Security("is_granted('ROLE_ACTION', ['/modules/Timetable/tt.php'])")
      */
-    public function myTimetable(TimetableRenderManager $manager, Person $person, string $date = 'today')
+    public function myTimetable(TimetableRenderManager $manager, Person $person, Request $request, string $date = 'today')
     {
         if ($this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php'])) {
             $date = $manager->manageDateChange($date);
+            if ($request->getContentType() !== 'json')
+                return $this->render('Default/dump.html.twig', [
+                    'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
+                    'redirect' => false,
+                ]);
             return new JsonResponse([
                 'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
+                'redirect' => false,
             ], 200);
         }
+        if ($request->getContentType() !== 'json')
+            return $this->render('Default/dump.html.twig', [
+                'content' => [
+                    'valid' => 'error',
+                ],
+                'redirect' => true,
+            ]);
         return new JsonResponse([
             'content' => [
                 'valid' => 'error',
             ],
+            'redirect' => true,
         ], 200);
     }
 }

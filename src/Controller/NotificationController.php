@@ -71,16 +71,24 @@ class NotificationController extends AbstractController
     public function details(Request $request, NotificationManager $manager)
     {
         if ($this->isGranted('ROLE_USER')) {
-            if ($request->getContentType() !== 'json')
-                return $this->redirectToRoute('home');
 
             $manager->setNotifications();
+            if ($request->getContentType() !== 'json')
+                return $this->render('Default/dump.html.twig', [
+                    'count' => $manager->getCount(),
+                    'redirect' => false,
+                ]);
             return new JsonResponse(
                 [
                     'count' => $manager->getCount(),
                     'redirect' => false,
                 ], 200);
         }
+        if ($request->getContentType() !== 'json')
+            return $this->render('Default/dump.html.twig', [
+                'count' => $manager->getCount(),
+                'redirect' => true,
+            ]);
         return new JsonResponse(
             [
                 'count' => 0,

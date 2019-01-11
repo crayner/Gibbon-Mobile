@@ -1,0 +1,9 @@
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+{% block content %}
+    {{ dump() }}
+{% endblock content %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock javascripts %}

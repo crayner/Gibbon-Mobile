@@ -25,6 +25,14 @@ export default class TrayApp extends Component {
         this.showNotifications = this.showNotifications.bind(this)
         this.showMessenger = this.showMessenger.bind(this)
         this.handleLogout = this.handleLogout.bind(this)
+        this.delay = ( function() {
+            var timer = 0;
+            return function(callback, ms) {
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        })()
+
     }
 
     componentDidMount () {

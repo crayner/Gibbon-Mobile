@@ -32,6 +32,7 @@ namespace App\Util;
 
 
 use App\Entity\Person;
+use App\Provider\I18nProvider;
 
 class LocaleHelper
 {
@@ -41,12 +42,18 @@ class LocaleHelper
     private static $locale = 'en';
 
     /**
+     * @var I18nProvider
+     */
+    private static $provider;
+
+    /**
      * LocaleHelper constructor.
      * @param string $locale
      */
-    public function __construct(string $locale = 'en')
+    public function __construct(I18nProvider $provider, string $locale = 'en')
     {
-        self::$locale = $locale;
+        self::$locale = self::getDefaultLocale($locale);
+        self::$provider = $provider;
         $user = UserHelper::getCurrentUser();
         if ($user instanceof Person)
             self::$locale = ! empty($user->getI18nPersonal()) && ! empty($user->getI18nPersonal()->getCode()) ? $user->getI18nPersonal()->getCode() : self::$locale ;
@@ -60,5 +67,22 @@ class LocaleHelper
     public static function getLocale(): string
     {
         return self::$locale;
+    }
+
+    /**
+     * getDefaultLocale
+     * @param string $locale
+     * @return string
+     */
+    public static function getDefaultLocale(string $locale): string
+    {
+        if ($locale !== 'en')
+            return $locale;
+        return self::$provider->getRepository()->createQueryBuilder('i')
+            ->where('i.systemDefault = :yes')
+            ->setParameter('yes', 'Y')
+            ->select('i.code')
+            ->getQuery()
+            ->getSingleScalarResult() ?: $locale;
     }
 }

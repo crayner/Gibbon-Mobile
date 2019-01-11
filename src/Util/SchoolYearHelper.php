@@ -151,15 +151,7 @@ class SchoolYearHelper
      */
     public static function isDayInTerm(\DateTime $date): bool
     {
-        if (EntityHelper::getRepository(SchoolYearTerm::class)->createQueryBuilder('syt')
-            ->select('COUNT(syt)')
-            ->where('syt.firstDay <= :date and syt.lastDay >= :date')
-            ->andWhere('syt.schoolYear = :schoolYear')
-            ->setParameters(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'date' => $date])
-            ->getQuery()
-            ->getSingleScalarResult() > 0)
-            return true;
-        return false;
+        return EntityHelper::getRepository(SchoolYearTerm::class)->isDayInTerm($date);
     }
 
     /**
@@ -174,21 +166,75 @@ class SchoolYearHelper
     }
 
     /**
-     * @var array|null
-     */
-    private static $daysOfWeek;
-
-    /**
      * getDaysOfWeek
      * @return array
      */
     public static function getDaysOfWeek(): array
     {
-        if (! empty(self::$daysOfWeek))
-            return self::$daysOfWeek;
-        self::$daysOfWeek = EntityHelper::getRepository(DaysOfWeek::class)->createQueryBuilder('dow', 'dow.nameShort')
-            ->getQuery()
-            ->getArrayResult();
-        return self::$daysOfWeek;
+        return EntityHelper::getRepository(DaysOfWeek::class)->findAllAsArray();
+    }
+
+//Checks to see if a specified date (YYYY-MM-DD) is a day where school is open in the current academic year. There is an option to search all years
+    function isSchoolOpen($guid, $date, $connection2, $allYears = '')
+    {
+        //Set test variables
+        $isInTerm = false;
+        $isSchoolDay = false;
+        $isSchoolOpen = false;
+
+        //Turn $date into UNIX timestamp and extract day of week
+        $timestamp = dateConvertToTimestamp($date);
+        $dayOfWeek = date('D', $timestamp);
+
+        //See if date falls into a school term
+        try {
+            $data = array();
+            $sqlWhere = '';
+            if ($allYears != true) {
+                $data[$_SESSION[$guid]['gibbonSchoolYearID']] = $_SESSION[$guid]['gibbonSchoolYearID'];
+                $sqlWhere = ' AND gibbonSchoolYear.gibbonSchoolYearID=:'.$_SESSION[$guid]['gibbonSchoolYearID'];
+            }
+
+            $sql = "SELECT gibbonSchoolYearTerm.firstDay, gibbonSchoolYearTerm.lastDay FROM gibbonSchoolYearTerm, gibbonSchoolYear WHERE gibbonSchoolYearTerm.gibbonSchoolYearID=gibbonSchoolYear.gibbonSchoolYearID $sqlWhere";
+            $result = $connection2->prepare($sql);
+            $result->execute($data);
+        } catch (PDOException $e) {
+        }
+        while ($row = $result->fetch()) {
+            if ($date >= $row['firstDay'] and $date <= $row['lastDay']) {
+                $isInTerm = true;
+            }
+        }
+
+        //See if date's day of week is a school day
+        if ($isInTerm == true) {
+            try {
+                $data = array('nameShort' => $dayOfWeek);
+                $sql = "SELECT * FROM gibbonDaysOfWeek WHERE nameShort=:nameShort AND schoolDay='Y'";
+                $result = $connection2->prepare($sql);
+                $result->execute($data);
+            } catch (PDOException $e) {
+            }
+            if ($result->rowCount() > 0) {
+                $isSchoolDay = true;
+            }
+        }
+
+        //See if there is a special day
+        if ($isInTerm == true and $isSchoolDay == true) {
+            try {
+                $data = array('date' => $date);
+                $sql = "SELECT * FROM gibbonSchoolYearSpecialDay WHERE type='School Closure' AND date=:date";
+                $result = $connection2->prepare($sql);
+                $result->execute($data);
+            } catch (PDOException $e) {
+            }
+
+            if ($result->rowCount() < 1) {
+                $isSchoolOpen = true;
+            }
+        }
+
+        return $isSchoolOpen;
     }
 }

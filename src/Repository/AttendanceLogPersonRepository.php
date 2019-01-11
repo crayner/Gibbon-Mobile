@@ -30,6 +30,7 @@
 namespace App\Repository;
 
 use App\Entity\AttendanceLogPerson;
+use App\Entity\CourseClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -46,5 +47,25 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, AttendanceLogPerson::class);
+    }
+
+    /**
+     * findClassStudents
+     * @param CourseClass $class
+     * @param \DateTime $date
+     * @return array
+     */
+    public function findClassStudents(CourseClass $class, \DateTime $date): array
+    {
+        return $this->createQueryBuilder('alp')
+            ->select('alp, p')
+            ->join('alp.person', 'p')
+            ->where('alp.courseClass = :class')
+            ->setParameter('class', $class)
+            ->andWhere('alp.date = :currentDate')
+            ->setParameter('currentDate', $date)
+            ->getQuery()
+            ->getResult() ?: [];
+
     }
 }
