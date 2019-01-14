@@ -235,10 +235,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 	 */
 	public function supports(Request $request): bool
 	{
-		if ($request->getPathInfo() != '/security/oauth2callback/')
-			return false;
-
-		return true;
+	    return strpos($request->getPathInfo(), 'security/oauth2callback') !== false && $request->query->has('code');
 	}
 
     /**

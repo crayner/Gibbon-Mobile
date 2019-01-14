@@ -18,12 +18,12 @@ export default function ButtonSubmit(props) {
         button.type = 'submit'
 
     if (button.icon === false || typeof(button.icon) === 'undefined')
-        button.icon = ['fas','download']
+        button.icon = ['fas','upload']
 
     return (
         <Button
             button={button}
-            submitButtonHandler={submitButtonHandler}
+            buttonHandler={submitButtonHandler}
             {...otherProps}
         />
     )

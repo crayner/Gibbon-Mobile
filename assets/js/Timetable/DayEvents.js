@@ -7,7 +7,6 @@ import {getTimeString} from '../Component/getTimeString'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import {faUsers,faCheck} from '@fortawesome/free-solid-svg-icons'
-import {openPage} from '../Component/openPage'
 import {getDateString} from '../Component/getDateString'
 
 export default function DayEvents(props) {
@@ -17,7 +16,6 @@ export default function DayEvents(props) {
         showSchoolCalendar,
         showSpaceBookingCalendar,
         events,
-        locale,
         takeAttendance,
     } = props
 
@@ -54,8 +52,17 @@ export default function DayEvents(props) {
                 content.push(<p className={'font-weight-bold'} key={'name'}>{event.name}</p>)
             } else {
 
+                const today = new Date()
+                if (getDateString(event.dayDate.date) === getDateString(today))
+                {
+                    const timeNow = getTimeString(today)
+                    if (timeNow >= getTimeString(event.start.date) && timeNow <getTimeString(event.end.date)) {
+                        colour = colour.replace('alert-light', 'alert-success');
+                    }
+                }
+
                 const stuff = event.links.attendance && eventDateInPast(event) ? (
-                    <span style={{float: 'right'}} className="fa-layers fa-fw" title={translateMessage(translations,'Take Attendance by Class')} onClick={() => takeAttendance(event.links.attendance)}>
+                    <span style={{float: 'right'}} className="fa-layers fa-fw" title={translateMessage(translations,'Take Attendance by Class')} onClick={() => takeAttendance(event)}>
                         <FontAwesomeIcon icon={faUsers} color={event.attendanceStatus} />
                         <FontAwesomeIcon icon={faCheck} color={'black'} transform={'shrink-3 down-3 right-6'} />
                     </span>
@@ -104,7 +111,6 @@ export default function DayEvents(props) {
 
 DayEvents.propTypes = {
     translations: PropTypes.object.isRequired,
-    locale: PropTypes.string.isRequired,
     events: PropTypes.array.isRequired,
     showPersonalCalendar: PropTypes.bool.isRequired,
     showSchoolCalendar: PropTypes.bool.isRequired,

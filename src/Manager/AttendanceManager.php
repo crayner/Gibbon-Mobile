@@ -360,6 +360,6 @@ class AttendanceManager
         }
         $this->getProvider()->getEntityManager()->persist($alcc);
         $this->getProvider()->getEntityManager()->flush();
-        $this->getMessageManager()->add('Success', 'Your request was completed successfully.');
+        $this->getMessageManager()->add('success', 'Your request was completed successfully.');
     }
 }

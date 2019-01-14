@@ -61,19 +61,19 @@ class AttendanceController extends AbstractController
 
             if ($request->getContentType() === 'json')
                 return new JsonResponse([
-                    'messages' => $manager->getMessageManager()->getTranslatedMessages($translator),
+                    'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
                     'content' => $manager->__toArray(),
                     'redirect' =>false
                 ], 200);
             return $this->render('Default/dump.html.twig', [
                 'manager' => $manager,
-                'messages' => $manager->getMessageManager()->getTranslatedMessages($translator),
+                'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
                 'content' => $manager->__toArray(),
             ]);
         }
         $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
         return new JsonResponse([
-            'messages' => $manager->getMessageManager()->getTranslatedMessages($translator),
+            'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
             'content' => [],
             'redirect' => true,
         ], 200);
@@ -91,14 +91,14 @@ class AttendanceController extends AbstractController
             $manager->handleClassRequest($request);
 
             return new JsonResponse([
-                'messages' => $manager->getMessageManager()->getTranslatedMessages($translator),
+                'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
                 'content' => $manager->__toArray(),
                 'redirect' => false,
             ]);
         }
         $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
         return new JsonResponse([
-            'messages' => $manager->getMessageManager()->getTranslatedMessages($translator),
+            'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
             'content' => [],
             'redirect' => true,
         ], 200);

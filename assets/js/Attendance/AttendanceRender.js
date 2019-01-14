@@ -7,15 +7,16 @@ import Messages from '../Component/Messages/Messages'
 import {format} from 'date-fns/esm'
 import { Form, FormGroup, Label, Input } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import ButtonSubmit from '../Component/Button/ButtonSubmit'
 
 export default function AttendanceRender(props) {
     const {
-        messages,
         attendance,
         translations,
         gibbonHost,
         takeStudentAttendance,
         loadEvents,
+        ...otherProps
     } = props
 
     if (loadEvents){
@@ -26,7 +27,7 @@ export default function AttendanceRender(props) {
                         <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance")}</p>
                     </div>
                 </div>
-                <Messages messages={messages}/>
+                <Messages {...otherProps} translations={translations}/>
                 <div className={'row'}>
                     <div className="col-12">
                         <div className="progress" title={translateMessage(translations, 'Loading')}>
@@ -39,6 +40,7 @@ export default function AttendanceRender(props) {
             </div>
         )
     }
+
 
 
     const onDate = new Date(attendance.date.date)
@@ -70,7 +72,7 @@ export default function AttendanceRender(props) {
                             id={'attendance_code_'+ key}
                             value={student.attendance.code}
                             className={'form-control'}
-                            onChange={(event) => takeStudentAttendance(event,student)}
+                            onChange={(event) => takeStudentAttendance(student,event)}
                         >
                             {attendanceCodeOptions()}
                         </Input>
@@ -90,15 +92,22 @@ export default function AttendanceRender(props) {
         })
     }
 
+    const button = {
+        style: {float: 'right'},
+        title: translateMessage(translations, 'Take Attendance by Class'),
+    }
+
     if (attendance.type === 'courseClass') {
         return (
             <div className={'container-fluid timetable'}>
                 <div className={'row border-bottom'}>
                     <div className="col-12">
-                        <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance")}: {attendance.courseClass.course.name}.{attendance.courseClass.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}</p>
+                        <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance")}: {attendance.courseClass.course.name}.{attendance.courseClass.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}
+                            <ButtonSubmit button={button} submitButtonHandler={takeStudentAttendance}/>
+                        </p>
                     </div>
                 </div>
-                <Messages messages={messages}/>
+                <Messages {...otherProps} translations={translations}/>
                 {students}
             </div>
         )
@@ -106,7 +115,6 @@ export default function AttendanceRender(props) {
 }
 
 AttendanceRender.propTypes = {
-    messages: PropTypes.array,
     gibbonHost: PropTypes.string,
     translations: PropTypes.object.isRequired,
     attendance: PropTypes.object.isRequired,

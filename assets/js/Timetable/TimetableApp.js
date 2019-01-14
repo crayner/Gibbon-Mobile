@@ -46,6 +46,7 @@ export default class TimetableApp extends Component {
         this.toggleSpaceBookingCalendar = this.toggleSpaceBookingCalendar.bind(this)
         this.takeAttendance = this.takeAttendance.bind(this)
         this.takeStudentAttendance = this.takeStudentAttendance.bind(this)
+        this.cancelMessage = this.cancelMessage.bind(this)
     }
 
     componentDidMount () {
@@ -59,6 +60,14 @@ export default class TimetableApp extends Component {
         }
         this.startPreLoad()
     }
+
+    cancelMessage(id) {
+        this.state.messages.splice(id,1)
+        this.setState({
+            messages: this.state.messages,
+        })
+    }
+
 
     isDateInSchoolYear(date) {
         this.direction = ! this.direction
@@ -158,6 +167,7 @@ export default class TimetableApp extends Component {
                         schoolOpen: data.content.schoolOpen,
                         loadEvents: false,
                     })
+                    this.startPreLoad()
                 }
             })
     }
@@ -222,7 +232,7 @@ export default class TimetableApp extends Component {
 
     preLoadTimetableDays()
     {
-        if (this.preLoad.length === 0) {
+        if (! this.preLoadIsOn || this.preLoad.length === 0 || this.state.loadEvents || this.state.showStatus === 'attendance') {
             this.preLoadIsOn = false
             return
         }
@@ -238,6 +248,7 @@ export default class TimetableApp extends Component {
             this.preLoadTimetableDays()
             return
         }
+
         fetchJson('/timetable/' + newDate + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
             .then(data => {
                 if (data.content.day !== this.state.day) {
@@ -299,7 +310,8 @@ export default class TimetableApp extends Component {
         });
     }
 
-    takeAttendance(url){
+    takeAttendance(event){
+        const url = event.links.attendance
         this.setState({
             loadEvents: true,
             showStatus: 'attendance',
@@ -308,9 +320,11 @@ export default class TimetableApp extends Component {
         })
         fetchJson(url, {method: 'GET'}, this.locale)
             .then(data => {
+                let attendance = data.content
+                attendance.event = event
                 this.setState({
                     showStatus: 'attendance',
-                    attendance: data.content,
+                    attendance: attendance,
                     messages: data.messages,
                     loadEvents: false,
                 })
@@ -319,7 +333,14 @@ export default class TimetableApp extends Component {
             })
     }
 
-    takeStudentAttendance(event, student){
+    takeStudentAttendance(student, event){
+        if (typeof(student.colour) === 'string') {
+            this.setState({
+                loadEvents: true,
+            })
+            this.setCourseClassAttendance({...this.state.attendance}, 'timetable')
+            return
+        }
         const value = event.currentTarget.value
         let attendance = {...this.state.attendance}
         const id = student.person.id
@@ -330,18 +351,42 @@ export default class TimetableApp extends Component {
                 attendance: attendance,
             })
             if(attendance.type === 'courseClass'){
-                fetchJson('/attendance/class/record/', {body: JSON.stringify(attendance), method: 'POST'}, this.locale)
-                    .then(data => {
-                        this.setState({
-                            showStatus: 'attendance',
-                            attendance: data.content,
-                            messages: data.messages,
-                        })
-                    })
+                this.setCourseClassAttendance(attendance, 'attendance')
             }
-
         }
+    }
 
+    setCourseClassAttendance(attendance, status){
+        let event = attendance.event
+        fetchJson('/attendance/class/record/', {body: JSON.stringify(attendance), method: 'POST'}, this.locale)
+            .then(data => {
+                attendance = data.content
+                attendance.event = event
+                if (status === 'timetable') {
+                    const events = this.state.events
+                    events.map(item => {
+                        if (item.id === event.id) {
+                            item.attendanceStatus = 'green'
+                        }
+                    })
+                    this.startPreLoad()
+                    this.setState({
+                        showStatus: status,
+                        events: events,
+                        attendance: attendance,
+                        messages: data.messages,
+                        loadEvents: false,
+                    })
+                } else {
+                    this.setState({
+                        showStatus: status,
+                        attendance: attendance,
+                        messages: data.messages,
+                        loadEvents: false,
+                    })
+
+                }
+            })
     }
 
     render () {
@@ -355,6 +400,7 @@ export default class TimetableApp extends Component {
                     togglePersonalCalendar={this.togglePersonalCalendar}
                     toggleSchoolCalendar={this.toggleSchoolCalendar}
                     toggleSpaceBookingCalendar={this.toggleSpaceBookingCalendar}
+                    cancelMessage={this.cancelMessage}
                     takeAttendance={this.takeAttendance}
                 />
             )
@@ -365,6 +411,7 @@ export default class TimetableApp extends Component {
                     {...this.otherProps}
                     {...this.state}
                     takeStudentAttendance={this.takeStudentAttendance}
+                    cancelMessage={this.cancelMessage}
                 />
             )
         }

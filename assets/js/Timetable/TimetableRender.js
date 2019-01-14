@@ -10,7 +10,6 @@ import Messages from '../Component/Messages/Messages'
 
 export default function TimetableRender(props) {
     const {
-        messages,
         loadEvents,
         translations,
         ...otherProps
@@ -23,7 +22,7 @@ export default function TimetableRender(props) {
                     <p className="text-lg-left text-uppercase">{translateMessage(translations, "My Timetable")}</p>
                 </div>
             </div>
-            <Messages messages={messages} />
+            <Messages {...otherProps} translations={translations}/>
             <div className={'row'}>
                 <div className="col-12">
                     <div className="progress" title={translateMessage(translations, 'Loading')}>
@@ -47,7 +46,7 @@ export default function TimetableRender(props) {
                     <p className="text-lg-left text-uppercase">{translateMessage(translations, "My Timetable")}</p>
                 </div>
             </div>
-            <Messages messages={messages} />
+            <Messages {...otherProps} translations={translations}/>
             <TimetableControls {...otherProps} translations={translations} />
             <DateHeader {...otherProps} translations={translations} />
             <DayEvents {...otherProps} translations={translations} />
