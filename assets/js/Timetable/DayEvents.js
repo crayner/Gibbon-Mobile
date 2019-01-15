@@ -62,7 +62,7 @@ export default function DayEvents(props) {
                 }
 
                 const stuff = event.links.attendance && eventDateInPast(event) ? (
-                    <span style={{float: 'right'}} className="fa-layers fa-fw" title={translateMessage(translations,'Take Attendance by Class')} onClick={() => takeAttendance(event)}>
+                    <span style={{float: 'right'}} className="fa-layers fa-fw fa-2x" title={translateMessage(translations,'Take Attendance by Class')} onClick={() => takeAttendance(event)}>
                         <FontAwesomeIcon icon={faUsers} color={event.attendanceStatus} />
                         <FontAwesomeIcon icon={faCheck} color={'black'} transform={'shrink-3 down-3 right-6'} />
                     </span>

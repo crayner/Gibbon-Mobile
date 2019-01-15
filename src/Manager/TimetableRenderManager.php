@@ -388,11 +388,11 @@ class TimetableRenderManager
 
     /**
      * convertGoogleCalendarEvents
-     * @param array $events
+     * @param array|bool $events
      * @param string $eventType
      * @throws \Exception
      */
-    private function convertGoogleCalendarEvents(array $events, string $eventType)
+    private function convertGoogleCalendarEvents($events, string $eventType)
     {
         if (empty($events))
             return ;
