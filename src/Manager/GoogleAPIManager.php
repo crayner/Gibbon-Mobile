@@ -32,6 +32,10 @@ namespace App\Manager;
 use App\Security\GoogleAuthenticator;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class GoogleAPIManager
+ * @package App\Manager
+ */
 class GoogleAPIManager
 {
     /**
@@ -61,8 +65,17 @@ class GoogleAPIManager
         $this->authenticator = $authenticator;
     }
 
-    //Returns events from a Google Calendar XML field, between the time and date specified
-    function getCalendarEvents($calendarId, \DateTime $date)
+
+    /**
+     * getCalendarEvents
+     *
+     * Returns events from a Google Calendar XML field, between the time and date specified
+     * @param $calendarId
+     * @param \DateTime $date
+     * @return array
+     * @throws \Google_Exception
+     */
+    function getCalendarEvents($calendarId, \DateTime $date): array
     {
         $googleOAuth = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth');
         $date = clone $date;
@@ -154,7 +167,7 @@ class GoogleAPIManager
                 }
             }
         } else {
-            $eventsSchool = false;
+            $eventsSchool = [];
         }
 
         return $eventsSchool;
