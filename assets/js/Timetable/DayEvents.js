@@ -20,7 +20,11 @@ export default function DayEvents(props) {
     } = props
 
     if (events.length === 0)
-        return ''
+        return (<div className={'row'}>
+            <div className={'col-12 alert-dark'}>
+                {translateMessage(translations, 'No events found')}
+            </div>
+        </div>)
 
     const content = events.map(event => {
         if (event.eventType === 'personal' && !showPersonalCalendar)
@@ -79,7 +83,7 @@ export default function DayEvents(props) {
 
         if (event.eventType === 'school' || event.eventType === 'personal')
         {
-            content.push(<p className={'font-weight-bold'} key={'name'}><FontAwesomeIcon style={{float: 'right'}} icon={faEye} onClick={() => window.open(event.links.external,'_blank')} title={translateMessage(translations, 'View Details')} />{event.name}</p>)
+            content.push(<p className={'font-weight-bold'} key={'name'}><FontAwesomeIcon style={{float: 'right'}} icon={faEye} size={'2x'} onClick={() => window.open(event.links.external,'_blank')} title={translateMessage(translations, 'View Details')} />{event.name}</p>)
             if (event.allDayEvent && event.location !== '') {
                 content.push(<p className={'font-italic text-truncate'} key={'location'}> @ {event.location}</p>)
             } else if (! event.allDayEvent && event.location !== '') {

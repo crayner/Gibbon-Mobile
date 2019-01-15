@@ -219,6 +219,7 @@ abstract class DashboardManager implements DashboardInterface
         $translations['Take Attendance'] = $this->getTranslator()->trans('Take Attendance');
         $translations['on'] = $this->getTranslator()->trans('on');
         $translations['Take Attendance by Class'] = $this->getTranslator()->trans('Take Attendance by Class');
+        $translations['No events found'] = $this->getTranslator()->trans('No events found');
 
         $properties['translations'] = $translations;
         $properties['locale'] = $this->getRequest()->get('_locale');

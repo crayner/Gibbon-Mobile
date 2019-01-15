@@ -31,9 +31,7 @@ namespace App\Manager;
 
 use App\Entity\AttendanceLogCourseClass;
 use App\Entity\AttendanceLogRollGroup;
-use App\Entity\CourseClass;
 use App\Entity\Person;
-use App\Entity\RollGroup;
 use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TimetableEvent;
 use App\Entity\TTColumnRow;
