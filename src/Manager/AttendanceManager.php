@@ -33,11 +33,14 @@ namespace App\Manager;
 use App\Entity\AttendanceCode;
 use App\Entity\AttendanceLogCourseClass;
 use App\Entity\AttendanceLogPerson;
+use App\Entity\AttendanceLogRollGroup;
 use App\Entity\CourseClass;
 use App\Entity\Person;
+use App\Entity\RollGroup;
 use App\Entity\TTDayRowClass;
 use App\Provider\AttendanceCodeProvider;
 use App\Util\TimetableHelper;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -173,11 +176,19 @@ class AttendanceManager
     public function isDateInFuture(): bool
     {
         $periodTime = clone $this->getCurrentDate();
-        $start = $this->getTTDayRowClass()->getTTColumnRow()->getTimeStart();
-        $periodTime->add(new \DateInterval('PT'.$start->format('H\Hi\M')));
-        if ($periodTime->getTimestamp() > strtotime('+5 Minutes')) {
-            $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
-            return $this->dateInFuture = true;
+        if ($this->getTTDayRowClass()) {
+            $start = $this->getTTDayRowClass()->getTTColumnRow()->getTimeStart();
+            $periodTime->add(new \DateInterval('PT' . $start->format('H\Hi\M')));
+            if ($periodTime->getTimestamp() > strtotime('+5 Minutes')) {
+                $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
+                return $this->dateInFuture = true;
+            }
+        } elseif ($this->getRollGroup())
+        {
+            if ($this->getCurrentDate()->getTimestamp() > strtotime('+5 Minutes')) {
+                $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
+                return $this->dateInFuture = true;
+            }
         }
         return $this->dateInFuture = false;
     }
@@ -220,7 +231,11 @@ class AttendanceManager
      */
     public function getStudents()
     {
-        $this->students = $this->getTTDayRowClass()->getCourseClass()->getStudents();
+        if ($this->getTTDayRowClass()) {
+            $this->students = $this->getTTDayRowClass()->getCourseClass()->getStudents();
+        } elseif ($this->getRollGroup()) {
+            $this->students = $this->getRollGroup()->getStudentEnrolments();
+        }
         return $this->students;
     }
 
@@ -236,9 +251,16 @@ class AttendanceManager
     public function isAttendanceRequired(): bool
     {
         if (is_null($this->attendanceRequired)) {
-            $this->attendanceRequired = $this->getTTDayRowClass()->getCourseClass()->getAttendance() === 'Y' ? true : false;
-            if (!$this->attendanceRequired) {
-                $this->getMessageManager()->add('warning', '');
+            if ($this->getTTDayRowClass()) {
+                $this->attendanceRequired = $this->getTTDayRowClass()->getCourseClass()->getAttendance() === 'Y' ? true : false;
+                if (!$this->attendanceRequired) {
+                    $this->getMessageManager()->add('warning', 'Attendance is not required.');
+                }
+            } elseif ($this->getRollGroup()) {
+                $this->attendanceRequired = $this->getRollGroup()->getAttendance() === 'Y' ? true : false;
+                if (!$this->attendanceRequired) {
+                    $this->getMessageManager()->add('warning', 'Attendance is not required.');
+                }
             }
         }
         return $this->attendanceRequired;
@@ -255,12 +277,18 @@ class AttendanceManager
             return [];
 
         $result = [];
-        $result['TTDayRowClass'] = $this->getTTDayRowClass()->__toArray();
-        $result['courseClass'] = $this->getCourseClass()->__toArray(["courseClassPeople","TTDayRowClasses","students"]);
-        $result['courseClass']['course'] = $this->getCourseClass()->getCourse()->__toArray(['courseClasses','schoolYear','department']);
-        $result['date'] = $this->getCurrentDate();
+        if ($this->getTTDayRowClass()) {
+            $result['TTDayRowClass'] = $this->getTTDayRowClass()->__toArray();
+            $result['courseClass'] = $this->getCourseClass()->__toArray(["courseClassPeople", "TTDayRowClasses", "students"]);
+            $result['courseClass']['course'] = $this->getCourseClass()->getCourse()->__toArray(['courseClasses', 'schoolYear', 'department']);
+            $result['type'] = 'courseClass';
+        }
+        if ($this->getRollGroup()) {
+            $result['rollGroup'] = $this->getRollGroup()->__toArray();
+            $result['type'] = 'rollGroup';
+        }
         $result['students'] = $this->createStudentAttendanceList();
-        $result['type'] = 'courseClass';
+        $result['date'] = $this->getCurrentDate();
         $result['codes'] = $this->attendanceTypes;
 
         return $result;
@@ -287,7 +315,12 @@ class AttendanceManager
      */
     private function createStudentAttendanceList(): array
     {
-        $results = $this->getProvider()->getRepository(AttendanceLogPerson::class)->findClassStudents($this->getCourseClass(), $this->getCurrentDate());
+        $results = [];
+        if ($this->getTTDayRowClass()) {
+            $results = $this->getProvider()->getRepository(AttendanceLogPerson::class)->findClassStudents($this->getCourseClass(), $this->getCurrentDate());
+        } elseif ($this->getRollGroup()) {
+            $results = $this->getProvider()->getRepository(AttendanceLogPerson::class)->findRollStudents($this->getCurrentDate());
+        }
         if (empty($results))
             $this->getMessageManager()->add('info', 'Attendance has not been taken for this group yet for the specified date. The entries below are a best-guess based on defaults and information put into the system in advance, not actual data.');
         foreach($results as $attendanceRecord)
@@ -307,6 +340,16 @@ class AttendanceManager
             $result['attendance']['code'] = isset($result['attendance']['code']) ? $result['attendance']['code'] : $this->getProvider()->getRepository(AttendanceCode::class)->findDefaultAttendanceCode()->getId();
             $this->attendance[$id] = $result;
         }
+        $students = new ArrayCollection($this->attendance);
+        $iterator = $students->getIterator();
+        $iterator->uasort(
+            function ($a, $b) {
+                return $a['person']['name'] < $b['person']['name'] ? -1 : 1;
+            }
+        );
+        $this->attendance = [];
+        foreach(iterator_to_array($iterator, false) as $student)
+            $this->attendance[$student['person']['name']] = $student;
 
         return $this->attendance;
     }
@@ -355,10 +398,88 @@ class AttendanceManager
                 ->setCourseClass($this->getCourseClass())
                 ->setReason('')
                 ->setComment('')
+                ->setContext('Class')
             ;
             $this->getProvider()->getEntityManager()->persist($alp);
         }
         $this->getProvider()->getEntityManager()->persist($alcc);
+        $this->getProvider()->getEntityManager()->flush();
+        $this->getMessageManager()->add('success', 'Your request was completed successfully.');
+    }
+
+    /**
+     * @var RollGroup
+     */
+    private $rollGroup;
+
+    /**
+     * takeRollAttendance
+     * @param RollGroup $roll
+     * @param \DateTime $date
+     */
+    public function takeRollAttendance(RollGroup $roll, \DateTime $date)
+    {
+        $this->setRollGroup($roll);
+        $this->setCurrentDate($date);
+    }
+
+    /**
+     * @return RollGroup
+     */
+    public function getRollGroup(): ?RollGroup
+    {
+        return $this->rollGroup;
+    }
+
+    /**
+     * @param RollGroup $rollGroup
+     * @return AttendanceManager
+     */
+    public function setRollGroup(RollGroup $rollGroup): AttendanceManager
+    {
+        $this->rollGroup = $rollGroup;
+        $this->isAttendanceRequired();
+        return $this;
+    }
+
+    /**
+     * handleRollRequest
+     * @param Request $request
+     * @throws \Exception
+     */
+    public function handleRollRequest(Request $request)
+    {
+        $content = json_decode($request->getContent());
+        $this->setRollGroup($this->getRepository(RollGroup::class)->find($content->rollGroup->id));
+        $this->setCurrentDate(new \DateTime($content->date->date, new \DateTimeZone($content->date->timezone)));
+
+        $alrg = $this->getRepository(AttendanceLogRollGroup::class)->findOneBy(['rollGroup' => $this->getRollGroup(), 'date' => $this->getCurrentDate()]);
+        $students = $this->getRepository(AttendanceLogPerson::class)->findRollStudents($this->getCurrentDate());
+
+        $alrg = $alrg ?: new AttendanceLogRollGroup();
+        $alrg->setRollGroup($this->getRollGroup());
+        $alrg->setDate($this->getCurrentDate());
+        $codes = [];
+        foreach($content->students as $student)
+        {
+            if (empty($students[$student->person->id]))
+            {
+                $alp = new AttendanceLogPerson();
+            }
+            $students[$student->person->id] = $alp;
+            $code = $student->attendance->code;
+            $code = isset($codes[$code]) ? $codes[$code] : $this->getRepository(AttendanceCode::class)->find($code);
+            $alp->setAttendanceCode($code)
+                ->setPerson($this->getRepository(Person::class)->find($student->person->id))
+                ->setDate($this->getCurrentDate())
+                ->setCourseClass(null)
+                ->setReason('')
+                ->setComment('')
+                ->setContext('Roll Group')
+            ;
+            $this->getProvider()->getEntityManager()->persist($alp);
+        }
+        $this->getProvider()->getEntityManager()->persist($alrg);
         $this->getProvider()->getEntityManager()->flush();
         $this->getMessageManager()->add('success', 'Your request was completed successfully.');
     }

@@ -31,6 +31,7 @@ namespace App\Repository;
 
 use App\Entity\AttendanceLogPerson;
 use App\Entity\CourseClass;
+use App\Entity\RollGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -64,6 +65,27 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
             ->setParameter('class', $class)
             ->andWhere('alp.date = :currentDate')
             ->setParameter('currentDate', $date)
+            ->andWhere('alp.context = :context')
+            ->setParameter('context', 'Class')
+            ->getQuery()
+            ->getResult() ?: [];
+
+    }
+
+    /**
+     * findRollStudents
+     * @param \DateTime $date
+     * @return array
+     */
+    public function findRollStudents(\DateTime $date): array
+    {
+        return $this->createQueryBuilder('alp')
+            ->select('alp, p')
+            ->join('alp.person', 'p')
+            ->where('alp.date = :currentDate')
+            ->setParameter('currentDate', $date)
+            ->andWhere('alp.context = :context')
+            ->setParameter('context', 'Roll Group')
             ->getQuery()
             ->getResult() ?: [];
 

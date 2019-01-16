@@ -29,6 +29,7 @@
  */
 namespace App\Entity;
 
+use App\Util\UserHelper;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -159,12 +160,24 @@ class AttendanceLogRollGroup
      * @param \DateTime|null $timestampTaken
      * @return AttendanceLogRollGroup
      * @throws \Exception
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
      */
     public function setTimestampTaken(?\DateTime $timestampTaken = null): AttendanceLogRollGroup
     {
         $this->timestampTaken = $timestampTaken ?: new \DateTime('now');
         return $this;
+    }
+
+    /**
+     * createTakerTimeStamps
+     * @return AttendanceLogRollGroup
+     * @throws \Exception
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function createTakerTimeStamps(): AttendanceLogRollGroup
+    {
+        if (empty($this->getPersonTaker()))
+            $this->setPersonTaker(UserHelper::getCurrentUser());
+        return $this->setTimestampTaken(new \DateTime('now'));
     }
 }

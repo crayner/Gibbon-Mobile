@@ -31,6 +31,7 @@ namespace App\Entity;
 
 use App\Manager\EntityInterface;
 use App\Manager\Traits\BooleanList;
+use App\Util\EntityHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -421,5 +422,15 @@ class RollGroup implements EntityInterface
     {
         $this->studentEnrolments = $studentEnrolments;
         return $this;
+    }
+
+    /**
+     * __toArray
+     * @param array $ignore
+     * @return array
+     */
+    public function __toArray(array $ignore = []): array
+    {
+        return EntityHelper::__toArray(RollGroup::class, $this, $ignore);
     }
 }

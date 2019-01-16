@@ -21,8 +21,8 @@ export default function DayEvents(props) {
 
     if (events.length === 0)
         return (<div className={'row'}>
-            <div className={'col-12 alert-dark'}>
-                {translateMessage(translations, 'No events found')}
+            <div className={'col-12 alert alert-dark text-center'}>
+                {translateMessage(translations, 'There are no records to display.')}
             </div>
         </div>)
 

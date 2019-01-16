@@ -32,6 +32,7 @@ namespace App\Manager;
 use App\Entity\AttendanceLogCourseClass;
 use App\Entity\AttendanceLogRollGroup;
 use App\Entity\Person;
+use App\Entity\RollGroup;
 use App\Entity\SchoolYearSpecialDay;
 use App\Entity\TimetableEvent;
 use App\Entity\TTColumnRow;
@@ -136,7 +137,6 @@ class TimetableRenderManager
             }
 
             $result['render'] = $proceed;
-
             $this->convertLessonsToEvents($result);
 
             $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth', false);
@@ -377,6 +377,10 @@ class TimetableRenderManager
                     $event->setId('class_' . $class['id']);
                     $event->setDayDate($day['date']);
                     $this->getEvents()->addEvent($event);
+                } elseif ($row['type'] === 'Pastoral') {
+                    if (!empty($event = $this->getRollGroupEventInformation($row, $result,$day))) {
+                        $this->getEvents()->addEvent($event);
+                    }
                 }
             }
         }
@@ -476,5 +480,31 @@ class TimetableRenderManager
     private function getRepository(?string $className = null): ObjectRepository
     {
         return $this->getTimetableProvider()->getRepository($className);
+    }
+
+    /**
+     * getRollGroupEventInformation
+     * @param array $row
+     * @param array $result
+     * @param array $day
+     * @return TimetableEvent|null
+     * @throws \Exception
+     */
+    private function getRollGroupEventInformation(array $row, array $result, array $day): ?TimetableEvent
+    {
+        $rollGroup = $this->getRepository(RollGroup::class)->findOneBy(['tutor' => $result['person'], 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear()]);
+        if (empty($rollGroup))
+            return null;
+        $event = new TimetableEvent($row['name']);
+        $event->setStart($row['timeStart'])
+            ->setEnd($row['timeEnd'])
+            ->setLocation($rollGroup->getSpace() ? $rollGroup->getSpace()->getName() : '')
+            ->setPhone($rollGroup->getSpace() ? $rollGroup->getSpace()->getPhoneInt() : '')
+            ->setDayDate($day['date'])
+            ->addLink('attendance', '/attendance/timetable/'.$rollGroup->getId().'/roll/'.$day['date']->format('Y-m-d').'/date/take/')
+            ->setAttendanceStatus($this->isAttendanceTaken($rollGroup->getId(), $day['date'], 'RollGroup'))
+            ->setClassName($rollGroup->getName())
+            ->setId('roll_group_' . $row['id']);
+        return $event;
     }
 }

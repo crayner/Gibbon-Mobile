@@ -334,16 +334,19 @@ export default class TimetableApp extends Component {
     }
 
     takeStudentAttendance(student, event){
+        let attendance = {...this.state.attendance}
         if (typeof(student.colour) === 'string') {
             this.setState({
                 loadEvents: true,
             })
-            this.setCourseClassAttendance({...this.state.attendance}, 'timetable')
+            if (attendance.type === 'classCourse')
+                this.setCourseClassAttendance(attendance, 'timetable')
+            if (attendance.type === 'rollGroup')
+                this.setRollGroupAttendance(attendance, 'timetable')
             return
         }
         const value = event.currentTarget.value
-        let attendance = {...this.state.attendance}
-        const id = student.person.id
+        const id = student.person.name
         if (attendance.students.hasOwnProperty(id)) {
             student.attendance.code = parseInt(value)
             attendance.students[id] = student
@@ -353,12 +356,48 @@ export default class TimetableApp extends Component {
             if(attendance.type === 'courseClass'){
                 this.setCourseClassAttendance(attendance, 'attendance')
             }
+            if(attendance.type === 'rollGroup'){
+                this.setRollGroupAttendance(attendance, 'attendance')
+            }
         }
     }
 
     setCourseClassAttendance(attendance, status){
         let event = attendance.event
         fetchJson('/attendance/class/record/', {body: JSON.stringify(attendance), method: 'POST'}, this.locale)
+            .then(data => {
+                attendance = data.content
+                attendance.event = event
+                if (status === 'timetable') {
+                    const events = this.state.events
+                    events.map(item => {
+                        if (item.id === event.id) {
+                            item.attendanceStatus = 'green'
+                        }
+                    })
+                    this.startPreLoad()
+                    this.setState({
+                        showStatus: status,
+                        events: events,
+                        attendance: attendance,
+                        messages: data.messages,
+                        loadEvents: false,
+                    })
+                } else {
+                    this.setState({
+                        showStatus: status,
+                        attendance: attendance,
+                        messages: data.messages,
+                        loadEvents: false,
+                    })
+
+                }
+            })
+    }
+
+    setRollGroupAttendance(attendance, status){
+        let event = attendance.event
+        fetchJson('/attendance/roll/record/', {body: JSON.stringify(attendance), method: 'POST'}, this.locale)
             .then(data => {
                 attendance = data.content
                 attendance.event = event

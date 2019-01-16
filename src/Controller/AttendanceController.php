@@ -29,6 +29,7 @@
  */
 namespace App\Controller;
 
+use App\Entity\RollGroup;
 use App\Entity\TTDayRowClass;
 use App\Manager\AttendanceManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,6 +90,68 @@ class AttendanceController extends AbstractController
     {
         if ($this->isGranted('ROLE_ACTION', ['/modules/Attendance/attendance_take_byCourseClass.php'])){
             $manager->handleClassRequest($request);
+
+            return new JsonResponse([
+                'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
+                'content' => $manager->__toArray(),
+                'redirect' => false,
+            ]);
+        }
+        $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
+        return new JsonResponse([
+            'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
+            'content' => [],
+            'redirect' => true,
+        ], 200);
+    }
+
+    /**
+     * takeRoll
+     * @param RollGroup $roll
+     * @param \DateTime $date
+     * @param AttendanceManager $manager
+     * @param TranslatorInterface $translator
+     * @param Request $request
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @Route("/attendance/timetable/{roll}/roll/{date}/date/take/", name="attendance_take_roll")
+     */
+    public function takeRoll(RollGroup $roll, \DateTime $date, AttendanceManager $manager, TranslatorInterface $translator, Request $request)
+    {
+        if ($this->isGranted('ROLE_ACTION', ['/modules/Attendance/attendance_take_byRollGroup.php']))
+        {
+            $manager->takeRollAttendance($roll, $date);
+
+            if ($request->getContentType() === 'json')
+                return new JsonResponse([
+                    'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
+                    'content' => $manager->__toArray(),
+                    'redirect' =>false
+                ], 200);
+            return $this->render('Default/dump.html.twig', [
+                'manager' => $manager,
+                'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
+                'content' => $manager->__toArray(),
+            ]);
+        }
+        $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
+        return new JsonResponse([
+            'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
+            'content' => [],
+            'redirect' => true,
+        ], 200);
+    }
+
+    /**
+     * storeRoll
+     * @param Request $request
+     * @param AttendanceManager $manager
+     * @Route("/attendance/roll/record/", methods={"POST"}, name="api_attendance_record_roll")
+     */
+    public function storeRollAttendance(Request $request, AttendanceManager $manager, TranslatorInterface $translator)
+    {
+        if ($this->isGranted('ROLE_ACTION', ['/modules/Attendance/attendance_take_byRollGroup.php'])){
+            $manager->handleRollRequest($request);
 
             return new JsonResponse([
                 'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),

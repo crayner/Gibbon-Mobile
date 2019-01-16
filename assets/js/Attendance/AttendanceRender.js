@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import {translateMessage} from '../Component/MessageTranslator'
 import Messages from '../Component/Messages/Messages'
 import {format} from 'date-fns/esm'
-import { Form, FormGroup, Label, Input } from 'reactstrap'
+import { FormGroup, Input } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ButtonSubmit from '../Component/Button/ButtonSubmit'
 
@@ -45,6 +45,14 @@ export default function AttendanceRender(props) {
 
     const onDate = new Date(attendance.date.date)
     const hostName = window.location.protocol + '//' + window.location.hostname
+    const colours = {
+        '1': 'alert-light',
+        '2': 'alert-primary',
+        '3': 'alert-warning',
+        '4': 'alert-danger',
+        '5': 'alert-danger',
+        '6': 'alert-danger',
+    }
     const students = Object.keys(attendance.students).map(key => {
         const student = attendance.students[key]
 
@@ -56,7 +64,7 @@ export default function AttendanceRender(props) {
         }
 
         return (
-            <div className={'row border-bottom'} key={'student_'+key}>
+            <div className={'row border-bottom ' + colours[student.attendance.code] } key={'student_'+key}>
                 <div className="col-2 text-center">
                     <img style={{height: '4rem'}} src={image} title={student.name} />
                 </div>
@@ -102,7 +110,22 @@ export default function AttendanceRender(props) {
             <div className={'container-fluid timetable'}>
                 <div className={'row border-bottom'}>
                     <div className="col-12">
-                        <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance")}: {attendance.courseClass.course.name}.{attendance.courseClass.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}
+                        <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance by Class")}: {attendance.courseClass.course.name}.{attendance.courseClass.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}
+                            <ButtonSubmit button={button} submitButtonHandler={takeStudentAttendance}/>
+                        </p>
+                    </div>
+                </div>
+                <Messages {...otherProps} translations={translations}/>
+                {students}
+            </div>
+        )
+    }
+    if (attendance.type === 'rollGroup') {
+        return (
+            <div className={'container-fluid timetable'}>
+                <div className={'row border-bottom'}>
+                    <div className="col-12">
+                        <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance by Roll Group")}: {attendance.rollGroup.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}
                             <ButtonSubmit button={button} submitButtonHandler={takeStudentAttendance}/>
                         </p>
                     </div>

@@ -47,4 +47,24 @@ class AttendanceLogRollGroupRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AttendanceLogRollGroup::class);
     }
+
+    /**
+     * isAttendanceTaken
+     * @param int $class
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function isAttendanceTaken(int $roll, \DateTime $date): bool
+    {
+        if (empty($this->createQueryBuilder('alrg')
+            ->join('alrg.rollGroup', 'rg')
+            ->where('alrg.date = :date')
+            ->setParameter('date', $date)
+            ->andWhere('rg.id = :rgid')
+            ->setParameter('rgid', $roll)
+            ->getQuery()
+            ->getResult()))
+            return false;
+        return true;
+    }
 }
