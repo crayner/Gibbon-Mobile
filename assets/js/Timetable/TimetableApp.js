@@ -339,17 +339,18 @@ export default class TimetableApp extends Component {
             this.setState({
                 loadEvents: true,
             })
-            if (attendance.type === 'classCourse')
+            if (attendance.type === 'courseClass')
                 this.setCourseClassAttendance(attendance, 'timetable')
             if (attendance.type === 'rollGroup')
                 this.setRollGroupAttendance(attendance, 'timetable')
             return
         }
+
         const value = event.currentTarget.value
-        const id = student.person.name
-        if (attendance.students.hasOwnProperty(id)) {
-            student.attendance.code = parseInt(value)
-            attendance.students[id] = student
+        const name = student.name
+        if (attendance.students.hasOwnProperty(name)) {
+            student.attendanceCode = parseInt(value)
+            attendance.students[name] = student
             this.setState({
                 attendance: attendance,
             })

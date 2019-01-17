@@ -58,7 +58,7 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
      */
     public function findClassStudents(CourseClass $class, \DateTime $date): array
     {
-        return $this->createQueryBuilder('alp')
+        $result = $this->createQueryBuilder('alp')
             ->select('alp, p')
             ->join('alp.person', 'p')
             ->where('alp.courseClass = :class')
@@ -69,6 +69,7 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
             ->setParameter('context', 'Class')
             ->getQuery()
             ->getResult() ?: [];
+        return $this->defineStudentListKeys($result);
 
     }
 
@@ -79,7 +80,7 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
      */
     public function findRollStudents(\DateTime $date): array
     {
-        return $this->createQueryBuilder('alp')
+        $result = $this->createQueryBuilder('alp')
             ->select('alp, p')
             ->join('alp.person', 'p')
             ->where('alp.date = :currentDate')
@@ -88,6 +89,21 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
             ->setParameter('context', 'Roll Group')
             ->getQuery()
             ->getResult() ?: [];
+        return $this->defineStudentListKeys($result);
+    }
 
+    /**
+     * defineStudentListKeys
+     * @param array $result
+     * @return array
+     */
+    private function defineStudentListKeys(array $result): array
+    {
+        $students = [];
+        foreach($result as $q=>$w)
+        {
+            $students[$w->getPerson()->getId()] = $w;
+        }
+        return $students;
     }
 }

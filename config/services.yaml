@@ -77,3 +77,7 @@ services:
     App\Listener\HelperListener:
         arguments:
             $logger: "@monolog.logger.security"
+
+    App\Listener\AttendanceLogPersonListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }

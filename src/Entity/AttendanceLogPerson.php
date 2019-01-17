@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class AttendanceLogPerson
  * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\AttendanceLogPersonRepository")
- * @ORM\Table(name="AttendanceLogPerson", indexes={@ORM\Index(name="date", columns={"date"}),@ORM\Index(name="dateAndPerson", columns={"date","gibbonPersonID"}),@ORM\Index(name="gibbonPersonID", columns={"gibbonPersonID"})})
+ * @ORM\Table(name="AttendanceLogPerson", indexes={@ORM\Index(name="date", columns={"date"}),@ORM\Index(name="dateAndPerson", columns={"date","gibbonPersonID"}),@ORM\Index(name="gibbonPersonID", columns={"gibbonPersonID"})}, uniqueConstraints={@ORM\UniqueConstraint(name="dateContextPersonClass", columns={"date","context","gibbonPersonID","gibbonCourseClassID"})})
  * @ORM\HasLifecycleCallbacks()
  */
 class AttendanceLogPerson
@@ -50,7 +50,7 @@ class AttendanceLogPerson
     private $id;
 
     /**
-     * @var Person|null
+     * @var AttendanceCode|null
      * @ORM\ManyToOne(targetEntity="AttendanceCode")
      * @ORM\JoinColumn(name="gibbonAttendanceCodeID", referencedColumnName="gibbonAttendanceCodeID")
      */
@@ -59,7 +59,7 @@ class AttendanceLogPerson
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID", nullable=false)
+     * @ORM\JoinColumn(name="gibbonPersonID", referencedColumnName="gibbonPersonID")
      */
     private $person;
 
@@ -112,7 +112,7 @@ class AttendanceLogPerson
     /**
      * @var Person|null
      * @ORM\ManyToOne(targetEntity="Person")
-     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID", nullable=false)
+     * @ORM\JoinColumn(name="gibbonPersonIDTaker", referencedColumnName="gibbonPersonID")
      */
     private $personTaker;
 
@@ -148,7 +148,7 @@ class AttendanceLogPerson
     }
 
     /**
-     * @return Person|null
+     * @return AttendanceCode|null
      */
     public function getAttendanceCode(): ?AttendanceCode
     {
@@ -363,17 +363,6 @@ class AttendanceLogPerson
     }
 
     /**
-     * updateTakenTime
-     * @return AttendanceLogPerson
-     * @throws \Exception
-     * @ORM\PreUpdate()
-     */
-    public function updateTakenTime()
-    {
-        return $this->setTimestampTaken(new \DateTime('now'));
-    }
-
-    /**
      * setTakerTime
      * @return AttendanceLogPerson
      * @throws \Exception
@@ -382,5 +371,14 @@ class AttendanceLogPerson
     public function setTakerTime(): AttendanceLogPerson
     {
         return $this->setTimestampTaken(new \DateTime('now'))->setPersonTaker(UserHelper::getCurrentUser())->setDirection(null)->setType(null);
+    }
+
+    /**
+     * AttendanceLogPerson constructor.
+     */
+    public function __construct()
+    {
+        $this->setComment('');
+        $this->setReason('');
     }
 }

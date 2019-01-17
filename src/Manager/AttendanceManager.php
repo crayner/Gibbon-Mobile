@@ -29,7 +29,6 @@
  */
 namespace App\Manager;
 
-
 use App\Entity\AttendanceCode;
 use App\Entity\AttendanceLogCourseClass;
 use App\Entity\AttendanceLogPerson;
@@ -80,11 +79,6 @@ class AttendanceManager
      * @var TTDayRowClass|null
      */
     private $TTDayRowClass;
-
-    /**
-     * @var bool
-     */
-    private $canTakeAttendance = true;
 
     /**
      * @var MessageManager|null
@@ -223,6 +217,9 @@ class AttendanceManager
         return $this->provider;
     }
 
+    /**
+     * @var array
+     */
     private $students;
 
     /**
@@ -326,7 +323,7 @@ class AttendanceManager
         foreach($results as $attendanceRecord)
         {
             $result = [];
-            $result['attendance']['code'] = $attendanceRecord->getAttendanceCode()->getId();
+            $result['attendanceCode'] = $attendanceRecord->getAttendanceCode()->getId();
             $this->attendance[$attendanceRecord->getPerson()->getId()] = $result;
         }
 
@@ -334,24 +331,72 @@ class AttendanceManager
         {
             $id = $student->getPerson()->getId();
             $result = isset($this->attendance[$id]) ? $this->attendance[$id] : [];
-            $result['person']['id'] = $id;
-            $result['person']['name'] = $student->getPerson()->formatName(true, true, true);
-            $result['person']['photo'] = $student->getPerson()->getImage240(true);
-            $result['attendance']['code'] = isset($result['attendance']['code']) ? $result['attendance']['code'] : $this->getProvider()->getRepository(AttendanceCode::class)->findDefaultAttendanceCode()->getId();
+            $result['id'] = $id;
+            $result['name'] = $student->getPerson()->formatName(true, true, true);
+            $result['photo'] = $student->getPerson()->getImage240(true);
+            $result['attendanceCode'] = isset($result['attendanceCode']) ? $result['attendanceCode'] : ($this->guessStudentAttendanceCode($student->getPerson(), isset($result['attendance']['code']) ? $result['attendance']['code'] : $this->getProvider()->getRepository(AttendanceCode::class)->findDefaultAttendanceCode()->getId()));
             $this->attendance[$id] = $result;
         }
         $students = new ArrayCollection($this->attendance);
         $iterator = $students->getIterator();
         $iterator->uasort(
             function ($a, $b) {
-                return $a['person']['name'] < $b['person']['name'] ? -1 : 1;
+                return $a['name'] < $b['name'] ? -1 : 1;
             }
         );
         $this->attendance = [];
         foreach(iterator_to_array($iterator, false) as $student)
-            $this->attendance[$student['person']['name']] = $student;
+            $this->attendance[$student['name']] = $student;
 
         return $this->attendance;
+    }
+
+    /**
+     * guessStudentAttendanceCode
+     * @param Person $student
+     * @param int $code
+     * @return int
+     * @throws \Exception
+     */
+    private function guessStudentAttendanceCode(Person $student, int $code): int
+    {
+        $attendanceRecord = $this->getRepository(AttendanceLogPerson::class)->findBy(['person' => $student, 'date' => $this->getCurrentDate()]);
+        $in = 0;
+        $out = 0;
+        $rollGroup = null;
+        $future = null;
+        $selfRegistration = null;
+        foreach($attendanceRecord as $record) {
+            if ($record->getDirection() === 'In') {
+                $in++;
+            } else {
+                $out++;
+            }
+            if ($record->getContext() === 'Roll Group')
+            {
+                $rollGroup = $record;
+            }
+            if ($record->getContext() === 'Future')
+            {
+                $future = $record;
+            }
+            if ($record->getContext() === 'Self Registration')
+            {
+                $selfRegistration = $record;
+            }
+        }
+
+        if (count($attendanceRecord) === 0) return $code;
+
+        if (count($attendanceRecord) === $in) return 1;
+
+        if (count($attendanceRecord) === $out) return 4;
+
+        if (is_null($rollGroup) && is_null($future) && is_null($selfRegistration)) return $code;
+        elseif ($selfRegistration) return $selfRegistration->getAttendanceCode()->getId();
+        elseif ($future) return $future->getAttendanceCode()->getId();
+        elseif ($rollGroup) return $rollGroup->getAttendanceCode()->getId();
+        return $code;
     }
 
     /**
@@ -376,28 +421,28 @@ class AttendanceManager
         $this->setTTDayRowClass($this->getRepository(TTDayRowClass::class)->find($content->TTDayRowClass->id));
         $this->setCurrentDate(new \DateTime($content->date->date, new \DateTimeZone($content->date->timezone)));
 
-        $alcc = $this->getRepository(AttendanceLogCourseClass::class)->findOneBy(['courseClass' => $this->getCourseClass(), 'date' => $this->getCurrentDate()]);
+        $alcc = $this->getRepository(AttendanceLogCourseClass::class)->findOneBy(['courseClass' => $this->getCourseClass(), 'date' => $this->getCurrentDate()]) ?: new AttendanceLogCourseClass();
         $students = $this->getRepository(AttendanceLogPerson::class)->findClassStudents($this->getCourseClass(), $this->getCurrentDate());
 
-        $alcc = $alcc ?: new AttendanceLogCourseClass();
         $alcc->setCourseClass($this->getCourseClass());
         $alcc->setDate($this->getCurrentDate());
         $codes = [];
         foreach($content->students as $student)
         {
-            if (empty($students[$student->person->id]))
-            {
+            if (empty($students[$student->id])) {
                 $alp = new AttendanceLogPerson();
+            } else {
+                $alp = $students[$student->id];
             }
-            $students[$student->person->id] = $alp;
-            $code = $student->attendance->code;
+            $students[$student->id] = $alp;
+            $code = $student->attendanceCode;
             $code = isset($codes[$code]) ? $codes[$code] : $this->getRepository(AttendanceCode::class)->find($code);
             $alp->setAttendanceCode($code)
-                ->setPerson($this->getRepository(Person::class)->find($student->person->id))
+                ->setPerson($this->getRepository(Person::class)->find($student->id))
                 ->setDate($this->getCurrentDate())
                 ->setCourseClass($this->getCourseClass())
-                ->setReason('')
-                ->setComment('')
+                ->setDirection($code->getDirection())
+                ->setType($code->getName())
                 ->setContext('Class')
             ;
             $this->getProvider()->getEntityManager()->persist($alp);
@@ -453,28 +498,28 @@ class AttendanceManager
         $this->setRollGroup($this->getRepository(RollGroup::class)->find($content->rollGroup->id));
         $this->setCurrentDate(new \DateTime($content->date->date, new \DateTimeZone($content->date->timezone)));
 
-        $alrg = $this->getRepository(AttendanceLogRollGroup::class)->findOneBy(['rollGroup' => $this->getRollGroup(), 'date' => $this->getCurrentDate()]);
+        $alrg = $this->getRepository(AttendanceLogRollGroup::class)->findOneBy(['rollGroup' => $this->getRollGroup(), 'date' => $this->getCurrentDate()]) ?: new AttendanceLogRollGroup();
         $students = $this->getRepository(AttendanceLogPerson::class)->findRollStudents($this->getCurrentDate());
 
-        $alrg = $alrg ?: new AttendanceLogRollGroup();
         $alrg->setRollGroup($this->getRollGroup());
         $alrg->setDate($this->getCurrentDate());
         $codes = [];
         foreach($content->students as $student)
         {
-            if (empty($students[$student->person->id]))
-            {
+            if (empty($students[$student->id])) {
                 $alp = new AttendanceLogPerson();
+            } else {
+                $alp = $students[$student->id];
             }
-            $students[$student->person->id] = $alp;
-            $code = $student->attendance->code;
+            $students[$student->id] = $alp;
+            $code = $student->attendanceCode;
             $code = isset($codes[$code]) ? $codes[$code] : $this->getRepository(AttendanceCode::class)->find($code);
             $alp->setAttendanceCode($code)
-                ->setPerson($this->getRepository(Person::class)->find($student->person->id))
+                ->setPerson($this->getRepository(Person::class)->find($student->id))
                 ->setDate($this->getCurrentDate())
+                ->setDirection($code->getDirection())
+                ->setType($code->getName())
                 ->setCourseClass(null)
-                ->setReason('')
-                ->setComment('')
                 ->setContext('Roll Group')
             ;
             $this->getProvider()->getEntityManager()->persist($alp);

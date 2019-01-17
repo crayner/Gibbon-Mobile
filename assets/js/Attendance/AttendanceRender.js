@@ -53,32 +53,32 @@ export default function AttendanceRender(props) {
         '5': 'alert-danger',
         '6': 'alert-danger',
     }
+
     const students = Object.keys(attendance.students).map(key => {
         const student = attendance.students[key]
-
         let image = 'build/static/DefaultPerson.png'
-        if (student.person.photo === 'build/static/DefaultPerson.png') {
-            image = hostName + '/' + student.person.photo
+        if (student.photo === 'build/static/DefaultPerson.png') {
+            image = hostName + '/' + student.photo
         } else {
-            image = gibbonHost + '/' + student.person.photo
+            image = gibbonHost + '/' + student.photo
         }
 
         return (
-            <div className={'row border-bottom ' + colours[student.attendance.code] } key={'student_'+key}>
+            <div className={'row border-bottom ' + colours[student.attendanceCode] } key={'student_' + student.id}>
                 <div className="col-2 text-center">
                     <img style={{height: '4rem'}} src={image} title={student.name} />
                 </div>
                 <div className="col-5">
-                    {student.person.name}
-                    <input type={'hidden'} name={'attendance[id][' + key + ']'} id={'attendance_id_'+ key} value={key} />
+                    {student.name}
+                    <input type={'hidden'} name={'attendance[id][' + student.id + ']'} id={'attendance_id_'+ key} value={student.id} />
                 </div>
                 <div className="col-5">
                     <FormGroup>
                         <Input
                             type="select"
-                            name={'attendance[code][' + key + ']'}
-                            id={'attendance_code_'+ key}
-                            value={student.attendance.code}
+                            name={'attendance[code][' + student.id + ']'}
+                            id={'attendance_code_'+ student.id}
+                            value={student.attendanceCode}
                             className={'form-control'}
                             onChange={(event) => takeStudentAttendance(student,event)}
                         >

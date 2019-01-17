@@ -24,16 +24,38 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 23/11/2018
- * Time: 15:27
+ * Date: 17/01/2019
+ * Time: 10:33
  */
-namespace App\Util;
+namespace App\Listener;
+
+use App\Entity\AttendanceLogPerson;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 /**
- * Class VersionHelper
- * @package App\Util
+ * Class AttendanceLogPersonListener
+ * @package App\Listener
  */
-class VersionHelper
+class AttendanceLogPersonListener
 {
-    CONST VERSION = '0.0.05';
+    /**
+     * preUpdate
+     * @param PreUpdateEventArgs $args
+     * @throws \Exception
+     */
+    public function preUpdate(PreUpdateEventArgs $args): void
+    {
+        $entity = $args->getObject();
+
+        // only act on some "AttendanceLogPerson" entity
+        if (! $entity instanceof AttendanceLogPerson) {
+            return;
+        }
+
+        if (count($args->getEntityChangeSet()) < 2) {
+            return;
+        }
+
+        $entity->setTakerTime();
+    }
 }

@@ -126,7 +126,7 @@ function eventDateInPast(event){
     //To allow for server /client time slip, a 5 minute buffer is added.
     const date = new Date(getDateString(event.dayDate.date) + 'T' + getTimeString(event.start.date))
     const now = new Date()
-    now.setMinutes(now.getMinutes() - 5)
+    now.setMinutes(now.getMinutes() + 5)
     if (date < now)
         return true
     return false
