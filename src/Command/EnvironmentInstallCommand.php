@@ -82,6 +82,7 @@ class EnvironmentInstallCommand extends Command
                     }
                 }
         }
+
         $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
         if (! $fileSystem->exists($config)) {
             $io->error(sprintf('The Gibbon config.php file was not found at "%s".  You may need to run the gibbon installation scripts manually as the automatic search for your Gibbon installation appears to have failed.  I searched "%s" directory for the Gibbon installation.  See "http://www.craigrayner.com/help/installation.php"', $config, $projectDir['dirname']));
@@ -104,6 +105,7 @@ class EnvironmentInstallCommand extends Command
             $content['parameters']['db_name'] = $databaseName;
             $content['parameters']['db_user'] = $databaseUsername;
             $content['parameters']['db_pass'] = $databasePassword;
+            $content['parameters']['gibbon_document_root'] = $gibbonRoot;
 
             $fileSystem->dumpFile($file, Yaml::dump($content, 8));
             $io->success('Database settings have been transferred from Gibbon to the Gibbon-Mobile framework.');

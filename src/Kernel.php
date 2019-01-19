@@ -39,7 +39,6 @@ class Kernel extends BaseKernel
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
 
-
         $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';
 
@@ -47,6 +46,9 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
+
+        if (!is_file($confDir.'/{packages}/google_mobile.yaml'))
+            $this->temporaryParameters($container);
     }
 
     protected function configureRoutes(RouteCollectionBuilder $routes)
@@ -56,5 +58,33 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
+    }
+
+    private function temporaryParameters(ContainerBuilder $container)
+    {
+        $container->setParameter('session_name', 'gibbon_mobile');
+        $container->setParameter('locale', 'en_GB');
+        $container->setParameter('db_driver', 'pdo_mysql');
+        $container->setParameter('db_host', null);
+        $container->setParameter('db_port', null);
+        $container->setParameter('db_name', null);
+        $container->setParameter('db_charset', null);
+        $container->setParameter('db_user', null);
+        $container->setParameter('db_pass', null);
+        $container->setParameter('db_prefix', 'mobile');
+        $container->setParameter('db_server_version', '5.7');
+        $container->setParameter('mailer_transport', null);
+        $container->setParameter('mailer_host', null);
+        $container->setParameter('mailer_user', null);
+        $container->setParameter('mailer_password', null);
+        $container->setParameter('mailer_port', null);
+        $container->setParameter('mailer_spool', null);
+        $container->setParameter('mailer_encryption', null);
+        $container->setParameter('mailer_auth_mode', null);
+        $container->setParameter('cookie_lifetime', 0);
+        $container->setParameter('security.hierarchy.roles', []);
+        $container->setParameter('gibbon_document_root', '');
+        $container->setParameter('google_client_id', '');
+        $container->setParameter('gibbon_document_root', '');
     }
 }
