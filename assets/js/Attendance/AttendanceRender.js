@@ -47,11 +47,11 @@ export default function AttendanceRender(props) {
     const hostName = window.location.protocol + '//' + window.location.hostname
     const colours = {
         '1': 'alert-light',
-        '2': 'alert-primary',
-        '3': 'alert-warning',
+        '2': 'alert-warning',
+        '3': 'alert-info',
         '4': 'alert-danger',
         '5': 'alert-danger',
-        '6': 'alert-danger',
+        '6': 'alert-warning',
     }
 
     const students = Object.keys(attendance.students).map(key => {
@@ -64,7 +64,7 @@ export default function AttendanceRender(props) {
         }
 
         return (
-            <div className={'row border-bottom ' + colours[student.attendanceCode] } key={'student_' + student.id}>
+            <div className={'row border-bottom ' + (typeof(colours[student.attendanceCode]) !== 'undefined' ? colours[student.attendanceCode] : 'alert-dark')} key={'student_' + student.id}>
                 <div className="col-2 text-center">
                     <img style={{height: '4rem'}} src={image} title={student.name} />
                 </div>

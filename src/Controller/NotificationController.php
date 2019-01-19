@@ -48,7 +48,7 @@ class NotificationController extends AbstractController
      * @param NotificationManager $manager
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/notification/show/", name="notifications_show")
-     * @IsGranted("IS_FULLY_AUTHENTICATED")
+     * @IsGranted("ROLE_USER")
      */
     public function show(NotificationManager $manager)
     {
@@ -103,7 +103,7 @@ class NotificationController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      * @Route("/notification/{id}/delete/", name="notification_delete")
-     * @IsGranted("IS_FULLY_AUTHENTICATED")
+     * @IsGranted("ROLE_USER")
      */
     public function delete(Notification $id, NotificationManager $manager)
     {
@@ -124,7 +124,7 @@ class NotificationController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      * @Route("/notification/{id}/archive/", name="notification_archive")
-     * @IsGranted("IS_FULLY_AUTHENTICATED")
+     * @IsGranted("ROLE_USER")
      */
     public function archive(Notification $id, NotificationManager $manager)
     {
@@ -144,7 +144,7 @@ class NotificationController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      * @Route("/notification/archive/all/", name="notification_archive_all")
-     * @IsGranted("IS_FULLY_AUTHENTICATED")
+     * @IsGranted("ROLE_USER")
      */
     public function archiveAll(NotificationManager $manager)
     {

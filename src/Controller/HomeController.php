@@ -49,7 +49,7 @@ class HomeController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/", name="home")
-     * @IsGranted("IS_FULLY_AUTHENTICATED")
+     * @IsGranted("ROLE_USER")
      */
     public function home(StaffDashboardManager $staffDashboardManager)
     {
