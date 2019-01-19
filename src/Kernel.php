@@ -47,7 +47,7 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
 
-        if (!is_file($confDir.'/{packages}/google_mobile.yaml'))
+        if (!realpath($confDir . '/packages/gibbon_mobile.yaml'))
             $this->temporaryParameters($container);
     }
 
@@ -65,8 +65,8 @@ class Kernel extends BaseKernel
         $container->setParameter('session_name', 'gibbon_mobile');
         $container->setParameter('locale', 'en_GB');
         $container->setParameter('db_driver', 'pdo_mysql');
-        $container->setParameter('db_host', null);
-        $container->setParameter('db_port', null);
+        $container->setParameter('db_host', '127.0.0.1');
+        $container->setParameter('db_port', 3306);
         $container->setParameter('db_name', null);
         $container->setParameter('db_charset', null);
         $container->setParameter('db_user', null);

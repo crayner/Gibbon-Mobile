@@ -116,6 +116,9 @@ class EnvironmentInstallCommand extends Command
         if (! $fileSystem->exists($file))
             $fileSystem->copy($file . '.dist', $file);
 
+        $realCacheDir = $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . '*';
+        $fileSystem->remove($realCacheDir);
+
         return 0;
     }
 
