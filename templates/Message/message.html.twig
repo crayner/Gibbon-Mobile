@@ -14,7 +14,7 @@
         {% if message.transChoice is same as(false) %}
             {{ message.message|trans(message.options, message.domain)|raw }}
         {% else %}
-            {{ message.message|transchoice(message.transChoice, message.options, message.domain)|raw }}
+            {{ message.message|trans(message.options|merge('%count%', message.transChoice), message.domain)|raw }}
         {% endif %}
     {% endif %}
 {% else %}
@@ -24,7 +24,7 @@
         {% if message.transChoice is same as(false) %}
             {{ message.message|trans(message.options, message.domain) }}
         {% else %}
-            {{ message.message|transchoice(message.transChoice, message.options, message.domain) }}
+            {{ message.message|trans(message.options|merge('%count%', message.transChoice), message.domain)|raw }}
         {% endif %}
     {% endif %}
 {% endif %}

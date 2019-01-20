@@ -35,12 +35,14 @@ use App\Provider\ActionProvider;
 use App\Provider\FamilyAdultProvider;
 use App\Provider\FamilyChildProvider;
 use App\Provider\FamilyProvider;
+use App\Provider\I18nProvider;
 use App\Provider\ModuleProvider;
 use App\Provider\PersonProvider;
 use App\Provider\SchoolYearProvider;
 use App\Provider\TimetableProvider;
 use App\Util\EntityHelper;
 use App\Util\FormatHelper;
+use App\Util\LocaleHelper;
 use App\Util\RelationshipHelper;
 use App\Util\SchoolYearHelper;
 use App\Util\SecurityHelper;
@@ -89,6 +91,7 @@ class HelperListener implements EventSubscriberInterface
         new FormatHelper($translator, $container);
         new SecurityHelper(new ActionProvider($entityManager, $messageManager, $authorizationChecker, $router), new ModuleProvider($entityManager, $messageManager, $authorizationChecker, $router), $logger);
         new TimetableHelper(new TimetableProvider($entityManager, $messageManager, $authorizationChecker, $router));
+        new LocaleHelper(new I18nProvider($entityManager, $messageManager, $authorizationChecker, $router), 'en');
     }
 
     /**

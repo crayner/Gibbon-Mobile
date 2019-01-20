@@ -27,9 +27,7 @@
  * Date: 24/11/2018
  * Time: 14:00
  */
-
 namespace App\Util;
-
 
 use App\Entity\Person;
 use App\Provider\I18nProvider;
