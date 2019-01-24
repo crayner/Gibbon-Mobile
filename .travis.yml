@@ -1,12 +1,13 @@
 language: php
 
+php:
+  - 7.1
+  - 7.2
+  - 7.0
+  - nightly
+
 matrix:
   fast_finish: true
-  include:
-    - php: 7.0
-    - phy: 7.1
-    - phy: 7.2
-
 # optionally specify a list of environments, for example to test different RDBMS
 cache:
   directories:
@@ -19,8 +20,9 @@ env:
 
 before_script:
   - cp .env.local.test .env.local
-  - php bin/console "doctrine:database:create --env=test"
-  - php bin/console "doctrine:schema:create --env=test"
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
+
 before_install:
   # Disable x-debug to speed up things
   - phpenv config-rm xdebug.ini
@@ -28,4 +30,4 @@ before_install:
   - export PATH=$HOME/.composer/vendor/bin:$PATH
 
 script:
-  - ./vendor/bin/phpunit
+  - $HOME/symfony-bridge/.phpunit
