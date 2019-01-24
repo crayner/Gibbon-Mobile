@@ -73,7 +73,7 @@ class EnvironmentInstallCommand extends Command
             $content['parameters']['db_name'] = 'mobile_test';
             $content['parameters']['db_user'] = 'root';
             $content['parameters']['db_pass'] = null;
-            $content['parameters']['gibbon_document_root'] = $gibbonRoot;
+            $content['parameters']['gibbon_document_root'] = '../../';
 
             $fileSystem->dumpFile($file, Yaml::dump($content, 8));
             return 0;
