@@ -50,7 +50,7 @@ class TTSpaceBooking  implements EntityInterface
 
     /**
      * @var string|null
-     * @ORM\Column(length=6, name="foreignKey", options={"default": "gibbonSpaceID"})
+     * @ORM\Column(length=30, name="foreignKey", options={"default": "gibbonSpaceID"})
      */
     private $foreignKey = 'gibbonSpaceID';
 
