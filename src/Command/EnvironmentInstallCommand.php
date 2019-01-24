@@ -80,45 +80,7 @@ class EnvironmentInstallCommand extends Command
             $content['parameters']['gibbon_document_root'] = '../../';
 
             $fileSystem->dumpFile($file, Yaml::dump($content, 8));
-
-            $application = new Application($kernel);
-            $application->setAutoExit(false);
-
-            $input = new ArrayInput(
-                [
-                    'command' => 'doctrine:database:create',
-                    // (optional) define the value of command arguments
-                    '--env' => 'test',
-                ]
-            );
-
-            // You can use NullOutput() if you don't need the output
-            $output = new BufferedOutput();
-            $result = $application->run($input, $output);
-
-            // return the output, don't use if you used NullOutput()
-            if ($result !== 0) {
-                dump($output);
-                return $result;
-            }
-
-            $input = new ArrayInput(
-                [
-                    'command' => 'doctrine:schema:create',
-                    // (optional) define the value of command arguments
-                    '--env' => 'test',
-                ]
-            );
-
-            // You can use NullOutput() if you don't need the output
-            $output = new BufferedOutput();
-            $result = $application->run($input, $output);
-
-            // return the output, don't use if you used NullOutput()
-            if ($result !== 0)
-                return 46;
-
-
+            return 0;
         }
 
         $io = new SymfonyStyle($input, $output);

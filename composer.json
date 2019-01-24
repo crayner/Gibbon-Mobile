@@ -71,6 +71,7 @@
     "scripts": {
         "auto-scripts": {
             "gibbon:environment:install": "symfony-cmd",
+            "gibbon:database:create": "symfony-cmd",
             "cache:clear": "symfony-cmd",
             "gibbon:setting:install": "symfony-cmd",
             "gibbon:translation:install": "symfony-cmd",
