@@ -76,6 +76,7 @@ class DatabaseCreateCommand extends Command
 
             // return the output, don't use if you used NullOutput()
             if ($result !== 0) {
+                dump($output);
                 return $result;
             }
 
@@ -93,6 +94,7 @@ class DatabaseCreateCommand extends Command
 
             // return the output, don't use if you used NullOutput()
             if ($result !== 0) {
+                dump($output);
                 return $result;
             }
         }
