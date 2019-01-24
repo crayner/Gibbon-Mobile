@@ -58,7 +58,7 @@ class FinanceBudgetCycle
 
     /**
      * @var string|null
-     * @ORM\Column(length=7, options={"default": "Upcoming"})
+     * @ORM\Column(length=8, options={"default": "Upcoming"})
      */
     private $status = 'Upcoming';
 
