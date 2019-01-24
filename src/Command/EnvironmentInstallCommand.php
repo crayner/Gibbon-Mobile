@@ -97,9 +97,10 @@ class EnvironmentInstallCommand extends Command
             $result = $application->run($input, $output);
 
             // return the output, don't use if you used NullOutput()
-            if ($result !== 0)
+            if ($result !== 0) {
+                dump($output);
                 return $result;
-
+            }
 
             $input = new ArrayInput(
                 [
