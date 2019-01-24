@@ -83,7 +83,7 @@ class EnvironmentInstallCommand extends Command
 
             // return the output, don't use if you used NullOutput()
             if ($result !== 0)
-                return 45;
+                return $result;
 
 
             $input = new ArrayInput(
