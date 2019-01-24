@@ -6,6 +6,17 @@ php:
   - '7.2'
   - nightly
 
+# optionally specify a list of environments, for example to test different RDBMS
+env:
+  global:
+    - CI_PLATFORM='travis_ci'
+    - ABSOLUTE_URL='http://127.0.0.1:8888'
+    - DB_HOST='127.0.0.1'
+    - DB_NAME='gibbon_mobile'
+    - DB_USERNAME='root'
+    - DB_PASSWORD=''
+
+
 install:
   - travis_retry composer self-update
 #  - travis_retry composer global require "codeception/codeception:2.1.*@dev"
@@ -18,6 +29,7 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+  - cp .env.test.local .env.local
   # Disable x-debug to speed up things
   - phpenv config-rm xdebug.ini
   # add composer global bin to PATH to make codeception usable
