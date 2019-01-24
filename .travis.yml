@@ -1,32 +1,21 @@
 language: php
 
-php:
-  - '7.0'
-  - '7.1'
-  - '7.2'
-  - nightly
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+    - phy: 7.1
+    - phy: 7.2
 
 # optionally specify a list of environments, for example to test different RDBMS
-env:
-  global:
-    - CI_PLATFORM='travis_ci'
-    - ABSOLUTE_URL='http://127.0.0.1:8888'
-    - DB_HOST='127.0.0.1'
-    - DB_NAME='gibbon_mobile'
-    - DB_USERNAME='root'
-    - DB_PASSWORD=''
-
-
-install:
-  - travis_retry composer self-update
-#  - travis_retry composer global require "codeception/codeception:2.1.*@dev"
-  - travis_retry composer install --prefer-dist --no-interaction
-# Cache folder, you can delete cache from Travis CI web interface
-
 cache:
   directories:
-    - vendor
-    - $HOME/.composer/cache
+    - $HOME/.composer/cache/files
+    - $HOME/symfony-bridge/.phpunit
+env:
+  global:
+    - PHPUNIT_FLAGS="-v"
+    - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
 
 before_install:
   - cp .env.local.test .env.local
