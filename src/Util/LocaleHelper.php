@@ -74,7 +74,7 @@ class LocaleHelper
      */
     public static function getDefaultLocale(string $locale): string
     {
-        if ($locale !== 'en')
+        if ($locale !== 'en' || empty(self::$provider))
             return $locale;
         return self::$provider->getRepository()->createQueryBuilder('i')
             ->where('i.systemDefault = :yes')

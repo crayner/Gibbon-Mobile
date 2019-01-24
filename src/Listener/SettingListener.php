@@ -107,7 +107,7 @@ class SettingListener implements EventSubscriberInterface
                 $application->setAutoExit(false);
 
                 $input = new ArrayInput(array(
-                    'command' => 'translation:install',
+                    'command' => 'gibbon:translation:install',
                     // (optional) define the value of command arguments
                     '--relative' => '--relative',
                 ));
@@ -123,7 +123,7 @@ class SettingListener implements EventSubscriberInterface
                 $output->fetch();
 
                 $input = new ArrayInput(array(
-                    'command' => 'setting:install',
+                    'command' => 'gibbon:setting:install',
                 ));
 
                 // You can use NullOutput() if you don't need the output

@@ -562,7 +562,7 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=12, name="parent1gender", options={"default": "Unspecified"})
+     * @ORM\Column(length=12, name="parent1gender", options={"default": "Unspecified"}, nullable=true))
      */
     private $parent1gender = 'Unspecified';
 
@@ -700,7 +700,7 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=12, name="parent2gender", options={"default": "Unspecified"})
+     * @ORM\Column(length=12, name="parent2gender", options={"default": "Unspecified"}, nullable=true)
      */
     private $parent2gender = 'Unspecified';
 
