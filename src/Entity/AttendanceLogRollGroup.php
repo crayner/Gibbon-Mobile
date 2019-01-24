@@ -71,7 +71,7 @@ class AttendanceLogRollGroup
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", name="timestampTaken", options={"default": "current_timestamp()"})
+     * @ORM\Column(type="datetime", name="timestampTaken", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestampTaken;
 

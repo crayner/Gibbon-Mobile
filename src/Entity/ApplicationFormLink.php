@@ -65,7 +65,7 @@ class ApplicationFormLink
 
     /**
      * @var \DateTime|null
-     * @ORM\Column(type="datetime", options={"default": "current_timestamp()"})
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      */
     private $timestamp;
 

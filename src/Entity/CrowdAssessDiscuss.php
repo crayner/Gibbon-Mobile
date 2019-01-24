@@ -71,7 +71,7 @@ class CrowdAssessDiscuss
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", options={"current_timestamp()"})
+     * @ORM\Column(type="text", options={"CURRENT_TIMESTAMP"})
      */
     private $comment;
 
