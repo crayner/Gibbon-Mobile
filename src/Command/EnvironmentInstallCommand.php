@@ -56,14 +56,32 @@ class EnvironmentInstallCommand extends Command
      * @param OutputInterface $output
      * @return int|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $kernel = $this->getApplication()->getKernel();
+        $fileSystem = new Filesystem();
+        if (isset($_SERVER['APP_TRAVIS_TEST']))
+        {
+            $file = $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
+            if (!$fileSystem->exists($file)) {
+                $fileSystem->copy($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml' . '.dist', $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml', false);
+            }
+            $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
+
+            $content = Yaml::parse(file_get_contents($file));
+            $content['parameters']['db_host'] = '127.0.0.1';
+            $content['parameters']['db_name'] = 'mobile_test';
+            $content['parameters']['db_user'] = 'root';
+            $content['parameters']['db_pass'] = null;
+            $content['parameters']['gibbon_document_root'] = $gibbonRoot;
+
+            $fileSystem->dumpFile($file, Yaml::dump($content, 8));
+            return 0;
+        }
 
         $io = new SymfonyStyle($input, $output);
         $io->newLine();
 
-        $fileSystem = new Filesystem();
         $projectDir = pathinfo($kernel->getProjectDir());
 
         $gibbonRoot = $input->getArgument('gibbonRoot');
