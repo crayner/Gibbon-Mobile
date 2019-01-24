@@ -29,9 +29,12 @@
  */
 namespace App\Command;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
@@ -62,6 +65,44 @@ class EnvironmentInstallCommand extends Command
         $fileSystem = new Filesystem();
         if (isset($_SERVER['APP_TRAVIS_TEST']))
         {
+
+            $application = new Application($kernel);
+            $application->setAutoExit(false);
+
+            $input = new ArrayInput(
+                [
+                    'command' => 'doctrine:database:create',
+                    // (optional) define the value of command arguments
+                    '--env' => 'test',
+                ]
+            );
+
+            // You can use NullOutput() if you don't need the output
+            $output = new BufferedOutput();
+            $result = $application->run($input, $output);
+
+            // return the output, don't use if you used NullOutput()
+            if ($result !== 0)
+                return 45;
+
+
+            $input = new ArrayInput(
+                [
+                    'command' => 'doctrine:schema:create',
+                    // (optional) define the value of command arguments
+                    '--env' => 'test',
+                ]
+            );
+
+            // You can use NullOutput() if you don't need the output
+            $output = new BufferedOutput();
+            $result = $application->run($input, $output);
+
+            // return the output, don't use if you used NullOutput()
+            if ($result !== 0)
+                return 46;
+
+
             $file = $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
             if (!$fileSystem->exists($file)) {
                 $fileSystem->copy($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml' . '.dist', $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml', false);
