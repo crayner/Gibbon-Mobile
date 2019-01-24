@@ -30,6 +30,8 @@ cache:
 
 before_install:
   - cp .env.local.test .env.local
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
   # Disable x-debug to speed up things
   - phpenv config-rm xdebug.ini
   # add composer global bin to PATH to make codeception usable
