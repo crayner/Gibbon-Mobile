@@ -29,7 +29,7 @@
  */
 namespace App\Form\Security;
 
-use App\Entity\Person;
+use App\Security\SecurityUser;
 use Hillrange\Form\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -44,6 +44,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class AuthenticateType extends AbstractType
 {
+    /**
+     * buildForm
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -94,7 +99,7 @@ class AuthenticateType extends AbstractType
         $resolver->setDefaults(
             [
                 'translation' => 'messages',
-                'data_class' => Person::class,
+                'data_class' => SecurityUser::class,
                 'attr' => [
                     'novalidate' => true,
                     'id' => $this->getBlockPrefix(),

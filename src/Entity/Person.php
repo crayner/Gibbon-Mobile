@@ -46,7 +46,7 @@ use Doctrine\ORM\PersistentCollection;
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\Table(name="Person", uniqueConstraints={@ORM\UniqueConstraint(name="username", columns={"username"})}, indexes={@ORM\Index(name="username_2", columns={"username", "email"})})
  */
-class Person extends User implements EntityInterface
+class Person implements EntityInterface
 {
     use BooleanList;
 

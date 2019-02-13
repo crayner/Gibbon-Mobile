@@ -14,7 +14,7 @@ security:
             id: App\Security\MD5PasswordEncoder
     providers:
         security_user_provider:
-            id: App\Provider\PersonProvider
+            id: App\Security\SecurityUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt|home)|css|images|build|js)/

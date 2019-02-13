@@ -17,8 +17,8 @@ namespace App\Util;
 
 use App\Entity\Person;
 use App\Provider\PersonProvider;
+use App\Security\SecurityUser;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class UserHelper
@@ -47,15 +47,16 @@ class UserHelper
     }
 
     /**
-     * @var UserInterface|null
+     * @var Person|null
      */
     private static $currentUser;
 
     /**
      * getCurrentUser
-     * @return UserInterface|null
+     * @return Person|null
+     * @throws \Exception
      */
-    public static function getCurrentUser(): ?UserInterface
+    public static function getCurrentUser(): ?Person
     {
         if (! is_null(self::$currentUser))
             return self::$currentUser;
@@ -69,8 +70,8 @@ class UserHelper
             return null;
 
         $user = $token->getUser();
-        if ($user instanceof Person)
-            self::$currentUser = $user;
+        if ($user instanceof SecurityUser)
+            self::$currentUser = self::getProvider()->find($user->getId());
         else
             self::$currentUser = null;
 

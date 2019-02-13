@@ -32,6 +32,7 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Manager\LoginManager;
 use App\Form\Security\AuthenticateType;
+use App\Security\SecurityUser;
 use App\Util\EntityHelper;
 use Hillrange\Form\Util\FormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -66,8 +67,9 @@ class SecurityController extends AbstractController
 
         $user = $repository::getRepository(Person::class)->loadUserByUsername($lastUsername) ?: new Person();
         $user->setUsername($lastUsername);
+        $securityUser = new SecurityUser($user);
 
-        $form = $this->createForm(AuthenticateType::class, $user);
+        $form = $this->createForm(AuthenticateType::class, $securityUser);
 
         return $this->render('Security\login.html.twig',
             [

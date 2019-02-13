@@ -338,7 +338,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
             return $this->client;
         $client = new \Google_Client($this->getConfig());
         $client->setAuthConfig($this->getClientSecrets());
-        $client->addScope(['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/plus.me', 'https://www.googleapis.com/auth/calendar']);
+        $client->addScope(['email', 'profile', 'https://www.googleapis.com/auth/calendar']);
         $client->setRedirectUri($this->getRouter()->generate('connect_google_check',[],UrlGeneratorInterface::ABSOLUTE_URL));
         return $this->client = $client;
     }

@@ -47,7 +47,7 @@ use App\Util\UserHelper;
  * Class PersonProvider
  * @package App\Manager\Provider
  */
-class PersonProvider extends UserProvider
+class PersonProvider
 {
     use EntityTrait;
 
