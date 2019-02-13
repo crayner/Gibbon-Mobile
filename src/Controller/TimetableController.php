@@ -31,7 +31,6 @@ namespace App\Controller;
 
 use App\Entity\Person;
 use App\Manager\TimetableRenderManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -152,8 +152,19 @@ export default class TimetableApp extends Component {
         })
         fetchJson('/timetable/' + date + '/' + this.person + '/display/', {method: 'GET'}, this.locale)
             .then(data => {
-                if (data.content.valid === 'error')
+                if (data.content.valid === 'error') {
+                    const message = {
+                        id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                        message: 'An error occurred collecting the timetable information. You may not have access to this timetable.',
+                        level: 'danger',
+                    }
+                    const messages = [message]
+                    this.setState({
+                        loadEvents: false,
+                        messages: messages,
+                    })
                     return
+                }
                 if (data.content.day !== this.state.day) {
                     const newDate = getDateString(data.content.day.date.date)
                     this.days[newDate] = data.content

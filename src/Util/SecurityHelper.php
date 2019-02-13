@@ -27,16 +27,14 @@
  * Date: 19/12/2018
  * Time: 12:17
  */
-
 namespace App\Util;
 
-
 use App\Entity\Module;
+use App\Entity\Person;
 use App\Provider\ActionProvider;
 use App\Provider\ModuleProvider;
 use Doctrine\DBAL\Driver\PDOException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class SecurityHelper
 {
@@ -163,7 +161,7 @@ class SecurityHelper
         $module = '';
         $role = '';
         //Check user is logged in
-        if (UserHelper::getCurrentUser() instanceof UserInterface) {
+        if (UserHelper::getCurrentUser() instanceof Person) {
             //Check user has a current role set
             if (! empty(UserHelper::getCurrentUser()->getPrimaryRole())) {
                 //Check module ready

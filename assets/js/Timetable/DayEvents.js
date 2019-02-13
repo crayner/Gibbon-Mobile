@@ -45,6 +45,7 @@ export default function DayEvents(props) {
             colour = 'alert-warning'
 
         let content = []
+        let specialDay = '';
 
         if (event.eventType === 'normal' || event.eventType === 'booking')
         {
@@ -54,6 +55,9 @@ export default function DayEvents(props) {
                     event.name = translateMessage(translations, 'School Closed')
                 }
                 content.push(<p className={'font-weight-bold'} key={'name'}>{event.name}</p>)
+                if (event.description) {
+                    content.push(<p key={'description'}>{event.description}</p>)
+                }
             } else {
 
                 const today = new Date()
@@ -92,14 +96,21 @@ export default function DayEvents(props) {
             }
         }
 
+        let headerContent = translateMessage(translations, 'All Day Event')
+        if (!event.allDayEvent && event.start)
+            headerContent = getTimeString(event.start.date)
+        if (event.specialDay) {
+            if (event.specialDayType === 'School Closure') {
+                headerContent = translateMessage(translations, 'School Closure')
+                specialDay = ' specialDay'
+            }
+        }
         return (
             <div className={'row'} key={event.id}>
-                <div className={'col-2 text-center card'}>
-                    {event.allDayEvent ?
-                    translateMessage(translations, 'All Day Event')
-                    : getTimeString(event.start.date) }
+                <div className={'col-2 text-center card' + specialDay}>
+                    {headerContent}
                 </div>
-                <div className={'col-10 card ' + colour}>
+                <div className={'col-10 card ' + colour + specialDay}>
                     {content}
                 </div>
             </div>

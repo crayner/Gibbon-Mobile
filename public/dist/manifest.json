@@ -7,8 +7,8 @@
   "build/form.css": "/build/form.c64d24b6.css",
   "build/form.js": "/build/form.dc201b02.js",
   "build/notificationTray.js": "/build/notificationTray.bca3dbac.js",
-  "build/timetable.css": "/build/timetable.8229d70d.css",
-  "build/timetable.js": "/build/timetable.92e60c72.js",
+  "build/timetable.css": "/build/timetable.53d09136.css",
+  "build/timetable.js": "/build/timetable.077d8d55.js",
   "build/vendors~1aeabec8.css": "/build/vendors~1aeabec8.9ae8728c.css",
   "build/vendors~1aeabec8.js": "/build/vendors~1aeabec8.a379ea5c.js",
   "build/core.0b627364.css.map": "/build/core.0b627364.css.map",
@@ -16,6 +16,6 @@
   "build/static/DefaultPerson.png": "/build/static/DefaultPerson.png",
   "build/static/logo.png": "/build/static/logo.png",
   "build/static/rosella.jpg": "/build/static/rosella.jpg",
-  "build/timetable.8229d70d.css.map": "/build/timetable.8229d70d.css.map",
+  "build/timetable.53d09136.css.map": "/build/timetable.53d09136.css.map",
   "build/vendors~1aeabec8.9ae8728c.css.map": "/build/vendors~1aeabec8.9ae8728c.css.map"
 }

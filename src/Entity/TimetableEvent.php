@@ -402,4 +402,50 @@ class TimetableEvent
         $this->attendanceStatus = $attendanceStatus ? 'green' : 'orange' ;
         return $this;
     }
+
+    /**
+     * @var bool
+     */
+    private $specialDay = false;
+
+    /**
+     * @return bool
+     */
+    public function isSpecialDay(): bool
+    {
+        return $this->specialDay;
+    }
+
+    /**
+     * @param bool $specialDay
+     * @return TimetableEvent
+     */
+    public function setSpecialDay(bool $specialDay): TimetableEvent
+    {
+        $this->specialDay = $specialDay;
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    private $specialDayType = 'School Closure';
+
+    /**
+     * @return string
+     */
+    public function getSpecialDayType(): string
+    {
+        return $this->specialDayType;
+    }
+
+    /**
+     * @param string $specialDayType
+     * @return TimetableEvent
+     */
+    public function setSpecialDayType(string $specialDayType): TimetableEvent
+    {
+        $this->specialDayType = $specialDayType;
+        return $this;
+    }
 }

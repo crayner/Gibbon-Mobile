@@ -52,6 +52,11 @@ class UserHelper
     private static $currentUser;
 
     /**
+     * @var SecurityUser|null
+     */
+    private static $currentSecurityUser;
+
+    /**
      * getCurrentUser
      * @return Person|null
      * @throws \Exception
@@ -61,21 +66,46 @@ class UserHelper
         if (! is_null(self::$currentUser))
             return self::$currentUser;
 
-        if (empty(self::$tokenStorage))
-            return null;
+        $user = self::getCurrentSecurityUser();
 
-        $token = self::$tokenStorage->getToken();
-
-        if (is_null($token))
-            return null;
-
-        $user = $token->getUser();
         if ($user instanceof SecurityUser)
             self::$currentUser = self::getProvider()->find($user->getId());
         else
             self::$currentUser = null;
 
         return self::$currentUser;
+    }
+
+    /**
+     * getCurrentSecurityUser
+     * @param Person|null $person
+     * @return SecurityUser|null
+     */
+    public static function getCurrentSecurityUser(Person $person = null): ?SecurityUser
+    {
+        if (empty(self::$tokenStorage))
+            return self::$currentSecurityUser = null;
+
+        $token = self::$tokenStorage->getToken();
+
+        if (is_null($token))
+            return self::$currentSecurityUser = null;
+
+        self::$currentSecurityUser = $token->getUser() instanceof SecurityUser ? $token->getUser() : null ;
+        return self::$currentSecurityUser;
+    }
+
+    /**
+     * getSecurityUser
+     * @param Person|null $person
+     * @return SecurityUser|null
+     */
+    public static function getSecurityUser(Person $person = null): ?SecurityUser
+    {
+        if (is_null($person))
+            return self::getCurrentSecurityUser();
+        self::$currentSecurityUser = new SecurityUser($person);
+        return self::$currentSecurityUser;
     }
 
     /**

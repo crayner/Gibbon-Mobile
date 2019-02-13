@@ -30,7 +30,6 @@
 
 namespace App\Security;
 
-
 use App\Entity\Person;
 use App\Entity\Role;
 use App\Util\EntityHelper;
@@ -41,6 +40,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInterface, \Serializable
 {
+
+    /**
+     * SecurityUser constructor.
+     * @param Person $user
+     */
+    public function __construct(Person $user = null)
+    {
+        if ($this->isUser($user))
+        {
+            $this->setId($user->getId());
+            $this->setUserPassword($user);
+            $this->setUsername($user->getUsername());
+            $this->setSalt($user->getPasswordStrongSalt());
+            $this->setSystemAdmin($user->isSystemAdmin());
+            $this->setAllRoles($user->getAllRoles());
+            $this->setPrimaryRole($user->getPrimaryRole());
+            $this->setEmail($user->getEmail());
+        }
+    }
 
     /**
      * Returns the roles granted to the user.
@@ -206,24 +224,6 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
     }
 
     /**
-     * SecurityUser constructor.
-     * @param Person $user
-     */
-    public function __construct(Person $user = null)
-    {
-        if ($this->isUser($user))
-        {
-            $this->setId($user->getId());
-            $this->setUserPassword($user);
-            $this->setUsername($user->getUsername());
-            $this->setSalt($user->getPasswordStrongSalt());
-            $this->setSystemAdmin($user->isSystemAdmin());
-            $this->setAllRoles($user->getAllRoles());
-            $this->setEmail($user->getEmail());
-        }
-    }
-
-    /**
      * @var string|null
      */
     private $username;
@@ -269,6 +269,8 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
             $this->getPassword(),
             $this->getSalt(),
             $this->getEmail(),
+            $this->getPrimaryRole(),
+            $this->getAllRoles(),
         ));
     }
 
@@ -284,6 +286,8 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
             $this->password,
             $this->salt,
             $this->email,
+            $this->primaryRole,
+            $this->allRoles,
             ) = unserialize($serialized);
     }
 

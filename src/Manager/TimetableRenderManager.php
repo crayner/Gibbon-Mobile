@@ -62,8 +62,8 @@ class TimetableRenderManager
      * @param Person $person
      * @param \DateTime $startDayStamp
      * @param int|null $timetableID
-     * @return mixed
-     * @throws \Exception
+     * @return array
+     * @throws \Google_Exception
      */
     public function render(Person $person, \DateTime $startDayStamp, ?int $timetableID = null)
     {
@@ -85,7 +85,6 @@ class TimetableRenderManager
                     $proceed = true;
             }
         }
-
         if (! $proceed)
             $result['error'] = $this->getTranslator()->trans('You do not have permission to access this timetable at this time.');
         else {
@@ -146,7 +145,7 @@ class TimetableRenderManager
             $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
             $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false) && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php') ;
 
-            $googleManager = new GoogleAPIManager($person, $this->getGoogleAuthenticator());
+            $googleManager = new GoogleAPIManager(UserHelper::getSecurityUser($person), $this->getGoogleAuthenticator());
             $this->convertGoogleCalendarEvents($result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : [], 'school');
             $this->convertGoogleCalendarEvents($result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : [], 'personal');
             $this->convertSpaceBookingEvents($result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : [] );
@@ -344,11 +343,21 @@ class TimetableRenderManager
         }
         $this->getEvents()->setSchoolOpen(true);
         $this->getEvents()->setDay($day);
-        if (!$result['schoolOpen'] && $result['specialDay'])
-        {
+        if (!$result['schoolOpen'] && $result['specialDay']) {
             $event = new TimetableEvent($result['specialDay']->getName());
-            $this->getEvents()->setSchoolOpen(false);
-            $event->setSchoolDay(false);
+            if ($result['specialDay']->getType() === 'School Closure') {
+                $this->getEvents()->setSchoolOpen(false);
+                $event->setSchoolDay(false);
+
+            } else {
+
+                $this->getEvents()->setSchoolOpen(true);
+                $event->setSchoolDay(true);
+            }
+            $event->setDayDate($day['date']);
+            $event->setSpecialDayType($result['specialDay']->getType());
+            $event->setSpecialDay(true);
+            $event->setDescription($result['specialDay']->getDescription());
             $this->getEvents()->addEvent($event);
         }
         elseif (!$result['schoolOpen'])
@@ -442,7 +451,6 @@ class TimetableRenderManager
     private function getEventsAsArray(): array
     {
         $this->getEvents()->sortEvents();
-
         $events = [];
         $events['schoolOpen'] = $this->getEvents()->isSchoolOpen();
         $events['day'] = $this->getEvents()->getDay();
