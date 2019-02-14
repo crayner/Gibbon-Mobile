@@ -63,6 +63,7 @@ class SettingExtension extends AbstractExtension
             new \Twig_SimpleFunction('getSetting', array($this->manager, 'getSettingByScope')),
             new \Twig_SimpleFunction('getParameter', array($this->manager, 'getParameter')),
             new \Twig_SimpleFunction('getVersion', array($this, 'getVersion')),
+            new \Twig_SimpleFunction('getGibbonVersion', array($this, 'getGibbonVersion')),
         ];
     }
 
@@ -72,5 +73,14 @@ class SettingExtension extends AbstractExtension
      */
     public function getVersion(){
         return VersionHelper::VERSION;
+    }
+
+    /**
+     * getGibbonVersion
+     * @return string
+     */
+    public function getGibbonVersion(): string
+    {
+        return VersionHelper::GIBBON;
     }
 }
