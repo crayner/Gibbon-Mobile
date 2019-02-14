@@ -330,10 +330,10 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
 
     /**
      * setSalt
-     * @param string $salt
+     * @param null|string $salt
      * @return SecurityUser
      */
-    public function setSalt(string $salt = ''): SecurityUser
+    public function setSalt(?string $salt): SecurityUser
     {
         $this->salt = $salt ?: '';
         return $this;

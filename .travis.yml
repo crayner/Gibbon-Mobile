@@ -1,25 +1,42 @@
 language: php
 
+# The platforms you wants to test on
+dist: trusty
+os:
+  - linux
+
 php:
   - 7.2
   - nightly
 
-matrix:
-  fast_finish: true
+# faster builds on new travis setup not using sudo
+sudo: false
+
+# set git depth to reduce download size
+git:
+  depth: 2
 
 cache:
   directories:
-    - $HOME/.composer/cache/files
-    - $HOME/symfony-bridge/.phpunit
+    - vendor
+    - $HOME/.composer/cache
+
+
+# optionally specify a list of environments, for example to test different RDBMS
 env:
   global:
-    - PHPUNIT_FLAGS="-v"
-    - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
-    - SYMFONY_VERSION="4.*" DB=mysql
+    - CI_PLATFORM='travis_ci'
+    - ABSOLUTE_URL='http://127.0.0.1:8888'
+    - DB_HOST='127.0.0.1'
+    - DB_NAME='craigray_gibbon_test'
+    - DB_USERNAME='root'
+    - DB_PASSWORD=''
 
 install:
   - cp .env.local.test .env.local
-  - composer install
+  - cp config/packages/gibbon_mobile.yaml.travis config/packages/gibbon_mobile.yaml
+  - travis_retry composer self-update
+  - travis_retry composer install --prefer-dist --no-interaction
 
 before_install:
   # Disable x-debug to speed up things
@@ -27,5 +44,12 @@ before_install:
   # add composer global bin to PATH to make codeception usable
   - export PATH=$HOME/.composer/vendor/bin:$PATH
 
-script:
-  - $HOME/symfony-bridge/.phpunit
+#script:
+#  - $HOME/symfony-bridge/.phpunit
+
+# execute any number of scripts before the test run, custom env's are available as variables
+before_script:
+  - php -S 127.0.0.1:8888 -t $TRAVIS_BUILD_DIR >/dev/null 2>&1 &
+  - sleep 1
+  - phpunit --version
+
