@@ -448,4 +448,19 @@ class TimetableEvent
         $this->specialDayType = $specialDayType;
         return $this;
     }
+
+    /**
+     * getEventTypePriority
+     * @return string
+     */
+    public function getEventTypePriority(TimetableEvent $event): string
+    {
+        if ($this->getEventType() === 'school')
+            return 'a';
+        if ($this->getEventType() === 'personal' && in_array($event->getEventType(), ['normal', 'booking']))
+            return 'a';
+        if ($this->getEventType() === 'normal' && $event->getEventType() === 'booking')
+            return 'a';
+        return 'z';
+    }
 }

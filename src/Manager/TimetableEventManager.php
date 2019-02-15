@@ -160,10 +160,14 @@ class TimetableEventManager
 
         $iterator->uasort(
             function ($a, $b) {
-                if ($a->isAllDayEvent() && ! $b->isAllDayEvent()) return -1;
-                if (! $a->isAllDayEvent() && $b->isAllDayEvent()) return 1;
-                if ($a->isAllDayEvent() && $b->isAllDayEvent()) return $a->getName().$a->getId() < $b->getName().$b->getId() ? -1 : 1 ;
-                return $a->getStart()->format('Hi').$a->getName().$a->getId() < $b->getStart()->format('Hi').$b->getName().$b->getId() ? -1 : 1 ;
+                if (is_null($a->getStart())) $a->setAllDayEvent(true);
+                if (is_null($b->getStart())) $b->setAllDayEvent(true);
+                if ($a->isAllDayEvent() && !$b->isAllDayEvent()) return -1;
+                if (!$a->isAllDayEvent() && $b->isAllDayEvent()) return 1;
+                if ($a->isAllDayEvent() && $b->isAllDayEvent()) {
+                    return $a->getEventTypePriority($b) . $a->getName() < $b->getEventTypePriority($a) . $b->getName() ? -1 : 1;
+                }
+                return $a->getStart()->format('Hi') . $a->getName() . $a->getEventTypePriority($b) < $b->getStart()->format('Hi') . $b->getName()  . $b->getEventTypePriority($a) ? -1 : 1;
             }
         );
 

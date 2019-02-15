@@ -414,6 +414,7 @@ class TimetableRenderManager
                 ->setLocation($event['location'])
                 ->addLink('external', $event['link'])
                 ->setEventType($eventType);
+
             if ($event['eventType'] !== 'Specified Time') {
                 $entity->setAllDayEvent();
             } else {

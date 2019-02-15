@@ -110,7 +110,6 @@ class GoogleAPIManager
                             $multiDay = true;
                         }
                     }
-
                     if ($multiDay) { //This event spans multiple days
                         if ($entry->end->date != $entry->start->date) {
                             $days = (strtotime($entry->end->date) - strtotime($entry->start->date)) / (86400);
@@ -137,6 +136,11 @@ class GoogleAPIManager
                         } else {
                             $eventsSchool[$count]['end'] = $eventEnd;
                         }
+                        $end = new \DateTime($eventsSchool[$count]['end']);
+                        $eventLength = $end->diff(new \DateTime($eventsSchool[$count]['start']));
+                        if ($eventLength->days >= 1)
+                            $eventsSchool[$count]['eventType'] = 'All Day';
+
                         //WHERE
                         $eventsSchool[$count]['location'] = $entry->getLocation();
 
