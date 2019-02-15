@@ -29,10 +29,10 @@
  */
 namespace App\Manager;
 
+use App\Entity\Person;
 use App\Util\UserHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -83,7 +83,6 @@ class NotificationTrayManager
 
         $translations = [];
         $translations['Message Wall'] = $this->getTranslator()->trans('Message Wall', [], 'messages');
-        $translations['Likes'] = $this->getTranslator()->trans('Likes', [], 'messages');
         $translations['Notifications'] = $this->getTranslator()->trans('Notifications', [], 'messages');
 
         $result['translations'] = $translations;
@@ -121,14 +120,13 @@ class NotificationTrayManager
     }
 
     /**
-     * @param NotificationManager $displayTray
+     * setDisplayTray
      * @return NotificationTrayManager
+     * @throws \Exception
      */
     public function setDisplayTray(): NotificationTrayManager
     {
-        $person = UserHelper::getCurrentUser();
-        if ($person instanceof UserInterface)
-            $this->displayTray = true;
+        $this->displayTray = UserHelper::getCurrentUser() instanceof Person;
         return $this;
     }
 

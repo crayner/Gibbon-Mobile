@@ -2593,4 +2593,13 @@ class Person implements EntityInterface
     {
         return $this->getSurname().$this->getFirstName();
     }
+
+    /**
+     * getLocale
+     * @return string|null
+     */
+    public function getLocale(): ?string
+    {
+        return $this->getI18nPersonal();
+    }
 }

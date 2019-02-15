@@ -5,7 +5,7 @@ import { render } from 'react-dom'
 import TrayApp from './NotificationTray/TrayApp'
 
 const tray = document.getElementById('notificationTray')
-console.log(window.TRAY_PROPS)
+
 if (tray === null)
     render(<div>&nbsp;</div>, document.getElementById('dumpStuff') )
 else
