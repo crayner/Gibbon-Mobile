@@ -39,6 +39,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class SecurityUserProvider implements UserProviderInterface
 {
+
     /**
      * @var integer|null
      */
@@ -121,9 +122,9 @@ class SecurityUserProvider implements UserProviderInterface
      * getUser
      * @return Person|null
      */
-    private function getUser(): ?Person
+    public function getUser(): ?Person
     {
-        return $this->user ?: $this->loadUser();
+        return $this->user = $this->user ?: $this->loadUser();
     }
 
     /**

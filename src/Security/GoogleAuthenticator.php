@@ -57,7 +57,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 	private $google_user;
 
     /**
-     * @var PersonProvider
+     * @var SecurityUserProvider
      */
 	private $provider;
 
@@ -68,8 +68,10 @@ class GoogleAuthenticator implements AuthenticatorInterface
      * @param MessageManager $messageManager
      * @param SettingManager $settingManager
      * @param LoggerInterface $logger
+     * @param SecurityUserProvider $provider
+     * @throws \Google_Exception
      */
-	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger, PersonProvider $provider)
+	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger, SecurityUserProvider $provider)
 	{
 		$this->em = $em;
 		$this->router = $router;
@@ -101,22 +103,18 @@ class GoogleAuthenticator implements AuthenticatorInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider): UserInterface
     {
-        $user = $userProvider->getRepository(Person::class)->findOneBy(['googleAPIRefreshToken' => $this->google_user->getId()]);
-        // 1) have they logged in with Google before? Easy!
-        /*		$existingUser = $this->em->getRepository(Person::class)
-                    ->findOneBy(['googleId' => $googleUser->getId()]);
-                if ($existingUser) {
-                    return $existingUser;
-                }
-        */
+        $refreshToken = isset($credentials['refresh_token']) ? $credentials['refresh_token'] : null;
+
         if (empty($user)) {
             // 2) do we have a matching user by email?
-            $user = $userProvider->loadUserByUsername($this->google_user->getEmail());
+            $user = $userProvider->loadUserByUsername($this->getGoogleUser()->getEmail());
 
-            $user->setGoogleAPIRefreshToken($this->google_user->getId());
+            if (!empty($refreshToken)) {
+                $userProvider->getUser()->setGoogleAPIRefreshToken($refreshToken);
 
-            $this->em->persist($user);
-            $this->em->flush();
+                $this->em->persist($userProvider->getUser());
+                $this->em->flush();
+            }
         }
 
 		// 3) Maybe you just want to "register" them by creating
@@ -124,7 +122,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 //		$user->setGoogleId($googleUser->getId());
 //		$this->em->persist($user);
 //		$this->em->flush();
-        $this->logger->debug(sprintf('Google Authentication: The user "%s" authenticated using Google.', $this->google_user->getName()));
+        $this->logger->debug(sprintf('Google Authentication: The user "%s" authenticated using Google.', $this->getGoogleUser()->getName()));
 
         $this->setAccessToken($credentials);
 
@@ -178,6 +176,8 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$user = $token->getUser();
 		$this->logger->notice("Google Authentication: UserProvider #" . $user->getId() . " (" . $user->getEmail() . ") The user authenticated via Google.");
 
+		$this->getProvider()->setSecurityUser($user);
+		$user = $this->getProvider()->getUser();
 		if (null !== $user->getLocale())
 			$request->setLocale($user->getLocale());
 
@@ -402,10 +402,18 @@ class GoogleAuthenticator implements AuthenticatorInterface
 
     /**
      * getProvider
-     * @return PersonProvider
+     * @return SecurityUserProvider
      */
-    public function getProvider(): PersonProvider
+    public function getProvider(): SecurityUserProvider
     {
         return $this->provider;
+    }
+
+    /**
+     * @return Object
+     */
+    public function getGoogleUser(): Object
+    {
+        return $this->google_user;
     }
 }
