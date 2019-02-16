@@ -84,13 +84,16 @@ class SettingInstallCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->newLine();
 
-        $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
+        $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
+        $io->success(sprintf('File: %s', $file));
+
+        $content = Yaml::parse(file_get_contents($file));
+        $gibbonRoot = $content['parameters']['gibbon_document_root'];
+        $io->success(sprintf('Gibbon Document Root: %s', $gibbonRoot));
 
         $fileSystem = new Filesystem();
         if (! $fileSystem->exists($file))
             $fileSystem->copy($file.'.dist', $file, false);
-
-        $gibbonRoot = $this->getSettingManager()->getSettingByScopeAsString('System', 'absolutePath') ?: '';
 
         $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
         if (! $fileSystem->exists($config)) {
@@ -101,10 +104,11 @@ class SettingInstallCommand extends Command
             // now build .env.local file for the mailer
             if ($this->getSettingManager()->getSettingByScopeAsBoolean('System', 'enableMailerSMTP', 'N')) {
 
-                $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
-
-
-                $content = Yaml::parse(file_get_contents($file));
+                if ($gibbonRoot !== $content['parameters']['gibbon_document_root'])
+                {
+                    $io->error(sprintf('The database absolute path %s does not equal the config path %s', $gibbonRoot, $content['parameters']['gibbon_document_root']));
+                    return 2;
+                }
 
                 $content['parameters']['mailer_host'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPHost', null);
                 $content['parameters']['mailer_transport'] = 'smtp';
