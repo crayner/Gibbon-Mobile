@@ -92,12 +92,6 @@ class UnitBlock implements EntityInterface
     private $sequenceNumber;
 
     /**
-     * @var string|null
-     * @ORM\Column(type="text", name="gibbonOutcomeIDList")
-     */
-    private $outcomeList;
-
-    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -238,24 +232,6 @@ class UnitBlock implements EntityInterface
     public function setSequenceNumber(int $sequenceNumber): UnitBlock
     {
         $this->sequenceNumber = $sequenceNumber;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getOutcomeList(): ?string
-    {
-        return $this->outcomeList;
-    }
-
-    /**
-     * @param string|null $outcomeList
-     * @return UnitBlock
-     */
-    public function setOutcomeList(?string $outcomeList): UnitBlock
-    {
-        $this->outcomeList = $outcomeList;
         return $this;
     }
 }

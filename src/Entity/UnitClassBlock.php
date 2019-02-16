@@ -115,12 +115,6 @@ class UnitClassBlock implements EntityInterface
     private $complete = 'N';
 
     /**
-     * @var string|null
-     * @ORM\Column(type="text", name="gibbonOutcomeIDList")
-     */
-    private $outcomeList;
-
-    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -315,24 +309,6 @@ class UnitClassBlock implements EntityInterface
     public function setComplete(?string $complete): UnitClassBlock
     {
         $this->complete = self::checkBoolean($complete, 'N');
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getOutcomeList(): ?string
-    {
-        return $this->outcomeList;
-    }
-
-    /**
-     * @param string|null $outcomeList
-     * @return UnitClassBlock
-     */
-    public function setOutcomeList(?string $outcomeList): UnitClassBlock
-    {
-        $this->outcomeList = $outcomeList;
         return $this;
     }
 }

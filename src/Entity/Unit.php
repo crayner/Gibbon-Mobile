@@ -108,12 +108,6 @@ class Unit implements EntityInterface
 
     /**
      * @var string|null
-     * @ORM\Column(length=1, options={"default": "N"})
-     */
-    private $embeddable = 'N';
-
-    /**
-     * @var string|null
      * @ORM\Column(length=50, nullable=true)
      */
     private $license;
@@ -315,24 +309,6 @@ class Unit implements EntityInterface
     public function setDetails(?string $details): Unit
     {
         $this->details = $details;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getEmbeddable(): ?string
-    {
-        return $this->embeddable;
-    }
-
-    /**
-     * @param string|null $embeddable
-     * @return Unit
-     */
-    public function setEmbeddable(?string $embeddable): Unit
-    {
-        $this->embeddable = self::checkBoolean($embeddable, 'N');
         return $this;
     }
 

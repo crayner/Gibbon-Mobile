@@ -91,7 +91,7 @@ class ApplicationForm
 
     /**
      * @var string|null
-     * @ORM\Column(length=12, options={"default": "Unspecified"})
+     * @ORM\Column(length=12, options={"default": "Unspecified"}, nullable=true)
      */
     private $gender = 'Unspecified';
 
