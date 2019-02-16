@@ -140,14 +140,17 @@ class TimetableRenderManager
 
             $googleAvailable = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'googleOAuth', false);
             $schoolAvailable = $this->getSettingManager()->getSettingByScopeAsString('System', 'calendarFeed', false);
-            $personalAvailable = $person->getCalendarFeedPersonal() ?: false;
-            $result['allowSchoolCalendar'] = $result['person']->getViewCalendarSchool($googleAvailable, $schoolAvailable) === 'Y' ? true : false ;
-            $result['allowPersonalCalendar'] = $result['person']->getViewCalendarPersonal($googleAvailable) === 'Y' ? true : false ;
-            $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y' ? true : false) && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php') ;
+
+            $result['allowSchoolCalendar'] = ($result['person']->getViewCalendarSchool() === 'Y'
+                                                && $googleAvailable && $schoolAvailable) ;
+            $result['allowPersonalCalendar'] = ($result['person']->getViewCalendarPersonal() === 'Y'
+                                                    && ! empty($result['person']->getCalendarFeedPersonal()));
+            $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y'
+                                                        && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php')) ;
 
             $googleManager = new GoogleAPIManager(UserHelper::getSecurityUser($person), $this->getGoogleAuthenticator());
             $this->convertGoogleCalendarEvents($result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : [], 'school');
-            $this->convertGoogleCalendarEvents($result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($personalAvailable, $result['date']) : [], 'personal');
+            $this->convertGoogleCalendarEvents($result['allowPersonalCalendar'] ? $googleManager->getCalendarEvents($result['person']->getCalendarFeedPersonal() ?: false, $result['date']) : [], 'personal');
             $this->convertSpaceBookingEvents($result['allowSpaceBookingCalendar'] ? $this->getSpaceBookingEvents($result['date'], $person) : [] );
 
         }
@@ -440,6 +443,7 @@ class TimetableRenderManager
                 ->setLocation($event['name'])
                 ->setEventType('booking')
                 ->setStart($event['timeStart'])
+                ->setDayDate($event['date'])
                 ->setEnd($event['timeEnd']);
             $this->getEvents()->addEvent($entity);
         }
@@ -452,6 +456,7 @@ class TimetableRenderManager
     private function getEventsAsArray(): array
     {
         $this->getEvents()->sortEvents();
+
         $events = [];
         $events['schoolOpen'] = $this->getEvents()->isSchoolOpen();
         $events['day'] = $this->getEvents()->getDay();

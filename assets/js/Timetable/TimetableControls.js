@@ -20,6 +20,9 @@ export default function TimetableControls(props) {
         allowPersonalCalendar,
         allowSchoolCalendar,
         allowSpaceBookingCalendar,
+        showSchoolCalendar,
+        showPersonalCalendar,
+        showSpaceBookingCalendar,
         translations,
         changeDate,
         locale,
@@ -78,7 +81,7 @@ export default function TimetableControls(props) {
     const personal = {
         icon: faUser,
         type: 'misc',
-        colour: 'primary',
+        colour: showPersonalCalendar ? 'primary' : 'light',
         iconAttr: {size: '2x'},
         title: translateMessage(translations, 'Personal Calendar'),
     }
@@ -86,7 +89,7 @@ export default function TimetableControls(props) {
     const school = {
         icon: faSchool,
         type: 'misc',
-        colour: 'success',
+        colour: showSchoolCalendar ? 'success' : 'light',
         iconAttr: {size: '2x'},
         title: translateMessage(translations, 'School Calendar'),
     }
@@ -94,7 +97,7 @@ export default function TimetableControls(props) {
     const space = {
         icon: faCubes,
         type: 'misc',
-        colour: 'warning',
+        colour: showSpaceBookingCalendar ? 'warning' : 'light',
         iconAttr: {size: '2x'},
         title: translateMessage(translations, 'Bookings'),
     }
@@ -132,4 +135,7 @@ TimetableControls.propTypes = {
     allowPersonalCalendar: PropTypes.bool.isRequired,
     allowSchoolCalendar: PropTypes.bool.isRequired,
     allowSpaceBookingCalendar: PropTypes.bool.isRequired,
+    showSchoolCalendar: PropTypes.bool.isRequired,
+    showPersonalCalendar: PropTypes.bool.isRequired,
+    showSpaceBookingCalendar: PropTypes.bool.isRequired,
 }
