@@ -130,7 +130,7 @@ class SettingInstallCommand extends Command
 
                 $fileSystem->dumpFile($file, Yaml::dump($content,8));
                 $io->success('Email settings have been copied from the Gibbon Setup');
-            }else {
+            } else {
                 $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
 
 

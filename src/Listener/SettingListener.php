@@ -29,6 +29,7 @@
  */
 namespace App\Listener;
 
+use App\Command\EnvironmentInstallCommand;
 use App\Manager\SettingManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -36,9 +37,12 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class SettingListener
@@ -62,16 +66,22 @@ class SettingListener implements EventSubscriberInterface
     private $logger;
 
     /**
+     * @var string
+     */
+    private $file;
+
+    /**
      * SettingListener constructor.
      * @param ContainerInterface $container
      * @param LoggerInterface $logger
      * @param SettingManager|null $manager
      */
-    public function __construct(ContainerInterface $container, LoggerInterface $logger, ?SettingManager $manager = null)
+    public function __construct(ContainerInterface $container, ?SettingManager $manager = null)
     {
         $this->manager = $manager;
         $this->container = $container;
-        $this->logger = $logger->withName('setting');
+        $this->logger = $container->get('monolog.logger.setting');
+        $this->file = __DIR__ . DIRECTORY_SEPARATOR .'..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
     }
 
     /**
@@ -90,19 +100,17 @@ class SettingListener implements EventSubscriberInterface
 
     /**
      * onResponse
-     * @param KernelEvent $event
+     * @param FilterResponseEvent $event
      * @throws \Exception
      */
-    public function onResponse()
+    public function onResponse(FilterResponseEvent $event)
     {
         if ($this->manager instanceof SettingManager) {
             $this->manager->saveSettingCache();
 
-            $lastTranslation = $this->manager->getSettingByScopeAsDate('Mobile', 'translationTransferDate');
+            $lastTranslationRefresh = $this->manager->getParameter('translation_last_refresh', null);
 
-            if ($lastTranslation === false || ! $lastTranslation instanceof \DateTime ||
-                $lastTranslation->diff(new \DateTime('now'), true )->format('%a') > $this->manager->getParameter('translation_refresh', 90))
-            {
+            if ($lastTranslationRefresh !== null && $lastTranslationRefresh < strtotime('-'.$this->manager->getParameter('translation_refresh', 90).' Days')) {
                 $application = new Application($this->getContainer()->get('kernel'));
                 $application->setAutoExit(false);
 
@@ -121,7 +129,16 @@ class SettingListener implements EventSubscriberInterface
                     trigger_error($output->fetch(), E_USER_ERROR);
 
                 $output->fetch();
+                $content = Yaml::parse(file_get_contents($this->file));
+                $content['parameters']['translation_last_refresh'] = strtotime('now');
+                file_put_contents($this->file, Yaml::dump($content, 8));
+                $this->getLogger()->info('The translation files were refreshed from Gibbon.');
+            }
+            
+            
+            $lastSettingRefresh = $this->manager->getParameter('setting_last_refresh', null);
 
+            if ($lastSettingRefresh !== null && $lastSettingRefresh < strtotime('-30 Days')) {
                 $input = new ArrayInput(array(
                     'command' => 'gibbon:setting:install',
                 ));
@@ -136,25 +153,114 @@ class SettingListener implements EventSubscriberInterface
 
                 $output->fetch();
 
-                $this->logger->notice('Translation and Settings were updated.');
+                $content = Yaml::parse(file_get_contents($this->file));
+                $content['parameters']['setting_last_refresh'] = strtotime('now');
+                file_put_contents($this->file, Yaml::dump($content, 8));
+                $this->getLogger()->info('The settings where refreshed from Gibbon.');
             }
         }
     }
 
     /**
      * onRequest
-     * @param KernelEvent $event
+     * @param GetResponseEvent $event
+     * @return int
      * @throws \Exception
      */
-    public function onRequest(KernelEvent $event)
+    public function onRequest(GetResponseEvent $event)
     {
+        if (! file_exists($this->file))
+        {
+            $app = new EnvironmentInstallCommand();
+            $kernel = $this->getContainer()->get('kernel');
+
+            $input = new ArrayInput(
+                [],
+                $app->getDefinition()
+            );
+
+            // You can use NullOutput() if you don't need the output
+            $output = new BufferedOutput();
+
+            $app->executeCommand($input, $output, $kernel);
+            // return the output, don't use if you used NullOutput()
+            $output->fetch();
+
+            $content = [];
+            $content[] = '# Auto-generated by Installation routines within the kernel.';
+            $content[] = '# on '.date('jS M/Y');
+            $content[] = 'APP_ENV=prod';
+            $content[] = 'APP_SECRET='.substr(str_replace('.', '', uniqid('',true) . uniqid('',true)), -32);
+
+            file_put_contents($kernel->getProjectDir() . DIRECTORY_SEPARATOR . '.env.local', implode("\r\n", $content));
+
+            $response = new RedirectResponse('/');
+
+            $event->setResponse($response);
+        }
+
+        $this->file = realpath($this->file);
+        $content = Yaml::parse(file_get_contents($this->file));
+
+
+        if (empty($content['parameters']['setting_last_refresh'])) {
+
+            $application = new Application($this->getContainer()->get('kernel'));
+            $application->setAutoExit(false);
+            ini_set('max_execution_time', 30);
+            $input = new ArrayInput(
+                [
+                    'command' => 'gibbon:setting:install',
+                ]
+            );
+
+            // You can use NullOutput() if you don't need the output
+            $output = new BufferedOutput();
+            $result = $application->run($input, $output);
+
+            // return the output, don't use if you used NullOutput()
+            if ($result !== 0) {
+                dd($output);
+                return $result;
+            }
+
+            $content['parameters']['setting_last_refresh'] = strtotime('now');
+            file_put_contents($this->file, Yaml::dump($content, 8));
+            $this->getLogger()->info('The settings where copied from Gibbon.');
+        }
+
+        $content['parameters']['translation_refresh'] = ! empty($content['parameters']['translation_refresh']) ? $content['parameters']['translation_refresh'] : 90;
+
+        if (empty($content['parameters']['translation_last_refresh']))
+        {
+            $application = new Application($this->getContainer()->get('kernel'));
+            $application->setAutoExit(false);
+
+            $input = new ArrayInput(
+                [
+                    'command' => 'gibbon:translation:install',
+                ]
+            );
+
+            // You can use NullOutput() if you don't need the output
+            $output = new BufferedOutput();
+            $result = $application->run($input, $output);
+
+            // return the output, don't use if you used NullOutput()
+            if ($result !== 0) {
+                dd($output);
+                return $result;
+            }
+            $content['parameters']['translation_last_refresh'] = strtotime('now');
+            file_put_contents($this->file, Yaml::dump($content, 8));
+            $this->getLogger()->info('The translation files were copied from Gibbon');
+
+        }
+
         if (! $event->getRequest()->hasSession()) {
             $session = new Session();
             $session->start();
         }
-        $file = __DIR__ . DIRECTORY_SEPARATOR .'..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon.yaml';
-        if (realpath($file) &&! file_exists($file))
-            self::onResponse();
     }
 
     /**
@@ -163,5 +269,13 @@ class SettingListener implements EventSubscriberInterface
     public function getContainer(): ContainerInterface
     {
         return $this->container;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 }

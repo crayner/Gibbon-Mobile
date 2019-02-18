@@ -43,6 +43,8 @@ parameters:
     gibbon_document_root: 'F:\websites\crayner\Gibbon-v17'
     gibbon_host_url: 'http://gibbon-17.craigrayner.com/'
     translation_refresh: 90
+    translation_last_refresh: ~
+    setting_last_refresh: ~
     mailer_transport: null
     mailer_host: null
     mailer_user: null
