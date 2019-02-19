@@ -55,16 +55,6 @@ class SettingInstallCommand extends Command
     private $manager;
 
     /**
-     * @var bool|string 
-     */
-    private $file;
-
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -85,8 +75,8 @@ class SettingInstallCommand extends Command
         $this->manager = $manager;
         $this->logger = $manager->getContainer()->get('monolog.logger.setting');
         $this->installationManager = $installationManager;
-        $this->installationManager->setLogger($this->logger);
-        $this->installationManager->setSettingManager($this->getSettingManager());
+        $this->installationManager->setLogger($this->logger)
+            ->setSettingManager($this->getSettingManager());
     }
 
     /**

@@ -40,8 +40,9 @@ parameters:
         ROLE_SYSTEM_ADMIN:
             - ROLE_REGISTRAR
             - ROLE_PARENT
-    gibbon_document_root: 'F:\websites\crayner\Gibbon-v17'
-    gibbon_host_url: 'http://gibbon-17.craigrayner.com/'
+    gibbon_document_root: ''
+    gibbon_host_url: ''
+    installation_required: false
     translation_refresh: 90
     translation_last_refresh: ~
     setting_last_refresh: ~
@@ -54,7 +55,7 @@ parameters:
     mailer_port: null
     mailer_encryption: null
     mailer_auth_mode: null
-    mailer_sender_name: 'Hill Range Services'
-    mailer_sender_address: craig@craigrayner.com
+    mailer_sender_name: ''
+    mailer_sender_address:
     google_client_id: ''
     google_secret: ''

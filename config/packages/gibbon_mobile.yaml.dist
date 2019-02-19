@@ -40,6 +40,7 @@ parameters:
             - ROLE_PARENT
     gibbon_document_root: ''
     gibbon_host_url: ''
+    installation_required: true
     # How often should the translations be copied from Gibbon in DAYS
     translation_refresh: 90
     translation_last_refresh: ~
