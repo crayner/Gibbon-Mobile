@@ -237,6 +237,15 @@ class SettingManager implements ContainerAwareInterface
     }
 
     /**
+     * clearSettingCache
+     */
+    public function clearSettingCache(): void
+    {
+        $this->settings = new ArrayCollection();
+        $this->saveSettingCache();
+    }
+
+    /**
      * createSetting
      * @param Setting $setting
      * @param bool $overwrite

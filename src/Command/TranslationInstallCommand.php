@@ -74,6 +74,11 @@ class TranslationInstallCommand extends Command
     private $manager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * InstallCommand constructor.
      * @param Finder $finder
      * @param string $gibbonDocumentRoot
@@ -87,6 +92,7 @@ class TranslationInstallCommand extends Command
         $this->gibbonDocumentRoot = $this->getSettingManager()->getSettingByScopeAsString('System', 'absolutePath') ?: '';
         $this->filesystem = new Filesystem();
         $this->finder->exclude(['LC_MESSAGES']);
+        $this->logger = $manager->getContainer()->get('monolog.logger.setting');
     }
 
     /**
@@ -184,12 +190,15 @@ class TranslationInstallCommand extends Command
 
                         if ($method === $expectedMethod) {
                             $rows[] = array(sprintf('<fg=green;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" /* HEAVY CHECK MARK (U+2714) */), $message . ' for ' . $locale, $method);
+                            $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
                         } else {
                             $rows[] = array(sprintf('<fg=yellow;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'WARNING' : '!'), $message . ' for ' . $locale, $method);
+                            $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
                         }
                     } catch (\Exception $e) {
                         $exitCode = 1;
                         $rows[] = array(sprintf('<fg=red;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */), $message . ' for ' . $locale, $e->getMessage());
+                        $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
                     }
 
                     if ($locale === 'en_GB') {
@@ -210,12 +219,15 @@ class TranslationInstallCommand extends Command
 
                             if ($method === $expectedMethod) {
                                 $rows[] = array(sprintf('<fg=green;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" /* HEAVY CHECK MARK (U+2714) */), $message . ' for ' . $locale, $method);
+                                $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
                             } else {
                                 $rows[] = array(sprintf('<fg=yellow;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'WARNING' : '!'), $message . ' for ' . $locale, $method);
+                                $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
                             }
                         } catch (\Exception $e) {
                             $exitCode = 1;
                             $rows[] = array(sprintf('<fg=red;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */), $message . ' for ' . $locale, $e->getMessage());
+                            $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
                         }
                     }
                 }
@@ -229,11 +241,14 @@ class TranslationInstallCommand extends Command
 
         if (0 !== $exitCode) {
             $io->error('Some errors occurred while installing translations.');
+            $this->logger->error(sprintf('%s: Some errors occurred while installing translations.', __CLASS__));
         } else {
             if ($copyUsed) {
                 $io->note('Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.');
+                $this->logger->debug(sprintf('%s: Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.', __CLASS__));
             }
             $io->success($rows ? 'All translations were successfully installed.' : 'No translations were provided by Gibbon.');
+            $this->logger->info(sprintf($rows ? '%s: All translations were successfully installed.' : '%s: No translations were provided by Gibbon.', __CLASS__));
             $setting = $this->getSettingManager()->getSettingByScope('Mobile', 'translationTransferDate', true);
             if (empty($setting)) {
                 $setting = new Setting();
@@ -314,6 +329,7 @@ EOT
             $method = self::METHOD_ABSOLUTE_SYMLINK;
         } catch (IOException $e) {
             // fall back to copy
+            $this->logger->info(sprintf('%s: Files were copied.', __CLASS__, $target));
             $method = $this->hardCopy($origin, $target);
         }
 
@@ -335,6 +351,7 @@ EOT
         }
         $this->filesystem->symlink($origin, $target);
         if (!file_exists($target)) {
+            $this->logger->error(sprintf('%s: Symbolic link "%s" was created but appears to be broken.', __CLASS__, $target));
             throw new IOException(sprintf('Symbolic link "%s" was created but appears to be broken.', $target), 0, null, $target);
         }
     }

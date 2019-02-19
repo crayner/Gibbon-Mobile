@@ -30,12 +30,15 @@
 namespace App\Command;
 
 use App\Entity\I18n;
+use App\Manager\InstallationManager;
 use App\Manager\SettingManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -52,14 +55,38 @@ class SettingInstallCommand extends Command
     private $manager;
 
     /**
+     * @var bool|string 
+     */
+    private $file;
+
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var InstallationManager
+     */
+    private $installationManager;
+
+    /**
      * SettingInstallCommand constructor.
      * @param SettingManager $manager
      */
-    public function __construct(SettingManager $manager)
+    public function __construct(SettingManager $manager, InstallationManager $installationManager)
     {
         parent::__construct();
 
         $this->manager = $manager;
+        $this->logger = $manager->getContainer()->get('monolog.logger.setting');
+        $this->installationManager = $installationManager;
+        $this->installationManager->setLogger($this->logger);
+        $this->installationManager->setSettingManager($this->getSettingManager());
     }
 
     /**
@@ -79,113 +106,22 @@ class SettingInstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $kernel = $this->getApplication()->getKernel();
+        $this->getSettingManager()->clearSettingCache();
+        $this->installationManager->setKernel($this->getApplication()->getKernel());
+
+        $exitCode = $this->installationManager->settings();
 
         $io = new SymfonyStyle($input, $output);
         $io->newLine();
 
-        $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
-        $io->success(sprintf('File: %s', $file));
-
-        $content = Yaml::parse(file_get_contents($file));
-        $gibbonRoot = $content['parameters']['gibbon_document_root'];
-        $io->success(sprintf('Gibbon Document Root: %s', $gibbonRoot));
-
-        $fileSystem = new Filesystem();
-        if (! $fileSystem->exists($file))
-            $fileSystem->copy($file.'.dist', $file, false);
-
-        $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
-        if (! $fileSystem->exists($config)) {
-            $io->error(sprintf('The Gibbon config.php file was not found at "%s"', $config));
-            return 1;
-        } else {
-            $io->success(sprintf('The Gibbon config.php file was found at "%s"', $config));
-            // now build .env.local file for the mailer
-            if ($this->getSettingManager()->getSettingByScopeAsBoolean('System', 'enableMailerSMTP', 'N')) {
-
-                if ($gibbonRoot !== $content['parameters']['gibbon_document_root'])
-                {
-                    $io->error(sprintf('The database absolute path %s does not equal the config path %s', $gibbonRoot, $content['parameters']['gibbon_document_root']));
-                    return 2;
-                }
-
-                $content['parameters']['mailer_host'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPHost', null);
-                $content['parameters']['mailer_transport'] = 'smtp';
-                $content['parameters']['mailer_auth_mode'] = null;
-                if (strpos($content['parameters']['mailer_host'], 'gmail') !== false)
-                    $content['parameters']['mailer_transport'] = 'gmail';
-                if ($content['parameters']['mailer_transport'] === 'smtp') {
-                    $content['parameters']['mailer_port'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPort', null);
-                    $content['parameters']['mailer_encryption'] = null;
-                    if ($content['parameters']['mailer_port'] === '465')
-                        $content['parameters']['mailer_encryption'] = 'ssl';
-                    if ($content['parameters']['mailer_port'] === '587')
-                        $content['parameters']['mailer_encryption'] = 'tls';
-                }
-                $content['parameters']['mailer_user'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPUsername', null);
-                $content['parameters']['mailer_password'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPassword', null);
-                $content['parameters']['mailer_spool'] = ['type' => 'memory'];
-
-
-                $fileSystem->dumpFile($file, Yaml::dump($content,8));
-                $io->success('Email settings have been copied from the Gibbon Setup');
-            } else {
-                $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
-
-
-                $content = Yaml::parse(file_get_contents($file));
-
-                $content['parameters']['mailer_host'] = null;
-                $content['parameters']['mailer_transport'] = null;
-                $content['parameters']['mailer_auth_mode'] = null;
-                $content['parameters']['mailer_transport'] = null;
-                $content['parameters']['mailer_port'] = null;
-                $content['parameters']['mailer_encryption'] = null;
-                $content['parameters']['mailer_user'] = null;
-                $content['parameters']['mailer_password'] = null;
-                $content['parameters']['mailer_spool'] = ['type' => 'memory'];
-
-
-                $fileSystem->dumpFile($file, Yaml::dump($content,8));
-                $io->success('Email settings have been set as default and turned off.');
-            }
-
-            $file = realpath($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
-
-            $content = file_get_contents($file);
-            $gibbon = Yaml::parse($content);
-
-            $gibbon['parameters']['cookie_lifetime'] = $this->getSettingManager()->getSettingByScopeAsInteger('System', 'sessionDuration', 1200);
-            $gibbon['parameters']['google_client_id'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientID', '');
-            $gibbon['parameters']['google_secret'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientSecret', '');
-            $gibbon['parameters']['timezone'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
-            $gibbon['parameters']['gibbon_document_root'] = $gibbonRoot;
-            $gibbon['parameters']['gibbon_host_url'] = ($this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL') ?: '').'/';
-            $gibbon['parameters']['mailer_sender_address'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationEmail', null);
-            $gibbon['parameters']['mailer_sender_name'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationName', null);
-            $gibbon['parameters']['locale'] = $this->getSettingManager()->getRepository(I18n::class)->createQueryBuilder('i')
-                ->where('i.systemDefault = :yes')
-                ->setParameter('yes', 'Y')
-                ->select('i.code')
-                ->getQuery()
-                ->getSingleScalarResult() ?: 'en_GB';
-
-            $content = Yaml::dump($gibbon, 8);
-
-            $fileSystem->dumpFile($file, $content);
-            $io->success('Environmental settings have been set into the Gibbon-Mobile framework.');
+        foreach($this->installationManager->getMessageManager()->getMessages() as $message)
+        {
+            $method = $message->getLevel();
+            $io->$method($message->getMessage());
         }
 
-        $file = $kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'build' ;
+        $this->installationManager->getMessageManager()->clearMessages();
 
-        $fileSystem->remove($file);
-
-        $fileSystem->mirror($kernel->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'dist', $file);
-
-        $io->success('Assets have been copied from dist to build directory!');
-
-
-        return 0;
+        return $exitCode;
     }
 }
