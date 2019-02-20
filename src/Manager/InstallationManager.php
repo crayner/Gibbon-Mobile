@@ -219,8 +219,8 @@ class InstallationManager
 
             $content['setting_last_refresh'] = strtotime('now');
             $this->setMobileParameters($content);
-            $this->getMessageManager()->addMessage('success', 'Environmental settings have been set into the Gibbon-Mobile framework.');
-            $this->logger->info(sprintf('%s: Environmental settings have been set into the Gibbon-Mobile framework.', __CLASS__.':'.__LINE__), $this->content);
+            $this->getMessageManager()->addMessage('success', 'Additional Environmental settings have been set into the Gibbon-Mobile framework.');
+            $this->logger->info(sprintf('%s: Additional Environmental settings have been set into the Gibbon-Mobile framework.', __CLASS__.':'.__LINE__), $this->content);
         }
 
         $file = $this->getKernel()->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'build' ;
@@ -286,10 +286,12 @@ class InstallationManager
         foreach($this->getFinder() as $dir) {
 
             $locale = $dir->getBasename();
+            if ($locale === 'LC_MESSAGES')
+                continue;
             $source = $dir->getPathname() . DIRECTORY_SEPARATOR . 'LC_MESSAGES' . DIRECTORY_SEPARATOR ;
 
             if (! file_exists($source)) {
-                $this->getMessageManager()->add('warning', sprintf('<fg=yellow;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'WARNING' : '!'). sprintf('File is locked for %s', $locale));
+                $this->getMessageManager()->add('warning', sprintf('%s: The translation file is locked for locale %s', __CLASS__, $locale));
             } else {
                 $finder = new Finder();
 
@@ -312,18 +314,18 @@ class InstallationManager
                         }
 
                         if ($method === $expectedMethod) {
-                            $this->getMessageManager()->add('success' , sprintf('<fg=green;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" /* HEAVY CHECK MARK (U+2714) */) .$message . ' for ' . $locale);
-                            $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
+                            $this->getMessageManager()->add('success' , sprintf('Successful Translation Transfer for %s using method %s', $target, $method));
+                            $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $target, $method));
                             $rows = true;
                         } else {
-                            $this->getMessageManager()->add('warning' , sprintf('<fg=yellow;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'WARNING' : '!') .  $message . ' for ' . $locale . ' using ' . $method);
-                            $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
+                            $this->getMessageManager()->add('warning' , sprintf('Warning Translation Transfer for %s using method %s', $target, $method));
+                            $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $target, $method));
                             $rows = true;
                         }
                     } catch (\Exception $e) {
                         $exitCode = 1;
-                        $this->getMessageManager()->add('error' , sprintf('<fg=red;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */) .  $message . ' for ' . $locale . ' error: ' . $e->getMessage());
-                        $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
+                        $this->getMessageManager()->add('error' , sprintf('Error Translation Transfer for %s using method %s. Error %s', $target, $method, $e->getMessage()));
+                        $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s. Error %s', __CLASS__, $target, $method, $e->getMessage()));
                     }
 
                     if ($locale === 'en_GB') {
@@ -343,18 +345,18 @@ class InstallationManager
                             }
 
                             if ($method === $expectedMethod) {
-                                $this->getMessageManager()->add('success' , sprintf('<fg=green;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" /* HEAVY CHECK MARK (U+2714) */) .$message . ' for ' . $locale);
-                                $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
+                                $this->getMessageManager()->add('success' , sprintf('Successful Translation Transfer for %s using method %s', $target, $method));
+                                $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $target, $method));
                                 $rows = true;
                             } else {
-                                $this->getMessageManager()->add('warning' , sprintf('<fg=yellow;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'WARNING' : '!') .  $message . ' for ' . $locale . ' using ' . $method);
-                                $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
+                                $this->getMessageManager()->add('warning' , sprintf('Warning Translation Transfer for %s using method %s', $target, $method));
+                                $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $target, $method));
                                 $rows = true;
                             }
                         } catch (\Exception $e) {
                             $exitCode = 1;
-                            $this->getMessageManager()->add('error' , sprintf('<fg=red;options=bold>%s</>', '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" /* HEAVY BALLOT X (U+2718) */) .  $message . ' for ' . $locale . ' error: ' . $e->getMessage());
-                            $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s', __CLASS__, $locale, $method));
+                            $this->getMessageManager()->add('error' , sprintf('Error Translation Transfer for %s using method %s. Error %s', $target, $method, $e->getMessage()));
+                            $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s. Error %s', __CLASS__, $target, $method, $e->getMessage()));
                         }
                     }
                 }
@@ -367,7 +369,7 @@ class InstallationManager
             $this->logger->error(sprintf('%s: Some errors occurred while installing translations.', __CLASS__));
         } else {
             if ($copyUsed) {
-                $this->getMessageManager()->add('note', 'Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.');
+                $this->getMessageManager()->add('info', 'Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.');
                 $this->logger->debug(sprintf('%s: Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.', __CLASS__));
             }
             $this->getMessageManager()->add('success', ($rows ? 'All translations were successfully installed.' : 'No translations were provided by Gibbon.'));
@@ -640,7 +642,7 @@ class InstallationManager
             $content = [];
             $content[] = '# Auto-generated by Installation routines within the kernel.';
             $content[] = '# on '.date('jS M/Y H:i:s');
-            $content[] = 'APP_ENV=dev';
+            $content[] = 'APP_ENV=prod';
             $content[] = 'APP_SECRET='.substr(str_replace('.', '', uniqid('') . uniqid('')), -32);
 
             file_put_contents($this->getKernel()->getProjectDir() . DIRECTORY_SEPARATOR . '.env.local', implode("\r\n", $content));

@@ -42,7 +42,6 @@ parameters:
             - ROLE_PARENT
     gibbon_document_root: ''
     gibbon_host_url: ''
-    installation_required: false
     translation_refresh: 90
     translation_last_refresh: ~
     setting_last_refresh: ~

@@ -160,12 +160,13 @@ class SettingListener implements EventSubscriberInterface
     public function onRequest(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
+        if (mb_strpos(trim($request->getRequestUri(), '/'), '_') === 0)
+            return ;
         $install = explode('/', trim($request->getRequestUri(), '/'));
         $install = isset($install[2]) ? $install[2] : '';
-        if (in_array($install, ['first-step']))
+        if (in_array($install, ['first-step', 'second-step', 'third-step']))
             return;
 
-        $this->installationManager->setKernel($this->getContainer()->get('kernel'));
         if (! file_exists($this->installationManager->getFile()))
         {
             $response = new RedirectResponse('/en_GB/install/first-step/');
@@ -177,20 +178,18 @@ class SettingListener implements EventSubscriberInterface
 
         if (empty($content['setting_last_refresh']))
         {
-            $this->installationManager->settings();
-            $this->getLogger()->info(sprintf('%s: The settings where copied from Gibbon.', __CLASS__));
-
-            $response = new RedirectResponse('/');
+            $response = new RedirectResponse('/'.$content['locale'].'/install/second-step/');
             $event->setResponse($response);
+            return ;
         }
 
         $content['translation_refresh'] = ! empty($content['translation_refresh']) ? $content['translation_refresh'] : 90;
 
         if (empty($content['translation_last_refresh']))
         {
-            $this->installationManager->translations();
-            $this->installationManager->assetsinstall();
-
+            $response = new RedirectResponse('/'.$content['locale'].'/install/third-step/');
+            $event->setResponse($response);
+            return ;
         }
 
         if (! $event->getRequest()->hasSession()) {

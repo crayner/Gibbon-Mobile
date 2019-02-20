@@ -54,9 +54,57 @@ class InstallationController extends AbstractController
         $manager->setKernel($kernel)
             ->setSettingManager($settingManager)
             ->setLogger($loggerFactory->getLogger('setting'));
+
         return $this->render('Install/first_step.html.twig',
             [
                 'output' => explode("\r\n", $manager->writeParametersFile()),
+                'manager' => $manager,
+            ]
+        );
+    }
+
+    /**
+     * createSettings
+     * @param InstallationManager $manager
+     * @param KernelInterface $kernel
+     * @param SettingManager $settingManager
+     * @param LoggerFactory $loggerFactory
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/install/second-step/", name="install_second_step")
+     */
+    public function createSettings(InstallationManager $manager, KernelInterface $kernel, SettingManager $settingManager, LoggerFactory $loggerFactory)
+    {
+        $manager->setKernel($kernel)
+            ->setSettingManager($settingManager)
+            ->setLogger($loggerFactory->getLogger('setting'))->settings();
+
+        return $this->render('Install/second_step.html.twig',
+            [
+                'messages' => $manager->getMessageManager(),
+                'manager' => $manager,
+            ]
+        );
+    }
+
+    /**
+     * createTranslation
+     * @param InstallationManager $manager
+     * @param KernelInterface $kernel
+     * @param SettingManager $settingManager
+     * @param LoggerFactory $loggerFactory
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/install/third-step/", name="install_third_step")
+     */
+    public function createTranslation(InstallationManager $manager, KernelInterface $kernel, SettingManager $settingManager, LoggerFactory $loggerFactory)
+    {
+        $manager->setKernel($kernel)
+            ->setSettingManager($settingManager)
+            ->setLogger($loggerFactory->getLogger('setting'))->translations();
+        $manager->assetsinstall();
+
+        return $this->render('Install/second_step.html.twig',
+            [
+                'messages' => $manager->getMessageManager(),
                 'manager' => $manager,
             ]
         );
