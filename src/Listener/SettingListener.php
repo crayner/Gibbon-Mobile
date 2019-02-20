@@ -29,12 +29,9 @@
  */
 namespace App\Listener;
 
-use App\Command\EnvironmentInstallCommand;
 use App\Manager\InstallationManager;
 use App\Manager\SettingManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -78,21 +75,20 @@ class SettingListener implements EventSubscriberInterface
 
     /**
      * SettingListener constructor.
-     * @param ContainerInterface $container
-     * @param LoggerInterface $logger
+     * @param InstallationManager $installationManager
      * @param SettingManager|null $manager
      */
-    public function __construct(ContainerInterface $container, ?SettingManager $manager = null)
+    public function __construct(InstallationManager $installationManager, ?SettingManager $manager = null)
     {
         $this->manager = $manager;
-        $this->container = $container;
-        $this->logger = $container->get('monolog.logger.setting');
+        $this->container = $manager->getContainer();
+        $this->logger = $this->getContainer()->get('monolog.logger.setting');
         $this->filesystem = new Filesystem();
-        $this->installationManager = new InstallationManager();
-        $this->installationManager->setSettingManager($manager)
-            ->setKernel($container->get('kernel'))
-            ->setLogger($this->logger);
-        $this->clearCache = false;
+        $this->setInstallationManager($installationManager);
+        $this->getInstallationManager()
+            ->setSettingManager($manager)
+            ->setLogger($this->logger)
+            ->setKernel($this->getContainer()->get('kernel'));
     }
 
     /**
@@ -102,8 +98,8 @@ class SettingListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         $listeners = [
-            KernelEvents::RESPONSE => ['onResponse', -16],
-            KernelEvents::TERMINATE => ['clearCache', -32],
+//            KernelEvents::RESPONSE => ['onResponse', -16],
+//            KernelEvents::TERMINATE => ['clearCache', -32],
             KernelEvents::REQUEST => ['onRequest', 0],
         ];
 
@@ -148,38 +144,33 @@ class SettingListener implements EventSubscriberInterface
         $request = $event->getRequest();
         if ($request->get('_route') === 'login' && $parameters['installation_required'] && ! empty($parameters['setting_last_refresh']) && ! empty($parameters['translation_last_refresh'])) {
             $this->installationManager->setParameter('installation_required', false);
-            $this->installationManager->getFilesystem()->remove($this->installationManager->getKernel()->getCacheDir());
             $response = new RedirectResponse('/'. $parameters['locale'].'/login/');
+            if ($request->hasSession())
+                $request->getSession()->invalidate();
+            $this->installationManager->getFilesystem()->remove($this->installationManager->getKernel()->getCacheDir());
             $event->setResponse($response);
         }
     }
+
     /**
      * onRequest
      * @param GetResponseEvent $event
-     * @return int
      * @throws \Exception
      */
-    public function onRequest(GetResponseEvent $event)
+    public function onRequest(GetResponseEvent $event): void
     {
+        $request = $event->getRequest();
+        $install = explode('/', trim($request->getRequestUri(), '/'));
+        $install = isset($install[2]) ? $install[2] : '';
+        if (in_array($install, ['first-step']))
+            return;
+
+        $this->installationManager->setKernel($this->getContainer()->get('kernel'));
         if (! file_exists($this->installationManager->getFile()))
         {
-            $app = new EnvironmentInstallCommand();
-            $kernel = $this->getContainer()->get('kernel');
-
-            $input = new ArrayInput(
-                [],
-                $app->getDefinition()
-            );
-
-            // You can use NullOutput() if you don't need the output
-            $output = new BufferedOutput();
-
-            $app->executeCommand($input, $output, $kernel);
-            // return the output, don't use if you used NullOutput()
-            $output->fetch();
-
-            $response = new RedirectResponse('/');
+            $response = new RedirectResponse('/en_GB/install/first-step/');
             $event->setResponse($response);
+            return ;
         }
 
         $content = $this->installationManager->getMobileParameters();
@@ -222,5 +213,23 @@ class SettingListener implements EventSubscriberInterface
     public function getLogger(): LoggerInterface
     {
         return $this->logger;
+    }
+
+    /**
+     * @return InstallationManager
+     */
+    public function getInstallationManager(): InstallationManager
+    {
+        return $this->installationManager;
+    }
+
+    /**
+     * @param InstallationManager $installationManager
+     * @return SettingListener
+     */
+    public function setInstallationManager(InstallationManager $installationManager): SettingListener
+    {
+        $this->installationManager = $installationManager;
+        return $this;
     }
 }
