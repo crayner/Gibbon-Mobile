@@ -83,7 +83,7 @@ class SettingExtension extends AbstractExtension
      */
     public function getGibbonVersion(): string
     {
-        return VersionHelper::GIBBON;
+        return implode(',', VersionHelper::GIBBON);
     }
 
     /**
