@@ -44,7 +44,7 @@
         "symfony/test-pack": "^1.0",
         "symfony/var-dumper": "^4.2"
     },
-    "config": {php
+    "config": {
         "preferred-install": {
             "*": "dist"
         },
