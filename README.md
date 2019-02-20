@@ -1,11 +1,5 @@
 # Gibbon - Mobile
 
-This package is aimed at provision of responsive design for mobiles and tablets for core features of the Gibbon Education programme.
+This package is aimed at provision of responsive design for mobiles and tablets for core features of the Gibbon Education programme.  This program relies on Gibbon being installed and working on the same server.
 
-### Version 0.0.06
-
-_**This package is currently in development, and changes made until release may not be backwards compatible.**_
-
-#### Need some help
-
-[Gibbon - Mobile Help](http://gibhelp.craigrayner.com)
+Details at <a href="http://gibhelp.craigrayner.com" target="_blank">Gibbon - Mobile Help</a>
