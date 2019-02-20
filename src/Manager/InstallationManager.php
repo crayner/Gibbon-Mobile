@@ -626,7 +626,7 @@ class InstallationManager
     {
         if (! file_exists($this->getFile()))
         {
-            $app = new EnvironmentInstallCommand();
+            $app = new EnvironmentInstallCommand($this);
 
             $input = new ArrayInput(
                 [],

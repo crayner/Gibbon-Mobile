@@ -29,6 +29,7 @@
  */
 namespace App\Command;
 
+use App\Manager\InstallationManager;
 use App\Util\VersionHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,7 +39,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class EnvironmentInstallCommand
@@ -52,6 +52,30 @@ class EnvironmentInstallCommand extends Command
     protected static $defaultName = 'gibbon:environment:install';
 
     /**
+     * @var InstallationManager
+     */
+    private $installationManager;
+
+    /**
+     * EnvironmentInstallCommand constructor.
+     * @param InstallationManager $installationManager
+     */
+    public function __construct(InstallationManager $installationManager)
+    {
+        parent::__construct();
+        $this->installationManager = $installationManager;    
+    }
+
+    /**
+     * getInstallationManager
+     * @return InstallationManager
+     */
+    public function getInstallationManager(): InstallationManager
+    {
+        return $this->installationManager;
+    }
+
+    /**
      * execute
      *
      * @param InputInterface $input
@@ -61,6 +85,7 @@ class EnvironmentInstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $kernel = $this->getApplication()->getKernel();
+        $this->getInstallationManager()->setKernel($kernel);
         return $this->executeCommand($input, $output, $kernel);
     }
 
@@ -83,20 +108,18 @@ class EnvironmentInstallCommand extends Command
         if (isset($_SERVER['APP_TRAVIS_TEST']))
         {
 
-            $file = $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
-            if (!$fileSystem->exists($file)) {
-                $fileSystem->copy($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml' . '.dist', $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml', false);
-            }
-            $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
+            $file = $this->getInstallationManager()->getFile();
+            if (! $fileSystem->exists($file))
+                $fileSystem->copy($file . '.dist', $file, false);
 
-            $content = Yaml::parse(file_get_contents($file));
-            $content['parameters']['db_host'] = '127.0.0.1';
-            $content['parameters']['db_name'] = 'mobile_test';
-            $content['parameters']['db_user'] = 'root';
-            $content['parameters']['db_pass'] = null;
-            $content['parameters']['gibbon_document_root'] = '../../';
+            $content = $this->getInstallationManager()->getMobileParameters();
+            $content['db_host'] = '127.0.0.1';
+            $content['db_name'] = 'mobile_test';
+            $content['db_user'] = 'root';
+            $content['db_pass'] = null;
+            $content['gibbon_document_root'] = '../../';
 
-            $fileSystem->dumpFile($file, Yaml::dump($content, 8));
+            $this->getInstallationManager()->setMobileParameters($content);
             return 0;
         }
 
@@ -120,37 +143,44 @@ class EnvironmentInstallCommand extends Command
                         $version = '';
                         if (file_exists($gibbonVersionFile))
                             include $gibbonVersionFile;
-                        if ($fileSystem->exists($config) && version_compare(VersionHelper::GIBBON, $version) === 0)
-                            break;
+                        if ($fileSystem->exists($config)){
+                            $valid = false;
+                            foreach(VersionHelper::GIBBON as $gVersion)
+                            {
+                                if (version_compare($gVersion, $version, '='))
+                                {
+                                    $valid = true;
+                                    break;
+                                }
+                            }
+                            if ($valid)
+                                break;
+                        }
                     }
                 }
         }
 
         $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
         if (! $fileSystem->exists($config)) {
-            $io->error(sprintf('The Gibbon config.php file was not found at "%s".  You may need to run the gibbon installation scripts manually as the automatic search for your Gibbon installation appears to have failed.  I searched "%s" directory for the Gibbon installation.  See "http://www.craigrayner.com/help/installation.php"', $config, $projectDir['dirname']));
+            $io->error(sprintf('The Gibbon config.php file was not found at "%s".  You may need to run the gibbon installation scripts manually as the automatic search for your Gibbon installation appears to have failed.  I searched "%s" sub directories for the Gibbon installation matching version [%s].  See "http://gibhelp.craigrayner.com" for further help.', $config, $projectDir['dirname'], implode(',',VersionHelper::GIBBON)));
             return 1;
         } else {
-            $io->success(sprintf('The Gibbon config.php file was found at "%s"', $config));
+            $io->success(sprintf('The Gibbon config.php file was found at "%s" for Gibbon version [%s]', $config, implode(',', VersionHelper::GIBBON)));
 
             include $config;
 
-            // now build .env.local file
+            $file = $this->getInstallationManager()->getFile();
+            if (!$fileSystem->exists($file))
+                $fileSystem->copy($file . '.dist', $file, false);
 
-            $file = $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
-            if (!$fileSystem->exists($file)) {
-                $fileSystem->copy($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml' . '.dist', $kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml', false);
-            }
-            $file = realpath($kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml');
+            $content = $this->getInstallationManager()->getMobileParameters();
+            $content['db_host'] = $databaseServer;
+            $content['db_name'] = $databaseName;
+            $content['db_user'] = $databaseUsername;
+            $content['db_pass'] = $databasePassword;
+            $content['gibbon_document_root'] = $gibbonRoot;
 
-            $content = Yaml::parse(file_get_contents($file));
-            $content['parameters']['db_host'] = $databaseServer;
-            $content['parameters']['db_name'] = $databaseName;
-            $content['parameters']['db_user'] = $databaseUsername;
-            $content['parameters']['db_pass'] = $databasePassword;
-            $content['parameters']['gibbon_document_root'] = $gibbonRoot;
-
-            $fileSystem->dumpFile($file, Yaml::dump($content, 8));
+            $this->getInstallationManager()->setMobileParameters($content);
             $io->success('Database settings have been transferred from Gibbon to the Gibbon-Mobile framework.');
         }
 
