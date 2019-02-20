@@ -31,6 +31,7 @@ namespace App\Twig\Extension;
 
 use App\Manager\SettingManager;
 use App\Util\VersionHelper;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\AbstractExtension;
 
 /**
@@ -64,6 +65,7 @@ class SettingExtension extends AbstractExtension
             new \Twig_SimpleFunction('getParameter', array($this->manager, 'getParameter')),
             new \Twig_SimpleFunction('getVersion', array($this, 'getVersion')),
             new \Twig_SimpleFunction('getGibbonVersion', array($this, 'getGibbonVersion')),
+            new \Twig_SimpleFunction('clearCache', array($this, 'clearCache')),
         ];
     }
 
@@ -82,5 +84,15 @@ class SettingExtension extends AbstractExtension
     public function getGibbonVersion(): string
     {
         return VersionHelper::GIBBON;
+    }
+
+    /**
+     * clearCache
+     */
+    public function clearCache()
+    {
+        $fs = new Filesystem();
+        $fs->remove($this->manager->getContainer()->get('kernel')->getCacheDir());
+        die();
     }
 }

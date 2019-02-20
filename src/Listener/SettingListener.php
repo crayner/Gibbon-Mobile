@@ -29,14 +29,16 @@
  */
 namespace App\Listener;
 
+use App\Manager\InstallationManager;
 use App\Manager\SettingManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -62,16 +64,36 @@ class SettingListener implements EventSubscriberInterface
     private $logger;
 
     /**
+     * @var Filesystem 
+     */
+    private $filesystem;
+
+    /**
+     * @var InstallationManager
+     */
+    private $installationManager;
+
+    /**
+     * @var bool
+     */
+    private $clearCache = false;
+
+    /**
      * SettingListener constructor.
-     * @param ContainerInterface $container
-     * @param LoggerInterface $logger
+     * @param InstallationManager $installationManager
      * @param SettingManager|null $manager
      */
-    public function __construct(ContainerInterface $container, LoggerInterface $logger, ?SettingManager $manager = null)
+    public function __construct(InstallationManager $installationManager, ?SettingManager $manager = null)
     {
         $this->manager = $manager;
-        $this->container = $container;
-        $this->logger = $logger->withName('setting');
+        $this->container = $manager->getContainer();
+        $this->logger = $this->getContainer()->get('monolog.logger.setting');
+        $this->filesystem = new Filesystem();
+        $this->setInstallationManager($installationManager);
+        $this->getInstallationManager()
+            ->setSettingManager($manager)
+            ->setLogger($this->logger)
+            ->setKernel($this->getContainer()->get('kernel'));
     }
 
     /**
@@ -81,8 +103,9 @@ class SettingListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         $listeners = [
-            KernelEvents::RESPONSE => 'onResponse',
-            KernelEvents::REQUEST => 'onRequest',
+//            KernelEvents::RESPONSE => ['onResponse', -16],
+            KernelEvents::TERMINATE => ['clearCache', -32],
+            KernelEvents::REQUEST => ['onRequest', 0],
         ];
 
         return $listeners;
@@ -90,71 +113,93 @@ class SettingListener implements EventSubscriberInterface
 
     /**
      * onResponse
-     * @param KernelEvent $event
+     * @param FilterResponseEvent $event
      * @throws \Exception
      */
-    public function onResponse()
+    public function onResponse(FilterResponseEvent $event)
     {
         if ($this->manager instanceof SettingManager) {
             $this->manager->saveSettingCache();
 
-            $lastTranslation = $this->manager->getSettingByScopeAsDate('Mobile', 'translationTransferDate');
+            $lastTranslationRefresh = $this->manager->getParameter('translation_last_refresh', null);
 
-            if ($lastTranslation === false || ! $lastTranslation instanceof \DateTime ||
-                $lastTranslation->diff(new \DateTime('now'), true )->format('%a') > $this->manager->getParameter('translation_refresh', 90))
-            {
-                $application = new Application($this->getContainer()->get('kernel'));
-                $application->setAutoExit(false);
+            if ($lastTranslationRefresh !== null && $lastTranslationRefresh < strtotime('-'.$this->manager->getParameter('translation_refresh', 90).' Days')) {
+                $this->installationManager->translations();
+                $this->getLogger()->info(sprintf('%s: The translation files were refreshed from Gibbon.', __CLASS__));
+            }
+            
+            
+            $lastSettingRefresh = $this->manager->getParameter('setting_last_refresh', null);
 
-                $input = new ArrayInput(array(
-                    'command' => 'gibbon:translation:install',
-                    // (optional) define the value of command arguments
-                    '--relative' => '--relative',
-                ));
+            if ($lastSettingRefresh !== null && $lastSettingRefresh < strtotime('-30 Days')) {
+                $this->installationManager->settings();
+                $this->getLogger()->info(sprintf('%s: The settings where refreshed from Gibbon.', __CLASS__));
+            }
+        }
 
-                // You can use NullOutput() if you don't need the output
-                $output = new BufferedOutput();
-                $result = $application->run($input, $output);
+    }
 
-                // return the output, don't use if you used NullOutput()
-                if ($result !== 0)
-                    trigger_error($output->fetch(), E_USER_ERROR);
-
-                $output->fetch();
-
-                $input = new ArrayInput(array(
-                    'command' => 'gibbon:setting:install',
-                ));
-
-                // You can use NullOutput() if you don't need the output
-                $output = new BufferedOutput();
-                $result = $application->run($input, $output);
-
-                // return the output, don't use if you used NullOutput()
-                if ($result !== 0)
-                    trigger_error($output->fetch(), E_USER_ERROR);
-
-                $output->fetch();
-
-                $this->logger->notice('Translation and Settings were updated.');
+    /**
+     * clearCache
+     * @param KernelEvent $event
+     */
+    public function clearCache(KernelEvent $event)
+    {
+        if ($this->clearCache) {
+            $request = $event->getRequest();
+            if ($request->get('_route') === 'install_first_step') {
+                if ($request->hasSession())
+                    $request->getSession()->invalidate();
+                $this->installationManager->getFilesystem()->remove($this->installationManager->getKernel()->getCacheDir());
+                die();
             }
         }
     }
 
     /**
      * onRequest
-     * @param KernelEvent $event
+     * @param GetResponseEvent $event
      * @throws \Exception
      */
-    public function onRequest(KernelEvent $event)
+    public function onRequest(GetResponseEvent $event): void
     {
+        $request = $event->getRequest();
+        if (mb_strpos(trim($request->getRequestUri(), '/'), '_') === 0)
+            return ;
+        $install = explode('/', trim($request->getRequestUri(), '/'));
+        $install = isset($install[2]) ? $install[2] : '';
+        if (in_array($install, ['first-step', 'second-step', 'third-step']))
+            return;
+
+        if (! file_exists($this->installationManager->getFile()))
+        {
+            $response = new RedirectResponse('/en_GB/install/first-step/');
+            $event->setResponse($response);
+            return ;
+        }
+
+        $content = $this->installationManager->getMobileParameters();
+
+        if (empty($content['setting_last_refresh']))
+        {
+            $response = new RedirectResponse('/'.$content['locale'].'/install/second-step/');
+            $event->setResponse($response);
+            return ;
+        }
+
+        $content['translation_refresh'] = ! empty($content['translation_refresh']) ? $content['translation_refresh'] : 90;
+
+        if (empty($content['translation_last_refresh']))
+        {
+            $response = new RedirectResponse('/'.$content['locale'].'/install/third-step/');
+            $event->setResponse($response);
+            return ;
+        }
+
         if (! $event->getRequest()->hasSession()) {
             $session = new Session();
             $session->start();
         }
-        $file = __DIR__ . DIRECTORY_SEPARATOR .'..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon.yaml';
-        if (realpath($file) &&! file_exists($file))
-            self::onResponse();
     }
 
     /**
@@ -163,5 +208,31 @@ class SettingListener implements EventSubscriberInterface
     public function getContainer(): ContainerInterface
     {
         return $this->container;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @return InstallationManager
+     */
+    public function getInstallationManager(): InstallationManager
+    {
+        return $this->installationManager;
+    }
+
+    /**
+     * @param InstallationManager $installationManager
+     * @return SettingListener
+     */
+    public function setInstallationManager(InstallationManager $installationManager): SettingListener
+    {
+        $this->installationManager = $installationManager;
+        return $this;
     }
 }

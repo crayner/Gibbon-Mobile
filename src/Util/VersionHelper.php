@@ -35,7 +35,7 @@ namespace App\Util;
  */
 class VersionHelper
 {
-    CONST VERSION = '0.0.06';
+    CONST VERSION = '0.1.00';
 
     CONST GIBBON = '18.0.00';
 }

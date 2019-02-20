@@ -29,16 +29,15 @@
  */
 namespace App\Command;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use App\Util\VersionHelper;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -62,6 +61,24 @@ class EnvironmentInstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $kernel = $this->getApplication()->getKernel();
+        return $this->executeCommand($input, $output, $kernel);
+    }
+
+    /**
+     * configure
+     *
+     */
+    protected function configure()
+    {
+        $this
+            // ...
+            ->addArgument('gibbonRoot', InputArgument::OPTIONAL, 'Define the Gibbon installation Root Directory?')
+
+        ;
+    }
+
+    public function executeCommand(InputInterface $input, OutputInterface $output, KernelInterface $kernel): int
+    {
         $fileSystem = new Filesystem();
         if (isset($_SERVER['APP_TRAVIS_TEST']))
         {
@@ -99,7 +116,11 @@ class EnvironmentInstallCommand extends Command
                     if (property_exists($content, 'name') && $content->name === 'gibbonedu/core') {
                         $gibbonRoot = $file->getPath();
                         $config = rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php';
-                        if ($fileSystem->exists($config))
+                        $gibbonVersionFile = trim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'version.php';
+                        $version = '';
+                        if (file_exists($gibbonVersionFile))
+                            include $gibbonVersionFile;
+                        if ($fileSystem->exists($config) && version_compare(VersionHelper::GIBBON, $version) === 0)
                             break;
                     }
                 }
@@ -142,18 +163,5 @@ class EnvironmentInstallCommand extends Command
         $fileSystem->remove($realCacheDir);
 
         return 0;
-    }
-
-    /**
-     * configure
-     *
-     */
-    protected function configure()
-    {
-        $this
-            // ...
-            ->addArgument('gibbonRoot', InputArgument::OPTIONAL, 'Define the Gibbon installation Root Directory?')
-
-        ;
     }
 }

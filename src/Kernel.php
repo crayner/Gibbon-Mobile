@@ -40,7 +40,7 @@ class Kernel extends BaseKernel
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
 
         $container->setParameter('container.dumper.inline_class_loader', true);
-        $confDir = $this->getProjectDir().'/config';
+        $confDir = realpath($this->getProjectDir().'/config');
 
         $loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
@@ -60,6 +60,10 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
     }
 
+    /**
+     * temporaryParameters
+     * @param ContainerBuilder $container
+     */
     private function temporaryParameters(ContainerBuilder $container)
     {
         $container->setParameter('session_name', 'gibbon_mobile');
@@ -84,7 +88,8 @@ class Kernel extends BaseKernel
         $container->setParameter('cookie_lifetime', 0);
         $container->setParameter('security.hierarchy.roles', []);
         $container->setParameter('gibbon_document_root', '');
+        $container->setParameter('gibbon_host_url', '');
         $container->setParameter('google_client_id', '');
-        $container->setParameter('gibbon_document_root', '');
+        $container->setParameter('timezone', 'UTC');
     }
 }

@@ -121,7 +121,7 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
      */
     private function getInstituteTranslation($trans, $locale): string
     {
-        if (empty($trans))
+        if (empty($trans) || empty($this->settingManager->getParameter('db_name')))
             return $trans;
 
         $strings = $this->getStrings();

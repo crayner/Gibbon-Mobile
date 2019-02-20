@@ -1,0 +1,32 @@
+{% extends 'Default/template.html.twig' %}
+
+{% set coreOnly = true %}
+
+{% block content %}
+    {% set paragraph = false %}
+    {% for line in output %}
+        {% if line is not same as('') %}
+            {% if paragraph is same as(false) %}
+                <p>
+                {% set paragraph = true %}
+            {% endif %}
+            {% if paragraph is same as(true) %}
+                {{ line }}
+            {% endif %}
+        {% endif %}
+        {% if line is same as('') and paragraph is same as(true) %}
+            </p>
+            {% set paragraph = false %}
+        {% endif %}
+    {% endfor %}
+    {% if paragraph is same as(true) %}
+        {% set paragraph = false %}
+        </p>
+    {% endif %}
+    <p><a href="{{ path('home') }}">Continue</a></p>
+{% endblock content %}
+
+{% block magicStuff %}
+    {{ clearCache() }}
+{% endblock magicStuff %}
+

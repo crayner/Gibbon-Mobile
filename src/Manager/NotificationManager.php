@@ -32,6 +32,7 @@ namespace App\Manager;
 use App\Entity\Notification;
 use App\Manager\Objects\Notifications;
 use App\Provider\NotificationProvider;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -94,8 +95,14 @@ class NotificationManager
         $this->stack = $stack;
         $this->provider = $provider;
 
-        $this->setTimezone($settingManager->getSettingByScope('System', 'timezone'));
-        $normalisers = [new DateTimeNormalizer(['datetime_timezone' => $settingManager->getSettingByScope('System', 'timezone')]),new ObjectNormalizer()];
+        try {
+            $timezone = $settingManager->getSettingByScope('System', 'timezone');
+        } catch (ConnectionException $e) {
+            $timezone = 'UTC';
+        }
+
+        $this->setTimezone($timezone);
+        $normalisers = [new DateTimeNormalizer(['datetime_timezone' => $this->getTimezone()]), new ObjectNormalizer()];
         $encoders = [new JsonEncoder()];
         $this->serialiser = new Serializer($normalisers,$encoders);
     }
