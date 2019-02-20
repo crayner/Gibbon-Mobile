@@ -74,6 +74,11 @@ class SettingListener implements EventSubscriberInterface
     private $installationManager;
 
     /**
+     * @var bool
+     */
+    private $clearCache = false;
+
+    /**
      * SettingListener constructor.
      * @param InstallationManager $installationManager
      * @param SettingManager|null $manager
@@ -99,7 +104,7 @@ class SettingListener implements EventSubscriberInterface
     {
         $listeners = [
 //            KernelEvents::RESPONSE => ['onResponse', -16],
-//            KernelEvents::TERMINATE => ['clearCache', -32],
+            KernelEvents::TERMINATE => ['clearCache', -32],
             KernelEvents::REQUEST => ['onRequest', 0],
         ];
 
@@ -140,15 +145,14 @@ class SettingListener implements EventSubscriberInterface
      */
     public function clearCache(KernelEvent $event)
     {
-        $parameters = $this->installationManager->getMobileParameters();
-        $request = $event->getRequest();
-        if ($request->get('_route') === 'login' && $parameters['installation_required'] && ! empty($parameters['setting_last_refresh']) && ! empty($parameters['translation_last_refresh'])) {
-            $this->installationManager->setParameter('installation_required', false);
-            $response = new RedirectResponse('/'. $parameters['locale'].'/login/');
-            if ($request->hasSession())
-                $request->getSession()->invalidate();
-            $this->installationManager->getFilesystem()->remove($this->installationManager->getKernel()->getCacheDir());
-            $event->setResponse($response);
+        if ($this->clearCache) {
+            $request = $event->getRequest();
+            if ($request->get('_route') === 'install_first_step') {
+                if ($request->hasSession())
+                    $request->getSession()->invalidate();
+                $this->installationManager->getFilesystem()->remove($this->installationManager->getKernel()->getCacheDir());
+                die();
+            }
         }
     }
 

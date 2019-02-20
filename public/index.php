@@ -21,6 +21,8 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false
 }
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+if (! file_exists($kernel->getCacheDir()))
+    ini_set('max_execution_time', 120);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
