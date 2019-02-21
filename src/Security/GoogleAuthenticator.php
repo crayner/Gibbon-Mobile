@@ -77,11 +77,11 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$this->router = $router;
 		$this->messageManager = $messageManager;
 		$this->settingManager = $settingManager;
+        $this->logger = $logger;
+        $this->provider = $provider;
 		if (! empty($settingManager->getParameter('google_client_id'))) {
-            $this->logger = $logger;
             $this->getClient();
             $this->getClient()->setLogger($logger);
-            $this->provider = $provider;
         }
 	}
 
