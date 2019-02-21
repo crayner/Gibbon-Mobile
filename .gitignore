@@ -24,3 +24,4 @@ yarn-error.log
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 *.zip
+gibbon_module.yaml

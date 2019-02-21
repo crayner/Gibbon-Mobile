@@ -41,6 +41,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class InstallationManager
+ * @package App\Manager
+ */
 class InstallationManager
 {
     const METHOD_COPY = 'copy';
@@ -218,6 +222,7 @@ class InstallationManager
                 ->getSingleScalarResult() ?: 'en_GB';
 
             $content['setting_last_refresh'] = strtotime('now');
+            $content['installation_progress'] = 'settings';
             $this->setMobileParameters($content);
             $this->getMessageManager()->addMessage('success', 'Additional Environmental settings have been set into the Gibbon-Mobile framework.');
             $this->logger->info(sprintf('%s: Additional Environmental settings have been set into the Gibbon-Mobile framework.', __CLASS__.':'.__LINE__), $this->content);
@@ -376,6 +381,7 @@ class InstallationManager
             $this->logger->info(sprintf($rows ? '%s: All translations were successfully installed.' : '%s: No translations were provided by Gibbon.', __CLASS__));
             
             $this->setParameter('translation_last_refresh', strtotime('now'));
+            $this->setParameter('installation_progress', 'complete');
         }
 
         return $exitCode;
@@ -457,7 +463,7 @@ class InstallationManager
             $method = self::METHOD_ABSOLUTE_SYMLINK;
         } catch (IOException $e) {
             // fall back to copy
-            $this->logger->info(sprintf('%s: Files were copied.', __CLASS__, $target));
+            $this->logger->info(sprintf('%s: Files were copied as symlink was not available.', __CLASS__, $target));
             $method = $this->hardCopy($origin, $target);
         }
 
@@ -649,5 +655,49 @@ class InstallationManager
 
             return $output->fetch();
         }
+    }
+
+    /**
+     * getMobileParameter
+     * @param string $name
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getMobileParameter(string $name, $default = null)
+    {
+        if ($this->settingManager instanceof SettingManager)
+            return $this->getSettingManager()->getParameter($name, $default);
+        $content = $this->getMobileParameters();
+        if (isset($content[$name]))
+            return $content[$name];
+        return $default;
+    }
+
+    /**
+     * clearCache
+     */
+    public function clearCache(): void
+    {
+        if ($this->settingManager instanceof SettingManager)
+            $cacheDir = $this->getSettingManager()->getContainer()->get('kernel')->getCacheDir();
+        else
+            $cacheDir = '../../var/cache/';
+        if (! realpath($cacheDir)) {
+            $this->getLogger()->warning('The cache could not be cleared.', [$cacheDir, realpath($cacheDir)]);
+            return ;
+        }
+        ini_set('max_execution_time', 120);
+        $fs = new Filesystem();
+        try {
+            sleep(1);
+            $fs->remove($cacheDir);
+        } catch (IOException $e) {
+            $this->getLogger()->warning('The cache could not be removed.', [$cacheDir, realpath($cacheDir)]);
+            $this->clearCache();
+            return ;
+        }
+
+        $this->getLogger()->warning('The cache was cleared.');
+        return ;
     }
 }

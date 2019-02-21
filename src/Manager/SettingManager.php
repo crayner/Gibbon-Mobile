@@ -232,8 +232,13 @@ class SettingManager implements ContainerAwareInterface
      */
     public function saveSettingCache(): void
     {
-        if ($this->hasSession())
-            $this->getSession()->set('setting_cache', $this->settings);
+        try {
+            if ($this->hasSession()) {
+                $this->getSession()->set('setting_cache', $this->settings);
+            }
+        } catch(\RuntimeException $e) {
+            return ;
+        }
     }
 
     /**

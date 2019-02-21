@@ -42,6 +42,7 @@ parameters:
     gibbon_host_url: ''
     # How often should the translations be copied from Gibbon in DAYS
     translation_refresh: 90
+    installation_progress: environment
     translation_last_refresh: ~
     setting_last_refresh: ~
     # Mailer Settings .... @todo

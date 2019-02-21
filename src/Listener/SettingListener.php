@@ -37,9 +37,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -74,11 +72,6 @@ class SettingListener implements EventSubscriberInterface
     private $installationManager;
 
     /**
-     * @var bool
-     */
-    private $clearCache = false;
-
-    /**
      * SettingListener constructor.
      * @param InstallationManager $installationManager
      * @param SettingManager|null $manager
@@ -103,56 +96,52 @@ class SettingListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         $listeners = [
-//            KernelEvents::RESPONSE => ['onResponse', -16],
-            KernelEvents::TERMINATE => ['clearCache', -32],
+            KernelEvents::TERMINATE => ['onTerminate', -2048],
+            KernelEvents::RESPONSE => ['saveSettingCache', 32],
             KernelEvents::REQUEST => ['onRequest', 0],
         ];
 
         return $listeners;
     }
 
+    /*
+     * saveSettingCache
+     */
+    public function saveSettingCache()
+    {
+        if ($this->manager instanceof SettingManager)
+            $this->manager->saveSettingCache();
+    }
+
     /**
-     * onResponse
-     * @param FilterResponseEvent $event
+     * onTerminate
      * @throws \Exception
      */
-    public function onResponse(FilterResponseEvent $event)
+    public function onTerminate()
     {
+        if ($this->getInstallationManager()->getMobileParameter('installation_progress', 'start') !== 'complete')
+            return ;
+        if (empty($lastTranslationRefresh = $this->getInstallationManager()->getMobileParameter('translation_last_refresh', null)))
+            return ;
+        if (empty($lastSettingRefresh = $this->getInstallationManager()->getMobileParameter('setting_last_refresh', null)))
+            return;
+
         if ($this->manager instanceof SettingManager) {
             $this->manager->saveSettingCache();
-
-            $lastTranslationRefresh = $this->manager->getParameter('translation_last_refresh', null);
-
+            $clearCache = false;
             if ($lastTranslationRefresh !== null && $lastTranslationRefresh < strtotime('-'.$this->manager->getParameter('translation_refresh', 90).' Days')) {
                 $this->installationManager->translations();
                 $this->getLogger()->info(sprintf('%s: The translation files were refreshed from Gibbon.', __CLASS__));
+                $clearCache = true;
             }
-            
-            
-            $lastSettingRefresh = $this->manager->getParameter('setting_last_refresh', null);
 
             if ($lastSettingRefresh !== null && $lastSettingRefresh < strtotime('-30 Days')) {
                 $this->installationManager->settings();
                 $this->getLogger()->info(sprintf('%s: The settings where refreshed from Gibbon.', __CLASS__));
+                $clearCache = true;
             }
-        }
-
-    }
-
-    /**
-     * clearCache
-     * @param KernelEvent $event
-     */
-    public function clearCache(KernelEvent $event)
-    {
-        if ($this->clearCache) {
-            $request = $event->getRequest();
-            if ($request->get('_route') === 'install_first_step') {
-                if ($request->hasSession())
-                    $request->getSession()->invalidate();
-                $this->installationManager->getFilesystem()->remove($this->installationManager->getKernel()->getCacheDir());
-                die();
-            }
+            if ($clearCache)
+                $this->getInstallationManager()->clearCache();
         }
     }
 
