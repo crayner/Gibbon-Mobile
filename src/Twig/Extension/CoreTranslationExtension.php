@@ -79,6 +79,8 @@ class CoreTranslationExtension extends AbstractExtension
         $translations = [];
         $translations['Your session is about to expire: you will be logged out shortly.'] = $this->translator->trans('Your session is about to expire: you will be logged out shortly.');
         $translations['Logout'] = $this->translator->trans('Logout');
+        $translations['Home'] = $this->translator->trans('Home');
+        $translations['Menu'] = $this->translator->trans('Menu', [], 'mobile');
         $translations['Stay Connected'] = $this->translator->trans('Stay Connected');
         return $translations;
     }

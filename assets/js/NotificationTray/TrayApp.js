@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react'
 import MessageWall from './MessageWall'
-import Likes from './Likes'
 import Notifications from './Notifications'
 import PropTypes from 'prop-types'
 import {fetchJson} from '../Component/fetchJson'

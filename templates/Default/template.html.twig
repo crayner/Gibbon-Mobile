@@ -9,52 +9,57 @@
         {% endblock stylesheets %}
     </head>
     <body>
-    <div class="container-fluid mobileContent">
-        {% block titleBar %}
-            <div id="titleBar">
-                <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}
-                    <div style="float: left;">{{ miscButton({title: 'Home', style: 'margin-top: -0.6rem;', class: 'btn btn-transparent alert-success fas fa-home fa-fw fa-2x', windowOpen: {route: path('home')}})|raw }}
-                    </div>
-                    {% block menuContent %}
-                        <div id="notificationTray" style="float: right;"></div>
-                    {% endblock menuContent %}
-                </h2></div>
-        {% endblock titleBar %}
-        {% block flashMessages %}
-            {% include 'Message/flash.html.twig' %}
-        {% endblock flashMessages %}
-        {% block content %}
-        {% endblock content %}
-        {% block footer %}
-            <div class="container-fluid text-center mobileFooter">
-                <div class="d-none d-sm-none d-md-block">
-                    <div class="row text-center text-charcoal">
-                        <div class="col-3">
-                            <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" />
-                        </div>
-                        <div class="col-9">
-                            <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} for Gibbon Version {{ getGibbonVersion() }} &copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
-                            <p class="small">
-                                {{ 'Created under the'|trans }} <a target='_blank' href='https://www.gnu.org/licenses/gpl.html' class="text-charcoal">GNU GPL</a>
-                                @ <a target='_blank' href='http://www.ichk.edu.hk' class="text-charcoal" title="Hill Range Services">HRS</a> |
-                                <a target='_blank' href='https://gibbonedu.org/about/#ourTeam' class="text-charcoal">{{ 'Credits'|trans }}</a> |
-                                <a target='_blank' href='https://gibbonedu.org/about/#translators' class="text-charcoal">{{ 'Translators'|trans }}</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-block d-sm-block d-md-none">
-                    <div class="row text-center text-charcoal">
-                        <div class="col-12">
-                            <div class="col-12">
-                                <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" style="float: left; height: 50px;"  />
+    <div>
+        {% block slideMenu %}
+            <div id="slideMenu" style="float: left;"></div>
+        {% endblock slideMenu %}
+        <div id="mobileContent" style="float: right; width: calc(100% - 64px)">
+            <div class="container-fluid mobileContent" >
+                {% block titleBar %}
+                    <div id="titleBar">
+                        <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}
+                            {% block notificationTray %}
+                                <div id="notificationTray" style="float: right;"></div>
+                            {% endblock notificationTray %}
+                        </h2></div>
+                {% endblock titleBar %}
+                {% block flashMessages %}
+                    {% include 'Message/flash.html.twig' %}
+                {% endblock flashMessages %}
+                {% block content %}
+                {% endblock content %}
+                {% block footer %}
+                    <div class="container-fluid text-center mobileFooter">
+                        <div class="d-none d-sm-none d-md-block">
+                            <div class="row text-center text-charcoal">
+                                <div class="col-3">
+                                    <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" />
+                                </div>
+                                <div class="col-9">
+                                    <p class="small" style="padding-top: 0.5rem;">{{ 'Powered by'|trans }} Gibbon-Mobile {{ getVersion() }} for Gibbon Version {{ getGibbonVersion() }} &copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
+                                    <p class="small">
+                                        {{ 'Created under the'|trans }} <a target='_blank' href='https://www.gnu.org/licenses/gpl.html' class="text-charcoal">GNU GPL</a>
+                                        @ <a target='_blank' href='http://www.ichk.edu.hk' class="text-charcoal" title="Hill Range Services">HRS</a> |
+                                        <a target='_blank' href='https://gibbonedu.org/about/#ourTeam' class="text-charcoal">{{ 'Credits'|trans }}</a> |
+                                        <a target='_blank' href='https://gibbonedu.org/about/#translators' class="text-charcoal">{{ 'Translators'|trans }}</a>
+                                    </p>
+                                </div>
                             </div>
-                            <p class="small" style="padding-top: 0.5rem;">Gibbon-Mobile {{ getVersion() }}<br />for Gibbon Version {{ getGibbonVersion() }}<br />&copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
+                        </div>
+                        <div class="d-block d-sm-block d-md-none">
+                            <div class="row text-center text-charcoal">
+                                <div class="col-12">
+                                    <div class="col-12">
+                                        <img src="{{ asset('build/static/logo.png') }}" class="image-fluid" alt="{{ 'Logo'|trans }}" style="float: left; height: 50px;"  />
+                                    </div>
+                                    <p class="small" style="padding-top: 0.5rem;">Gibbon-Mobile {{ getVersion() }}<br />for Gibbon Version {{ getGibbonVersion() }}<br />&copy; Craig Rayner 2018 - {{ 'today'|date('Y') }}</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endblock footer %}
             </div>
-        {% endblock footer %}
+        </div>
     </div>
     <div id="coreRender"></div>
     <div id="dumpStuff"></div>
@@ -70,6 +75,15 @@
                     newLink.media = 'screen'
                     document.head.appendChild(newLink)
                 {% endfor %}
+                {% set link = encore_entry_css_files('slideMenu') %}
+                {% for css in link %}
+                    newLink = document.createElement("link");
+                    newLink.href = '{{ asset(css) }}'
+                    newLink.rel = 'stylesheet'
+                    newLink.type = 'text/css'
+                    newLink.media = 'screen'
+                    document.head.appendChild(newLink)
+                {% endfor %}
             }
             window.addEventListener('load', cssLinks());
             {% if props is not defined %}{% set props = {timeOut: timeOut} %}{% endif %}
@@ -79,8 +93,10 @@
             {% set props = props|merge({translations: coreTranslations()}) %}
             window.CORE_PROPS = {{ props|json_encode|raw }}
             window.TRAY_PROPS = {{ getNotificationTray()|raw }}
+            window.MENU_PROPS = {{ getMenuItems(app.user, props)|raw }}
         </script>
         {{ encore_entry_script_tags('core') }}
+        {{ encore_entry_script_tags('slideMenu') }}
         {% if coreOnly is not defined %}
             {{ encore_entry_script_tags('notificationTray') }}
             {% if manager is defined and hasTimetable(manager) %}

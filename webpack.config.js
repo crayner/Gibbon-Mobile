@@ -21,6 +21,7 @@ Encore
     .addEntry('core', './assets/js/core.js')
     .addEntry('timetable', './assets/js/timetable.js')
     .addEntry('notificationTray', './assets/js/notificationTray.js')
+    .addEntry('slideMenu', './assets/js/slideMenu.js')
     .splitEntryChunks()
 
     /*

@@ -15,10 +15,21 @@ security:
     providers:
         security_user_provider:
             id: App\Security\SecurityUserProvider
+        api_key_user_provider:
+            id: App\Security\ApiKeyUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt|home)|css|images|build|js)/
             security: false
+        api:
+            pattern: ^/api_
+            stateless: true
+            guard:
+                authenticator:
+                    - App\Security\ApiKeyAuthenticator
+                entry_point: App\Security\ApiKeyAuthenticator
+            provider: api_key_user_provider
+            context: main
         main:
             anonymous: ~
             form_login:
@@ -33,6 +44,7 @@ security:
                 password_parameter:     'authenticate[_password]'
                 failure_path_parameter: login
                 provider:               security_user_provider
+            provider:                   security_user_provider
             access_denied_handler:      App\Security\AccessDeniedHandler
             logout:
                 path:                   logout
@@ -51,4 +63,5 @@ security:
                     - App\Security\LoginFormAuthenticator
                     - App\Security\GoogleAuthenticator
                 entry_point: App\Security\LoginFormAuthenticator
+            context: main
     role_hierarchy: '%security.hierarchy.roles%'

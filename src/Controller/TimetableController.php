@@ -47,11 +47,11 @@ class TimetableController extends AbstractController
      * myTimetable
      * @param string $date
      * @return JsonResponse|Response
-     * @Route("/timetable/{date}/{person}/display/", name="timetable_display")
+     * @Route("/timetable/{date}/{person}/display/", name="api_timetable_display")
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, Request $request, string $date = 'today')
     {
-        if ($this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php'])) {
+        if ($this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php']) && $request->getContentType() === 'json') {
             $date = $manager->manageDateChange($date);
             if ($request->getContentType() !== 'json')
                 return $this->render('Default/dump.html.twig', [
@@ -61,6 +61,14 @@ class TimetableController extends AbstractController
             return new JsonResponse([
                 'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
                 'redirect' => false,
+            ], 200);
+        } elseif (! $this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php']) && $request->getContentType() === 'json')
+        {
+            return new JsonResponse([
+                'content' => [
+                    'valid' => 'error',
+                ],
+                'redirect' => true,
             ], 200);
         }
         if ($request->getContentType() !== 'json')
