@@ -45,6 +45,7 @@ export default class TimetableApp extends Component {
         this.toggleSchoolCalendar = this.toggleSchoolCalendar.bind(this)
         this.toggleSpaceBookingCalendar = this.toggleSpaceBookingCalendar.bind(this)
         this.takeAttendance = this.takeAttendance.bind(this)
+        this.closeAttendance = this.closeAttendance.bind(this)
         this.takeStudentAttendance = this.takeStudentAttendance.bind(this)
         this.cancelMessage = this.cancelMessage.bind(this)
     }
@@ -374,19 +375,29 @@ export default class TimetableApp extends Component {
         }
     }
 
+    closeAttendance(){
+        this.setState({
+            loadEvents: false,
+            showStatus: 'timetable',
+            attendance: {},
+            messages: [],
+        })
+        this.startPreLoad()
+    }
+
     setCourseClassAttendance(attendance, status){
         let event = attendance.event
         fetchJson('/attendance/class/record/', {body: JSON.stringify(attendance), method: 'POST'}, this.locale)
             .then(data => {
                 attendance = data.content
                 attendance.event = event
+                const events = this.state.events
+                events.map(item => {
+                    if (item.id === event.id) {
+                        item.attendanceStatus = 'green'
+                    }
+                })
                 if (status === 'timetable') {
-                    const events = this.state.events
-                    events.map(item => {
-                        if (item.id === event.id) {
-                            item.attendanceStatus = 'green'
-                        }
-                    })
                     this.startPreLoad()
                     this.setState({
                         showStatus: status,
@@ -398,6 +409,7 @@ export default class TimetableApp extends Component {
                 } else {
                     this.setState({
                         showStatus: status,
+                        events: events,
                         attendance: attendance,
                         messages: data.messages,
                         loadEvents: false,
@@ -413,13 +425,13 @@ export default class TimetableApp extends Component {
             .then(data => {
                 attendance = data.content
                 attendance.event = event
+                const events = this.state.events
+                events.map(item => {
+                    if (item.id === event.id) {
+                        item.attendanceStatus = 'green'
+                    }
+                })
                 if (status === 'timetable') {
-                    const events = this.state.events
-                    events.map(item => {
-                        if (item.id === event.id) {
-                            item.attendanceStatus = 'green'
-                        }
-                    })
                     this.startPreLoad()
                     this.setState({
                         showStatus: status,
@@ -431,6 +443,7 @@ export default class TimetableApp extends Component {
                 } else {
                     this.setState({
                         showStatus: status,
+                        events: events,
                         attendance: attendance,
                         messages: data.messages,
                         loadEvents: false,
@@ -462,6 +475,7 @@ export default class TimetableApp extends Component {
                     {...this.otherProps}
                     {...this.state}
                     takeStudentAttendance={this.takeStudentAttendance}
+                    closeAttendance={this.closeAttendance}
                     cancelMessage={this.cancelMessage}
                 />
             )

@@ -8,6 +8,7 @@ import {format} from 'date-fns/esm'
 import { FormGroup, Input } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ButtonSubmit from '../Component/Button/ButtonSubmit'
+import ButtonClose from '../Component/Button/ButtonClose'
 
 export default function AttendanceRender(props) {
     const {
@@ -15,6 +16,7 @@ export default function AttendanceRender(props) {
         translations,
         gibbonHost,
         takeStudentAttendance,
+        closeAttendance,
         loadEvents,
         ...otherProps
     } = props
@@ -105,12 +107,18 @@ export default function AttendanceRender(props) {
         title: translateMessage(translations, 'Take Attendance by Class'),
     }
 
+    const buttonClose = {
+        style: {float: 'right'},
+        title: translateMessage(translations, 'Close without saving data.'),
+    }
+
     if (attendance.type === 'courseClass') {
         return (
             <div className={'container-fluid timetable'}>
                 <div className={'row border-bottom'}>
                     <div className="col-12">
                         <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance by Class")}: {attendance.courseClass.course.name}.{attendance.courseClass.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}
+                            <ButtonClose button={buttonClose} closeButtonHandler={closeAttendance}/>
                             <ButtonSubmit button={button} submitButtonHandler={takeStudentAttendance}/>
                         </p>
                     </div>
@@ -126,6 +134,7 @@ export default function AttendanceRender(props) {
                 <div className={'row border-bottom'}>
                     <div className="col-12">
                         <p className="text-lg-left text-uppercase">{translateMessage(translations, "Take Attendance by Roll Group")}: {attendance.rollGroup.name} {translateMessage(translations, 'on')} {format(onDate, 'E, do MMM/yyyy')}
+                            <ButtonClose button={buttonClose} closeButtonHandler={closeAttendance}/>
                             <ButtonSubmit button={button} submitButtonHandler={takeStudentAttendance}/>
                         </p>
                     </div>
@@ -142,6 +151,7 @@ AttendanceRender.propTypes = {
     translations: PropTypes.object.isRequired,
     attendance: PropTypes.object.isRequired,
     takeStudentAttendance: PropTypes.func.isRequired,
+    closeAttendance: PropTypes.func.isRequired,
     loadEvents: PropTypes.bool.isRequired,
 }
 

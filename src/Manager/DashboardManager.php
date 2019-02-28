@@ -216,6 +216,7 @@ abstract class DashboardManager implements DashboardInterface
         $translations['Bookings'] = $this->getTranslator()->trans('Bookings');
         $translations['View Details'] = $this->getTranslator()->trans('View Details');
         $translations['Take Attendance by Class'] = $this->getTranslator()->trans('Take Attendance by Class');
+        $translations['Close without saving data.'] = $this->getTranslator()->trans('Close without saving data.', [], 'mobile');
         $translations['on'] = $this->getTranslator()->trans('on');
         $translations['Take Attendance by Roll Group'] = $this->getTranslator()->trans('Take Attendance by Roll Group');
         $translations['There are no records to display.'] = $this->getTranslator()->trans('There are no records to display.');

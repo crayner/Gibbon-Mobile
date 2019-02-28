@@ -27,7 +27,7 @@ export default function NavItems(props) {
                 <NavIcon>
                     <FontAwesomeIcon size={'2x'} fixedWidth icon={[item.icon.prefix, item.icon.iconName]} title={item.text} onClick={() => menuItemClick({'data-route': item.route})} />
                 </NavIcon>
-                <NavText>
+                <NavText style={{fontSize: '1.5rem', marginTop: '-4px'}}>
                     {item.text}
                 </NavText>
                 { subItems !== null ? subItems : '' }
