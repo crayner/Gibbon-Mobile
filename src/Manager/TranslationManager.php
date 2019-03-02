@@ -8,7 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Intl\Exception\InvalidArgumentException;
+use Symfony\Component\Translation\Loader\MoFileLoader;
+use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -65,6 +69,7 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
      *
      * @return string The translated string
      *
+     * @deprecated use ->trans with option '%count%' => $count
      * @throws InvalidArgumentException If the locale contains invalid characters
      */
     public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
@@ -198,7 +203,6 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
         $this->logger = $logger;
         $this->stringReplacementManager = $manager;
 
-        $translator->addLoader('xlf', new XliffFileLoader());
         $this->translator = $translator;
     }
 

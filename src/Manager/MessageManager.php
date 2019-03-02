@@ -9,7 +9,7 @@ class MessageManager
 	/**
 	 * @var string
 	 */
-	private $domain = 'System';
+	private $domain = 'messages';
 
 	/**
 	 * @var array
@@ -127,7 +127,7 @@ class MessageManager
 	 *
 	 * @param string|null $domain
 	 */
-	public function __construct(string $domain = 'System')
+	public function __construct(string $domain = 'messages')
 	{
 		$this->setDomain($domain);
 	}
