@@ -81,7 +81,7 @@ class CoreTranslationExtension extends AbstractExtension
         $translations['Logout'] = $this->translator->trans('Logout');
         $translations['Home'] = $this->translator->trans('Home');
         $translations['Menu'] = $this->translator->trans('Menu', [], 'mobile');
-        $translations['Stay Connected'] = $this->translator->trans('Stay Connected');
+        $translations['Stay Connected'] = $this->translator->trans('Stay Connected', [], 'mobile');
         return $translations;
     }
 }

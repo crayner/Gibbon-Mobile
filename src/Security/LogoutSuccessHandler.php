@@ -52,14 +52,14 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
             $session->remove('googleAPIAccessToken');
             $session->remove('knpu.oauth2_client_state');
             $session->remove('last_activity_time');
-            $flash = $session->getFlashBag()->all();
+            $flashBag = $session->getFlashBag()->all();
             try {
                 $session->invalidate();
             } catch(\ErrorException $e) {
-                $flash = null;
+                $flashBag = null;
             }
-            if (! empty($flash))
-                $session->getFlashBag()->setAll($flash);
+            if (! empty($flashBag))
+                $session->getFlashBag()->setAll($flashBag);
         }
 		$request->setLocale($this->locale);
 

@@ -32,9 +32,9 @@ namespace App\Controller;
 use App\Logger\LoggerFactory;
 use App\Manager\InstallationManager;
 use App\Manager\SettingManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class InstallationController

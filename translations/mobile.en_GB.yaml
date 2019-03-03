@@ -1,0 +1,11 @@
+Menu: Menu
+'Close without saving data.': 'Close without saving data.'
+version:
+    cutting_edge:
+        line: '{1} The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software expects Gibbon to be running at cutting edge line (%{line}), but Gibbon is at line (%{gLine}).|[2,Inf] The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software expects Gibbon to be running at one of cutting edge lines (%{line}), but Gibbon is at line (%{gLine}).'
+        expected: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software expects Gibbon to be running in Cutting Edge Mode.'
+        not: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software does not expect Gibbon to be running in Cutting Edge Mode.'
+    incompatible: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon.'
+'Gibbon - Mobile': 'Gibbon - Responsive'
+'Stay Connected': Stay Connected
+'All Day Event': All Day Event

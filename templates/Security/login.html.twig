@@ -8,7 +8,7 @@
 
         {% block titleBar %}
             <div id="titleBar">
-                <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans }}</h2></div>
+                <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Mobile')|trans([], 'mobile') }}</h2></div>
         {% endblock titleBar %}
 
 

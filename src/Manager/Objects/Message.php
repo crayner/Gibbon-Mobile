@@ -166,6 +166,7 @@ class Message
 	}
 
     /**
+     * @deprecated Use trans only with '%count%' option set.
      * @return mixed
      */
     public function getTransChoice()
@@ -175,11 +176,13 @@ class Message
 
     /**
      * @param mixed $transChoice
+     * @deprecated Use $this->addOption('%count%', $element);
      * @return Message
      */
     public function setTransChoice($transChoice)
     {
-        $this->transChoice = $transChoice;
+        $this->addOption('%count%', $transChoice);
+        $this->transChoice = false;
         return $this;
     }
 

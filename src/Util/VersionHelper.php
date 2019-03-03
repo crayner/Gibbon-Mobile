@@ -44,4 +44,14 @@ class VersionHelper
      * @const array
      */
     CONST GIBBON = ['18.0.00'];
+
+    /**
+     * @const bool
+     */
+    CONST CUTTING_EDGE_CODE = true;
+
+    /**
+     * @const array of integers
+     */
+    CONST CUTTING_EDGE_CODE_LINE = [31, 32];
 }

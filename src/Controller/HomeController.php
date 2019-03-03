@@ -62,4 +62,14 @@ class HomeController extends AbstractController
             ]
         );
     }
+
+    /**
+     * versionWarning
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/version/warning/", name="_version_warning")
+     */
+    public function versionWarning()
+    {
+        return $this->render('Install/version_warning.html.twig');
+    }
 }

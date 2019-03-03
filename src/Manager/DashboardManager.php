@@ -212,7 +212,7 @@ abstract class DashboardManager implements DashboardInterface
         $translations['Phone'] = $this->getTranslator()->trans('Phone');
         $translations['Personal Calendar'] = $this->getTranslator()->trans('Personal Calendar');
         $translations['School Calendar'] = $this->getTranslator()->trans('School Calendar');
-        $translations['All Day Event'] = $this->getTranslator()->trans('All Day Event');
+        $translations['All Day Event'] = $this->getTranslator()->trans('All Day Event', [], 'mobile');
         $translations['Bookings'] = $this->getTranslator()->trans('Bookings');
         $translations['View Details'] = $this->getTranslator()->trans('View Details');
         $translations['Take Attendance by Class'] = $this->getTranslator()->trans('Take Attendance by Class');

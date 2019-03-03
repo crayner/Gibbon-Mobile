@@ -85,7 +85,6 @@ class LastActivityListener implements EventSubscriberInterface
         if (!$event->isMasterRequest())
              return ;
 
-
         $session = null;
         $request = $event->getRequest();
 
