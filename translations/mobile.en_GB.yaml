@@ -7,5 +7,11 @@ version:
         not: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software does not expect Gibbon to be running in Cutting Edge Mode.'
     incompatible: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon.'
 'Gibbon - Mobile': 'Gibbon - Responsive'
+'Gibbon - Responsive': 'Gibbon - Responsive'
 'Stay Connected': Stay Connected
 'All Day Event': All Day Event
+'Gibbon is running cutting edge code, but has updates that have not been applied.  The administrator needs to update the system fully.': 'Gibbon is running cutting edge code, but has updates that have not been applied.  The administrator needs to update the system fully.'
+'Gibbon Responsive needs to be upgraded to version "%{version}"': 'Gibbon Responsive needs to be upgraded to version "%{version}"'
+'Gibbon Responsive does not have a valid version to run for Gibbon Version "%{version}"': 'Gibbon Responsive does not have a valid version to run for Gibbon Version "%{version}"'
+'Close Message': 'Close Message'
+'Gibbon Responsive was not able to get details of the version available.': 'Gibbon Responsive was not able to get details of the version available.'

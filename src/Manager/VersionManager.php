@@ -27,12 +27,15 @@
  * Date: 2/03/2019
  * Time: 10:09
  */
-
 namespace App\Manager;
 
-
 use App\Util\VersionHelper;
+use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class VersionManager
+ * @package App\Manager
+ */
 class VersionManager
 {
 
@@ -60,45 +63,171 @@ class VersionManager
     }
 
     /**
+     * @var string|null
+     */
+    private $gibbonVersion;
+
+    /**
      * checkVersion
      * @return bool
      */
     public function checkVersion(): bool
     {
-        $gVersion = $this->getSettingManager()->getSettingByScopeAsString('System', 'version');
+        $this->gibbonVersion = $this->getSettingManager()->getSettingByScopeAsString('System', 'version');
 
         //Check Gibbon Version
         $versionCorrect = false;
         foreach(VersionHelper::GIBBON as $version)
         {
-            if (version_compare($gVersion, $version, '='))
+            if (version_compare($this->gibbonVersion, $version, '='))
             {
                 $versionCorrect = true;
                 break;
             }
         }
         if (!$versionCorrect) {
-            $this->getSettingManager()->getMessageManager()->add('danger', 'version.incompatible', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $gVersion],'mobile');
+            $this->getSettingManager()->getMessageManager()->add('danger', 'version.incompatible', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion],'mobile');
             return false;
         }
 
         //Is the version using cutting edge.
         $cuttingEdge = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'cuttingEdgeCode');
         if (VersionHelper::CUTTING_EDGE_CODE || $cuttingEdge !== VersionHelper::CUTTING_EDGE_CODE || true) {
-            $cuttingEdgeLine = $this->getSettingManager()->getSettingByScopeAsInteger('System', 'cuttingEdgeCodeLine');
+            $cuttingEdgeLine = $this->countCuttingEdgeLines();
             if ($cuttingEdge !== VersionHelper::CUTTING_EDGE_CODE) {
                 if (VersionHelper::CUTTING_EDGE_CODE)
-                    $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.expected', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $gVersion],'mobile');
+                    $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.expected', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion],'mobile');
                 else
-                    $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.not', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $gVersion],'mobile');
+                    $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.not', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion],'mobile');
                 return false;
             }
             if (! in_array($cuttingEdgeLine, VersionHelper::CUTTING_EDGE_CODE_LINE)) {
-                $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.line', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $gVersion, '%{line}' => implode(', ', VersionHelper::CUTTING_EDGE_CODE_LINE), '%{gLine}' => $cuttingEdgeLine, '%count%' => count(VersionHelper::CUTTING_EDGE_CODE_LINE)],'mobile');
+                $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.line', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion, '%{line}' => implode(', ', VersionHelper::CUTTING_EDGE_CODE_LINE), '%{gLine}' => $cuttingEdgeLine, '%count%' => count(VersionHelper::CUTTING_EDGE_CODE_LINE)],'mobile');
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * getGibbonVersion
+     * @return string|null
+     */
+    public function getGibbonVersion(): ?string
+    {
+        return $this->gibbonVersion;
+    }
+
+    /**
+     * setGibbonVersion
+     * @param string|null $gibbonVersion
+     * @return VersionManager
+     */
+    public function setGibbonVersion(?string $gibbonVersion): VersionManager
+    {
+        $this->gibbonVersion = $gibbonVersion;
+        return $this;
+    }
+
+    /**
+     * @var array|null
+     */
+    private $versionData;
+
+    /**
+     * countCuttingEdgeLines
+     * @return int
+     */
+    private function countCuttingEdgeLines(): int
+    {
+        $sql = [];
+        require $this->getSettingManager()->getParameter('gibbon_document_root') . '/CHANGEDB.php';
+
+        foreach($sql as $item) {
+            if ($item[0] === $this->gibbonVersion) {
+                $updates = $item[1];
+                break;
+            }
+        }
+
+        $updates = explode("end\r\n", isset($updates) ? $updates : '');
+        $x = 0;
+        foreach($updates as $update)
+            if (! empty($update))
+                $x++;
+        return intval($x);
+    }
+
+    /**
+     * loadVersionInformation
+     * @throws \Exception
+     */
+    public function loadVersionInformation()
+    {
+        $fileName = 'http://gibhelp.craigrayner.com/Download/version.yaml/';
+        $this->setGibbonVersion($this->getSettingManager()->getSettingByScopeAsString('System', 'version'));
+
+        try {
+            $contents = file_get_contents($fileName);
+        } catch (\Exception $e) {
+            $this->getSettingManager()->getMessageManager()->add('danger', 'Gibbon Responsive was not able to get details of the version available.', [], 'mobile');
+        }
+
+        $this->versionData = Yaml::parse($contents);
+        $this->getGibbonDetails();
+
+        $possible = $this->matchVersion($this->versionData[$this->getGibbonVersion()]);
+        if (empty($possible))
+            $this->getSettingManager()->getMessageManager()->add('danger', 'Gibbon Responsive does not have a valid version to run for Gibbon Version "%{version}"', ['%{version}' => $this->gibbonDetails['version']], 'mobile');
+        else
+            $this->getSettingManager()->getMessageManager()->add('danger', 'Gibbon Responsive needs to be upgraded to version "%{version}"', ['%{version}' => $possible], 'mobile');
+
+        return $this;
+    }
+
+    /**
+     * @var array
+     */
+    private $gibbonDetails;
+
+    /**
+     * getGibbonDetails
+     * @return array
+     * @throws \Exception
+     */
+    public function getGibbonDetails(): array
+    {
+        if (! empty($this->gibbonDetails))
+            return $this->gibbonDetails;
+        $this->gibbonDetails = [];
+        $this->gibbonDetails['version'] = $this->getGibbonVersion();
+        $this->gibbonDetails['cuttingEdge'] = $this->getSettingManager()->getSettingByScopeAsBoolean('System', 'cuttingEdgeCode');
+
+
+        if ($this->gibbonDetails['cuttingEdge']) {
+            $this->gibbonDetails['cuttingEdgeLine'] = $this->getSettingManager()->getSettingByScopeAsInteger('System', 'cuttingEdgeCodeLine');
+            $this->gibbonDetails['cuttingEdgeLineFound'] = $this->countCuttingEdgeLines();
+            if ($this->gibbonDetails['cuttingEdgeLineFound'] === $this->gibbonDetails['cuttingEdgeLine'])
+                $this->getSettingManager()->getMessageManager()->add('warning', 'Gibbon is running cutting edge code, but has updates that have not been applied.  The administrator needs to update the system fully.', [], 'mobile');
+        }
+
+        return $this->gibbonDetails;
+    }
+
+    private function matchVersion($versions)
+    {
+        $possible = '';
+        foreach(($versions ?: []) as $version=>$details)
+        {
+            if ($this->gibbonDetails['cuttingEdge'] === $details['cutting_edge'] && $this->gibbonDetails['cuttingEdge'])
+            {
+                if (in_array($this->gibbonDetails['cuttingEdgeLineFound'], $details['cutting_edge_line'])) {
+                    $possible = $version;
+                    break ;
+                }
+            }
+        }
+        return $possible;
     }
 }

@@ -32,11 +32,15 @@
  */
 namespace App\Controller;
 
+use App\Manager\SettingManager;
 use App\Manager\StaffDashboardManager;
+use App\Manager\TranslationManager;
+use App\Manager\VersionManager;
 use App\Util\UserHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class HomeController
@@ -65,11 +69,20 @@ class HomeController extends AbstractController
 
     /**
      * versionWarning
+     * @param VersionManager $manager
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      * @Route("/version/warning/", name="_version_warning")
      */
-    public function versionWarning()
+    public function versionWarning(VersionManager $manager, SettingManager $settingManager, TranslatorInterface $translator)
     {
-        return $this->render('Install/version_warning.html.twig');
+        $manager->setSettingManager($settingManager);
+        $manager->loadVersionInformation();
+        return $this->render('Install/version_warning.html.twig',
+            [
+                'manager' => $manager,
+                'messages' => $manager->getSettingManager()->getMessageManager()->getTranslatedMessages($translator),
+            ]
+        );
     }
 }
