@@ -129,6 +129,9 @@ class TranslationInstallCommand extends Command
                 case 'info':
                     $method = 'note';
                     break;
+                case 'warning':
+                    $method = 'note';
+                    break;
             }
             $io->$method($message->getMessage());
         }

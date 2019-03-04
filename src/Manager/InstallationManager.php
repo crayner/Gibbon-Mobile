@@ -332,40 +332,7 @@ class InstallationManager
                         $this->getMessageManager()->add('error' , sprintf('Error Translation Transfer for %s using method %s. Error %s', $target, $method, $e->getMessage()));
                         $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s. Error %s', __CLASS__, $target, $method, $e->getMessage()));
                     }
-
-                    if ($locale === 'en_GB') {
-                        $locale = 'en';
-                        $target = $targetDir . 'messages.en.' . $file->getExtension();
-
-                        try {
-                            if ($method === self::METHOD_RELATIVE_SYMLINK)
-                                $method = $this->relativeSymlinkWithFallback($source, $target);
-                            elseif ($method === self::METHOD_ABSOLUTE_SYMLINK)
-                                $method = $this->relativeSymlinkWithFallback($source, $target);
-                            else
-                                $method = $this->hardCopy($source, $target);
-
-                            if (self::METHOD_COPY === $method) {
-                                $copyUsed = true;
-                            }
-
-                            if ($method === $expectedMethod) {
-                                $this->getMessageManager()->add('success' , sprintf('Successful Translation Transfer for %s using method %s', $target, $method));
-                                $this->logger->info(sprintf('%s: Successful Translation Transfer for %s using method %s', __CLASS__, $target, $method));
-                                $rows = true;
-                            } else {
-                                $this->getMessageManager()->add('warning' , sprintf('Warning Translation Transfer for %s using method %s', $target, $method));
-                                $this->logger->warning(sprintf('%s: Warning Translation Transfer for %s using method %s', __CLASS__, $target, $method));
-                                $rows = true;
-                            }
-                        } catch (\Exception $e) {
-                            $exitCode = 1;
-                            $this->getMessageManager()->add('error' , sprintf('Error Translation Transfer for %s using method %s. Error %s', $target, $method, $e->getMessage()));
-                            $this->logger->error(sprintf('%s: Error Translation Transfer for %s using method %s. Error %s', __CLASS__, $target, $method, $e->getMessage()));
-                        }
-                    }
                 }
-
             }
         }
 
