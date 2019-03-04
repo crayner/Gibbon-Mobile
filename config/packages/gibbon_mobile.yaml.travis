@@ -12,7 +12,7 @@ parameters:
     db_pass: ''
     db_prefix: gibbon
     db_server: mysql
-    db_charset: utf8mb4
+    db_charset: utf8
     db_server_version: 5.7
     security.hierarchy.roles:
         ROLE_USER: null
