@@ -149,84 +149,75 @@ class InstallationManager
         if (! $fileSystem->exists($this->file))
             $fileSystem->copy($this->file.'.dist', $this->file, false);
 
-        $config = realpath(rtrim($gibbonRoot, '\\/') . DIRECTORY_SEPARATOR . 'config.php');
-        if ($config === false) {
-            $this->getMessageManager()->addMessage('error', sprintf('The Gibbon config.php file was not found at "%s"', $config));
-            $this->logger->error(sprintf('%S: The Gibbon config.php file was not found at "%s"', __CLASS__, $config));
-            return 1;
-        } else {
-            $this->getMessageManager()->addMessage('success', sprintf('The Gibbon config.php file was found at "%s"', $config));
-            $this->logger->info(sprintf('%s: The Gibbon config.php file was found at "%s"', __CLASS__, $config));
-            // now build .env.local file for the mailer
-            if ($this->getSettingManager()->getSettingByScopeAsBoolean('System', 'enableMailerSMTP', 'N')) {
+        // now build .env.local file for the mailer
+        if ($this->getSettingManager()->getSettingByScopeAsBoolean('System', 'enableMailerSMTP', 'N')) {
 
-                if ($gibbonRoot !== $content['gibbon_document_root'])
-                {
-                    $this->getMessageManager()->addMessage('error', sprintf('The database absolute path %s does not equal the config path %s', $gibbonRoot, $content['gibbon_document_root']));
-                    $this->logger->error(sprintf('%s: The database absolute path %s does not equal the config path %s', __CLASS__, $gibbonRoot, $content['gibbon_document_root']));
-                    return 2;
-                }
-
-                $content['mailer_host'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPHost', null);
-                $content['mailer_transport'] = 'smtp';
-                $content['mailer_auth_mode'] = null;
-                if (strpos($content['mailer_host'], 'gmail') !== false)
-                    $content['mailer_transport'] = 'gmail';
-                if ($content['mailer_transport'] === 'smtp') {
-                    $content['mailer_port'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPort', null);
-                    $content['mailer_encryption'] = null;
-                    if ($content['mailer_port'] === '465')
-                        $content['mailer_encryption'] = 'ssl';
-                    if ($content['mailer_port'] === '587')
-                        $content['mailer_encryption'] = 'tls';
-                }
-                $content['mailer_user'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPUsername', null);
-                $content['mailer_password'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPassword', null);
-                $content['mailer_spool'] = ['type' => 'memory'];
-
-
-                //$fileSystem->dumpFile($this->file, Yaml::dump($content,8));
-                $this->getMessageManager()->addMessage('success','Email settings have been copied from the Gibbon Setup');
-                $this->logger->info(sprintf('%s: Email settings have been copied from the Gibbon Setup.', __CLASS__));
-            } else {
-
-                $content['mailer_host'] = null;
-                $content['mailer_transport'] = null;
-                $content['mailer_auth_mode'] = null;
-                $content['mailer_transport'] = null;
-                $content['mailer_port'] = null;
-                $content['mailer_encryption'] = null;
-                $content['mailer_user'] = null;
-                $content['mailer_password'] = null;
-                $content['mailer_spool'] = ['type' => 'memory'];
-
-
-                //$fileSystem->dumpFile($this->file, Yaml::dump($content,8));
-                $this->getMessageManager()->addMessage('success', 'Email settings have been set as default and turned off.');
-                $this->logger->info(sprintf('%s: Email settings have been set as default and turned off.', __CLASS__));
+            if ($gibbonRoot !== $content['gibbon_document_root'])
+            {
+                $this->getMessageManager()->addMessage('error', sprintf('The database absolute path %s does not equal the config path %s', $gibbonRoot, $content['gibbon_document_root']));
+                $this->logger->error(sprintf('%s: The database absolute path %s does not equal the config path %s', __CLASS__, $gibbonRoot, $content['gibbon_document_root']));
+                return 2;
             }
 
-            $content['cookie_lifetime'] = $this->getSettingManager()->getSettingByScopeAsInteger('System', 'sessionDuration', 1200);
-            $content['google_client_id'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientID', '');
-            $content['google_secret'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientSecret', '');
-            $content['timezone'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
-            $content['gibbon_document_root'] = $gibbonRoot;
-            $content['gibbon_host_url'] = str_replace("\r\n", '', $this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL')) . '/';
-            $content['mailer_sender_address'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationEmail', null);
-            $content['mailer_sender_name'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationName', null);
-            $content['locale'] = $this->getSettingManager()->getRepository(I18n::class)->createQueryBuilder('i')
-                ->where('i.systemDefault = :yes')
-                ->setParameter('yes', 'Y')
-                ->select('i.code')
-                ->getQuery()
-                ->getSingleScalarResult() ?: 'en_GB';
+            $content['mailer_host'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPHost', null);
+            $content['mailer_transport'] = 'smtp';
+            $content['mailer_auth_mode'] = null;
+            if (strpos($content['mailer_host'], 'gmail') !== false)
+                $content['mailer_transport'] = 'gmail';
+            if ($content['mailer_transport'] === 'smtp') {
+                $content['mailer_port'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPort', null);
+                $content['mailer_encryption'] = null;
+                if ($content['mailer_port'] === '465')
+                    $content['mailer_encryption'] = 'ssl';
+                if ($content['mailer_port'] === '587')
+                    $content['mailer_encryption'] = 'tls';
+            }
+            $content['mailer_user'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPUsername', null);
+            $content['mailer_password'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'mailerSMTPPassword', null);
+            $content['mailer_spool'] = ['type' => 'memory'];
 
-            $content['setting_last_refresh'] = strtotime('now');
-            $content['installation_progress'] = 'settings';
-            $this->setMobileParameters($content);
-            $this->getMessageManager()->addMessage('success', 'Additional Environmental settings have been set into the Gibbon-Mobile framework.');
-            $this->logger->info(sprintf('%s: Additional Environmental settings have been set into the Gibbon-Mobile framework.', __CLASS__.':'.__LINE__), $this->content);
+
+            //$fileSystem->dumpFile($this->file, Yaml::dump($content,8));
+            $this->getMessageManager()->addMessage('success','Email settings have been copied from the Gibbon Setup');
+            $this->logger->info(sprintf('%s: Email settings have been copied from the Gibbon Setup.', __CLASS__));
+        } else {
+
+            $content['mailer_host'] = null;
+            $content['mailer_transport'] = null;
+            $content['mailer_auth_mode'] = null;
+            $content['mailer_transport'] = null;
+            $content['mailer_port'] = null;
+            $content['mailer_encryption'] = null;
+            $content['mailer_user'] = null;
+            $content['mailer_password'] = null;
+            $content['mailer_spool'] = ['type' => 'memory'];
+
+
+            //$fileSystem->dumpFile($this->file, Yaml::dump($content,8));
+            $this->getMessageManager()->addMessage('success', 'Email settings have been set as default and turned off.');
+            $this->logger->info(sprintf('%s: Email settings have been set as default and turned off.', __CLASS__));
         }
+
+        $content['cookie_lifetime'] = $this->getSettingManager()->getSettingByScopeAsInteger('System', 'sessionDuration', 1200);
+        $content['google_client_id'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientID', '');
+        $content['google_secret'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'googleClientSecret', '');
+        $content['timezone'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'timezone', 'UTC');
+        $content['gibbon_document_root'] = $gibbonRoot;
+        $content['gibbon_host_url'] = str_replace("\r\n", '', $this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL')) . '/';
+        $content['mailer_sender_address'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationEmail', null);
+        $content['mailer_sender_name'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'organisationName', null);
+        $content['locale'] = $this->getSettingManager()->getRepository(I18n::class)->createQueryBuilder('i')
+            ->where('i.systemDefault = :yes')
+            ->setParameter('yes', 'Y')
+            ->select('i.code')
+            ->getQuery()
+            ->getSingleScalarResult() ?: 'en_GB';
+
+        $content['setting_last_refresh'] = strtotime('now');
+        $content['installation_progress'] = 'settings';
+        $this->setMobileParameters($content);
+        $this->getMessageManager()->addMessage('success', 'Additional Environmental settings have been set into the Gibbon-Mobile framework.');
+        $this->logger->info(sprintf('%s: Additional Environmental settings have been set into the Gibbon-Mobile framework.', __CLASS__.':'.__LINE__), $this->content);
 
         $file = $this->getKernel()->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'build' ;
 
