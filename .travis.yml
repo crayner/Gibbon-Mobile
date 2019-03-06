@@ -46,8 +46,8 @@ before_install:
 before_script:
   - php -S 127.0.0.1:8888 -t $TRAVIS_BUILD_DIR >/dev/null 2>&1 &
   - sleep 1
-  - ./vendor/bin/simple-phpunit --version
+  - ./bin/phpunit.phar --version
 
 script:
-  - ./vendor/bin/simple-phpunit
+  - ./bin/phpunit.phar
 
