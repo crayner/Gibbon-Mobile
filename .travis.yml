@@ -50,5 +50,5 @@ before_script:
   - ./vendor/bin/simple-phpunit --version
 
 script:
-  - ./vendor/bin/simple-phpunit ./tests/
+  - ./vendor/bin/simple-phpunit --configuration ./phpunit.xml.dist ./tests/
 
