@@ -49,5 +49,5 @@ before_script:
   - php ./bin/phpunit.phar --version
 
 script:
-  - php ./bin/phpunit.phar
+  - php ./bin/phpunit.phar ./tests/
 
