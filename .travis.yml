@@ -10,7 +10,7 @@ php:
   - 7.3
 
 # faster builds on new travis setup not using sudo
-sudo: false
+sudo: true
 
 addons:
     apt:
