@@ -10,12 +10,7 @@ php:
   - 7.3
 
 # faster builds on new travis setup not using sudo
-sudo: true
-
-addons:
-    apt:
-        packages:
-            - language-pack-en_GB
+sudo: false
 
 # set git depth to reduce download size
 git:
@@ -26,12 +21,13 @@ cache:
     - vendor
     - $HOME/.composer/cache
 
-
 # optionally specify a list of environments, for example to test different RDBMS
 env:
   global:
     - CI_PLATFORM='travis_ci'
     - ABSOLUTE_URL='http://127.0.0.1:8888'
+    - LANG=en_GB.UTF-8
+    - LC_ALL=en_GB.UTF-8
 
 install:
   - cp .env.local.test .env.local
