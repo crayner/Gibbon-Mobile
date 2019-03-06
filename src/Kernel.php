@@ -47,7 +47,7 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
 
-        if (!realpath($confDir . '/packages/gibbon_mobile.yaml'))
+        if (!realpath($confDir . '/packages/gibbon_responsive.yaml'))
             $this->temporaryParameters($container);
     }
 
@@ -66,7 +66,7 @@ class Kernel extends BaseKernel
      */
     private function temporaryParameters(ContainerBuilder $container)
     {
-        $container->setParameter('session_name', 'gibbon_mobile');
+        $container->setParameter('session_name', 'gibbon_responsive');
         $container->setParameter('locale', 'en_GB');
         $container->setParameter('db_driver', 'pdo_mysql');
         $container->setParameter('db_host', '127.0.0.1');

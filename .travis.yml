@@ -29,7 +29,6 @@ env:
 
 install:
   - cp .env.local.test .env.local
-  - cp config/packages/gibbon_mobile.yaml.travis config/packages/gibbon_mobile.yaml
   - travis_retry composer self-update
   - travis_retry composer install --prefer-dist --no-interaction
 

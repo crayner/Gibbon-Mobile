@@ -241,7 +241,7 @@ class InstallationManager
      */
     public function getFile(): string
     {
-        return $this->file = $this->file ?: $this->getKernel()->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_mobile.yaml';
+        return $this->file = $this->file ?: $this->getKernel()->getProjectDir(). DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'gibbon_responsive.yaml';
     }
 
     /**
@@ -254,8 +254,8 @@ class InstallationManager
         $sourceDir = realpath($this->getGibbonDocumentRoot());
 
         if (!is_dir($sourceDir)) {
-            $this->logger->error(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_mobile.yaml"' , $this->getGibbonDocumentRoot()));
-            throw new \InvalidArgumentException(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_mobile.yaml"' , $this->getGibbonDocumentRoot()));
+            $this->logger->error(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_responsive.yaml"' , $this->getGibbonDocumentRoot()));
+            throw new \InvalidArgumentException(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_responsive.yaml"' , $this->getGibbonDocumentRoot()));
         }
         $sourceDir = rtrim($sourceDir, "\\/") . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR;
         if (!is_dir($sourceDir)) {

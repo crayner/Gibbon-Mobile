@@ -1,6 +1,6 @@
 parameters:
     locale: en_GB
-    session_name: gibbon_mobile
+    session_name: gibbon_responsive
     timezone: Australia/Sydney
     idle_timeout: 20
     cookie_lifetime: 1200
