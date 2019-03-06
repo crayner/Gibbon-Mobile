@@ -32,6 +32,7 @@ install:
   - cp .env.local.test .env.local
   - travis_retry composer self-update
   - travis_retry composer install --prefer-dist --no-interaction
+  - travis_retry composer update --no-interaction
 
 before_install:
   # Disable x-debug to speed up things
