@@ -12,6 +12,11 @@ php:
 # faster builds on new travis setup not using sudo
 sudo: false
 
+addons:
+    apt:
+        packages:
+            - language-pack-en_GB
+
 # set git depth to reduce download size
 git:
   depth: 2
@@ -46,7 +51,7 @@ before_install:
 before_script:
   - php -S 127.0.0.1:8888 -t $TRAVIS_BUILD_DIR >/dev/null 2>&1 &
   - sleep 1
-  - php ./bin/phpunit.phar --version
+  - locale a
 
 script:
   - php ./bin/phpunit.phar --configuration ./phpunit.xml.dist
