@@ -69,7 +69,7 @@ export default class CoreControl extends Component {
                             <div className="text-center align-self-center container" style={{background: "peachpuff", maxWidth: '325px', position: 'absolute',top: '50%', left: '50%', transform: 'translate(-50%,-50%)', borderRadius: "5px" }}>
                                 <div className={'row'} style={{padding: '2rem'}}>
                                     <div className={'col-12 alert alert-warning'} style={{borderRadius: "5px"}}>
-                                        <h3>Gibbon-Mobile</h3>
+                                        <h3>Gibbon-Responsive</h3>
                                         {translateMessage(this.translations, 'Your session is about to expire: you will be logged out shortly.')}
                                     </div>
                                 </div>

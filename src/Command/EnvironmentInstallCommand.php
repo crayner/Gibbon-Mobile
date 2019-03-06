@@ -19,7 +19,7 @@
  * along with this program in the LICENCE file.
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Gibbon-Mobile
+ * Gibbon-Responsive
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
@@ -181,7 +181,7 @@ class EnvironmentInstallCommand extends Command
             $content['gibbon_document_root'] = $gibbonRoot;
 
             $this->getInstallationManager()->setMobileParameters($content);
-            $io->success('Database settings have been transferred from Gibbon to the Gibbon-Mobile framework.');
+            $io->success('Database settings have been transferred from Gibbon to the Gibbon-Responsive framework.');
         }
 
         //Create .htaccess File in public

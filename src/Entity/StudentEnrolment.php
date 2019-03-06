@@ -2,7 +2,7 @@
 /**
  * Created by PhpStorm.
  *
- * Gibbon-Mobile
+ * Gibbon-Responsive
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig

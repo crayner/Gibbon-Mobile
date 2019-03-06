@@ -19,7 +19,7 @@
  * along with this program in the LICENCE file.
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Gibbon-Mobile
+ * Gibbon-Responsive
  *
  * (c) 20 Craig Rayner <craig@craigrayner.com>
  *

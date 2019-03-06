@@ -1,5 +1,5 @@
 {
-    "name": "crayner/gibbon-mobile",
+    "name": "crayner/Gibbon-Responsive",
     "type": "project",
     "license": "proprietary",
     "require": {
@@ -7,6 +7,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "doctrine/doctrine-migrations-bundle": "^2.0",
         "google/apiclient": "^2.2",
         "hillrange/symfony-form": "^0.3",
         "sensio/framework-extra-bundle": "^5.2",

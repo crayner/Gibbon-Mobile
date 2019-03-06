@@ -19,7 +19,7 @@
  * along with this program in the LICENCE file.
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Gibbon-Mobile
+ * Gibbon-Responsive
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
@@ -216,8 +216,8 @@ class InstallationManager
         $content['setting_last_refresh'] = strtotime('now');
         $content['installation_progress'] = 'settings';
         $this->setMobileParameters($content);
-        $this->getMessageManager()->addMessage('success', 'Additional Environmental settings have been set into the Gibbon-Mobile framework.');
-        $this->logger->info(sprintf('%s: Additional Environmental settings have been set into the Gibbon-Mobile framework.', __CLASS__.':'.__LINE__), $this->content);
+        $this->getMessageManager()->addMessage('success', 'Additional Environmental settings have been set into the Gibbon-Responsive framework.');
+        $this->logger->info(sprintf('%s: Additional Environmental settings have been set into the Gibbon-Responsive framework.', __CLASS__.':'.__LINE__), $this->content);
 
         $file = $this->getKernel()->getProjectDir(). DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'build' ;
 

@@ -19,7 +19,7 @@
  * along with this program in the LICENCE file.
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Gibbon-Mobile
+ * Gibbon-Responsive
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
@@ -67,6 +67,7 @@ class DatabaseCreateCommand extends Command
                     'command' => 'doctrine:database:create',
                     // (optional) define the value of command arguments
                     '--env' => 'test',
+                    '--if-not-exists' => '--if-not-exists',
                 ]
             );
 
@@ -82,9 +83,8 @@ class DatabaseCreateCommand extends Command
 
             $input = new ArrayInput(
                 [
-                    'command' => 'doctrine:schema:create',
-                    // (optional) define the value of command arguments
-                    '--env' => 'test',
+                    'command' => 'doctrine:migrations:migrate',
+                    '--no-interaction' => '--no-interaction',
                 ]
             );
 

@@ -19,7 +19,7 @@
  * along with this program in the LICENCE file.
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Gibbon-Mobile
+ * Gibbon-Responsive
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
@@ -152,7 +152,7 @@ class TranslationInstallCommand extends Command
             ->addOption('relative', null, InputOption::VALUE_NONE, 'Make relative symlinks')
             ->setDescription('Copies the translations from Gibbon, and converts for use by the mobile application.')
             ->setHelp(<<<'EOT'
-The <info>%command.name%</info> command installs translation files from the <comment>i18n</comment> directory in Gibbon to the <comment>translations</comment> directory in the <comment>Gibbon-Mobile</comment> application.
+The <info>%command.name%</info> command installs translation files from the <comment>i18n</comment> directory in Gibbon to the <comment>translations</comment> directory in the <comment>Gibbon-Responsive</comment> application.
 
   <info>php %command.full_name%</info>
 
