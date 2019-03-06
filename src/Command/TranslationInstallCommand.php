@@ -114,6 +114,8 @@ class TranslationInstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (isset($_SERVER['APP_TRAVIS_TEST']))
+            return 0;
         $this->installationManager->setKernel($this->getApplication()->getKernel());
 
         $exitCode = $this->installationManager->translations();
