@@ -110,7 +110,7 @@ class EnvironmentInstallCommand extends Command
 
             $file = $this->getInstallationManager()->getFile();
             if (! $fileSystem->exists($file))
-                $fileSystem->copy($file . '.dist', $file, false);
+                $fileSystem->copy($file . '.travis', $file, false);
 
             $content = $this->getInstallationManager()->getMobileParameters();
             $content['db_host'] = '127.0.0.1';
