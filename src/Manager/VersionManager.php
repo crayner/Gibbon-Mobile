@@ -68,6 +68,29 @@ class VersionManager
     private $gibbonVersion;
 
     /**
+     * @var string
+     */
+    private $gibbonVersionStatus = 'Not Checked';
+
+    /**
+     * @return string
+     */
+    public function getGibbonVersionStatus(): string
+    {
+        return $this->gibbonVersionStatus;
+    }
+
+    /**
+     * @param string $gibbonVersionStatus
+     * @return VersionManager
+     */
+    public function setGibbonVersionStatus(string $gibbonVersionStatus): VersionManager
+    {
+        $this->gibbonVersionStatus = $gibbonVersionStatus;
+        return $this;
+    }
+
+    /**
      * checkVersion
      * @return bool
      */
@@ -87,6 +110,7 @@ class VersionManager
         }
         if (!$versionCorrect) {
             $this->getSettingManager()->getMessageManager()->add('danger', 'version.incompatible', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion],'mobile');
+            $this->setGibbonVersionStatus(sprinf('The Mobile software (Version %s) installed is not compatible with the installed version (%s) of Gibbon.', VersionHelper::VERSION, $this->gibbonVersion));
             return false;
         }
 
@@ -99,14 +123,16 @@ class VersionManager
                     $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.expected', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion],'mobile');
                 else
                     $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.not', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion],'mobile');
+                $this->setGibbonVersionStatus('Cutting Edge Setting not correct.');
                 return false;
             }
             if (! in_array($cuttingEdgeLine, VersionHelper::CUTTING_EDGE_CODE_LINE)) {
                 $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.line', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion, '%{line}' => implode(', ', VersionHelper::CUTTING_EDGE_CODE_LINE), '%{gLine}' => $cuttingEdgeLine, '%count%' => count(VersionHelper::CUTTING_EDGE_CODE_LINE)],'mobile');
+                $this->setGibbonVersionStatus('Cutting Edge Line is not correct.');
                 return false;
             }
         }
-
+        $this->setGibbonVersionStatus('No problem found');
         return true;
     }
 

@@ -44,7 +44,7 @@ class CalculatorTest extends WebTestCase
         self::bootKernel();
 
         // returns the real and unchanged service container
-        $container = self::$kernel->getContainer();
+        // $container = self::$kernel->getContainer();
 
         // gets the special container that allows fetching private services
         $container = self::$container;
@@ -52,7 +52,7 @@ class CalculatorTest extends WebTestCase
         $versionManager = $container->get(VersionManager::class);
         $versionManager->setSettingManager($container->get(SettingManager::class));
 
-        $this->assertEquals(true, $versionManager->checkVersion());
+        $this->assertEquals(true, $versionManager->checkVersion(), $versionManager->getGibbonVersionStatus());
 
         $details = $versionManager->getGibbonDetails();
 
