@@ -49,7 +49,7 @@ class HomeControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         $x = 0;
-        while ($client->getResponse()->getStatusCode() === 302 || $x >= 5)
+        while ($client->getResponse()->getStatusCode() === 302 && $x < 5)
         {
             $crawler = $client->followRedirect();
             $x++;
