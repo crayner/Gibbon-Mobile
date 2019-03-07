@@ -5,7 +5,6 @@
 $sql = [];
 $count = 0;
 
-++$count;
 $sql[$count][0] = '18.0.00';
 $sql[$count][1] = "
 DELETE FROM gibbonAction WHERE gibbonModuleID=(SELECT gibbonModuleID FROM gibbonModule WHERE name='Planner') AND name='Staff Likes';end
