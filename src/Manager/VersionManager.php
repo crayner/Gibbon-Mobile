@@ -177,11 +177,8 @@ class VersionManager
             }
         }
 
-        $updates = explode("end", isset($updates) ? $updates : '');
-        $x = 0;
-        foreach($updates as $line)
-            if (! empty($line))
-                $x++;
+        $x = mb_substr_count($updates, ';end');
+
         return intval($x);
     }
 
