@@ -69,7 +69,7 @@ class HomeControllerTest extends WebTestCase
     }
 
     /**
-     * testLoginFail\
+     * testLoginFail
      */
     public function testLoginFail()
     {
