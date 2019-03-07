@@ -30,7 +30,6 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class HomeControllerTest
@@ -56,7 +55,7 @@ class HomeControllerTest extends WebTestCase
     public function testLogin()
     {
         $client = static::createClient();
-
+        $client->followRedirects();
         $crawler = $client->request('GET', '/en_GB/login/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
