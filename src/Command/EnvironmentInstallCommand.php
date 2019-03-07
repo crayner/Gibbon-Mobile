@@ -117,7 +117,7 @@ class EnvironmentInstallCommand extends Command
             $content['db_name'] = 'mobile_test';
             $content['db_user'] = 'root';
             $content['db_pass'] = null;
-            $content['gibbon_document_root'] = realpath(__DIR__.'/../../Gibbon');
+            $content['gibbon_document_root'] = str_replace('\\', '/', realpath(__DIR__.'/../../Gibbon'));
 
             $this->getInstallationManager()->setMobileParameters($content);
             return 0;

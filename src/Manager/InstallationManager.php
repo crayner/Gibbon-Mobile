@@ -251,7 +251,11 @@ class InstallationManager
      */
     public function translations()
     {
-        $sourceDir = realpath($this->getGibbonDocumentRoot());
+        $message = 'Translation Transfer';
+
+        $this->getLogger()->info($message);
+
+        $sourceDir = $this->getGibbonDocumentRoot();
 
         if (!is_dir($sourceDir)) {
             $this->logger->error(sprintf('The source directory "%s" does not exist. Set the "gibbon_document_root" parameter in the "gibbon_responsive.yaml"' , $this->getGibbonDocumentRoot()));
@@ -263,6 +267,10 @@ class InstallationManager
             throw new \InvalidArgumentException(sprintf('The source directory "%s" does not exist.', $sourceDir));
         }
 
+        $this->getLogger()->info($message);
+
+
+
         $this->getFinder()->directories()->in($sourceDir);
 
         $expectedMethod = self::METHOD_RELATIVE_SYMLINK;
@@ -272,8 +280,6 @@ class InstallationManager
         $exitCode = 0;
 
         $targetDir = $this->getKernel()->getProjectDir(). DIRECTORY_SEPARATOR . 'translations' . DIRECTORY_SEPARATOR;
-
-        $message = 'Translation Transfer';
 
         $this->getFilesystem()->mkdir(\dirname($targetDir), 0755);
 
@@ -333,11 +339,11 @@ class InstallationManager
         } else {
             if ($copyUsed) {
                 $this->getMessageManager()->add('info', 'Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.');
-                $this->logger->debug(sprintf('%s: Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.', __CLASS__));
+                $this->logger->info(sprintf('%s: Some translations were installed via copy. If you make changes to these translations in Gibbon you have to run this command again.', __CLASS__));
             }
             $this->getMessageManager()->add('success', ($rows ? 'All translations were successfully installed.' : 'No translations were provided by Gibbon.'));
             $this->logger->info(sprintf($rows ? '%s: All translations were successfully installed.' : '%s: No translations were provided by Gibbon.', __CLASS__));
-            
+
             $this->setParameter('translation_last_refresh', strtotime('now'));
             $this->setParameter('installation_progress', 'complete');
         }
@@ -507,6 +513,7 @@ class InstallationManager
     {
         $content = $this->getMobileParameters();
         $content[$name] = $value;
+        $this->getLogger()->debug(sprintf('The Parameter "%s" was set to "%s"', $name, strval($value)));
         return $this->setMobileParameters($content);
     }
 
