@@ -48,23 +48,22 @@ class HomeControllerTest extends WebTestCase
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
-        /*        $x = 0;
-                while ($client->getResponse()->getStatusCode() === 302 && $x < 5)
-                {
-                    $crawler = $client->followRedirect();
-                    $x++;
-                }
+        $x = 0;
+        while ($client->getResponse()->getStatusCode() === 302 && $x < 5)
+        {
+            $crawler = $client->followRedirect();
+            $x++;
+        }
 
-                $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
-                $this->assertGreaterThan(
-                    0,
-                    $crawler->filter('body div.lead:contains("Login")')->count()
-                );
-                $this->assertGreaterThan(
-                    0,
-                    $crawler->filterXPath('//*[@id="authenticate__username"]')->count(),
-                    'The username form element is missing'
-                );
-        */
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('body div.lead:contains("Login")')->count()
+        );
+        $this->assertGreaterThan(
+            0,
+            $crawler->filterXPath('//*[@id="authenticate__username"]')->count(),
+            'The username form element is missing'
+        );
     }
 }
