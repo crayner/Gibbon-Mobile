@@ -177,11 +177,10 @@ class VersionManager
             }
         }
 
-        $this->setGibbonVersionStatus($updates);
-        $updates = explode("end\r\n", isset($updates) ? $updates : '');
+        $updates = explode("end", isset($updates) ? $updates : '');
         $x = 0;
-        foreach($updates as $update)
-            if (! empty($update))
+        foreach($updates as $line)
+            if (! empty($line))
                 $x++;
         return intval($x);
     }
