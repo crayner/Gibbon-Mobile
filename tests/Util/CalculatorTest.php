@@ -58,6 +58,7 @@ class CalculatorTest extends WebTestCase
 
         // assert that the Gibbon Version is Correct.
         $this->assertEquals('18.0.00', $details['version']);
+        $this->assertEquals(true, $details['cuttingEdge']);
         $this->assertEquals(32, $details['cuttingEdgeLineFound']);
     }
 }
