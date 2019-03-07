@@ -55,10 +55,15 @@ class HomeControllerTest extends WebTestCase
             $x++;
         }
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Login")')->count()
+            $crawler->filter('body div.lead:contains("Login")')->count()
+        );
+        $this->assertGreaterThan(
+            0,
+            $crawler->filterXPath('//*[@id="authenticate__username"]')->count(),
+            'The username form element is missing'
         );
     }
 }
