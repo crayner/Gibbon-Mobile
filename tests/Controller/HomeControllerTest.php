@@ -44,8 +44,21 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/');
+        $crawler = $client->request('GET', '/');
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
+
+        $x = 0;
+        while ($client->getResponse()->getStatusCode() === 302 || $x >= 5)
+        {
+            $crawler = $client->followRedirect();
+            $x++;
+        }
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("Login")')->count()
+        );
     }
 }
