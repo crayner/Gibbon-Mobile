@@ -21,8 +21,9 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="Gibbon Responsive Test Suite">
+            <directory>tests/Util</directory>
+            <directory>tests/Controller</directory>
         </testsuite>
     </testsuites>
 
