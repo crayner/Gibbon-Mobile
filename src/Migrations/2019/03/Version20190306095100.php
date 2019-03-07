@@ -33,13 +33,17 @@ namespace DoctrineMigrations;
 
 use App\Migrations\SqlLoad;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class Version20190306095100
  * @package DoctrineMigrations
  */
-final class Version20190306095100 extends SqlLoad
+final class Version20190306095100 extends SqlLoad implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     public function up(Schema $schema) : void
     {
         $this->getSql('Gibbon-v17.sql');
@@ -50,12 +54,15 @@ final class Version20190306095100 extends SqlLoad
         parent::up($schema);
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql("UPDATE `gibbonSetting` SET `value` = '".strval($cuttingEdge ?: '')."' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCodeLine'");
+        $this->addSql("UPDATE `gibbonSetting` SET `value` = '".$this->container->getParameter('gibbon_document_root')."' WHERE `scope` = 'System' AND `name` = 'absolutePath'");
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = '18.0.00' WHERE `scope` = 'System' AND `name` = 'version'");
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = 'Y' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCode'");
+
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->addSql("UPDATE `gibbonSetting` SET `value` = '".strval($cuttingEdge ?: '')."' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCodeLine'");
     }
 }

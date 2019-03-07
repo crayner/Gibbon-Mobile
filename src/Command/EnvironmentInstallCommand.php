@@ -115,7 +115,6 @@ class EnvironmentInstallCommand extends Command
             $content = $this->getInstallationManager()->getMobileParameters();
             $content['db_host'] = '127.0.0.1';
             $content['db_name'] = 'mobile_test';
-            $content['db_name'] = 'mobile_test';
             $content['db_user'] = 'root';
             $content['db_pass'] = null;
             $content['gibbon_document_root'] = realpath(__DIR__.'/../../Gibbon');
