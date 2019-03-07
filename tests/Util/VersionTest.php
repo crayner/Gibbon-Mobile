@@ -37,7 +37,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * Class CalculatorTest
  * @package App\Tests\Util
  */
-class CalculatorTest extends WebTestCase
+class VersionTest extends WebTestCase
 {
     public function testVersion()
     {
