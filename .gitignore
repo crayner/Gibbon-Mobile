@@ -8,8 +8,8 @@
 
 /.idea/
 *.log
-*.mo
-*.po
+/translations/*.mo
+/translations/*.po
 /public/uploads/
 .htaccess
 
