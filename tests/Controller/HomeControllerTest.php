@@ -67,4 +67,25 @@ class HomeControllerTest extends WebTestCase
             'The username form element is missing'
         );
     }
+
+    /**
+     * testLoginFail\
+     */
+    public function testLoginFail()
+    {
+        $client = static::createClient();
+
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/en_GB/login/');
+
+        $form = $crawler->filter('body button.btn')->form();
+        $form['authenticate[_username]'] = 'craigray';
+        $form['authenticate[_password]'] = 'sry93874ncS';  //wrong password
+        $client->submit($form);
+
+        $this->assertStringContainsString(
+            'Authentication failed because App\Security\LoginFormAuthenticator::checkCredentials() did not return true.',
+            $client->getResponse()->getContent()
+        );
+    }
 }
