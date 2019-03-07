@@ -58,7 +58,8 @@ class HomeControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
         $this->assertGreaterThan(
             0,
-            $crawler->filter('body div.lead:contains("Login")')->count()
+            $crawler->filter('body div.lead:contains("Login")')->count(),
+            'The Login Form was not found.'
         );
         $this->assertGreaterThan(
             0,
