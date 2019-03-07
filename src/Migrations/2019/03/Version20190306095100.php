@@ -42,6 +42,8 @@ final class Version20190306095100 extends SqlLoad
 {
     public function up(Schema $schema) : void
     {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+
         $this->getSql('Gibbon-v17.sql');
         parent::up($schema);
 
@@ -49,13 +51,10 @@ final class Version20190306095100 extends SqlLoad
         $cuttingEdge = count($sql);
         parent::up($schema);
 
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = '".strval($cuttingEdge ?: '')."' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCodeLine'");
 
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = '18.0.00') WHERE `scope` = 'System' AND `name` = 'version'");
 
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = 'Y' WHERE `scope` = \'System\' AND `name` = \'cuttingEdgeCode\'");
     }
 }

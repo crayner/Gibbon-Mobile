@@ -43,7 +43,6 @@ class SqlLoad extends AbstractMigration
     public function up(Schema $schema) : void
     {
         foreach($this->sql as $line) {
-            $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
             $this->addSql($line);
         }
     }
