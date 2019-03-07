@@ -128,7 +128,7 @@ class VersionManager
             }
             if (! in_array($cuttingEdgeLine, VersionHelper::CUTTING_EDGE_CODE_LINE)) {
                 $this->getSettingManager()->getMessageManager()->add('danger', 'version.cutting_edge.line', ['%{version}' => VersionHelper::VERSION, '%{gVersion}' => $this->gibbonVersion, '%{line}' => implode(', ', VersionHelper::CUTTING_EDGE_CODE_LINE), '%{gLine}' => $cuttingEdgeLine, '%count%' => count(VersionHelper::CUTTING_EDGE_CODE_LINE)],'mobile');
-                $this->setGibbonVersionStatus(sprintf('Cutting Edge Line is not correct. Available %s, Must be one of: %s', $cuttingEdgeLine, implode(', ', VersionHelper::CUTTING_EDGE_CODE_LINE)));
+                $this->setGibbonVersionStatus(sprintf('Cutting Edge Line is not correct. Available %s, Must be one of: %s in file %s', $cuttingEdgeLine, implode(', ', VersionHelper::CUTTING_EDGE_CODE_LINE, $this->getSettingManager()->getParameter('gibbon_document_root') . '/CHANGEDB.php')));
                 return false;
             }
         }
