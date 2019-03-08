@@ -2467,25 +2467,33 @@ class Person implements EntityInterface
     }
 
     /**
-     * @var array|null
-     * @ORM\Column(type="simple_array", options={"comment": "Serialised array of custom field values"})
+     * @var string
+     * @ORM\Column(type="text", options={"comment": "Serialised array of custom field values"})
+     * Gibbon does not support NULL for this field.
      */
-    private $fields;
+    private $fields = '';
 
     /**
-     * @return null|array
+     * @return array
      */
-    public function getFields(): ?array
+    public function getFields(): array
     {
-        return $this->fields;
+        if (is_array($this->fields))
+            $this->fields = implode(',', $this->fields);
+        if (empty($this->fields))
+            $this->fields = '';
+
+        return explode(',', $this->fields);
     }
 
     /**
-     * @param null|array $fields
+     * @param string|array $fields
      * @return Person
      */
-    public function setFields(?array $fields): Person
+    public function setFields($fields): Person
     {
+        $fields = is_array($fields) ? implode(',', $fields) : $fields ;
+        $fields = empty($fields) ? '' : $fields ;
         $this->fields = $fields;
         return $this;
     }
