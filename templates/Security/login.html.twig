@@ -20,7 +20,7 @@
                     <div class="col-8 lead">{{ 'Login'|trans }}</div>
                     <div class="col-4 text-right">
                         {% if getSetting('System', 'googleOAuth') is same as('Y') %}
-                            {{ miscButton({class: 'btn btn-success fab fa-google', title: 'Sign in with Google', transDomain: 'messages', windowOpen: {route: path('google_oauth')}, style: {}})|raw }}
+                            {{ miscButton({class: 'btn btn-success fab fa-google', title: 'Sign in with Google', transDomain: 'mobile', windowOpen: {route: path('google_oauth')}, style: {}})|raw }}
                         {% endif %}
                     </div>
                 </div>
