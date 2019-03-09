@@ -53,6 +53,9 @@ final class Version20190306095100 extends SqlLoad implements ContainerAwareInter
         $cuttingEdge = count($sql);
         parent::up($schema);
 
+        $this->getSql('gibbon_demo.sql');
+        parent::up($schema);
+
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = '".$this->container->getParameter('gibbon_document_root')."' WHERE `scope` = 'System' AND `name` = 'absolutePath'");
 
