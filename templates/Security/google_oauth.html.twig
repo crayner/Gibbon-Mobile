@@ -1,0 +1,55 @@
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+
+{% form_theme form
+    '@HillrangeForm/FormTheme/bootstrap.html.twig'
+%}
+
+        {% block titleBar %}
+            <div id="titleBar">
+                <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Responsive')|trans([], 'mobile') }}</h2></div>
+        {% endblock titleBar %}
+
+
+{% block content %}
+    <div id="googleOAuth">
+        {{ form_start(form) }}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 alert-secondary">
+                    <h3>{{ 'Google Integration'|trans }}</h3>
+                    <div class="lead">{{ 'If your school uses Google Apps, you can enable single sign on via Gibbon. This process makes use of OAuth, and allows a user to access Gibbon without a username and password, provided that their listed email address is a Google account to which they have access. For configuration instructions, %1$sclick here%2$s.'|trans({"%1$s": '<a href="https://gibbonedu.org/support/administrators/installing-gibbon/authenticating-with-google-oauth/" target="_blank">', "%2$s": '</a>' })|raw }}</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 card">
+                    <div class="form-group">
+                        <div class="input-group">
+                            {{ form_widget(form.clientSecret) }}
+                            <div class="input-group-append">{{ saveButton({style: {}, title: 'Submit'})|raw }}</div>
+                        </div>
+                        {{ form_label(form.clientSecret) }}
+                        {{ form_errors(form.clientSecret) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 card">
+                    {{ form_row(form.APIKey) }}
+                </div>
+                <div class="col-6 card">
+                    {{ form_row(form.schoolCalendar) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock javascripts %}
+
+
+

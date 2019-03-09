@@ -29,17 +29,25 @@
  */
 namespace App\Controller;
 
+use App\Entity\GoogleOAuth;
 use App\Entity\Person;
+use App\Form\Security\GoogleOAuthType;
 use App\Manager\LoginManager;
 use App\Form\Security\AuthenticateType;
+use App\Manager\MessageManager;
+use App\Provider\SettingProvider;
 use App\Security\SecurityUser;
 use App\Util\EntityHelper;
+use Hillrange\Form\Type\FileType;
 use Hillrange\Form\Util\FormManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Constraints\File;
 
 /**
  * Class SecurityController
@@ -88,5 +96,78 @@ class SecurityController extends AbstractController
     public function logout()
     {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+    }
+
+    /**
+     * loadGoogleOAuth
+     * @Route("/load/google/oauth/", name="load_google_oauth")
+     * @IsGranted("ROLE_SYSTEM_ADMIN")
+     */
+    public function loadGoogleOAuth(Request $request, SettingProvider $settingProvider)
+    {
+        $oauth = new GoogleOAuth();
+        $form = $this->createForm(GoogleOAuthType::class, $oauth);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $content = file_get_contents($oauth->getClientSecret());
+            try {
+                $content = json_decode($content, true);
+            } catch (\Exception $e) {
+                $settingProvider->getMessageManager()->add('danger', 'The Google Client Secret was not valid.', [], 'mobile');
+            }
+            if ($content['web'])
+                $content = $content['web'];
+            if (empty($content['client_id']) || empty($content['project_id']) || empty($content['client_secret']))
+                $settingProvider->getMessageManager()->add('danger', 'The Google Client Secret was not valid.', [], 'mobile');
+            else {
+                $setting = $settingProvider->getSettingByScope('System', 'googleOAuth', true);
+                $setting->setValue('Y');
+                $settingProvider->saveEntity();
+
+                $setting = $settingProvider->getSettingByScope('System', 'googleClientName', true);
+                $setting->setValue($content['project_id']);
+                $settingProvider->saveEntity();
+
+                $setting = $settingProvider->getSettingByScope('System', 'googleClientID', true);
+                $setting->setValue($content['client_id']);
+                $settingProvider->saveEntity();
+
+                $setting = $settingProvider->getSettingByScope('System', 'googleClientSecret', true);
+                $setting->setValue($content['client_secret']);
+                $settingProvider->saveEntity();
+
+                $url = $settingProvider->getParameter('gibbon_host_url');
+                foreach($content['redirect_uris'] as $item)
+                {
+                    if (strpos($item, $url) !== false)
+                    {
+                        $url = $item;
+                        break;
+                    }
+                }
+                $setting = $settingProvider->getSettingByScope('System', 'googleRedirectUri', true);
+                $setting->setValue($url);
+                $settingProvider->saveEntity();
+
+                $setting = $settingProvider->getSettingByScope('System', 'googleDeveloperKey', true);
+                $setting->setValue($oauth->getAPIKey());
+                $settingProvider->saveEntity();
+
+                $setting = $settingProvider->getSettingByScope('System', 'calendarFeed', true);
+                $setting->setValue($oauth->getSchoolCalendar());
+                $settingProvider->saveEntity();
+
+                return $this->redirectToRoute('logout');
+            }
+        }
+
+        return $this->render('Security/google_oauth.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 }

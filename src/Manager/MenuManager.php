@@ -33,6 +33,7 @@ use App\Entity\Menu;
 use App\Entity\MenuItem;
 use App\Provider\PersonProvider;
 use App\Security\SecurityUser;
+use App\Util\UserHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -154,6 +155,7 @@ class MenuManager
     private function getStaffMenu(array $props)
     {
         $this->addHomeItem();
+        $this->addSystemAdminMenu();
         $this->addLogoutItem();
         $props['menu'] = $this->menu->toArray();
 
@@ -174,6 +176,23 @@ class MenuManager
         ;
         $this->menu->addItem($item);
 
+        return $this;
+    }
+
+    /**
+     * addLogoutItem
+     * @return MenuManager
+     */
+    private function addSystemAdminMenu(): MenuManager
+    {
+        if (UserHelper::getCurrentUser()->isSystemAdmin()) {
+            $item = new MenuItem();
+            $item->setEventKey('Admin')
+                ->setIcon(['iconName' => 'tools'])
+                ->setText($this->getTranslator()->trans('Admin'))
+                ->setRoute($this->getRouter()->generate('load_google_oauth'));
+            $this->menu->addItem($item);
+        }
         return $this;
     }
 

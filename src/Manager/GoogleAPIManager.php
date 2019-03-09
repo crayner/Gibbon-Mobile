@@ -29,6 +29,7 @@
  */
 namespace App\Manager;
 
+use App\Provider\SettingProvider;
 use App\Security\GoogleAuthenticator;
 use Symfony\Component\Security\Core\User\UserInterface;
 

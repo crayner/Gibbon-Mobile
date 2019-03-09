@@ -74,6 +74,8 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
 
         $trans = $this->translator->trans($id, $parameters, $domain, $locale) ?: $id;
 
+        $trans = strtr($trans, $parameters);
+
         if (mb_strpos($trans, '|') !== false)
         {
             if ($trans === '|')

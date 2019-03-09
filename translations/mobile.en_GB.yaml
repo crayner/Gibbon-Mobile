@@ -6,7 +6,6 @@ version:
         expected: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software expects Gibbon to be running in Cutting Edge Mode.'
         not: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon. The mobile software does not expect Gibbon to be running in Cutting Edge Mode.'
     incompatible: 'The Mobile software (Version %{version}) installed is not compatible with the installed version (%{gVersion}) of Gibbon.'
-'Gibbon - Mobile': 'Gibbon - Responsive'
 'Gibbon - Responsive': 'Gibbon - Responsive'
 'Stay Connected': Stay Connected
 'All Day Event': All Day Event
@@ -15,3 +14,8 @@ version:
 'Gibbon Responsive does not have a valid version to run for Gibbon Version "%{version}"': 'Gibbon Responsive does not have a valid version to run for Gibbon Version "%{version}"'
 'Close Message': 'Close Message'
 'Gibbon Responsive was not able to get details of the version available.': 'Gibbon Responsive was not able to get details of the version available.'
+'The Google Client Secret was not valid.': 'The Google Client Secret was not valid.'
+'This is a 39 character key that can be created or found at https://console.cloud.google.com/apis/credentials': 'This is a 39 character key that can be created or found at https://console.cloud.google.com/apis/credentials'
+'Google API Key': Google API Key
+'Download the json file for your Web application available on https://console.cloud.google.com/apis/credentials': 'Download the json file for your Web application available on https://console.cloud.google.com/apis/credentials.  Use that file to upload here.'
+'Enable OAuth login via a Google Account.': 'Enable OAuth login via a Google Account.'
