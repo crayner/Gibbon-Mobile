@@ -31,6 +31,7 @@ namespace App\Twig\Extension;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Class CoreTranslationExtension
@@ -57,7 +58,17 @@ class CoreTranslationExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('coreTranslations', array($this, 'getCoreTranslations')),
+            new \Twig_SimpleFunction('coreTranslations', [$this, 'getCoreTranslations']),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters()
+    {
+        return [
+            new TwigFilter('transPlural', [$this->translator, 'transPlural']),
         ];
     }
 

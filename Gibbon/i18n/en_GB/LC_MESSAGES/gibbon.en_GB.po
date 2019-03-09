@@ -1,0 +1,17 @@
+#: modules/User Admin/applicationFormSettings.php:149
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Gibbon\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "One file removed"
+msgid_plural "%count% files removed"
+msgstr[0] "{0}No files removed"
+msgstr[1] "{1}One file removed"
+msgstr[2] "[2,Inf[%count% files removed"
+

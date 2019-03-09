@@ -9,18 +9,14 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Intl\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Loader\MoFileLoader;
-use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Loader\XliffFileLoader;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
+use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface; // Some Symfony Code in 4.2 still requires this interface
 
 class TranslationManager implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, LegacyTranslatorInterface
 {
-      public static $languages = [
+     public static $languages = [
         'nl_NL' => 'Dutch - Nederland',
         'en'    => 'English - United Kingdom',
         'en_GB' => 'English - United Kingdom',
@@ -38,6 +34,11 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
     ];
 
     /**
+     * @var null|string
+     */
+    private $domain;
+
+    /**
      * Translates the given message.
      *
      * @param string      $id         The message id (may also be an object that can be cast to string)
@@ -53,9 +54,56 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
     {
         if (empty($id) || $domain === false)
             return $id;
+
+        $domain = $domain ?: $this->getDomain();
+
+        $options = $parameters;
+        $parameters = [];
+        foreach($options as $name=>$value)
+        {
+            if (mb_substr($name, 0, 1) === '{' || mb_substr($name, -1) === '}') {
+                $parameters[$name] = $value;
+            } else {
+                $parameters['{'.$name.'}'] = $value;
+                if (strval(intval($name)) !== strval($name))
+                    $parameters[$name] = $value;
+            }
+        }
+
         $trans = $this->translator->trans($id, $parameters, $domain, $locale) ?: $id;
 
+        if (mb_strpos($trans, '|') !== false)
+        {
+            if ($trans === '|')
+                $trans = strtr($id, $parameters);
+            else {
+                $trans = explode('|', $trans);
+                if (count($trans) === 2)
+                    $trans = $trans[1];
+                else
+                    throw new \Symfony\Component\Translation\Exception\InvalidArgumentException(sprintf('The translations matrix for "%s" does not know how to manage multiple translations from a PO file. [ %s ]'. $id, implode('|',$trans)));
+            }
+        }
+
         return $this->getInstituteTranslation($trans, $locale);
+    }
+
+    /**
+     * transPlural
+     * Required due to old Gibbon Translation use of getText PO File Structure.
+     * @param $single
+     * @param $plural
+     * @param int $count
+     * @param array $arguments
+     * @param null $domain
+     * @param null $locale
+     * @return string
+     */
+    public function transPlural($single, $plural, int $count = 1, array $arguments = [], $domain = null, $locale = null)
+    {
+        if (intval($count) < 2)
+            return $this->trans($single, $arguments, $domain, $locale);
+        return $this->trans($plural, $arguments, $domain, $locale);
     }
 
     /**
@@ -85,6 +133,16 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
     }
 
     /**
+     * Returns the current locale.
+     *
+     * @return string The locale
+     */
+    public function getLocale()
+    {
+        return $this->translator->getLocale();
+    }
+
+    /**
      * Sets the current locale.
      *
      * @param string $locale The locale
@@ -94,16 +152,6 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
     public function setLocale($locale)
     {
         return $this->translator->setLocale($locale);
-    }
-
-    /**
-     * Returns the current locale.
-     *
-     * @return string The locale
-     */
-    public function getLocale()
-    {
-        return $this->translator->getLocale();
     }
 
     /**
@@ -220,10 +268,12 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
      */
     public function getStrings($refresh = false): ?Collection
     {
-        if (empty($this->strings) && ! $refresh)
-            $this->strings = $this->getSession()->get('stringReplacement', null);
-        else
-            return $this->strings;
+        if (!is_null($this->getSession())) {
+            if (empty($this->strings) && !$refresh)
+                $this->strings = $this->getSession()->get('stringReplacement', null);
+            else
+                return $this->strings;
+        }
 
         if ((empty($this->strings) || $refresh) && $this->stringReplacementManager->isValidEntityManager())
             try {
@@ -234,7 +284,7 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
         else
             return $this->strings = $this->strings instanceof ArrayCollection ? $this->strings : new ArrayCollection();
 
-        $this->getSession()->set('stringReplacement', $this->strings);
+        $this->getSession() ? $this->getSession()->set('stringReplacement', $this->strings) : null;
 
         return $this->strings;
     }
@@ -347,10 +397,41 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
     }
 
     /**
-     * @return SessionInterface
+     * @return ?SessionInterface
      */
-    public function getSession(): SessionInterface
+    public function getSession(): ?SessionInterface
     {
         return $this->settingManager->getSession();
+    }
+
+    /**
+     * getDomain
+     * @return string|null
+     */
+    public function getDomain(): ?string
+    {
+        return $this->domain;
+    }
+
+    /**
+     * setDomain
+     * @param string|null $domain
+     */
+    public function setDomain(?string $domain): TranslationManager
+    {
+        $this->domain = $domain;
+        return $this;
+    }
+
+    /**
+     * addResource
+     * @param $format
+     * @param $resource
+     * @param $locale
+     * @param null $domain
+     */
+    public function addResource($format, $resource, $locale, $domain = null): void
+    {
+        $this->translator->addResource($format, $resource, $locale, $domain);
     }
 }
