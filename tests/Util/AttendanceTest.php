@@ -106,8 +106,8 @@ class AttendanceTest extends WebTestCase
         $this->manager->setCurrentDate($dateTime);
         $this->assertFalse($this->manager->isDateInFuture(), 'Today is not in the future ' . $dateTime->format('Y-m-d'));
 
-        $this->assertGreaterThan(0, $this->manager->getProvider()->getRepository(TTDayDate::class)->findAll(), 'There are no records in the TT Day Date Table.');
-
+        $this->assertGreaterThan(0, $this->manager->getProvider()->getRepository(TTDayDate::class)->findAllLikeDate(date('Y')), 'There are no records in the TT Day Date Table.');
+echo count($this->manager->getProvider()->getRepository(TTDayDate::class)->findAllLikeDate(date('Y')));
         $x = 0;
         while (! $this->manager->isSchoolOpen() && $x < 100) {
             $dateTime->sub($interval);

@@ -56,13 +56,25 @@ class TTDayDateRepository extends ServiceEntityRepository
      */
     public function isSchoolOpen(\DateTime $date): bool
     {
-        if (intval($this->createQueryBuilder('tdd')
+       return (intval($this->createQueryBuilder('tdd')
                 ->select('COUNT(tdd.id)')
                 ->where('tdd.date LIKE :date')
                 ->setParameter('date', $date->format('Y-m-d').'%')
                 ->getQuery()
-                ->getSingleScalarResult()) > 0)
-            return true;
-        return false;
+                ->getSingleScalarResult()) > 0) ? true : false ;
+    }
+
+    /**
+     * findAllLikeDate
+     * @param string $date
+     * @return mixed
+     */
+    public function findAllLikeDate(string $date)
+    {
+        return $this->createQueryBuilder('tdd')
+            ->where('tdd.date LIKE :date')
+            ->setParameter('date', $date.'%')
+            ->getQuery()
+            ->getResult();
     }
 }

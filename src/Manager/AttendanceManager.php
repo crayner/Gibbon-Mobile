@@ -128,7 +128,7 @@ class AttendanceManager
     {
         $this->currentDate = $currentDate;
         $this->isSchoolOpen();
-        $this->isDateInFuture();
+        $this->isPeriodInFuture();
         return $this;
     }
 
@@ -147,7 +147,8 @@ class AttendanceManager
     public function setTTDayRowClass(?TTDayRowClass $TTDayRowClass): AttendanceManager
     {
         $this->TTDayRowClass = $TTDayRowClass;
-        $this->isAttendanceRequired();
+        $this->setRollGroup(null);
+        $this->isAttendanceRequired(true);
         return $this;
     }
 
@@ -263,9 +264,9 @@ class AttendanceManager
      * isAttendanceRequired
      * @return bool
      */
-    public function isAttendanceRequired(): bool
+    public function isAttendanceRequired(bool $refresh = false): bool
     {
-        if (is_null($this->attendanceRequired)) {
+        if (is_null($this->attendanceRequired) || $refresh) {
             if ($this->getTTDayRowClass()) {
                 $this->attendanceRequired = $this->getTTDayRowClass()->getCourseClass()->getAttendance() === 'Y' ? true : false;
                 if (!$this->attendanceRequired) {
@@ -501,7 +502,8 @@ class AttendanceManager
     public function setRollGroup(RollGroup $rollGroup): AttendanceManager
     {
         $this->rollGroup = $rollGroup;
-        $this->isAttendanceRequired();
+        $this->setTTDayRowClass(null);
+        $this->isAttendanceRequired(true);
         return $this;
     }
 
