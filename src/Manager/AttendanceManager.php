@@ -128,7 +128,7 @@ class AttendanceManager
     {
         $this->currentDate = $currentDate;
         $this->isSchoolOpen();
-        $this->isPeriodInFuture();
+        $this->isDateInFuture();
         return $this;
     }
 
