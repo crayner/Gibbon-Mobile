@@ -3,7 +3,7 @@ namespace App\Security;
 
 use App\Entity\Person;
 use App\Manager\MessageManager;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use App\Provider\PersonProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -42,7 +42,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 	private $messageManager;
 
 	/**
-	 * @var SettingManager
+	 * @var SettingProvider
 	 */
 	private $settingManager;
 
@@ -66,12 +66,12 @@ class GoogleAuthenticator implements AuthenticatorInterface
      * @param EntityManagerInterface $em
      * @param RouterInterface $router
      * @param MessageManager $messageManager
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      * @param LoggerInterface $logger
      * @param SecurityUserProvider $provider
      * @throws \Google_Exception
      */
-	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingManager $settingManager, LoggerInterface $logger, SecurityUserProvider $provider)
+	public function __construct(EntityManagerInterface $em, RouterInterface $router, MessageManager $messageManager, SettingProvider $settingManager, LoggerInterface $logger, SecurityUserProvider $provider)
 	{
 		$this->em = $em;
 		$this->router = $router;
@@ -268,9 +268,9 @@ class GoogleAuthenticator implements AuthenticatorInterface
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }

@@ -30,7 +30,7 @@
 namespace App\Listener;
 
 use App\Manager\FlashBagManager;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use App\Manager\VersionManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -46,7 +46,7 @@ use Symfony\Component\Routing\RouterInterface;
 class VersionListener implements EventSubscriberInterface
 {
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $manager;
 
@@ -63,7 +63,7 @@ class VersionListener implements EventSubscriberInterface
     /**
      * VersionListener constructor.
      */
-    public function __construct(SettingManager $manager, RouterInterface $router, FlashBagManager $flashBagManager)
+    public function __construct(SettingProvider $manager, RouterInterface $router, FlashBagManager $flashBagManager)
     {
         $this->manager = $manager;
         $this->router = $router;
@@ -107,9 +107,9 @@ class VersionListener implements EventSubscriberInterface
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->manager;
     }

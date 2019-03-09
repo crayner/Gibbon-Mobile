@@ -51,31 +51,31 @@ class TimetableController extends AbstractController
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, Request $request, string $date = 'today')
     {
-        if ($this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php']) && $request->getContentType() === 'json') {
+        if ($this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php'])) {
             $date = $manager->manageDateChange($date);
             if ($request->getContentType() !== 'json')
                 return $this->render('Default/dump.html.twig', [
                     'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
                     'redirect' => false,
+                    'authenticated' => true,
                 ]);
             return new JsonResponse([
                 'content' => $manager->render($person, new \DateTime($date, new \DateTimeZone($this->getParameter('timezone')))),
                 'redirect' => false,
             ], 200);
-        } elseif (! $this->isGranted('ROLE_ACTION', ['/modules/Timetable/tt.php']) && $request->getContentType() === 'json')
-        {
+        } elseif ($request->getContentType() === 'json') {
             return new JsonResponse([
                 'content' => [
                     'valid' => 'error',
                 ],
                 'redirect' => true,
             ], 200);
-        }
-        if ($request->getContentType() !== 'json')
+        } elseif ($request->getContentType() !== 'json')
             return $this->render('Default/dump.html.twig', [
                 'content' => [
                     'valid' => 'error',
                 ],
+                'authenticated' => false,
                 'redirect' => true,
             ]);
         return new JsonResponse([

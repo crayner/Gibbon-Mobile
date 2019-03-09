@@ -13,12 +13,12 @@
  * Date: 2/08/2018
  * Time: 12:12
  */
-namespace App\Manager;
+namespace App\Provider;
 
 use App\Entity\StringReplacement;
 use App\Manager\Traits\EntityTrait;
 
-class StringReplacementManager
+class StringReplacementProvider
 {
     use EntityTrait;
 

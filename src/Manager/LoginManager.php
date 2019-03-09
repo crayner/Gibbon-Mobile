@@ -30,6 +30,7 @@
 namespace App\Manager;
 
 use App\Entity\Setting;
+use App\Provider\SettingProvider;
 use App\Util\LocaleHelper;
 
 /**
@@ -39,15 +40,15 @@ use App\Util\LocaleHelper;
 class LoginManager
 {
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $settingManager;
 
     /**
      * LoginManager constructor.
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      */
-    public function __construct(SettingManager $settingManager)
+    public function __construct(SettingProvider $settingManager)
     {
         $this->settingManager = $settingManager;
     }
@@ -95,9 +96,9 @@ class LoginManager
 
     /**
      * getSettingManager
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }

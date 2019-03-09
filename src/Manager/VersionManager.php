@@ -29,6 +29,7 @@
  */
 namespace App\Manager;
 
+use App\Provider\SettingProvider;
 use App\Util\VersionHelper;
 use Symfony\Component\Yaml\Yaml;
 
@@ -40,23 +41,23 @@ class VersionManager
 {
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $settingManager;
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }
 
     /**
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      * @return VersionManager
      */
-    public function setSettingManager(SettingManager $settingManager): VersionManager
+    public function setSettingManager(SettingProvider $settingManager): VersionManager
     {
         $this->settingManager = $settingManager;
         return $this;

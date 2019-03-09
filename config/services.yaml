@@ -49,10 +49,8 @@ services:
         class: App\Manager\TranslationManager
         decorates: 'translator'
         arguments:
-            - '@app.manager.translation_manager.inner'
-            - '@App\Manager\StringReplacementManager'
-            - '@App\Manager\SettingManager'
-            - '@monolog.logger.translation'
+            $translator: '@app.manager.translation_manager.inner'
+            $logger: '@monolog.logger.translation'
         public: false
 
     App\Listener\MailerLoggerListener:

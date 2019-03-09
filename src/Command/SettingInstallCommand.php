@@ -31,7 +31,7 @@ namespace App\Command;
 
 use App\Entity\I18n;
 use App\Manager\InstallationManager;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,7 +50,7 @@ class SettingInstallCommand extends Command
     protected static $defaultName = 'gibbon:setting:install';
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $manager;
 
@@ -66,9 +66,9 @@ class SettingInstallCommand extends Command
 
     /**
      * SettingInstallCommand constructor.
-     * @param SettingManager $manager
+     * @param SettingProvider $manager
      */
-    public function __construct(SettingManager $manager, InstallationManager $installationManager)
+    public function __construct(SettingProvider $manager, InstallationManager $installationManager)
     {
         parent::__construct();
 
@@ -80,9 +80,9 @@ class SettingInstallCommand extends Command
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->manager;
     }

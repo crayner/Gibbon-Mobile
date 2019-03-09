@@ -33,7 +33,7 @@ use App\Entity\LibraryItem;
 use App\Entity\Person;
 use App\Entity\Space;
 use App\Entity\TTSpaceBooking;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node\Stmt\Else_;

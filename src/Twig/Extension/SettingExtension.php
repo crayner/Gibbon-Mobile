@@ -29,7 +29,7 @@
  */
 namespace App\Twig\Extension;
 
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use App\Util\VersionHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\AbstractExtension;
@@ -41,15 +41,15 @@ use Twig\Extension\AbstractExtension;
 class SettingExtension extends AbstractExtension
 {
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $manager;
 
     /**
      * SettingExtension constructor.
-     * @param SettingManager $manager
+     * @param SettingProvider $manager
      */
-    public function __construct(SettingManager $manager)
+    public function __construct(SettingProvider $manager)
     {
         $this->manager = $manager;
     }

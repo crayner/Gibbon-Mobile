@@ -39,7 +39,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class GoogleAPIManager
 {
     /**
-     * @var SettingManager 
+     * @var SettingProvider
      */
     private $settingManager;
 
@@ -178,9 +178,9 @@ class GoogleAPIManager
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }

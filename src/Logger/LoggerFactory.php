@@ -30,7 +30,7 @@
 
 namespace App\Logger;
 
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Monolog\Logger;
@@ -83,10 +83,10 @@ class LoggerFactory implements ContainerAwareInterface
     /**
      * LoggerFactory constructor.
      * @param ContainerInterface $container
-     * @param SettingManager $settingGateway
+     * @param SettingProvider $settingGateway
      * @throws \Exception
      */
-    public function __construct(ContainerInterface $container, SettingManager $settingGateway)
+    public function __construct(ContainerInterface $container, SettingProvider $settingGateway)
     {
         $this->setContainer($container);
         try {

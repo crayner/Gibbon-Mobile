@@ -30,7 +30,7 @@
 
 namespace App\Twig\Extension;
 
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use App\Provider\I18nProvider;
 use App\Provider\UsernameFormatProvider;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -43,7 +43,7 @@ use Twig\Extension\AbstractExtension;
 class FormatExtension extends AbstractExtension
 {
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $manager;
 
@@ -64,10 +64,10 @@ class FormatExtension extends AbstractExtension
 
     /**
      * FormatExtension constructor.
-     * @param SettingManager $manager
+     * @param SettingProvider $manager
      * @param UsernameFormatProvider $formatProvider
      */
-    public function __construct(SettingManager $manager, UsernameFormatProvider $formatProvider, I18nProvider $i18nProvider)
+    public function __construct(SettingProvider $manager, UsernameFormatProvider $formatProvider, I18nProvider $i18nProvider)
     {
         $this->manager = $manager;
         $this->formatProvider =  $formatProvider;

@@ -29,7 +29,7 @@
  */
 namespace App\Tests\Util;
 
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use App\Manager\VersionManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -50,7 +50,7 @@ class VersionTest extends WebTestCase
         $container = self::$container;
 
         $versionManager = $container->get(VersionManager::class);
-        $versionManager->setSettingManager($container->get(SettingManager::class));
+        $versionManager->setSettingManager($container->get(SettingProvider::class));
 
         $this->assertEquals(true, $versionManager->checkVersion(), $versionManager->getGibbonVersionStatus());
 

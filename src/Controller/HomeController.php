@@ -32,9 +32,8 @@
  */
 namespace App\Controller;
 
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use App\Manager\StaffDashboardManager;
-use App\Manager\TranslationManager;
 use App\Manager\VersionManager;
 use App\Util\UserHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -70,11 +69,13 @@ class HomeController extends AbstractController
     /**
      * versionWarning
      * @param VersionManager $manager
+     * @param SettingProvider $settingManager
+     * @param TranslatorInterface $translator
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      * @Route("/version/warning/", name="_version_warning")
      */
-    public function versionWarning(VersionManager $manager, SettingManager $settingManager, TranslatorInterface $translator)
+    public function versionWarning(VersionManager $manager, SettingProvider $settingManager, TranslatorInterface $translator)
     {
         $manager->setSettingManager($settingManager);
         $manager->loadVersionInformation();

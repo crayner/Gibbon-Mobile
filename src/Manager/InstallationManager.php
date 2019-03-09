@@ -31,6 +31,7 @@ namespace App\Manager;
 
 use App\Command\EnvironmentInstallCommand;
 use App\Entity\I18n;
+use App\Provider\SettingProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -98,25 +99,25 @@ class InstallationManager
     }
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $settingManager;
 
     /**
      * getSettingManager
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }
 
     /**
      * setSettingManager
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      * @return InstallationManager
      */
-    public function setSettingManager(SettingManager $settingManager): InstallationManager
+    public function setSettingManager(SettingProvider $settingManager): InstallationManager
     {
         $this->settingManager = $settingManager;
         return $this;
@@ -124,7 +125,7 @@ class InstallationManager
 
     /**
      * getSettingManager
-     * @return SettingManager
+     * @return SettingProvider
      */
     public function getMessageManager(): MessageManager
     {
@@ -630,7 +631,7 @@ class InstallationManager
      */
     public function getMobileParameter(string $name, $default = null)
     {
-        if ($this->settingManager instanceof SettingManager)
+        if ($this->settingManager instanceof SettingProvider)
             return $this->getSettingManager()->getParameter($name, $default);
         $content = $this->getMobileParameters();
         if (isset($content[$name]))
@@ -643,7 +644,7 @@ class InstallationManager
      */
     public function clearCache(): void
     {
-        if ($this->settingManager instanceof SettingManager)
+        if ($this->settingManager instanceof SettingProvider)
             $cacheDir = $this->getSettingManager()->getContainer()->get('kernel')->getCacheDir();
         else
             $cacheDir = '../../var/cache/';

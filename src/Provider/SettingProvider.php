@@ -27,9 +27,10 @@
  * Date: 23/11/2018
  * Time: 15:27
  */
-namespace App\Manager;
+namespace App\Provider;
 
 use App\Entity\Setting;
+use App\Manager\MessageManager;
 use App\Manager\Traits\EntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -38,10 +39,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Class SettingManager
+ * Class SettingProvider
  * @package App\Manager
  */
-class SettingManager implements ContainerAwareInterface
+class SettingProvider implements ContainerAwareInterface
 {
     use EntityTrait;
 
@@ -61,7 +62,7 @@ class SettingManager implements ContainerAwareInterface
     private $settings;
 
     /**
-     * SettingManager constructor.
+     * SettingProvider constructor.
      * this will overwrite the trait constructor, so it MUST implement the same functions as the trait.
      * @param ContainerInterface $container
      * @param MessageManager $messageManager
@@ -119,9 +120,9 @@ class SettingManager implements ContainerAwareInterface
      * setContainer
      *
      * @param ContainerInterface|null $container
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function setContainer(?ContainerInterface $container = null): SettingManager
+    public function setContainer(?ContainerInterface $container = null): SettingProvider
     {
         $this->container = $container;
         return $this;
@@ -254,10 +255,10 @@ class SettingManager implements ContainerAwareInterface
      * createSetting
      * @param Setting $setting
      * @param bool $overwrite
-     * @return SettingManager
+     * @return SettingProvider
      * @throws \Exception
      */
-    public function createSetting(Setting $setting, bool $overwrite = false): SettingManager
+    public function createSetting(Setting $setting, bool $overwrite = false): SettingProvider
     {
         $exists = $this->getSettingByScope($setting->getScope(), $setting->getName());
         if ($exists instanceof Setting)

@@ -30,7 +30,7 @@
 namespace App\Listener;
 
 use App\Manager\InstallationManager;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -47,7 +47,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class SettingListener implements EventSubscriberInterface
 {
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $manager;
 
@@ -74,9 +74,9 @@ class SettingListener implements EventSubscriberInterface
     /**
      * SettingListener constructor.
      * @param InstallationManager $installationManager
-     * @param SettingManager|null $manager
+     * @param SettingProvider|null $manager
      */
-    public function __construct(InstallationManager $installationManager, ?SettingManager $manager = null)
+    public function __construct(InstallationManager $installationManager, ?SettingProvider $manager = null)
     {
         $this->manager = $manager;
         $this->container = $manager->getContainer();
@@ -109,7 +109,7 @@ class SettingListener implements EventSubscriberInterface
      */
     public function saveSettingCache()
     {
-        if ($this->manager instanceof SettingManager)
+        if ($this->manager instanceof SettingProvider)
             $this->manager->saveSettingCache();
     }
 
@@ -126,7 +126,7 @@ class SettingListener implements EventSubscriberInterface
         if (empty($lastSettingRefresh = $this->getInstallationManager()->getMobileParameter('setting_last_refresh', null)))
             return;
 
-        if ($this->manager instanceof SettingManager) {
+        if ($this->manager instanceof SettingProvider) {
             $this->manager->saveSettingCache();
             $clearCache = false;
             if ($lastTranslationRefresh !== null && $lastTranslationRefresh < strtotime('-'.$this->manager->getParameter('translation_refresh', 90).' Days')) {

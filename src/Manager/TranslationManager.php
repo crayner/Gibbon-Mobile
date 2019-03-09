@@ -2,6 +2,8 @@
 namespace App\Manager;
 
 use App\Entity\StringReplacement;
+use App\Provider\SettingProvider;
+use App\Provider\StringReplacementProvider;
 use App\Repository\StringReplacementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -221,12 +223,12 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
     private $translateRepository;
 
     /**
-     * @var StringReplacementManager
+     * @var StringReplacementProvider
      */
     private $stringReplacementManager;
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $settingManager;
 
@@ -239,12 +241,12 @@ class TranslationManager implements TranslatorInterface, TranslatorBagInterface,
      * TranslationManager constructor.
      *
      * @param TranslatorInterface $translator
-     * @param StringReplacementManager $manager
-     * @param SettingManager $settingManager
+     * @param StringReplacementProvider $manager
+     * @param SettingProvider $settingManager
      * @param LoggerInterface $logger
      * @throws \Exception
      */
-    public function __construct(TranslatorInterface $translator, StringReplacementManager $manager, SettingManager $settingManager, LoggerInterface $logger)
+    public function __construct(TranslatorInterface $translator, StringReplacementProvider $manager, SettingProvider $settingManager, LoggerInterface $logger)
     {
         $this->settingManager = $settingManager;
         $this->translateRepository = $manager->getRepository();

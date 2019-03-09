@@ -31,6 +31,7 @@ namespace App\Manager;
 
 use App\Entity\SchoolYear;
 use App\Entity\User;
+use App\Provider\SettingProvider;
 use App\Util\SchoolYearHelper;
 use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -85,7 +86,7 @@ abstract class DashboardManager implements DashboardInterface
     private $stack;
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $settingManager;
 
@@ -98,12 +99,12 @@ abstract class DashboardManager implements DashboardInterface
      * @param ContainerInterface $container
      * @param TranslatorInterface $translator
      * @param RequestStack $stack
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      */
     public function __construct(EntityManagerInterface $entityManager, MessageManager $messageManager,
                                 AuthorizationCheckerInterface $authorizationChecker,
                                 RouterInterface $router, ContainerInterface $container, TranslatorInterface $translator,
-                                RequestStack $stack, SettingManager $settingManager)
+                                RequestStack $stack, SettingProvider $settingManager)
     {
         $this->entityManager = $entityManager;
         $this->messageManager = $messageManager;
@@ -255,9 +256,9 @@ abstract class DashboardManager implements DashboardInterface
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }

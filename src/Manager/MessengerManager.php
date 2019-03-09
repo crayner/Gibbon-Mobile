@@ -38,6 +38,7 @@ use App\Entity\Messenger;
 use App\Entity\Role;
 use App\Entity\RollGroup;
 use App\Provider\MessengerProvider;
+use App\Provider\SettingProvider;
 use App\Util\EntityHelper;
 use App\Util\UserHelper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -67,7 +68,7 @@ class MessengerManager
      * MessengerManager constructor.
      * @param MessengerProvider $provider
      */
-    public function __construct(MessengerProvider $provider, SettingManager $settingManager, RequestStack $stack)
+    public function __construct(MessengerProvider $provider, SettingProvider $settingManager, RequestStack $stack)
     {
         $this->provider = $provider;
         $this->setTimezone($settingManager->getSettingByScopeAsString('System', 'timezone'));

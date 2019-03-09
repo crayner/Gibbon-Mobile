@@ -30,7 +30,7 @@
 namespace App\Command;
 
 use App\Manager\InstallationManager;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,7 +63,7 @@ class TranslationInstallCommand extends Command
     private $finder;
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $manager;
 
@@ -82,7 +82,7 @@ class TranslationInstallCommand extends Command
      * @param Finder $finder
      * @param string $gibbonDocumentRoot
      */
-    public function __construct(SettingManager $manager)
+    public function __construct(SettingProvider $manager)
     {
         parent::__construct();
 
@@ -98,9 +98,9 @@ class TranslationInstallCommand extends Command
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->manager;
     }

@@ -38,6 +38,7 @@ use App\Entity\TimetableEvent;
 use App\Entity\TTColumnRow;
 use App\Entity\TTDay;
 use App\Entity\TTSpaceBooking;
+use App\Provider\SettingProvider;
 use App\Provider\TimetableProvider;
 use App\Security\GoogleAuthenticator;
 use App\Util\SchoolYearHelper;
@@ -169,7 +170,7 @@ class TimetableRenderManager
     private $timetableProvider;
 
     /**
-     * @var SettingManager
+     * @var SettingProvider
      */
     private $settingManager;
 
@@ -273,9 +274,9 @@ class TimetableRenderManager
     }
 
     /**
-     * @return SettingManager
+     * @return SettingProvider
      */
-    public function getSettingManager(): SettingManager
+    public function getSettingManager(): SettingProvider
     {
         return $this->settingManager;
     }

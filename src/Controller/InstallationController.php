@@ -31,7 +31,7 @@ namespace App\Controller;
 
 use App\Logger\LoggerFactory;
 use App\Manager\InstallationManager;
-use App\Manager\SettingManager;
+use App\Provider\SettingProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +49,7 @@ class InstallationController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/install/first-step/", name="install_first_step")
      */
-    public function createParameters(InstallationManager $manager, KernelInterface $kernel, SettingManager $settingManager, LoggerFactory $loggerFactory)
+    public function createParameters(InstallationManager $manager, KernelInterface $kernel, SettingProvider $settingManager, LoggerFactory $loggerFactory)
     {
         $manager->setKernel($kernel)
             ->setSettingManager($settingManager)
@@ -67,12 +67,12 @@ class InstallationController extends AbstractController
      * createSettings
      * @param InstallationManager $manager
      * @param KernelInterface $kernel
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      * @param LoggerFactory $loggerFactory
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/install/second-step/", name="install_second_step")
      */
-    public function createSettings(InstallationManager $manager, KernelInterface $kernel, SettingManager $settingManager, LoggerFactory $loggerFactory)
+    public function createSettings(InstallationManager $manager, KernelInterface $kernel, SettingProvider $settingManager, LoggerFactory $loggerFactory)
     {
         $manager->setKernel($kernel)
             ->setSettingManager($settingManager)
@@ -90,12 +90,12 @@ class InstallationController extends AbstractController
      * createTranslation
      * @param InstallationManager $manager
      * @param KernelInterface $kernel
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      * @param LoggerFactory $loggerFactory
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/install/third-step/", name="install_third_step")
      */
-    public function createTranslation(InstallationManager $manager, KernelInterface $kernel, SettingManager $settingManager, LoggerFactory $loggerFactory)
+    public function createTranslation(InstallationManager $manager, KernelInterface $kernel, SettingProvider $settingManager, LoggerFactory $loggerFactory)
     {
         $manager->setKernel($kernel)
             ->setSettingManager($settingManager)

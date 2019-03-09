@@ -32,6 +32,7 @@ namespace App\Manager;
 use App\Entity\Notification;
 use App\Manager\Objects\Notifications;
 use App\Provider\NotificationProvider;
+use App\Provider\SettingProvider;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -87,10 +88,10 @@ class NotificationManager
      * NotificationManager constructor.
      * @param RequestStack $stack
      * @param NotificationProvider $provider
-     * @param SettingManager $settingManager
+     * @param SettingProvider $settingManager
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    public function __construct(RequestStack $stack, NotificationProvider $provider, SettingManager $settingManager)
+    public function __construct(RequestStack $stack, NotificationProvider $provider, SettingProvider $settingManager)
     {
         $this->stack = $stack;
         $this->provider = $provider;

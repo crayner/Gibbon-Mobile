@@ -38,6 +38,7 @@ use App\Entity\Person;
 use App\Entity\RollGroup;
 use App\Entity\TTDayRowClass;
 use App\Provider\AttendanceCodeProvider;
+use App\Provider\SettingProvider;
 use App\Util\TimetableHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -93,7 +94,7 @@ class AttendanceManager
     /**
      * AttendanceManager constructor.
      */
-    public function __construct(AttendanceCodeProvider $attendanceCodeProvider, SettingManager $settingManager)
+    public function __construct(AttendanceCodeProvider $attendanceCodeProvider, SettingProvider $settingManager)
     {
         $this->attendanceTypes = $attendanceCodeProvider->findActive(true);
 
