@@ -105,7 +105,7 @@ class AttendanceTest extends WebTestCase
         $tomorrow->add($interval);
         $this->manager->setCurrentDate($dateTime);
         $this->assertFalse($this->manager->isDateInFuture(), 'Today is not in the future ' . $dateTime->format('Y-m-d'));
-
+/*
         while (! $this->manager->isSchoolOpen()) {
             $dateTime->sub($interval);
             $this->manager->setCurrentDate($dateTime);
@@ -127,7 +127,7 @@ class AttendanceTest extends WebTestCase
 
         $this->assertGreaterThan(0, $this->manager->getStudents()->count(), 'Number of students in the class');
         $this->manager->setCurrentDate($tomorrow);
-        $this->assertTrue($this->manager->isDateInFuture(), 'Tomorrow is in the future ' . $tomorrow->format('Y-m-d'));
+        $this->assertTrue($this->manager->isDateInFuture(), 'Tomorrow is in the future ' . $tomorrow->format('Y-m-d')); */
     }
 
     /**
