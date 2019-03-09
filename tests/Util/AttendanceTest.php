@@ -105,13 +105,13 @@ class AttendanceTest extends WebTestCase
         $tomorrow->add($interval);
         $this->manager->setCurrentDate($dateTime);
         $this->assertFalse($this->manager->isDateInFuture(), 'Today is not in the future ' . $dateTime->format('Y-m-d'));
-/*
+
         while (! $this->manager->isSchoolOpen()) {
             $dateTime->sub($interval);
             $this->manager->setCurrentDate($dateTime);
         }
         $this->assertTrue($this->manager->isSchoolOpen(), 'The school should be Open on '.$dateTime->format('Y-m-d'));
-
+/*
         $currentYear = SchoolYearHelper::getCurrentSchoolYear();
 
         $ttDayDate = $this->manager->getProvider()->getRepository(TTDayDate::class)->findBy(['date' => $dateTime]);
