@@ -220,7 +220,7 @@ trait EntityTrait
     public function getTransDomain(): string
     {
         if(empty($this->transDomain))
-            return 'System';
+            return 'messages';
         return $this->transDomain;
     }
 

@@ -30,7 +30,6 @@
 namespace App\Tests\Util;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Finder\Finder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -119,7 +118,6 @@ class TranslationTest extends KernelTestCase
             'Translated string with named string replacement'
         );
 
-
         $this->translator->setLocale('en_GB');
 
         $this->assertEquals(
@@ -156,7 +154,7 @@ class TranslationTest extends KernelTestCase
             $this->translator->transPlural('I have an orange', 'I have {num} oranges', 1, [
                 'num' => 1,
             ]),
-            'Untranslated plural string with string placeholder, with n=1'
+            'Untranslated plural string with string placeholder, with n=1, duplicating Gibbon Methods.'
         );
 
         $this->assertEquals(
@@ -165,7 +163,7 @@ class TranslationTest extends KernelTestCase
             $this->translator->transPlural('I have an orange', 'I have {num} oranges', 3, [
                 'num' => 3,
             ]),
-            'Untranslated plural string with string placeholder, with n=3'
+            'Untranslated plural string with string placeholder, with n=3, duplicating Gibbon Methods.'
         );
 
         $this->assertEquals(
@@ -174,7 +172,7 @@ class TranslationTest extends KernelTestCase
             $this->translator->transPlural('I have an apple', 'I have {num} apples', 1, [
                 'num' => 1,
             ]),
-            'Translated plural string with string placeholder, with n=1'
+            'Translated plural string with string placeholder, with n=1, duplicating Gibbon Methods.'
         );
 
         $this->assertEquals(
@@ -183,7 +181,7 @@ class TranslationTest extends KernelTestCase
             $this->translator->transPlural('I have an apple', 'I have {num} apples', 3, [
                 'num' => 3,
             ]),
-            'Translated plural string with string placeholder, with n=3'
+            'Translated plural string with string placeholder, with n=3, duplicating Gibbon Methods.'
         );
     }
 

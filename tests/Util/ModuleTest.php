@@ -50,7 +50,7 @@ class ModuleTest extends KernelTestCase
     {
         $kernel = self::bootKernel();
 
-        $this->entityManager = $kernel->getContainer()
+        $this->entityManager = self::$container
             ->get('doctrine')
             ->getManager();
     }
