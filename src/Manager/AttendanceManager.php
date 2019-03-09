@@ -92,19 +92,24 @@ class AttendanceManager
     private $provider;
 
     /**
+     * @var SettingProvider 
+     */
+    private $settingProvider;
+
+    /**
      * AttendanceManager constructor.
      */
-    public function __construct(AttendanceCodeProvider $attendanceCodeProvider, SettingProvider $settingManager)
+    public function __construct(AttendanceCodeProvider $attendanceCodeProvider, SettingProvider $provider)
     {
         $this->attendanceTypes = $attendanceCodeProvider->findActive(true);
 
         $this->provider = $attendanceCodeProvider;
         // Get attendance reasons
-        $this->genericReasons = $settingManager->getSettingByScopeAsArray('Attendance', 'attendanceReasons');
-        $this->medicalReasons = $settingManager->getSettingByScopeAsArray('Attendance', 'attendanceMedicalReasons');
-
+        $this->settingProvider = $provider;
+        $this->genericReasons = $provider->getSettingByScopeAsArray('Attendance', 'attendanceReasons');
+        $this->medicalReasons = $provider->getSettingByScopeAsArray('Attendance', 'attendanceMedicalReasons');
         $this->attendanceReasons = $this->genericReasons ?: [];
-        $this->messageManager = $settingManager->getMessageManager();
+        $this->messageManager = $provider->getMessageManager();
     }
 
     /**
@@ -123,7 +128,7 @@ class AttendanceManager
     {
         $this->currentDate = $currentDate;
         $this->isSchoolOpen();
-        $this->isDateInFuture();
+        $this->isPeriodInFuture();
         return $this;
     }
 
@@ -146,22 +151,46 @@ class AttendanceManager
         return $this;
     }
 
-
+    /**
+     * takeClassAttendance
+     * @param TTDayRowClass $class
+     * @param \DateTime $date
+     */
     public function takeClassAttendance(TTDayRowClass $class, \DateTime $date)
     {
         $this->setTTDayRowClass($class);
         $this->setCurrentDate($date);
     }
 
-    /**
-     * @var bool
-     */
-    private $dateInFuture = true;
 
     /**
      * @var bool
      */
     private $schoolOpen = false;
+
+    /**
+     * isPeriodInFuture
+     * @return bool
+     * @throws \Exception
+     */
+    public function isPeriodInFuture(): bool
+    {
+        $periodTime = clone $this->getCurrentDate();
+        if ($this->getTTDayRowClass()) {
+            $start = $this->getTTDayRowClass()->getTTColumnRow()->getTimeStart();
+            $periodTime->add(new \DateInterval('PT' . $start->format('H\Hi\M')));
+            if ($periodTime->getTimestamp() > strtotime('+5 Minutes')) {
+                $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
+                return true;
+            }
+        } elseif ($this->getRollGroup()) {
+            if ($this->getCurrentDate()->getTimestamp() > strtotime('+5 Minutes')) {
+                $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * isDateInFuture
@@ -170,22 +199,10 @@ class AttendanceManager
      */
     public function isDateInFuture(): bool
     {
-        $periodTime = clone $this->getCurrentDate();
-        if ($this->getTTDayRowClass()) {
-            $start = $this->getTTDayRowClass()->getTTColumnRow()->getTimeStart();
-            $periodTime->add(new \DateInterval('PT' . $start->format('H\Hi\M')));
-            if ($periodTime->getTimestamp() > strtotime('+5 Minutes')) {
-                $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
-                return $this->dateInFuture = true;
-            }
-        } elseif ($this->getRollGroup())
-        {
-            if ($this->getCurrentDate()->getTimestamp() > strtotime('+5 Minutes')) {
-                $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
-                return $this->dateInFuture = true;
-            }
-        }
-        return $this->dateInFuture = false;
+        $today = (new \DateTime('today', new \DateTimeZone($this->settingProvider->getParameter('timezone'))))->format('Y-m-d');
+        if ($this->getCurrentDate()->format('Y-m-d') > $today)
+            return true;
+        return false;
     }
 
     /**
@@ -203,7 +220,7 @@ class AttendanceManager
      */
     public function isSchoolOpen(): bool
     {
-        if (! $this->schoolOpen = TimetableHelper::isSchoolOpen($this->getCurrentDate()) || true) {
+        if (! $this->schoolOpen = TimetableHelper::isSchoolOpen($this->getCurrentDate())) {
             $this->getMessageManager()->add('danger', 'Your request failed because the specified date is in the future, or is not a school day.');
         }
         return $this->schoolOpen;
@@ -271,7 +288,7 @@ class AttendanceManager
      */
     public function __toArray(): array
     {
-        if (! $this->isAttendanceRequired() || ! $this->isSchoolOpen() || $this->isDateInFuture())
+        if (! $this->isAttendanceRequired() || ! $this->isSchoolOpen() || $this->isPeriodInFuture())
             return [];
 
         $result = [];
