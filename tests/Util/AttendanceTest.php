@@ -129,7 +129,7 @@ class AttendanceTest extends WebTestCase
 
         $this->assertGreaterThan(0, $this->manager->getStudents()->count(), 'Number of students in the class');
         $this->manager->setCurrentDate($tomorrow);
-        $this->assertTrue($this->manager->isDateInFuture(), 'Tomorrow is in the future ' . $tomorrow->format('Y-m-d'));
+        $this->assertTrue($this->manager->isDateInFuture(), sprintf('Tomorrow is not in the future %s. Today is %s', $tomorrow->format('DATE_RFC850'), $this->date->format('DATE_RFC850')));
     }
 
     /**
