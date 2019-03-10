@@ -105,7 +105,7 @@ class EnvironmentInstallCommand extends Command
     public function executeCommand(InputInterface $input, OutputInterface $output, KernelInterface $kernel): int
     {
         $fileSystem = new Filesystem();
-        if (isset($_SERVER['APP_TRAVIS_TEST']))
+        if ($_SERVER['APP_ENV'] === 'test')
         {
 
             $file = $this->getInstallationManager()->getFile();
@@ -118,6 +118,7 @@ class EnvironmentInstallCommand extends Command
             $content['db_user'] = 'root';
             $content['db_pass'] = null;
             $content['gibbon_document_root'] = str_replace('\\', '/', realpath(__DIR__.'/../../Gibbon'));
+            $content['gibbon_host_url'] = 'http://127.0.0.1:8888/';
 
             $this->getInstallationManager()->setMobileParameters($content);
             return 0;

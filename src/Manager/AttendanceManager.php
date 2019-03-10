@@ -147,7 +147,7 @@ class AttendanceManager
     public function setTTDayRowClass(?TTDayRowClass $TTDayRowClass): AttendanceManager
     {
         $this->TTDayRowClass = $TTDayRowClass;
-        $this->setRollGroup(null);
+        if (! is_null($TTDayRowClass)) $this->setRollGroup(null);
         $this->isAttendanceRequired(true);
         return $this;
     }
@@ -499,10 +499,10 @@ class AttendanceManager
      * @param RollGroup $rollGroup
      * @return AttendanceManager
      */
-    public function setRollGroup(RollGroup $rollGroup): AttendanceManager
+    public function setRollGroup(?RollGroup $rollGroup): AttendanceManager
     {
         $this->rollGroup = $rollGroup;
-        $this->setTTDayRowClass(null);
+        if (! is_null($rollGroup)) $this->setTTDayRowClass(null);
         $this->isAttendanceRequired(true);
         return $this;
     }

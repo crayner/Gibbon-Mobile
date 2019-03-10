@@ -107,7 +107,7 @@ class AttendanceTest extends WebTestCase
         $this->assertFalse($this->manager->isDateInFuture(), 'Today is not in the future ' . $dateTime->format('Y-m-d'));
 
         $this->assertGreaterThan(0, $this->manager->getProvider()->getRepository(TTDayDate::class)->findAllLikeDate(date('Y')), 'There are no records in the TT Day Date Table.');
-echo count($this->manager->getProvider()->getRepository(TTDayDate::class)->findAllLikeDate(date('Y')));
+
         $x = 0;
         while (! $this->manager->isSchoolOpen() && $x < 100) {
             $dateTime->sub($interval);
@@ -115,7 +115,7 @@ echo count($this->manager->getProvider()->getRepository(TTDayDate::class)->findA
             $x++;
         }
         $this->assertTrue($this->manager->isSchoolOpen(), 'The school should be Open on '.$dateTime->format('Y-m-d'));
-/*
+
         $currentYear = SchoolYearHelper::getCurrentSchoolYear();
 
         $ttDayDate = $this->manager->getProvider()->getRepository(TTDayDate::class)->findBy(['date' => $dateTime]);
@@ -131,7 +131,7 @@ echo count($this->manager->getProvider()->getRepository(TTDayDate::class)->findA
 
         $this->assertGreaterThan(0, $this->manager->getStudents()->count(), 'Number of students in the class');
         $this->manager->setCurrentDate($tomorrow);
-        $this->assertTrue($this->manager->isDateInFuture(), 'Tomorrow is in the future ' . $tomorrow->format('Y-m-d')); */
+        $this->assertTrue($this->manager->isDateInFuture(), 'Tomorrow is in the future ' . $tomorrow->format('Y-m-d'));
     }
 
     /**
