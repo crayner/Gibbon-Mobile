@@ -82,7 +82,7 @@ class SqlLoad extends AbstractMigration
     {
         if (file_exists(__DIR__. '/'. $source))
             $this->handle = fopen(__DIR__. '/'. $source, "r");
-        $this->count =0;
+        $this->count = 0;
     }
 
     /**

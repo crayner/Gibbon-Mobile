@@ -103,6 +103,7 @@ class AttendanceTest extends WebTestCase
         $interval = new \DateInterval('P1D');
         $tomorrow = clone $dateTime;
         $tomorrow->add($interval);
+        $tomorrow->add($interval);
         $this->manager->setCurrentDate($dateTime);
         $this->assertFalse($this->manager->isDateInFuture(), 'Today is not in the future ' . $dateTime->format('Y-m-d'));
 
