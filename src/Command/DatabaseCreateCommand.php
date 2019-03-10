@@ -34,6 +34,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -72,12 +73,11 @@ class DatabaseCreateCommand extends Command
             );
 
             // You can use NullOutput() if you don't need the output
-            $output = new BufferedOutput();
+            $output = new NullOutput();
             $result = $application->run($input, $output);
 
             // return the output, don't use if you used NullOutput()
             if ($result !== 0) {
-                dump($output);
                 return $result;
             }
 
@@ -92,7 +92,6 @@ class DatabaseCreateCommand extends Command
             $output = new BufferedOutput();
             $result = $application->run($input, $output);
 
-            // return the output, don't use if you used NullOutput()
             if ($result !== 0) {
                 dump($output);
                 return $result;

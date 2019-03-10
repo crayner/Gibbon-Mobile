@@ -40,9 +40,24 @@ use Doctrine\Migrations\AbstractMigration;
  */
 class SqlLoad extends AbstractMigration
 {
+    /**
+     * @var file pointer resource|null
+     */
+    private $handle;
+
+    /**
+     * @var integer
+     */
+    private $count;
+
+    /**
+     * up
+     * @param Schema $schema
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function up(Schema $schema) : void
     {
-        foreach($this->sql as $line) {
+        while(($line = $this->getSqlLine()) !== false) {
             $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
             $this->addSql($line);
         }
@@ -52,29 +67,56 @@ class SqlLoad extends AbstractMigration
     {}
 
     /**
-     * @var array|null
+     * getSql
+     * @param string $source
      */
-    private $sql = [];
+    public function getSql(string $source): void
+    {
+        if (file_exists(__DIR__. '/'. $source))
+            $this->handle = fopen(__DIR__. '/'. $source, "r");
+        $this->count =0;
+    }
 
     /**
-     * @return array|null
+     * getSqlLine
+     * @return bool|string
+     * @throws \Exception
      */
-    public function getSql(string $source): ?array
+    private function getSqlLine()
     {
-        $sql = [];
-        if (file_exists(__DIR__. '/'. $source))
-            $sql = file(__DIR__. '/'. $source);
-        $x = 0;
-        foreach($sql as $line)
-        {
-            if (empty($line))
-                continue;
-            if (mb_strpos($line, '--') === 0)
-                continue;
-            $this->sql[$x] = (!empty($this->sql[$x]) ? $this->sql[$x] : '') . $line;
-            if (mb_strpos($line, ';', -1) !== false)
-                $x++;
+        if ($this->handle) {
+            $sql = '';
+            while (($line = fgets($this->handle)) !== false) {
+                $line = trim($line, "\n\r");
+                if (empty($line))
+                    continue;
+                if (mb_strpos($line, '--') === 0)
+                    continue;
+                if (mb_strpos($line, '#') === 0)
+                    continue;
+                $sql .= $line;
+                try {
+                    if (mb_strpos($line, ';', -1) !== false) {
+                        $this->count++;
+                        return $sql;
+                    }
+                } catch (\Exception $e) {
+                    echo $line."\r\n";
+                    echo strlen($line)."\r\n";
+                    throw $e;
+                }
+            }
+            fclose($this->handle);
+            return false;
         }
-        return $this->sql;
+        return false;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return $this->count;
     }
 }

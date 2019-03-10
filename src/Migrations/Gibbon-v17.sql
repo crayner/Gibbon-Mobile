@@ -26,6 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `gibbonAction`
 --
 
+
+
 CREATE TABLE `gibbonAction` (
   `gibbonActionID` int(7) UNSIGNED ZEROFILL NOT NULL,
   `gibbonModuleID` int(4) UNSIGNED ZEROFILL NOT NULL,

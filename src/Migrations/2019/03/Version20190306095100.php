@@ -46,14 +46,17 @@ final class Version20190306095100 extends SqlLoad implements ContainerAwareInter
 
     public function up(Schema $schema) : void
     {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->addSql('ALTER DATABASE `'.$schema->getName().'` CHARACTER SET utf8 COLLATE utf8_unicode_ci;');
+
         $this->getSql('Gibbon-v17.sql');
         parent::up($schema);
 
-        $sql = $this->getSql('CuttingEdge.sql');
-        $cuttingEdge = count($sql);
+        $this->getSql('gibbon_demo.sql');
         parent::up($schema);
 
-        $this->getSql('gibbon_demo.sql');
+        $this->getSql('CuttingEdge.sql');
+        $cuttingEdge = $this->getCount();
         parent::up($schema);
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
