@@ -163,7 +163,6 @@ class AttendanceManager
         $this->setCurrentDate($date);
     }
 
-
     /**
      * @var bool
      */
@@ -200,7 +199,7 @@ class AttendanceManager
      */
     public function isDateInFuture(): bool
     {
-        $today = (new \DateTime('today', new \DateTimeZone($this->settingProvider->getParameter('timezone'))))->format('Y-m-d');
+        $today = (new \DateTime(date('Y-m-d 00:00:00'), new \DateTimeZone($this->settingProvider->getParameter('timezone'))))->format('Y-m-d');
         if ($this->getCurrentDate()->format('Y-m-d') > $today)
             return true;
         return false;

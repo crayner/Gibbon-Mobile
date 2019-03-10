@@ -47,6 +47,9 @@
     "symfony/panther": {
         "version": "v0.2.0"
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.10.0"
+    },
     "symfony/profiler-pack": {
         "version": "v1.0.4"
     },

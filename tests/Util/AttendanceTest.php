@@ -88,7 +88,7 @@ class AttendanceTest extends WebTestCase
 
         $this->manager = new AttendanceManager($provider, $settingProvider);
 
-        $this->date = new \DateTimeImmutable('now', new \DateTimeZone(self::$container->getParameter('timezone')));
+        $this->date = new \DateTimeImmutable(date('Y-m-d 00:00:00'), new \DateTimeZone(self::$container->getParameter('timezone')));
 
     }
 
@@ -103,7 +103,6 @@ class AttendanceTest extends WebTestCase
         $interval = new \DateInterval('P1D');
         $tomorrow = clone $dateTime;
         $tomorrow->add($interval);
-        $tomorrow->add($interval);
         $this->manager->setCurrentDate($dateTime);
         $this->assertFalse($this->manager->isDateInFuture(), 'Today is not in the future ' . $dateTime->format('Y-m-d'));
 
@@ -116,8 +115,6 @@ class AttendanceTest extends WebTestCase
             $x++;
         }
         $this->assertTrue($this->manager->isSchoolOpen(), 'The school should be Open on '.$dateTime->format('Y-m-d'));
-
-        $currentYear = SchoolYearHelper::getCurrentSchoolYear();
 
         $ttDayDate = $this->manager->getProvider()->getRepository(TTDayDate::class)->findBy(['date' => $dateTime]);
         $ttDayDate = reset($ttDayDate);
