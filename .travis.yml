@@ -28,7 +28,6 @@ env:
     - ABSOLUTE_URL='http://127.0.0.1:8888'
     - LANG=en_GB.UTF-8
     - LC_ALL=en_GB.UTF-8
-    - TZ=Asia/Hong_Kong
 
 install:
   - cp .env.local.test .env.local

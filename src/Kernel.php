@@ -92,6 +92,6 @@ class Kernel extends BaseKernel
         $container->setParameter('gibbon_document_root', '');
         $container->setParameter('gibbon_host_url', '');
         $container->setParameter('google_client_id', '');
-        $container->setParameter('timezone', 'UTC');
+        $container->setParameter('timezone', 'Asia/Hong_Kong');
     }
 }
