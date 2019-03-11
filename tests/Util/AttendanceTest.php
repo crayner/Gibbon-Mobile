@@ -97,7 +97,7 @@ class AttendanceTest extends WebTestCase
      */
     public function testAttendance()
     {
-        $dateTime = new \DateTime();
+        $dateTime = new \DateTime('now', new \DateTimeZone(self::$container->getParameter('timezone')));
         $dateTime->setTimestamp($this->date->getTimestamp());
         echo $this->date->format(DATE_RFC850). ' ' ;
         echo $dateTime->format(DATE_RFC850);
