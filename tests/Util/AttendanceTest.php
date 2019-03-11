@@ -89,7 +89,6 @@ class AttendanceTest extends WebTestCase
         $this->manager = new AttendanceManager($provider, $settingProvider);
 
         $this->date = new \DateTimeImmutable(date('Y-m-d 00:00:00'), new \DateTimeZone(self::$container->getParameter('timezone')));
-        echo $this->date->format(DATE_RFC850);
     }
 
     /**
@@ -100,6 +99,8 @@ class AttendanceTest extends WebTestCase
     {
         $dateTime = new \DateTime();
         $dateTime->setTimestamp($this->date->getTimestamp());
+        echo $this->date->format(DATE_RFC850). ' ' ;
+        echo $dateTime->format(DATE_RFC850);
         $interval = new \DateInterval('P1D');
         $tomorrow = clone $dateTime;
         $tomorrow->add($interval);
@@ -128,6 +129,7 @@ class AttendanceTest extends WebTestCase
             $this->assertFalse($this->manager->isAttendanceRequired(), 'Attendance is not required.');
 
         $this->assertGreaterThan(0, $this->manager->getStudents()->count(), 'Number of students in the class');
+        echo ' '. $tomorrow->format(DATE_RFC850);
         $this->manager->setCurrentDate($tomorrow);
         $this->assertTrue($this->manager->isDateInFuture(), sprintf('Tomorrow is not in the future %s. Today is %s', $tomorrow->format(DATE_RFC850), $this->date->format(DATE_RFC850)));
     }
