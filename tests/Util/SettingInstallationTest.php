@@ -29,6 +29,7 @@
  */
 namespace App\Tests\Util;
 
+use App\Entity\I18n;
 use App\Manager\MessageManager;
 use App\Provider\SettingProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -42,7 +43,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 class SettingInstallationTest extends WebTestCase
 {
     /**
-     * @var AttendanceManager
+     * @var SettingProvider
      */
     private $provider;
 
@@ -64,9 +65,22 @@ class SettingInstallationTest extends WebTestCase
 
     }
 
-    public function testSettingsCorrect()
+    public function testTimezoneSetting()
     {
         $this->assertEquals($this->provider->getParameter('timezone'), $this->provider->getSettingByScopeAsString('System', 'timezone', 'UTC'), 'The timezone has not been set correctly.');
+    }
+
+    public function testLocaleSetting()
+    {
+        $locale = $this->provider->getRepository(I18n::class)->createQueryBuilder('i')
+            ->where('i.systemDefault = :yes')
+            ->setParameter('yes', 'Y')
+            ->select('i.code')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $this->assertEquals($locale, $this->provider->getParameter('locale'), sprintf('The locale has not been set correctly % != %s', $locale, $this->provider->getParameter('locale')));
+        $this->assertStringContainsString(strval(strlen($locale)), '25', 'The length of the locale is not corrert.');
     }
 
     public function tearDown(): void
