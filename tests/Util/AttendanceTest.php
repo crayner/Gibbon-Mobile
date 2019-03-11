@@ -89,7 +89,7 @@ class AttendanceTest extends WebTestCase
         $this->manager = new AttendanceManager($provider, $settingProvider);
 
         $this->date = new \DateTimeImmutable(date('Y-m-d 00:00:00'), new \DateTimeZone(self::$container->getParameter('timezone')));
-
+        echo $this->date->format(DATE_RFC850);
     }
 
     /**
