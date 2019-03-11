@@ -28,7 +28,7 @@ env:
     - ABSOLUTE_URL='http://127.0.0.1:8888'
     - LANG=en_GB.UTF-8
     - LC_ALL=en_GB.UTF-8
-    - TIMEZONE=Asia/Hong_Kong
+    - TZ=Asia/Hong_Kong
 
 install:
   - cp .env.local.test .env.local
@@ -40,6 +40,7 @@ before_install:
   - phpenv config-rm xdebug.ini
   # add composer global bin to PATH to make codeception usable
   - export PATH=$HOME/.composer/vendor/bin:$PATH
+  - export TZ=Asia/Hong_Kong
 
 #script:
 #  - $HOME/symfony-bridge/.phpunit
