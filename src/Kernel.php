@@ -49,6 +49,8 @@ class Kernel extends BaseKernel
 
         if (!realpath($confDir . '/packages/gibbon_responsive.yaml'))
             $this->temporaryParameters($container);
+
+        ini_set('date.timezone', $container->getParameter('timezone'));
     }
 
     protected function configureRoutes(RouteCollectionBuilder $routes)
