@@ -36,11 +36,11 @@ install:
   - travis_retry composer install --prefer-dist --no-interaction
 
 before_install:
+  - export TZ=Asia/Hong_Kong
   # Disable x-debug to speed up things
   - phpenv config-rm xdebug.ini
   # add composer global bin to PATH to make codeception usable
   - export PATH=$HOME/.composer/vendor/bin:$PATH
-  - export TZ=Asia/Hong_Kong
 
 #script:
 #  - $HOME/symfony-bridge/.phpunit
