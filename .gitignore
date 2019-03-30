@@ -11,6 +11,9 @@
 /translations/
 /public/uploads/
 .htaccess
+*.zip
+*.cache
+!/public/bundles/.gitignore
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
@@ -23,4 +26,3 @@ yarn-error.log
 .phpunit
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-*.zip
