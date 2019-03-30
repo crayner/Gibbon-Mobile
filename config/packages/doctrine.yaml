@@ -17,7 +17,7 @@ doctrine:
         charset:    '%db_charset%'
         server_version: '%db_server_version%'
         default_table_options:
-            charset: utf8
+            charset: '%db_charset%'
             collate: utf8_unicode_ci
         mapping_types:
             enum: string

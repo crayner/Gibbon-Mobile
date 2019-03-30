@@ -97,16 +97,16 @@ class SecurityControllerTest extends WebTestCase
             ->setPhone3Type('')
             ->setPhone3CountryCode('')
             ->setPhone3('')
-            ->setPhone4Type('');
-        $person->setPhone4CountryCode('');
-        $person->setPhone4('');
-        $person->setWebsite('');
-        $person->setLanguageFirst('en_GB');
-        $person->setLanguageSecond('');
-        $person->setLanguageThird('');
-        $person->setCountryOfBirth('');
-        $person->setBirthCertificateScan('');
-        $person->setEthnicity('');
+            ->setPhone4Type('')
+            ->setPhone4CountryCode('')
+            ->setPhone4('')
+            ->setWebsite('')
+            ->setLanguageFirst('en_GB')
+            ->setLanguageSecond('')
+            ->setLanguageThird('')
+            ->setCountryOfBirth('')
+            ->setBirthCertificateScan('')
+            ->setEthnicity('');
         $person->setCitizenship1('');
         $person->setCitizenship1Passport('');
         $person->setCitizenship1PassportScan('');

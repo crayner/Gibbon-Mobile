@@ -34,11 +34,9 @@ use App\Entity\Person;
 use App\Form\Security\GoogleOAuthType;
 use App\Manager\LoginManager;
 use App\Form\Security\AuthenticateType;
-use App\Manager\MessageManager;
 use App\Provider\SettingProvider;
 use App\Security\SecurityUser;
 use App\Util\EntityHelper;
-use Hillrange\Form\Type\FileType;
 use Hillrange\Form\Util\FormManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,7 +45,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Validator\Constraints\File;
 
 /**
  * Class SecurityController
