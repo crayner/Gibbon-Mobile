@@ -1,6 +1,6 @@
 # Gibbon - Mobile
 
-___Version 0.0.07___
+___Version 0.0.08___
 
 This package is aimed at provision of responsive design for mobiles and tablets for core features of the Gibbon Education programme.  This program relies on Gibbon being installed and working on the same server.
 
