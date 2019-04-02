@@ -2,9 +2,6 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import "bootstrap/scss/bootstrap.scss";
-import "bootstrap/scss/bootstrap-grid.scss";
-import "bootstrap/dist/js/bootstrap.bundle";
 import '../../css/Form/form.scss';
 import ToggleType from './ToggleType'
 import RenderFormGroup from './RenderFormGroup'

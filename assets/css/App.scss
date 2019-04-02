@@ -18,11 +18,11 @@
     }
 }
 .text-tomato {
-    background-color: tomato !important;
-    color: white !important;
+    background-color: tomato ;
+    color: white ;
 }
 .text-black {
-    color: black !important;
+    color: black ;
 }
 .btn-transparent {
     font-weight: 400;
@@ -75,6 +75,11 @@
             @content;
         }
     }
+    @if $point==400 {
+        @media ( min-width: 400px ) {
+            @content;
+        }
+    }
     @if $point==480 {
         @media ( min-width: 480px ) {
             @content;
@@ -114,27 +119,32 @@
 
 @include r(240)  {
     html {
-        font-size: 2rem;
+        font-size: 0.3rem;
     }
 }
 @include r(320)  {
     html {
-        font-size: 2rem;
+        font-size: 0.35rem;
+    }
+}
+@include r(400)  {
+    html {
+        font-size: 0.4rem;
     }
 }
 @include r(480)  {
     html {
-        font-size: 2rem;
+        font-size: 0.5rem;
     }
 }
 @include r(600)  {
     html {
-        font-size: 2rem;
+        font-size: 0.75rem;
     }
 }
 @include r(768)  {
     html {
-        font-size: 2rem;
+        font-size: 1.0rem;
     }
 }
 @include r(1024)  {
@@ -149,11 +159,11 @@
 }
 @include r(1280)  {
     html {
-        font-size: 1rem;
+        font-size: 1.0rem;
     }
 }
 @include r(1500)  {
     html {
-        font-size: 1rem;
+        font-size: 1.0rem;
     }
 }

@@ -13,6 +13,8 @@
 /public/uploads/
 .htaccess
 !/public/bundles/.gitignore
+*.zip
+*.cache
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
@@ -25,6 +27,3 @@ yarn-error.log
 .phpunit
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-*.zip
-gibbon_module.yaml
-*.cache

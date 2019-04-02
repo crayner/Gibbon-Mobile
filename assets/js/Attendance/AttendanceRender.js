@@ -6,7 +6,6 @@ import {translateMessage} from '../Component/MessageTranslator'
 import Messages from '../Component/Messages/Messages'
 import {format} from 'date-fns/esm'
 import { FormGroup, Input } from 'reactstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import ButtonSubmit from '../Component/Button/ButtonSubmit'
 import ButtonClose from '../Component/Button/ButtonClose'
 

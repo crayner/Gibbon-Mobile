@@ -3,7 +3,6 @@
 import React from 'react'
 import { render } from 'react-dom'
 import FormControl from './Form/FormControl'
-import "bootstrap/scss/bootstrap.scss";
 
 render(
     <FormControl

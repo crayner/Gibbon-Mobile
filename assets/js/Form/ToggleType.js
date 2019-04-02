@@ -5,9 +5,6 @@ import PropTypes from 'prop-types'
 import FormHelp from './FormHelp'
 import FormErrors from './FormErrors'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import "bootstrap/scss/bootstrap.scss";
-import "bootstrap/scss/bootstrap-grid.scss";
-import "bootstrap/dist/js/bootstrap.bundle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'

@@ -2,9 +2,6 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import "bootstrap/scss/bootstrap.scss";
-import "bootstrap/scss/bootstrap-grid.scss";
-import "bootstrap/dist/js/bootstrap.bundle";
 
 export default function ExpandedChoiceType(props) {
     const {
