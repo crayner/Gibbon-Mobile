@@ -45,5 +45,6 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
-    }
+    },
+    "version": "1.15.2"
 }
