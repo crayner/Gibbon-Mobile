@@ -57,13 +57,28 @@ class SchoolYearTermRepository extends ServiceEntityRepository
     public function isDayInTerm(\DateTime $date): bool
     {
         if ($this->createQueryBuilder('syt')
-        ->select('COUNT(syt)')
-        ->where('syt.firstDay <= :date and syt.lastDay >= :date')
-        ->andWhere('syt.schoolYear = :schoolYear')
-        ->setParameters(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'date' => $date])
-        ->getQuery()
-        ->getSingleScalarResult() > 0)
+                ->select('COUNT(syt)')
+                ->where('syt.firstDay <= :date and syt.lastDay >= :date')
+                ->andWhere('syt.schoolYear = :schoolYear')
+                ->setParameters(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'date' => $date])
+                ->getQuery()
+                ->getSingleScalarResult() > 0)
             return true;
         return false;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return SchoolYearTerm|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByDay(\DateTime $date): ?SchoolYearTerm
+    {
+        return $this->createQueryBuilder('syt')
+                ->where('syt.firstDay <= :date and syt.lastDay >= :date')
+                ->andWhere('syt.schoolYear = :schoolYear')
+                ->setParameters(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'date' => $date])
+                ->getQuery()
+                ->getOneOrNullResult();
     }
 }

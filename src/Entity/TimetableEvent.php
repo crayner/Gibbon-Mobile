@@ -65,6 +65,18 @@ class TimetableEvent
         $this->setName($name);
         $this->setId(uniqid('mob_'));
         $this->setLinks([]);
+        if ($this->getName() === 'ERROR')
+        {
+            $this->setAllDayEvent(true);
+            $this->setClassName('day_error');
+            $this->setSchoolDay(false);
+            $this->setSpecialDay(false);
+        }
+    }
+
+    public static function createTimetableEvent(string $name): TimetableEvent
+    {
+        return new self($name);
     }
 
     /**
@@ -422,6 +434,8 @@ class TimetableEvent
      */
     public function setSpecialDay(bool $specialDay): TimetableEvent
     {
+        if ($this->getName() === 'ERROR')
+            $specialDay = false;
         $this->specialDay = $specialDay;
         return $this;
     }
@@ -440,7 +454,7 @@ class TimetableEvent
     }
 
     /**
-     * @param string $specialDayType
+     * @param string|null $specialDayType
      * @return TimetableEvent
      */
     public function setSpecialDayType(string $specialDayType): TimetableEvent

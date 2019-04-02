@@ -155,6 +155,15 @@ class SchoolYearHelper
     }
 
     /**
+     * @param \DateTime $date
+     * @return SchoolYearTerm|null
+     */
+    public static function findOneTermByDay(\DateTime $date): ?SchoolYearTerm
+    {
+        return EntityHelper::getRepository(SchoolYearTerm::class)->findOneByDay($date);
+    }
+
+    /**
      * getSchoolYearAsArray
      * @param SchoolYear|null $schoolYear
      * @return mixed

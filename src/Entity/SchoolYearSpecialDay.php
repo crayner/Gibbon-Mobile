@@ -30,6 +30,7 @@
 namespace App\Entity;
 
 use App\Manager\EntityInterface;
+use App\Util\SchoolYearHelper;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -286,5 +287,20 @@ class SchoolYearSpecialDay implements EntityInterface
     {
         $this->schoolClose = $schoolClose;
         return $this;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return SchoolYearSpecialDay
+     */
+    public static function createSpecialDay(\DateTime $date): SchoolYearSpecialDay
+    {
+        $self = new self();
+        $self->setDate($date);
+        $self->setType('School Closure');
+        $self->setName('ERROR');
+        $self->setDescription('Database Error: The date was not found in the term data.');
+        $self->setSchoolYearTerm(SchoolYearHelper::findOneTermByDay($date));
+        return $self;
     }
 }

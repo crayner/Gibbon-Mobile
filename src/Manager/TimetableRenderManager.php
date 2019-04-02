@@ -86,6 +86,7 @@ class TimetableRenderManager
                     $proceed = true;
             }
         }
+
         if (! $proceed)
             $result['error'] = $this->getTranslator()->trans('You do not have permission to access this timetable at this time.');
         else {
@@ -219,14 +220,19 @@ class TimetableRenderManager
             return $result;
         $result['day'] = $this->getTimetableProvider()->getRepository(TTDay::class)->findByDateTT($result['date'], $result['tt']);
 
-        $day = $result['day'];
-        $result['day'] = $this->getTimetableProvider()->findAsArray($result['day']);
-        $result['day']['TTColumn'] = $this->getTimetableProvider()->findAsArray($day->getTTColumn());
-        foreach($day->getTTColumn()->getTimetableColumnRows() as $row)
-                        $result['day']['TTColumn']['timetableColumnRows'][$row->getId()] = $this->getTimetableProvider()->findAsArray($row);
+        if (!is_null($result['day'])) {
+            $day = $result['day'];
+            $result['day'] = $this->getTimetableProvider()->findAsArray($result['day']);
+            $result['day']['TTColumn'] = $this->getTimetableProvider()->findAsArray($day->getTTColumn());
+            foreach ($day->getTTColumn()->getTimetableColumnRows() as $row)
+                $result['day']['TTColumn']['timetableColumnRows'][$row->getId()] = $this->getTimetableProvider()->findAsArray($row);
 
-        foreach($this->getTimetableProvider()->getRepository(TTColumnRow::class)->findPersonPeriods($day, $result['person'], true) as $row)
-            $result['day']['TTColumn']['timetableColumnRows'][$row['id']] = $row;
+            foreach ($this->getTimetableProvider()->getRepository(TTColumnRow::class)->findPersonPeriods($day, $result['person'], true) as $row)
+                $result['day']['TTColumn']['timetableColumnRows'][$row['id']] = $row;
+        } else {
+            $result['schoolOpen'] = false;
+            $result['specialDay'] = SchoolYearSpecialDay::createSpecialDay($result['date']);
+        }
 
         return $result;
     }
@@ -345,10 +351,11 @@ class TimetableRenderManager
             $day['colour'] =  $result['day']['colour'];
             $day['fontColour'] =  $result['day']['fontColour'];
         }
+
         $this->getEvents()->setSchoolOpen(true);
         $this->getEvents()->setDay($day);
         if (!$result['schoolOpen'] && $result['specialDay']) {
-            $event = new TimetableEvent($result['specialDay']->getName());
+            $event = TimetableEvent::createTimetableEvent($result['specialDay']->getName());
             if ($result['specialDay']->getType() === 'School Closure') {
                 $this->getEvents()->setSchoolOpen(false);
                 $event->setSchoolDay(false);
@@ -366,7 +373,7 @@ class TimetableRenderManager
         }
         elseif (!$result['schoolOpen'])
         {
-            $event = new TimetableEvent('School Closed');
+            $event = TimetableEvent::createTimetableEvent('School Closed');
             $this->getEvents()->setSchoolOpen(false);
             $event->setAllDayEvent();
             $event->setSchoolDay(false);
@@ -378,7 +385,7 @@ class TimetableRenderManager
             {
                 if (isset($row['TTDayRowClasses']))
                 {
-                    $event = new TimetableEvent($row['name']);
+                    $event = TimetableEvent::createTimetableEvent($row['name']);
                     $class = $row['TTDayRowClasses'][0];
                     $event->setStart($row['timeStart'])
                         ->setEnd($row['timeEnd'])
@@ -467,6 +474,7 @@ class TimetableRenderManager
             $events['events'][] = $event->__toArray();
         }
         $events['valid'] = true;
+
         return $events;
     }
 
