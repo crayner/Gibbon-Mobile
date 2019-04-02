@@ -38,7 +38,7 @@ class VersionHelper
     /**
      * @const string
      */
-    CONST VERSION = '0.0.07';
+    CONST VERSION = '0.0.09';
 
     /**
      * @const array
