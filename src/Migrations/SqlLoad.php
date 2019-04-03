@@ -68,6 +68,7 @@ class SqlLoad extends AbstractMigration
             }
 
             $this->addSql($line);
+            $this->count++;
         }
     }
 

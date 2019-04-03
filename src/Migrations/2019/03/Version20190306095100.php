@@ -56,8 +56,8 @@ final class Version20190306095100 extends SqlLoad implements ContainerAwareInter
         parent::up($schema);
 
         $this->getSql('CuttingEdge.sql');
-        $cuttingEdge = $this->getCount();
         parent::up($schema);
+        $cuttingEdge = $this->getCount();
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql("UPDATE `gibbonSetting` SET `value` = '".$this->container->getParameter('gibbon_document_root')."' WHERE `scope` = 'System' AND `name` = 'absolutePath'");
@@ -69,6 +69,6 @@ final class Version20190306095100 extends SqlLoad implements ContainerAwareInter
         $this->addSql("UPDATE `gibbonSetting` SET `value` = 'Y' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCode'");
 
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql("UPDATE `gibbonSetting` SET `value` = '".strval($cuttingEdge ?: '')."' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCodeLine'");
+        $this->addSql("UPDATE `gibbonSetting` SET `value` = '".strval($cuttingEdge ?: '0')."' WHERE `scope` = 'System' AND `name` = 'cuttingEdgeCodeLine'");
     }
 }
