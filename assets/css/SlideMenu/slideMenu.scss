@@ -1,4 +1,15 @@
 .slideMenu {
     float: right;
     min-width: 64px;
+    max-width: 24rem;
+}
+button [class*="---icon-bar---"] {
+    color: transparent;
+    background-color: transparent!important;
+}
+.hoverWhite {
+    color: #f9dcdd;
+}
+.hoverWhite:hover {
+    color: white;
 }

@@ -2,9 +2,9 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from './StyledSideNav'
 import '../../css/SlideMenu/slideMenu.scss'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -23,7 +23,7 @@ export default function NavItems(props) {
         const subItems = buildSubNavItems(item)
 
         return (
-            <NavItem eventKey={item.eventKey} key={item.eventKey}>
+            <NavItem eventKey={item.eventKey} key={item.eventKey} navitemStyle={{fontSize: '1.0rem'}}>
                 <NavIcon>
                     <FontAwesomeIcon size={'2x'} fixedWidth icon={[item.icon.prefix, item.icon.iconName]} title={item.text} onClick={() => menuItemClick({'data-route': item.route})} />
                 </NavIcon>
@@ -39,7 +39,6 @@ export default function NavItems(props) {
     {
         if (typeof item.items === 'undefined')
             return null;
-        console.log(item)
     }
 
     return (

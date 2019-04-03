@@ -3,19 +3,38 @@
 import React, { Component } from 'react'
 import {openPage} from '../Component/openPage'
 import DisplayMenu from './DisplayMenu'
+import ClickOutside from 'react-click-outside'
 
-export default class SlideMenuApp extends Component {
+class SlideMenuApp extends Component {
     constructor (props) {
         super(props)
 
         this.menuItemClick = this.menuItemClick.bind(this)
         this.otherProps = {...props}
+        this.state = {
+            expanded: false,
+        }
+
+        this.toggleSideBar = this.toggleSideBar.bind(this)
+        this.menuItemClick = this.menuItemClick.bind(this)
     }
 
     componentDidMount () {
     }
 
     componentWillUnmount() {
+    }
+
+    toggleSideBar() {
+        this.setState({
+            expanded: ! this.state.expanded,
+        })
+    }
+
+    handleClickOutside() {
+        if (this.state.expanded) {
+            this.toggleSideBar()
+        }
     }
 
     menuItemClick(item){
@@ -25,7 +44,15 @@ export default class SlideMenuApp extends Component {
 
     render () {
         return (
-            <DisplayMenu menuItemClick={this.menuItemClick} {...this.otherProps} />
+            <DisplayMenu
+                menuItemClick={this.menuItemClick}
+                toggleSideBar={this.toggleSideBar}
+                {...this.otherProps}
+                {...this.state}
+            />
         )
     }
 }
+
+
+export default ClickOutside(SlideMenuApp);
