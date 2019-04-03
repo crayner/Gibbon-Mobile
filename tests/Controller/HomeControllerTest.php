@@ -83,7 +83,7 @@ class HomeControllerTest extends WebTestCase
         $form['authenticate[_password]'] = 'sry93874ncS';  //wrong password
         $client->submit($form);
 
-        $this->assertStringContainsString(
+        $this->assertContains(
             'Authentication failed because App\Security\LoginFormAuthenticator::checkCredentials() did not return true.',
             $client->getResponse()->getContent()
         );

@@ -32,6 +32,7 @@ namespace App\Manager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Twig\Markup;
 
 /**
  * Class FormValidatorManager
@@ -80,7 +81,7 @@ class FormValidatorManager
 
         $x = $this->twig->render('Default/validate.html.twig', ['name' => $form->getName(), 'constraints' => $result]);
 
-        return new \Twig_Markup($x, 'html');
+        return new Markup($x, 'html');
     }
 
     /**

@@ -80,7 +80,7 @@ class SettingInstallationTest extends WebTestCase
             ->getSingleScalarResult();
 
         $this->assertEquals($locale, $this->provider->getParameter('locale'), sprintf('The locale has not been set correctly % != %s', $locale, $this->provider->getParameter('locale')));
-        $this->assertStringContainsString(strval(strlen($locale)), '25', 'The length of the locale is not corrert.');
+        $this->assertContains(strval(strlen($locale)), '25', 'The length of the locale is not corrert.');
     }
 
     public function tearDown(): void
