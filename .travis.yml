@@ -50,5 +50,5 @@ before_script:
   - sleep 1
 
 script:
-  - php ./bin/phpunit.phar --configuration ./phpunit.xml.dist
+  - php ./bin/phpunit --configuration ./phpunit.xml.dist
 
