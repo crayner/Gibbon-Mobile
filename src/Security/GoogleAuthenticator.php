@@ -179,9 +179,16 @@ class GoogleAuthenticator implements AuthenticatorInterface
 		$this->logger->notice("Google Authentication: UserProvider #" . $user->getId() . " (" . $user->getEmail() . ") The user authenticated via Google.");
 
 		$this->getProvider()->setSecurityUser($user);
+
 		$user = $this->getProvider()->getUser();
 		if (null !== $user->getLocale())
 			$request->setLocale($user->getLocale());
+
+        if (empty($user->getGoogleAPIRefreshToken()) && empty($this->getClient()->getAccessToken()['refresh_token'])) {
+            $this->getClient()->setApprovalPrompt('force');
+            $targetPath = $this->getClient()->createAuthUrl();
+            return new RedirectResponse($targetPath);
+        }
 
         if ($targetPath = $this->getTargetPath($request, $providerKey))
             return new RedirectResponse($targetPath);

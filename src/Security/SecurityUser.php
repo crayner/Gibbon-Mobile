@@ -40,6 +40,7 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
             $this->setAllRoles($user->getAllRoles());
             $this->setPrimaryRole($user->getPrimaryRole());
             $this->setEmail($user->getEmail());
+            $this->setGoogleAPIRefreshToken($user->getGoogleAPIRefreshToken());
         }
     }
 
@@ -423,5 +424,28 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
     public function formatName(bool $preferredName = true, bool $reverse = false, bool $informal = false, bool $initial = false)
     {
         return UserHelper::getCurrentUser()->formatName($preferredName, $reverse, $informal, $initial);
+    }
+
+    /**
+     * @var null|string
+     */
+    private $googleAPIRefreshToken;
+
+    /**
+     * @return string|null
+     */
+    public function getGoogleAPIRefreshToken(): ?string
+    {
+        return $this->googleAPIRefreshToken;
+    }
+
+    /**
+     * @param string|null $googleAPIRefreshToken
+     * @return SecurityUser
+     */
+    public function setGoogleAPIRefreshToken(?string $googleAPIRefreshToken): SecurityUser
+    {
+        $this->googleAPIRefreshToken = $googleAPIRefreshToken;
+        return $this;
     }
 }
