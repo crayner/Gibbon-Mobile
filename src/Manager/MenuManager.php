@@ -16,6 +16,7 @@ use App\Entity\Menu;
 use App\Entity\MenuItem;
 use App\Provider\PersonProvider;
 use App\Security\SecurityUser;
+use App\Util\SecurityHelper;
 use App\Util\UserHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -169,11 +170,28 @@ class MenuManager
     private function addSystemAdminMenu(): MenuManager
     {
         if (UserHelper::getCurrentUser()->isSystemAdmin()) {
-            $item = new MenuItem();
-            $item->setEventKey('Admin')
+            $item = MenuItem::createItem('Admin')
                 ->setIcon(['iconName' => 'tools'])
                 ->setText($this->getTranslator()->trans('Admin'))
-                ->setRoute($this->getRouter()->generate('load_google_oauth'));
+                ->addItem(
+                    MenuItem::createItem('admin-google-setup')
+                        ->setText($this->getTranslator()->trans('Google Integration'))
+                        ->setRoute($this->getRouter()->generate('load_google_oauth'))
+                )
+                ->addItem(
+                    MenuItem::createItem('admin-impersonation')
+                        ->setText($this->getTranslator()->trans('Impersonation', [], 'mobile'))
+                        ->setRoute($this->getRouter()->generate('impersonate')),
+                    SecurityHelper::getChecker()->isGranted('ROLE_ALLOWED_TO_SWITCH')
+                )
+                ->addItem(
+                    MenuItem::createItem('admin-exit_impersonation')
+                        ->setText($this->getTranslator()->trans('Exit Impersonation', [], 'mobile'))
+                        ->setRoute($this->getRouter()->generate('home', ['_switch_user' => 'exit'])),
+                    SecurityHelper::getChecker()->isGranted('ROLE_PREVIOUS_ADMIN')
+                )
+            ;
+
             $this->menu->addItem($item);
         }
         return $this;

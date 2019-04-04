@@ -18,6 +18,7 @@ use App\Provider\ActionProvider;
 use App\Provider\ModuleProvider;
 use Doctrine\DBAL\Driver\PDOException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SecurityHelper
 {
@@ -37,16 +38,27 @@ class SecurityHelper
     private static $logger;
 
     /**
+     * @var AuthorizationCheckerInterface
+     */
+    private static $checker;
+
+    /**
      * SecurityHelper constructor.
      * @param ActionProvider $actionProvider
      * @param ModuleProvider $moduleProvider
      * @param LoggerInterface $logger
+     * @param AuthorizationCheckerInterface $checker
      */
-    public function __construct(ActionProvider $actionProvider, ModuleProvider $moduleProvider, LoggerInterface $logger)
-    {
+    public function __construct(
+        ActionProvider $actionProvider,
+        ModuleProvider $moduleProvider,
+        LoggerInterface $logger,
+        AuthorizationCheckerInterface $checker
+    ) {
         self::$actionProvider = $actionProvider;
         self::$moduleProvider = $moduleProvider;
         self::$logger = $logger;
+        self::$checker = $checker;
     }
 
     /**
@@ -175,5 +187,13 @@ class SecurityHelper
         self::$logger->debug(sprintf('The action "%s", role "%s" and sub-action "%s" combination is not accessible.', $action, $role, $sub ));
 
         return false;
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public static function getChecker(): AuthorizationCheckerInterface
+    {
+        return self::$checker;
     }
 }

@@ -9,13 +9,15 @@ import SideNav, {
 
 // SideNav
 const StyledSideNav = styled(SideNav)`
-    float: right; 
-    background-color: rgba(50, 160, 25, 0.7);
+    color: #f9dcdd;
+    background-color: #6FBC5E;
 `;
 StyledSideNav.defaultProps = SideNav.defaultProps;
 
 // Toggle
-const StyledToggle = styled(Toggle)``;
+const StyledToggle = styled(Toggle)`
+    font-size: 18px;
+`;
 StyledToggle.defaultProps = Toggle.defaultProps;
 
 // Nav
@@ -23,15 +25,20 @@ const StyledNav = styled(Nav)``;
 StyledNav.defaultProps = Nav.defaultProps;
 
 // NavItem
-const StyledNavItem = styled(NavItem)``;
+const StyledNavItem = styled(NavItem)`
+    color: #f9dcdd;
+`;
 StyledNavItem.defaultProps = NavItem.defaultProps;
 
 // NavIcon
-const StyledNavIcon = styled(NavIcon)``;
+const StyledNavIcon = styled(NavIcon)`
+    font-size: 18px;
+`;
 StyledNavIcon.defaultProps = NavIcon.defaultProps;
 
 // NavText
-const StyledNavText = styled(NavText)``;
+const StyledNavText = styled(NavText)`
+`;
 StyledNavText.defaultProps = NavText.defaultProps;
 
 export {

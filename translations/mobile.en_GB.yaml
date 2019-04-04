@@ -20,3 +20,5 @@ version:
 'Download the json file for your Web application available on https://console.cloud.google.com/apis/credentials': 'Download the json file for your Web application available on https://console.cloud.google.com/apis/credentials.  Use that file to upload here.'
 'Enable OAuth login via a Google Account.': 'Enable OAuth login via a Google Account.'
 Sign in with Google: Sign in with Google
+Impersonation: Impersonation
+Exit Impersonation: Exit Impersonation

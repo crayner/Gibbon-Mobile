@@ -22,7 +22,7 @@ export default function DisplayMenu(props) {
                 onToggle={() => toggleSideBar()}
             >
                 <Toggle>
-                    {expanded ? <FontAwesomeIcon className={'hoverWhite'} size={'2x'} fixedWidth icon={['fas', 'times']} title={'close'} style={{marginTop: '12px'}} /> : <FontAwesomeIcon className={'hoverWhite'} size={'2x'} fixedWidth icon={['fas', 'bars']} title={'expand'}  />}
+                    {expanded ? <FontAwesomeIcon className={'hoverWhite'} fixedWidth icon={['fas', 'times']} title={'close'} style={{marginTop: '12px'}} /> : <FontAwesomeIcon className={'hoverWhite'} fixedWidth icon={['fas', 'bars']} title={'expand'} />}
                 </Toggle>
                 <NavItems {...props} />
             </SideNav>

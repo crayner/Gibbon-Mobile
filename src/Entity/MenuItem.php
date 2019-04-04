@@ -23,6 +23,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class MenuItem
 {
     /**
+     * @param string $eventKey
+     * @return MenuItem
+     */
+    public static function createItem(string $eventKey): MenuItem
+    {
+        $self = new self();
+        $self->setEventKey($eventKey);
+        return $self;
+    }
+
+    /**
      * @var string
      */
     private $eventKey;
@@ -127,14 +138,15 @@ class MenuItem
     }
 
     /**
-     * addItem
+     * @param MenuItem $item
+     * @param bool $test
      * @return MenuItem
      */
-    public function addItem(MenuItem $item): MenuItem
+    public function addItem(MenuItem $item, bool $test = true): MenuItem
     {
         if (empty($this->getItems()))
             $this->setItems(new ArrayCollection());
-        if (! empty($item->getEventKey()))
+        if (! empty($item->getEventKey()) && $test)
             $this->items->set($item->getEventKey(), $item);
         return $this;
     }

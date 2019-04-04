@@ -1,5 +1,5 @@
-.slideMenu {
-    float: right;
+#slideMenu {
+    float: left;
     min-width: 64px;
     max-width: 24rem;
 }
@@ -12,4 +12,24 @@ button [class*="---icon-bar---"] {
 }
 .hoverWhite:hover {
     color: white;
+}
+.sidenav---sidenav-subnav---1EN61 {
+    color: #f9dcdd;
+    background-color: #6FBC5E;
+    :hover {
+        color: white;
+        background-color: #6FBC5E;
+    }
+}
+.sidenav---sidenav-subnavitem---1cD47, .sidenav---expandable---3_dr7, .sidenav---navitem---9uL5T, .sidenav---navtext---1AE_f, .sidenav---sidenav---_2tBP {
+    color: #f9dcdd;
+    background-color: #6FBC5E;
+    :hover {
+        color: white;
+        background-color: #6FBC5E;
+    }
+}
+.sidenav---sidenav-subnav---1EN61 > .sidenav---sidenav-subnavitem---1cD47 > .sidenav---navitem---9uL5T:hover {
+    color: white;
+    background-color: #6FBC5E;
 }

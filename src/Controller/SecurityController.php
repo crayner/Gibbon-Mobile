@@ -150,4 +150,12 @@ class SecurityController extends AbstractController
             ]
         );
     }
+
+    /**
+     * @Route("/impersonate/", name="impersonate")
+     */
+    public function impersonate(Request $request)
+    {
+
+    }
 }

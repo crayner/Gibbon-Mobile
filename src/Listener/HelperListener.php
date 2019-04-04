@@ -64,15 +64,22 @@ class HelperListener implements EventSubscriberInterface
      * @param LoggerInterface $logger
      * @throws \Exception
      */
-    public function __construct(EntityManagerInterface $entityManager, MessageManager $messageManager,
-                                AuthorizationCheckerInterface $authorizationChecker,
-                                RouterInterface $router, TokenStorageInterface $tokenStorage, RequestStack $stack, TranslatorInterface $translator, ContainerInterface $container, LoggerInterface $logger)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        MessageManager $messageManager,
+        AuthorizationCheckerInterface $authorizationChecker,
+        RouterInterface $router,
+        TokenStorageInterface $tokenStorage,
+        RequestStack $stack,
+        TranslatorInterface $translator,
+        ContainerInterface $container,
+        LoggerInterface $logger)
     {
         new EntityHelper($entityManager);
         new RelationshipHelper(new FamilyProvider($entityManager, $messageManager, $authorizationChecker, $router), new FamilyAdultProvider($entityManager, $messageManager, $authorizationChecker, $router), new FamilyChildProvider($entityManager, $messageManager, $authorizationChecker, $router));
         new SchoolYearHelper(new SchoolYearManager($stack, new SchoolYearProvider($entityManager, $messageManager, $authorizationChecker, $router)), new UserHelper($tokenStorage, new PersonProvider($entityManager, $messageManager, $authorizationChecker, $router)));
         new FormatHelper($translator, $container);
-        new SecurityHelper(new ActionProvider($entityManager, $messageManager, $authorizationChecker, $router), new ModuleProvider($entityManager, $messageManager, $authorizationChecker, $router), $logger);
+        new SecurityHelper(new ActionProvider($entityManager, $messageManager, $authorizationChecker, $router), new ModuleProvider($entityManager, $messageManager, $authorizationChecker, $router), $logger, $authorizationChecker);
         new TimetableHelper(new TimetableProvider($entityManager, $messageManager, $authorizationChecker, $router));
         new LocaleHelper(new I18nProvider($entityManager, $messageManager, $authorizationChecker, $router), 'en');
     }
