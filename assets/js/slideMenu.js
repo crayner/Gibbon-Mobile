@@ -3,7 +3,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 import ClickOutside from './SlideMenu/SlideMenuApp'
-import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+import '../css/SlideMenu/slideMenu.scss';
 
 const tray = document.getElementById('slideMenu')
 

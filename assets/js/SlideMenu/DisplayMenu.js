@@ -1,7 +1,7 @@
 'use strict';
 
 import React from "react"
-import SideNav, { Toggle } from './StyledSideNav'
+import SideNav, { Toggle } from '@trendmicro/react-sidenav'
 import NavItems from './NavItems'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'

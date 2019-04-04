@@ -2,8 +2,7 @@
 
 import React from "react"
 import PropTypes from 'prop-types'
-import { Nav, NavItem, NavIcon, NavText, SubNav } from './StyledSideNav'
-import '../../css/SlideMenu/slideMenu.scss'
+import { Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
