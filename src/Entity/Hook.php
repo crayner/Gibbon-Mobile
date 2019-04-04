@@ -45,7 +45,7 @@ class Hook
     /**
      * @var array 
      */
-    private static $typeList = ['Public Home Page','Student Profile','Unit','Parental Dashboard','Staff Dashboard','Student Dashboard'];
+    private static $typeList = ['Public Home Page','Student Profile','Parental Dashboard','Staff Dashboard','Student Dashboard'];
 
     /**
      * @var string|null

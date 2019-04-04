@@ -25,7 +25,6 @@ class VersionTest extends KernelTestCase
     public function testVersion()
     {
         self::bootKernel();
-
         // returns the real and unchanged service container
         //$container = self::$kernel->getContainer();
 
@@ -43,6 +42,17 @@ class VersionTest extends KernelTestCase
         // assert that the Gibbon Version is Correct.
         $this->assertEquals('18.0.00', $details['version']);
         $this->assertEquals(true, $details['cuttingEdge']);
-        $this->assertEquals(34, $details['cuttingEdgeLineFound']);
+        $this->assertEquals($details['cuttingEdgeLine'], $details['cuttingEdgeLineFound']);
+
+        $path = realpath(__DIR__ . '/../../Gibbon/CHANGEDB.php');
+
+        include $path;
+        $changes = explode(';end', str_replace(["\r\n", "\n", "\r"], "", $sql[0][1]));
+        foreach ($changes as $q=>$w)
+            if (empty(trim($w)))
+                unset($changes[$q]);
+
+        // assert that the Gibbon Version is Correct.
+        $this->assertEquals(count($changes), $details['cuttingEdgeLineFound'], 'You must update the CHANGES.php file in the "Gibbon" directory for Travis testing.');
     }
 }

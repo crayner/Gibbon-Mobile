@@ -222,6 +222,10 @@ class VersionManager
         return $this->gibbonDetails;
     }
 
+    /**
+     * @param $versions
+     * @return int|string
+     */
     private function matchVersion($versions)
     {
         $possible = '';

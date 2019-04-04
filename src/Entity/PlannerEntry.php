@@ -45,13 +45,6 @@ class PlannerEntry implements EntityInterface
     private $courseClass;
 
     /**
-     * @var Hook|null
-     * @ORM\ManyToOne(targetEntity="Hook")
-     * @ORM\JoinColumn(name="gibbonHookID", referencedColumnName="gibbonHookID", nullable=true)
-     */
-    private $hook;
-
-    /**
      * @var Unit|null
      * @ORM\ManyToOne(targetEntity="Unit")
      * @ORM\JoinColumn(name="gibbonUnitID", referencedColumnName="gibbonUnitID", nullable=true)
@@ -271,24 +264,6 @@ class PlannerEntry implements EntityInterface
     public function setCourseClass(?CourseClass $courseClass): PlannerEntry
     {
         $this->courseClass = $courseClass;
-        return $this;
-    }
-
-    /**
-     * @return Hook|null
-     */
-    public function getHook(): ?Hook
-    {
-        return $this->hook;
-    }
-
-    /**
-     * @param Hook|null $hook
-     * @return PlannerEntry
-     */
-    public function setHook(?Hook $hook): PlannerEntry
-    {
-        $this->hook = $hook;
         return $this;
     }
 

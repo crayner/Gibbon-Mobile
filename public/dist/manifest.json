@@ -9,7 +9,7 @@
   "build/notificationTray.js": "/build/notificationTray.d4030924.js",
   "build/slideMenu.css": "/build/slideMenu.4a77d88c.css",
   "build/slideMenu.js": "/build/slideMenu.6c274c8d.js",
-  "build/timetable.css": "/build/timetable.20a7221d.css",
+  "build/timetable.css": "/build/timetable.2d1e0576.css",
   "build/timetable.js": "/build/timetable.9d180ec7.js",
   "build/vendors~1aeabec8.css": "/build/vendors~1aeabec8.660df614.css",
   "build/vendors~1aeabec8.js": "/build/vendors~1aeabec8.c76408fc.js",
@@ -19,6 +19,6 @@
   "build/static/DefaultPerson.png": "/build/static/DefaultPerson.png",
   "build/static/logo.png": "/build/static/logo.png",
   "build/static/rosella.jpg": "/build/static/rosella.jpg",
-  "build/timetable.20a7221d.css.map": "/build/timetable.20a7221d.css.map",
+  "build/timetable.2d1e0576.css.map": "/build/timetable.2d1e0576.css.map",
   "build/vendors~1aeabec8.660df614.css.map": "/build/vendors~1aeabec8.660df614.css.map"
 }

@@ -46,7 +46,7 @@ class SqlLoad extends AbstractMigration
             {
                 $engine = strpos($line, 'ENGINE=');
                 $line = substr($line, 0, $engine) . ' ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
-                $line = str_replace('CHARACTER SET utf8', 'COLLATE utf8_unicode_ci', $line);
+                $line = str_replace('CHARACTER SET utf8', 'COLLATE utf8_general_ci', $line);
             }
 
             $this->addSql($line);

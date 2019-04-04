@@ -36,5 +36,5 @@ class VersionHelper
     /**
      * @const array of integers
      */
-    CONST CUTTING_EDGE_CODE_LINE = [31,32,34];
+    CONST CUTTING_EDGE_CODE_LINE = [31,32,34,37];
 }

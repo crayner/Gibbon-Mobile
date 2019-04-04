@@ -18,11 +18,5 @@
     "env": {
         "browser": true,
         "node": true
-    },
-    "presets": [
-        "@babel/preset-env",
-        {
-            "corejs": "3.0.0"
-        }
-    ]
+    }
 }
