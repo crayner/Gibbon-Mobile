@@ -116,35 +116,16 @@ class PersonProvider
      */
     public function getCoursesByPerson(): array
     {
-        return $this->getRepository(Course::class)->createQueryBuilder('c')
-            ->select('DISTINCT c')
-            ->leftJoin('c.courseClasses', 'cc')
-            ->leftJoin('cc.courseClassPeople', 'ccp')
-            ->where('ccp.person = :person')
-            ->setParameter('person', $this->getEntity())
-            ->andWhere('c.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(Course::class)->findByPerson($this->getEntity());
     }
 
     /**
-     * getCourseClassesByPerson
      * @return array
      * @throws \Exception
      */
     public function getCourseClassesByPerson(): array
     {
-        return $this->getRepository(CourseClass::class)->createQueryBuilder('cc')
-            ->select('DISTINCT cc')
-            ->leftJoin('cc.courseClassPeople', 'ccp')
-            ->leftJoin('cc.course', 'c')
-            ->where('ccp.person = :person')
-            ->setParameter('person', $this->getEntity())
-            ->andWhere('c.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(CourseClass::class)->findByPerson($this->getEntity());
     }
 
     /**
@@ -163,27 +144,12 @@ class PersonProvider
     }
 
     /**
-     * getStaffYearGroupsByRollGroup
      * @return array
      * @throws \Exception
      */
     public function getStaffYearGroupsByRollGroup(): array
     {
-        $x = $this->getRepository(StudentEnrolment::class)->createQueryBuilder('se')
-            ->select('DISTINCT yg.id AS yearGroupList')
-            ->leftJoin('se.yearGroup', 'yg')
-            ->leftJoin('se.rollGroup', 'rg')
-            ->where('rg.tutor = :person OR rg.tutor2 = :person OR rg.tutor3 = :person')
-            ->setParameter('person', $this->getEntity())
-            ->andWhere('se.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
-        $results = [];
-        foreach($x as $list)
-            $results = array_merge($results, [str_pad($list['yearGroupList'],3, '0', STR_PAD_LEFT)]);
-
-        return array_unique($results);
+        return $this->getRepository(StudentEnrolment::class)->findStaffYearGroupsByRollGroup($this->getEntity());
     }
 
     /**
@@ -194,20 +160,7 @@ class PersonProvider
     public function getStudentYearGroup(?Person $person = null): array
     {
         $person = $person ?: UserHelper::getCurrentUser();
-        $x = $this->getRepository(StudentEnrolment::class)->createQueryBuilder('se')
-            ->select('DISTINCT yg.id AS yearGroupList')
-            ->leftJoin('se.yearGroup', 'yg')
-            ->where('se.schoolYear = :schoolYear')
-            ->andWhere('se.person = :person')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->setParameter('person', $person)
-            ->getQuery()
-            ->getResult();
-        $results = [];
-        foreach($x as $list)
-            $results = array_merge($results, explode(',',$list['yearGroupList']));
-
-        return array_unique($results);
+        return $this->getRepository(StudentEnrolment::class)->findStudentYearGroup($person);
     }
 
     /**
@@ -228,44 +181,22 @@ class PersonProvider
 
     /**
      * getChildrenOfParent
-     * @param Person|null $person
      * @return array
      * @throws \Exception
      */
     public function getChildrenOfParent(): array
     {
-        $x = $this->getRepository(FamilyAdult::class)->createQueryBuilder('fa')
-            ->leftJoin('fa.family', 'f')
-            ->leftJoin('f.children', 'fc')
-            ->leftJoin('fc.person', 'p')
-            ->select('fa,f,fc,p')
-            ->where('fa.person = :person')
-            ->setParameter('person', UserHelper::getCurrentUser())
-            ->getQuery()
-            ->getResult();
-        $results = [];
-        foreach(($x ?: []) as $item) {
-            foreach($item->getFamily()->getChildren() as $child)
-                if ($child->getPerson())
-                    $results[$child->getPerson()->getId()] = $child->getPerson();
-        }
-        return $results;
+        return $this->getRepository(FamilyAdult::class)->findChildrenOfParent(UserHelper::getCurrentUser());
     }
 
     /**
      * getStaffRollGroups
      * @return array
+     * @throws \Exception
      */
     public function getStaffRollGroups(): array
     {
-        return $this->getRepository(RollGroup::class)->createQueryBuilder('rg')
-            ->select('rg')
-            ->where('rg.tutor = :person OR rg.tutor2 = :person OR rg.tutor3 = :person OR rg.assistant = :person OR rg.assistant2 = :person OR rg.assistant3 = :person')
-            ->setParameter('person', UserHelper::getCurrentUser())
-            ->andWhere('rg.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(RollGroup::class)->findByTutor(UserHelper::getCurrentUser());
     }
 
     /**
@@ -276,15 +207,7 @@ class PersonProvider
     public function getStudentRollGroups(?Person $person = null): array
     {
         $person = $person ?: UserHelper::getCurrentUser();
-        return $this->getRepository(RollGroup::class)->createQueryBuilder('rg')
-            ->select('rg')
-            ->leftJoin('rg.studentEnrolments', 'se')
-            ->where('se.person = :person')
-            ->setParameter('person', $person)
-            ->andWhere('rg.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(RollGroup::class)->findByStudent($person);
     }
 
     /**
@@ -310,15 +233,7 @@ class PersonProvider
      */
     public function getActivitiesByStaff(): array
     {
-        return $this->getRepository(Activity::class)->createQueryBuilder('a')
-            ->select('DISTINCT a')
-            ->leftJoin('a.staff', 'a_s')
-            ->where('a_s.person = :person')
-            ->setParameter('person', UserHelper::getCurrentUser())
-            ->andWhere('a.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(Activity::class)->findByStaff(UserHelper::getCurrentUser());
     }
 
     /**
@@ -328,15 +243,7 @@ class PersonProvider
      */
     public function getActivitiesByStudents(): array
     {
-        return $this->getRepository(Activity::class)->createQueryBuilder('a')
-            ->select('DISTINCT a')
-            ->leftJoin('a.students', 'a_s')
-            ->where('a_s.person = :person')
-            ->setParameter('person', $this->getEntity())
-            ->andWhere('a.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(Activity::class)->findByStudent($this->getEntity());
     }
 
     /**
@@ -358,6 +265,7 @@ class PersonProvider
     /**
      * getStudentAttendance
      * @param string $showDate
+     * @param string $timezone
      * @return array
      * @throws \Exception
      */
@@ -365,14 +273,7 @@ class PersonProvider
     {
         $showDate = new \DateTime($showDate, new \DateTimeZone($timezone));
         $showDate = $showDate->format('Y-m-d');
-        return $this->getRepository(AttendanceLogPerson::class)->createQueryBuilder('alp')
-            ->leftJoin('alp.studentEnrolment', 'se', 'WITH', 'alp.person = se.person')
-            ->where('alp.person = :person')
-            ->setParameter('person', $this->getEntity())
-            ->andWhere('alp.date = :showDate')
-            ->setParameter('showDate', $showDate)
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(AttendanceLogPerson::class)->findByDateStudent($this->getEntity(), $showDate);
     }
 
     /**
@@ -383,13 +284,6 @@ class PersonProvider
      */
     public function getGroups(): array
     {
-        return $this->getRepository(Group::class)->createQueryBuilder('g')
-            ->leftJoin('g.people', 'gp')
-            ->where('gp.person = :person')
-            ->setParameter('person', $this->getEntity())
-            ->andWhere('g.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository(Group::class)->findByPerson($this->getEntity());
     }
 }

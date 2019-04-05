@@ -13,6 +13,8 @@
 namespace App\Repository;
 
 use App\Entity\CourseClass;
+use App\Entity\Person;
+use App\Util\SchoolYearHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -29,5 +31,23 @@ class CourseClassRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, CourseClass::class);
+    }
+
+    /**
+     * @param Person $person
+     * @return array
+     */
+    public function findByPerson(Person $person): array
+    {
+        return $this->createQueryBuilder('cc')
+            ->select('DISTINCT cc')
+            ->leftJoin('cc.courseClassPeople', 'ccp')
+            ->leftJoin('cc.course', 'c')
+            ->where('ccp.person = :person')
+            ->setParameter('person', $person)
+            ->andWhere('c.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
     }
 }

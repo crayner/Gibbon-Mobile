@@ -13,6 +13,8 @@
 namespace App\Repository;
 
 use App\Entity\Activity;
+use App\Entity\Person;
+use App\Util\SchoolYearHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -29,5 +31,41 @@ class ActivityRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Activity::class);
+    }
+
+    /**
+     * findByStaff
+     * @param Person $person
+     * @return array
+     */
+    public function findByStaff(Person $person): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('DISTINCT a')
+            ->leftJoin('a.staff', 'a_s')
+            ->where('a_s.person = :person')
+            ->setParameter('person', $person)
+            ->andWhere('a.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * findByStudent
+     * @param Person $person
+     * @return array
+     */
+    public function findByStudent(Person $person): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('DISTINCT a')
+            ->leftJoin('a.students', 'a_s')
+            ->where('a_s.person = :person')
+            ->setParameter('person', $person)
+            ->andWhere('a.schoolYear = :schoolYear')
+            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
+            ->getQuery()
+            ->getResult();
     }
 }

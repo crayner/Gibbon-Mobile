@@ -14,6 +14,7 @@ namespace App\Repository;
 
 use App\Entity\AttendanceLogPerson;
 use App\Entity\CourseClass;
+use App\Entity\Person;
 use App\Entity\RollGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -88,5 +89,23 @@ class AttendanceLogPersonRepository extends ServiceEntityRepository
             $students[$w->getPerson()->getId()] = $w;
         }
         return $students;
+    }
+
+    /**
+     * findByDateStudent
+     * @param Person $person
+     * @param string $showDate
+     * @return array
+     */
+    public function findByDateStudent(Person $person, string $showDate): array
+    {
+        return $this->createQueryBuilder('alp')
+            ->leftJoin('alp.studentEnrolment', 'se', 'WITH', 'alp.person = se.person')
+            ->where('alp.person = :person')
+            ->setParameter('person', $person)
+            ->andWhere('alp.date = :showDate')
+            ->setParameter('showDate', $showDate)
+            ->getQuery()
+            ->getResult();
     }
 }
