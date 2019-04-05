@@ -14,6 +14,7 @@ namespace App\Twig\Extension;
 
 use App\Manager\NotificationTrayManager;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Class NotificationTrayExtension
@@ -50,7 +51,7 @@ class NotificationTrayExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('getNotificationTray', array($this->manager, 'getNotificationTrayProperties'), ['is_safe' => ['html']]),
+            new TwigFunction('getNotificationTray', [$this->manager, 'getNotificationTrayProperties'], ['is_safe' => ['html']]),
         ];
     }
 }

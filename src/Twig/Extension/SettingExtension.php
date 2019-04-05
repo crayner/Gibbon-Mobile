@@ -16,6 +16,7 @@ use App\Provider\SettingProvider;
 use App\Util\VersionHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Class SettingExtension
@@ -44,11 +45,11 @@ class SettingExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('getSetting', array($this->manager, 'getSettingByScope')),
-            new \Twig_SimpleFunction('getParameter', array($this->manager, 'getParameter')),
-            new \Twig_SimpleFunction('getVersion', array($this, 'getVersion')),
-            new \Twig_SimpleFunction('getGibbonVersion', array($this, 'getGibbonVersion')),
-            new \Twig_SimpleFunction('clearCache', array($this, 'clearCache')),
+            new TwigFunction('getSetting', [$this->manager, 'getSettingByScope']),
+            new TwigFunction('getParameter', [$this->manager, 'getParameter']),
+            new TwigFunction('getVersion', [$this, 'getVersion']),
+            new TwigFunction('getGibbonVersion', [$this, 'getGibbonVersion']),
+            new TwigFunction('clearCache', [$this, 'clearCache']),
         ];
     }
 

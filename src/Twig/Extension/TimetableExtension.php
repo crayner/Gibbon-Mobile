@@ -12,8 +12,8 @@
  */
 namespace App\Twig\Extension;
 
-use App\Manager\DashboardInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Class TimetableExtension
@@ -37,7 +37,7 @@ class TimetableExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('hasTimetable', array($this, 'hasTimetable')),
+            new TwigFunction('hasTimetable', [$this, 'hasTimetable']),
         ];
     }
 

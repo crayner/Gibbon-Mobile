@@ -14,6 +14,7 @@ namespace App\Twig\Extension;
 
 use App\Manager\MenuManager;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Class MenuExtension
@@ -22,7 +23,7 @@ use Twig\Extension\AbstractExtension;
 class MenuExtension extends AbstractExtension
 {
     /**
-     * @var NotificationTrayManager
+     * @var MenuManager
      */
     private $manager;
 
@@ -50,7 +51,7 @@ class MenuExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('getMenuItems', array($this->manager, 'getMenuItems'), ['is_safe' => ['html']]),
+            new TwigFunction('getMenuItems', [$this->manager, 'getMenuItems'], ['is_safe' => ['html']]),
         ];
     }
 }

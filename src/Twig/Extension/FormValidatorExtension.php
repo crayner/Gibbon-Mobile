@@ -14,7 +14,12 @@ namespace App\Twig\Extension;
 
 use App\Manager\FormValidatorManager;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
+/**
+ * Class FormValidatorExtension
+ * @package App\Twig\Extension
+ */
 class FormValidatorExtension extends AbstractExtension
 {
     /**
@@ -46,7 +51,7 @@ class FormValidatorExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('renderValidatorScript', array($this->manager, 'renderValidatorScript'), ['is_safe' => ['html']]),
+            new TwigFunction('renderValidatorScript', [$this->manager, 'renderValidatorScript'], ['is_safe' => ['html']]),
         ];
     }
 

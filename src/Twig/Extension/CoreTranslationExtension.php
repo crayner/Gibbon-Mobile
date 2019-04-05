@@ -15,6 +15,7 @@ namespace App\Twig\Extension;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * Class CoreTranslationExtension
@@ -41,7 +42,7 @@ class CoreTranslationExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('coreTranslations', [$this, 'getCoreTranslations']),
+            new TwigFunction('coreTranslations', [$this, 'getCoreTranslations']),
         ];
     }
 

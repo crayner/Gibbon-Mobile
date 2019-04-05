@@ -16,8 +16,8 @@ namespace App\Twig\Extension;
 use App\Provider\SettingProvider;
 use App\Provider\I18nProvider;
 use App\Provider\UsernameFormatProvider;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Class FormatExtension
@@ -41,11 +41,6 @@ class FormatExtension extends AbstractExtension
     private $i18nProvider;
 
     /**
-     * @var RequestStack
-     */
-    private $stack;
-
-    /**
      * FormatExtension constructor.
      * @param SettingProvider $manager
      * @param UsernameFormatProvider $formatProvider
@@ -63,7 +58,7 @@ class FormatExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('dateFormat', array($this->i18nProvider, 'getDateFormatPHP')),
+            new TwigFunction('dateFormat', [$this->i18nProvider, 'getDateFormatPHP']),
         ];
     }
 }

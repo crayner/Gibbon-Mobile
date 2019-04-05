@@ -3,7 +3,12 @@ namespace App\Twig\Extension;
 
 use App\Manager\MessageManager;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
+/**
+ * Class FlashExtension
+ * @package App\Twig\Extension
+ */
 class FlashExtension extends AbstractExtension
 {
 	/**
@@ -30,8 +35,8 @@ class FlashExtension extends AbstractExtension
 	public function getFunctions()
 	{
 		return [
-			new \Twig_SimpleFunction('showFlash', array($this, 'showFlash')),
-			new \Twig_SimpleFunction('getMessageManager', array($this, 'getMessageManager')),
+			new TwigFunction('showFlash', [$this, 'showFlash']),
+			new TwigFunction('getMessageManager', [$this, 'getMessageManager']),
 		];
 	}
 
