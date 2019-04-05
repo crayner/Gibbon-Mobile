@@ -2572,7 +2572,7 @@ class Person implements EntityInterface
     {
         $name = $preferredName ? $this->getPreferredName() : $this->getFirstName();
         $name = $initial ? substr($name, 0, 1): $name;
-        return FormatHelper::name($this->getTitle(),$name,$this->getSurname(),$this->getPrimaryRole() ? $this->getPrimaryRole()->getCategory() : 'Staff', $reverse, $informal);
+        return FormatHelper::name($this->getTitle(), $name, $this->getSurname(),$this->getPrimaryRole() ? $this->getPrimaryRole()->getCategory() : 'Staff', $reverse, $informal);
     }
 
     /**
@@ -2582,7 +2582,7 @@ class Person implements EntityInterface
      */
     public function getFullName()
     {
-        return $this->getSurname().$this->getFirstName();
+        return $this->getSurname().': '.$this->getFirstName();
     }
 
     /**

@@ -32,8 +32,9 @@ class HomeController extends AbstractController
 {
     /**
      * home
-     *
+     * @param StaffDashboardManager $staffDashboardManager
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      * @Route("/", name="home")
      * @IsGranted("ROLE_USER")
      */
@@ -41,6 +42,10 @@ class HomeController extends AbstractController
     {
         if (UserHelper::isStaff())
             $manager = $staffDashboardManager;
+
+
+        if (empty($manager))
+            throw new \Exception('What type of user is that?');
 
         return $this->render('Default/home.html.twig',
             [

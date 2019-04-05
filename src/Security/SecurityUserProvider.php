@@ -20,6 +20,10 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * Class SecurityUserProvider
+ * @package App\Security
+ */
 class SecurityUserProvider implements UserProviderInterface
 {
 
@@ -73,7 +77,7 @@ class SecurityUserProvider implements UserProviderInterface
      */
     public function refreshUser(UserInterface $user): UserInterface
     {
-        if ($this->supportsClass(get_class($user)) && $this->getUser() && $this->getUser()->isEqualTo($user))
+        if ($this->supportsClass(get_class($user)) && $this->getSecurityUser() && $this->getSecurityUser()->isEqualTo($user))
             return $this->getUser();
         if (! $this->supportsClass(get_class($user)))
             throw new UnsupportedUserException(sprintf('The user provided was not valid.'));

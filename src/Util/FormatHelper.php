@@ -80,9 +80,11 @@ class FormatHelper
 
         if (empty($preferredName) && empty($surname)) return '';
 
+        $title = rtrim($title, '.');
+
         if ($roleCategory == 'Staff' or $roleCategory == 'Other') {
-            $setting = 'nameFormatStaff' . ($informal? 'Informal' : 'Formal') . ($reverse? 'Reversed' : '');
-            $format = isset(self::$settings[$setting])? self::$settings[$setting] : '[title] [preferredName:1]. [surname]';
+            $setting = 'nameFormatStaff' . ($informal ? 'Informal' : 'Formal') . ($reverse ? 'Reversed' : '');
+            $format = isset(self::$settings[$setting])? self::$settings[$setting] : '[title] [preferredName] [surname]';
 
             $output = preg_replace_callback('/\[+([^\]]*)\]+/u',
                 function ($matches) use ($title, $preferredName, $surname) {
@@ -94,14 +96,14 @@ class FormatHelper
                 $format);
 
         } elseif ($roleCategory == 'Parent') {
-            $format = (!$informal? '%1$s ' : '') . ($reverse? '%3$s, %2$s' : '%2$s %3$s');
+            $format = (!$informal ? '%1$s ' : '') . ($reverse ? '%3$s, %2$s' : '%2$s %3$s');
             $output = sprintf($format, $title, $preferredName, $surname);
         } elseif ($roleCategory == 'Student') {
             $format = $reverse ? '%2$s, %1$s' : '%1$s %2$s';
             $output = sprintf($format, $preferredName, $surname);
         }
 
-        return trim($output, ' ');
+        return trim($output);
     }
 
     /**

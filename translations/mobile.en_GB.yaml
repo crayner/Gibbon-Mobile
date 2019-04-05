@@ -22,3 +22,8 @@ version:
 Sign in with Google: Sign in with Google
 Impersonation: Impersonation
 Exit Impersonation: Exit Impersonation
+Select a Student: Select a Student
+Select to Impersonate: Select to Impersonate
+Select a Staff Member: Select a Staff Member
+Select a Parent: Select a Parent
+'Impersonating: %{name}': 'Impersonating: %{name}'

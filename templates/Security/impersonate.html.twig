@@ -1,0 +1,41 @@
+{% trans_default_domain "messages" %}
+
+{% extends 'Default/template.html.twig' %}
+
+{% form_theme form
+    '@HillrangeForm/FormTheme/bootstrap.html.twig'
+%}
+
+        {% block titleBar %}
+            <div id="titleBar">
+                <h2 class="alert alert-success text-center">{{ title|default('Gibbon - Responsive')|trans([], 'mobile') }}</h2></div>
+        {% endblock titleBar %}
+
+
+{% block content %}
+    <div id="impersonateForm">
+        {{ form_start(form) }}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4 card">
+                    {{ form_row(form.student) }}
+                </div>
+                <div class="col-4 card">
+                    {{ form_row(form.staff) }}
+                </div>
+                <div class="col-4 card">
+                    {{ form_row(form.parent) }}
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ renderValidatorScript(fullForm) }}
+{% endblock javascripts %}
+
+
+

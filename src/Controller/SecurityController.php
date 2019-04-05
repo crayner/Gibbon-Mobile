@@ -15,11 +15,15 @@ namespace App\Controller;
 use App\Entity\GoogleOAuth;
 use App\Entity\Person;
 use App\Form\Security\GoogleOAuthType;
+use App\Form\Security\ImpersonateType;
+use App\Manager\ImpersonationManager;
 use App\Manager\LoginManager;
 use App\Form\Security\AuthenticateType;
+use App\Manager\StaffDashboardManager;
 use App\Provider\SettingProvider;
 use App\Security\SecurityUser;
 use App\Util\EntityHelper;
+use App\Util\UserHelper;
 use Hillrange\Form\Util\FormManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,13 +42,14 @@ class SecurityController extends AbstractController
     /**
      * login
      * @param LoginManager $manager
-     * @param FormManager $formManager
-     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @param AuthenticationUtils $authenticationUtils
+     * @param EntityHelper $repository
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/login/", name="login")
      */
     public function login(LoginManager $manager, AuthenticationUtils $authenticationUtils, EntityHelper $repository)
     {
-        if ($this->getUser() instanceof UserInterface && !$this->denyAccessUnlessGranted('ROLE_USER'))
+        if ($this->getUser() instanceof UserInterface && !$this->isGranted('ROLE_USER'))
             return $this->redirectToRoute('home');
 
         // get the login error if there is one
@@ -80,6 +85,10 @@ class SecurityController extends AbstractController
 
     /**
      * loadGoogleOAuth
+     * @param Request $request
+     * @param SettingProvider $settingProvider
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      * @Route("/load/google/oauth/", name="load_google_oauth")
      * @IsGranted("ROLE_SYSTEM_ADMIN")
      */
@@ -152,10 +161,27 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * impersonate
+     * @param Request $request
+     * @param ImpersonationManager $manager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/impersonate/", name="impersonate")
+     * @IsGranted("ROLE_ALLOWED_TO_SWITCH")
      */
-    public function impersonate(Request $request)
+    public function impersonate(Request $request, ImpersonationManager $manager)
     {
+        $form = $this->createForm(ImpersonateType::class, $manager);
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('home', ['_switch_user' => $manager->getPerson()->getUsername()]);
+        }
+        return $this->render('Security/impersonate.html.twig',
+            [
+                'form' => $form->createView(),
+                'fullForm' => $form,
+            ]
+        );
     }
 }
