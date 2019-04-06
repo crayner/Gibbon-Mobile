@@ -318,4 +318,9 @@ class Role implements EntityInterface
         $this->restriction = in_array($restriction, self::getRestrictionList()) ? $restriction : 'None';
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->getCategory().': '.$this->getName();
+    }
 }

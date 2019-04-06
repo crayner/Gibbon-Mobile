@@ -19,7 +19,18 @@ export default function DayEvents(props) {
         takeAttendance,
     } = props
 
-    if (events.length === 0)
+    var countEventsNotDisplayed = 0;
+
+    events.map((event) => {
+        if (event.eventType === 'school' && ! showSchoolCalendar)
+            countEventsNotDisplayed = countEventsNotDisplayed + 1;
+        if (event.eventType === 'personal' && ! showPersonalCalendar)
+            countEventsNotDisplayed = countEventsNotDisplayed + 1;
+        if (event.eventType === 'booking' && ! showSpaceBookingCalendar)
+            countEventsNotDisplayed = countEventsNotDisplayed + 1;
+    })
+
+    if ((events.length - countEventsNotDisplayed) <= 0)
         return (<div className={'row'}>
             <div className={'col-12 alert alert-dark text-center'}>
                 {translateMessage(translations, 'There are no records to display.')}
@@ -105,6 +116,7 @@ export default function DayEvents(props) {
                 specialDay = ' specialDay'
             }
         }
+
         return (
             <div className={'row'} key={event.id}>
                 <div className={'col-2 text-center card' + specialDay}>
