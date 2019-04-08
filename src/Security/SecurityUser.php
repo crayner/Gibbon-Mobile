@@ -41,6 +41,7 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
             $this->setPrimaryRole($user->getPrimaryRole());
             $this->setEmail($user->getEmail());
             $this->setGoogleAPIRefreshToken($user->getGoogleAPIRefreshToken());
+            $this->setLocale($user->getI18nPersonal());
         }
     }
 
@@ -446,6 +447,30 @@ class SecurityUser implements UserInterface, EncoderAwareInterface, EquatableInt
     public function setGoogleAPIRefreshToken(?string $googleAPIRefreshToken): SecurityUser
     {
         $this->googleAPIRefreshToken = $googleAPIRefreshToken;
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * getLocale
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale ?: 'en_GB';
+    }
+
+    /**
+     * @param string $locale
+     * @return SecurityUser
+     */
+    public function setLocale(?string $locale): SecurityUser
+    {
+        $this->locale = $locale ?: 'en_GB';
         return $this;
     }
 }
