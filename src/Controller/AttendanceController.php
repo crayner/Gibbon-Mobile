@@ -55,11 +55,11 @@ class AttendanceController extends AbstractController
                 'content' => $manager->__toArray(),
             ]);
         }
-        $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
+        $manager->getMessageManager()->add('danger', 'You do not have access to this action.', ['code' => 'notGranted']);
         return new JsonResponse([
             'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
             'content' => [],
-            'redirect' => true,
+            'redirect' => false,
         ], 200);
     }
 
@@ -80,7 +80,7 @@ class AttendanceController extends AbstractController
                 'redirect' => false,
             ]);
         }
-        $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
+        $manager->getMessageManager()->add('danger', 'You do not have access to this action.', ['code' => 'notGranted']);
         return new JsonResponse([
             'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
             'content' => [],
@@ -109,7 +109,7 @@ class AttendanceController extends AbstractController
                 return new JsonResponse([
                     'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
                     'content' => $manager->__toArray(),
-                    'redirect' =>false
+                    'redirect' => false
                 ], 200);
             return $this->render('Default/dump.html.twig', [
                 'manager' => $manager,
@@ -117,11 +117,11 @@ class AttendanceController extends AbstractController
                 'content' => $manager->__toArray(),
             ]);
         }
-        $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
+        $manager->getMessageManager()->add('danger', 'You do not have access to this action.', ['code' => 'notGranted']);
         return new JsonResponse([
             'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
             'content' => [],
-            'redirect' => true,
+            'redirect' => false,
         ], 200);
     }
 
@@ -142,7 +142,7 @@ class AttendanceController extends AbstractController
                 'redirect' => false,
             ]);
         }
-        $manager->getMessageManager()->add('danger', 'You do not have access to this action.');
+        $manager->getMessageManager()->add('danger', 'You do not have access to this action.', ['code' => 'notGranted']);
         return new JsonResponse([
             'messages' => $manager->getMessageManager()->serialiseTranslatedMessages($translator),
             'content' => [],

@@ -260,7 +260,8 @@ class MessageManager
             $w = [];
             $w['level'] = $message->getLevel();
             $w['message'] = $message->getTranslatedMessage();
-            $w['id'] = $x;
+            $w['id'] = uniqid();
+            $w['code'] = $message->getCode();
             $mes[$x++] = $w;
         }
         return $mes;

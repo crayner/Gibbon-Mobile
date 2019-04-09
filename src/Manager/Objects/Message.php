@@ -131,6 +131,9 @@ class Message
         if ($name === 'fixedMessage')
             return $this->setFixedMessage($element);
 
+        if ($name === 'code')
+            return $this->setCode($element);
+
         $this->options[$name] = $element;
 
 		return $this;
@@ -268,6 +271,29 @@ class Message
     public function setTranslatedMessage(string $translatedMessage): Message
     {
         $this->translatedMessage = $translatedMessage;
+        return $this;
+    }
+
+    /**
+     * @var string|null
+     */
+    private $code;
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string|null $code
+     * @return Message
+     */
+    public function setCode(?string $code): Message
+    {
+        $this->code = $code;
         return $this;
     }
 }

@@ -332,10 +332,15 @@ export default class TimetableApp extends Component {
         })
         fetchJson(url, {method: 'GET'}, this.locale)
             .then(data => {
-                let attendance = data.content
+                let attendance = typeof(data.content) === 'object' ? data.content : {}
                 attendance.event = event
+                var status = 'attendance'
+                data.messages.map((message) => {
+                    if (message.code === 'notGranted')
+                        status = 'timetable'
+                })
                 this.setState({
-                    showStatus: 'attendance',
+                    showStatus: status,
                     attendance: attendance,
                     messages: data.messages,
                     loadEvents: false,

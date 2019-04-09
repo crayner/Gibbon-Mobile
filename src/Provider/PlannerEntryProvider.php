@@ -40,37 +40,18 @@ class PlannerEntryProvider implements EntityProviderInterface
     public function getStaffDashboardContent(string $timezone = 'UTC')
     {
         $today = new \DateTime('today', new \DateTimeZone($timezone));
-        $results = $this->getRepository()->createQueryBuilder('pe')
-            ->select('pe, cc, c, ccp, sh')
-            ->join('pe.courseClass', 'cc')
-            ->join('cc.course', 'c')
-            ->join('cc.courseClassPeople', 'ccp')
-            ->leftJoin('pe.studentHomeworkEntries', 'sh', 'WITH', 'ccp.person = sh.person', 'pe.id')
-            ->where('c.schoolYear = :schoolYear')
-            ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-            ->andWhere('pe.date = :today')
-            ->setParameter('today', $today->format('Y-m-d'))
-            ->andWhere('ccp.person = :currentUser')
-            ->setParameter('currentUser', UserHelper::getCurrentUser())
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository()->findStaffDashboardContent($today->format('Y-m-d'), SchoolYearHelper::getCurrentSchoolYear(), UserHelper::getCurrentUser());
+    }
 
-        // with UNION of
-
-        return array_merge($results,
-            $this->getRepository()->createQueryBuilder('pe')
-                ->select('pe, cc, c, peg')
-                ->join('pe.courseClass', 'cc')
-                ->join('pe.plannerEntryGuests', 'peg')
-                ->join('cc.course', 'c')
-                ->where('c.schoolYear = :schoolYear')
-                ->setParameter('schoolYear', SchoolYearHelper::getCurrentSchoolYear())
-                ->andWhere('pe.date = :today')
-                ->setParameter('today', $today->format('Y-m-d'))
-                ->andWhere('peg.person = :currentUser')
-                ->setParameter('currentUser', UserHelper::getCurrentUser())
-                ->getQuery()
-                ->getResult()
-            );
+    /**
+     * getStaffDashboardContent
+     * @param string $timezone
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getStudentDashboardContent(string $timezone = 'UTC')
+    {
+        $today = new \DateTime('today', new \DateTimeZone($timezone));
+        return $this->getRepository()->findStudentDashboardContent($today->format('Y-m-d'), SchoolYearHelper::getCurrentSchoolYear(), UserHelper::getCurrentUser());
     }
 }

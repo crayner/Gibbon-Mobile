@@ -498,7 +498,7 @@ class TimetableRenderManager
      */
     private function getRollGroupEventInformation(array $row, array $result, array $day): ?TimetableEvent
     {
-        $rollGroup = $this->getRepository(RollGroup::class)->findOneBy(['tutor' => $result['person'], 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear()]);
+        $rollGroup = $this->getRepository(RollGroup::class)->findOneByPersonSchoolYear($result['person'], SchoolYearHelper::getCurrentSchoolYear());
         if (empty($rollGroup))
             return null;
         $event = new TimetableEvent($row['name']);

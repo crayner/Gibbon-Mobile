@@ -2,13 +2,30 @@
 /**
  * Created by PhpStorm.
  *
- * Gibbon-Responsive
+ * Gibbon, Flexible & Open School System
+ * Copyright (C) 2010, Ross Parker
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program in the LICENCE file.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Gibbon-Mobile
  *
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 18/12/2018
- * Time: 16:34
+ * Date: 8/04/2019
+ * Time: 12:17
  */
 namespace App\Manager;
 
@@ -17,10 +34,10 @@ use App\Provider\PlannerEntryProvider;
 use App\Util\UserHelper;
 
 /**
- * Class StaffDashboardManager
+ * Class StudentDashboardManager
  * @package App\Manager
  */
-class StaffDashboardManager extends DashboardManager
+class StudentDashboardManager extends DashboardManager
 {
     /**
      * getDashboardName
@@ -28,8 +45,9 @@ class StaffDashboardManager extends DashboardManager
      */
     public function getDashboardName(): string
     {
-        return 'Staff Dashboard';
+        return 'Student Dashboard';
     }
+
 
     /**
      * @var array
@@ -43,7 +61,7 @@ class StaffDashboardManager extends DashboardManager
     public function getLessonContent(): array
     {
         if (empty($this->lessonContent))
-            $this->lessonContent = $this->getProvider(PlannerEntryProvider::class)->getStaffDashboardContent($this->getTimezone());
+            $this->lessonContent = $this->getProvider(PlannerEntryProvider::class)->getStudentDashboardContent($this->getTimezone());
         return $this->lessonContent;
     }
 
@@ -77,16 +95,5 @@ class StaffDashboardManager extends DashboardManager
     public function getPerson(): Person
     {
         return $this->person = $this->person ?: UserHelper::getCurrentUser();
-    }
-
-    /**
-     * getTimetableProps
-     * @return array
-     */
-    public function getTimetableProps(): array
-    {
-        $properties = parent::getTimetableProps();
-        $properties['canTakeAttendance'] = true;
-        return $properties;
     }
 }

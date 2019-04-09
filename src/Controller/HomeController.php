@@ -15,6 +15,7 @@
  */
 namespace App\Controller;
 
+use App\Manager\StudentDashboardManager;
 use App\Provider\SettingProvider;
 use App\Manager\StaffDashboardManager;
 use App\Manager\VersionManager;
@@ -38,14 +39,16 @@ class HomeController extends AbstractController
      * @Route("/", name="home")
      * @IsGranted("ROLE_USER")
      */
-    public function home(StaffDashboardManager $staffDashboardManager)
+    public function home(StaffDashboardManager $staffDashboardManager, StudentDashboardManager $studentDashboardManager)
     {
         if (UserHelper::isStaff())
             $manager = $staffDashboardManager;
 
+        if (UserHelper::isStudent())
+            $manager = $studentDashboardManager;
 
-        if (empty($manager))
-            throw new \Exception('What type of user is that?');
+        if (UserHelper::isParent())
+            throw new \Exception('Parent? What type of user is that?');
 
         return $this->render('Default/home.html.twig',
             [

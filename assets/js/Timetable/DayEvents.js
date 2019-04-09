@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import {faUsers,faCheck} from '@fortawesome/free-solid-svg-icons'
 import {getDateString} from '../Component/getDateString'
+import NavItems from '../SlideMenu/NavItems'
 
 export default function DayEvents(props) {
     const {
@@ -17,6 +18,7 @@ export default function DayEvents(props) {
         showSpaceBookingCalendar,
         events,
         takeAttendance,
+        canTakeAttendance,
     } = props
 
     var countEventsNotDisplayed = 0;
@@ -80,7 +82,8 @@ export default function DayEvents(props) {
                     }
                 }
 
-                const stuff = event.links.attendance && eventDateInPast(event) ? (
+
+                const stuff = canTakeAttendance && event.links.attendance && eventDateInPast(event) ? (
                     <span style={{float: 'right'}} className="fa-layers fa-fw fa-2x attendanceIcon" title={translateMessage(translations,'Take Attendance by Class')} onClick={() => takeAttendance(event)}>
                         <FontAwesomeIcon icon={faUsers} color={event.attendanceStatus} />
                         <FontAwesomeIcon icon={faCheck} color={'black'} transform={'shrink-3 down-3 right-6'} />
@@ -143,6 +146,11 @@ DayEvents.propTypes = {
     showSchoolCalendar: PropTypes.bool.isRequired,
     showSpaceBookingCalendar: PropTypes.bool.isRequired,
     takeAttendance: PropTypes.func.isRequired,
+    canTakeAttendance: PropTypes.bool,
+}
+
+DayEvents.defaultProps = {
+    canTakeAttendance: false,
 }
 
 function eventDateInPast(event){
