@@ -13,6 +13,7 @@
 namespace App\Repository;
 
 use App\Entity\FamilyChild;
+use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -29,5 +30,27 @@ class FamilyChildRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, FamilyChild::class);
+    }
+
+    /**
+     * getChildrenFromParent
+     * @param Person $person
+     * @return array
+     */
+    public function findByParent(Person $person): array
+    {
+        $result = $this->createQueryBuilder('fc')
+            ->leftJoin('fc.family', 'f')
+            ->leftJoin('f.adults', 'fa')
+            ->where('fa.person = :person')
+            ->setParameter('person', $person)
+            ->getQuery()
+            ->getResult();
+
+        $children = [];
+        foreach($result as $child)
+            $children[] = $child->getPerson()->getId();
+
+        return $children;
     }
 }

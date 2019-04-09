@@ -15,6 +15,7 @@ namespace App\Provider;
 use App\Entity\Family;
 use App\Entity\FamilyChild;
 use App\Entity\Person;
+use App\Manager\EntityProviderInterface;
 use App\Manager\Traits\EntityTrait;
 use Doctrine\DBAL\Connection;
 
@@ -22,7 +23,7 @@ use Doctrine\DBAL\Connection;
  * Class FamilyChildProvider
  * @package App\Provider
  */
-class FamilyChildProvider
+class FamilyChildProvider implements EntityProviderInterface
 {
     use EntityTrait;
 
@@ -38,18 +39,6 @@ class FamilyChildProvider
      */
     public function getChildrenFromParent(Person $person): array
     {
-        $result =  $this->getRepository()->createQueryBuilder('fc')
-            ->leftJoin('fc.family', 'f')
-            ->leftJoin('f.adults', 'fa')
-            ->where('fa.person = :person')
-            ->setParameter('person', $person)
-            ->getQuery()
-            ->getResult();
-
-        $children = [];
-        foreach($result as $child)
-            $children[] = $child->getPerson()->getId();
-
-        return $children;
+        return $this->getRepository()->findByParent($person);
     }
 }

@@ -1,4 +1,5 @@
 {% trans_default_domain "messages" %}
+
 <div class="container-fluid">
     <div class="row border-bottom">
         <div class="col-12">
@@ -6,45 +7,47 @@
         </div>
     </div>
     <div class="container-fluid">
-        <div class="row border-bottom">
-            <div class="col-12">
-                <p class="text-lg-left text-uppercase">{{ "Today's Lessons"|trans }}</p>
-            </div>
-        </div>
-        {% if manager.lessonContent is empty %}
-            <div class="row">
-                <div class="col-12 alert-warning">
-                    <p class="text-center">{{ "There are no records to display."|trans }}</p>
+        {% if manager.displayLessons %}
+            <div class="row border-bottom">
+                <div class="col-12">
+                    <p class="text-lg-left text-uppercase">{{ "Today's Lessons"|trans }}</p>
                 </div>
             </div>
-        {% else %}
-            <div class="row">
-                <div class="col-2 card card-header">
-                    {{ 'Class'|trans }}
-                </div>
-                <div class="col-2 card card-header">
-                    {{ 'Lesson'|trans }}
-                </div>
-                <div class="col-2 card card-header">
-                    {{ 'Homework'|trans }}
-                </div>
-                <div class="col-2 card card-header">
-                    {{ 'Summary'|trans }}
-                </div>
-                <div class="col-2 card card-header">
-                    {{ 'Like'|trans }}
-                </div>
-                <div class="col-2 card card-header">
-                    {{ 'Action'|trans }}
-                </div>
-            </div>
-            {% for record in manager.lessonContent %}
+            {% if manager.lessonContent is empty %}
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12 alert-warning">
+                        <p class="text-center">{{ "There are no records to display."|trans }}</p>
                     </div>
                 </div>
-            {% endfor %}
+            {% else %}
+                <div class="row">
+                    <div class="col-2 card card-header">
+                        {{ 'Class'|trans }}
+                    </div>
+                    <div class="col-2 card card-header">
+                        {{ 'Lesson'|trans }}
+                    </div>
+                    <div class="col-2 card card-header">
+                        {{ 'Homework'|trans }}
+                    </div>
+                    <div class="col-2 card card-header">
+                        {{ 'Summary'|trans }}
+                    </div>
+                    <div class="col-2 card card-header">
+                        {{ 'Like'|trans }}
+                    </div>
+                    <div class="col-2 card card-header">
+                        {{ 'Action'|trans }}
+                    </div>
+                </div>
+                {% for record in manager.lessonContent %}
+                    <div class="row">
+                        <div class="col-12">
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         {% endif %}
-        <div id="tt"></div>
+        <div id="dashboard"></div>
     </div>
 </div>

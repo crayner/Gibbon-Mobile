@@ -187,7 +187,7 @@ abstract class DashboardManager implements DashboardInterface
      */
     public function getTimetableProps(): array
     {
-        $translations['My Timetable'] = $this->getTranslator()->trans('My Timetable');
+        $translations['My Dashboard'] = $this->getTranslator()->trans('My Dashboard');
         $translations['Loading'] = $this->getTranslator()->trans('Loading');
         $translations['School Closed'] = $this->getTranslator()->trans('School Closed');
         $translations['Next Day'] = $this->getTranslator()->trans('Next Day');
@@ -204,6 +204,7 @@ abstract class DashboardManager implements DashboardInterface
         $translations['on'] = $this->getTranslator()->trans('on');
         $translations['Take Attendance by Roll Group'] = $this->getTranslator()->trans('Take Attendance by Roll Group');
         $translations['There are no records to display.'] = $this->getTranslator()->trans('There are no records to display.');
+        $translations['An error occurred collecting the timetable information. You may not have access to this timetable.'] = $this->getTranslator()->trans('An error occurred collecting the timetable information. You may not have access to this timetable.', [], 'mobile');
 
         $properties['translations'] = $translations;
         $properties['locale'] = $this->getRequest()->get('_locale');
@@ -217,6 +218,8 @@ abstract class DashboardManager implements DashboardInterface
         $properties['schoolYear'] = SchoolYearHelper::getSchoolYearAsArray();
         $properties['daysOfWeek'] = SchoolYearHelper::getDaysOfWeek();
         $properties['gibbonHost'] = $this->getSettingManager()->getSettingByScopeAsString('System', 'absoluteURL');
+        $properties['dashboardName'] = $this->getDashboardName();
+
         return $properties;
     }
 
@@ -257,4 +260,14 @@ abstract class DashboardManager implements DashboardInterface
         return null;
     }
 
+    /**
+     * isDisplayLessons
+     * @return bool
+     */
+    public function isDisplayLessons(): bool
+    {
+        if (property_exists($this, 'displayLessons'))
+            return $this->displayLessons ? true : false;
+        return true;
+    }
 }

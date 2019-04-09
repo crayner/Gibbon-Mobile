@@ -104,10 +104,10 @@
         {{ encore_entry_script_tags('slideMenu') }}
         {% if coreOnly is not defined %}
             {{ encore_entry_script_tags('notificationTray') }}
-            {% if manager is defined and hasTimetable(manager) %}
+            {% if manager is defined and method_exists(manager, 'getDashboardName') %}
                 <script type="application/javascript" language="JavaScript">
-                    function cssTimetableLinks(){
-                        {% set link = encore_entry_css_files('timetable') %}
+                    function cssDashboardLinks(){
+                        {% set link = encore_entry_css_files('dashboard') %}
                         {% for css in link %}
                         var newLink = document.createElement("link");
                         newLink.href = '{{ asset(css) }}'
@@ -117,10 +117,10 @@
                         document.head.appendChild(newLink)
                         {% endfor %}
                     }
-                    window.addEventListener('load', cssTimetableLinks());
-                    window.TIMETABLE_PROPS = {{ manager.properties|json_encode|raw }}
+                    window.addEventListener('load', cssDashboardLinks());
+                    window.DASHBOARD_PROPS = {{ manager.properties|json_encode|raw }}
                 </script>
-                {{ encore_entry_script_tags('timetable') }}
+                {{ encore_entry_script_tags('dashboard') }}
             {% endif %}
         {% endif %}
     {% endblock javascripts %}

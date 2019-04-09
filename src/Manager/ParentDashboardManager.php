@@ -7,53 +7,39 @@
  * (c) 2018 Craig Rayner <craig@craigrayner.com>
  *
  * User: craig
- * Date: 18/12/2018
- * Time: 16:34
+ * Date: 9/04/2019
+ * Time: 11:12
  */
+
 namespace App\Manager;
 
 use App\Entity\Person;
-use App\Provider\PlannerEntryProvider;
+use App\Provider\FamilyChildProvider;
 use App\Util\UserHelper;
 
-/**
- * Class StaffDashboardManager
- * @package App\Manager
- */
-class StaffDashboardManager extends DashboardManager
+class ParentDashboardManager extends DashboardManager
 {
+    /**
+     * @var bool
+     */
+    protected $displayLessons = false;
+
     /**
      * getDashboardName
      * @return string
      */
     public function getDashboardName(): string
     {
-        return 'Staff Dashboard';
+        return 'Parent Dashboard';
     }
 
     /**
-     * @var array
-     */
-    private $lessonContent;
-
-    /**
-     * getContent
+     * getLessonContent
      * @return array
      */
     public function getLessonContent(): array
     {
-        if (empty($this->lessonContent))
-            $this->lessonContent = $this->getProvider(PlannerEntryProvider::class)->getStaffDashboardContent($this->getTimezone());
-        return $this->lessonContent;
-    }
-
-    /**
-     * hasTimetable
-     * @return bool
-     */
-    public function hasTimetable(): bool
-    {
-        return true;
+        return [];
     }
 
     /**

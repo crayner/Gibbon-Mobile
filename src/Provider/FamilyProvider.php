@@ -13,15 +13,14 @@
 namespace App\Provider;
 
 use App\Entity\Family;
-use App\Entity\FamilyChild;
-use App\Entity\Person;
+use App\Manager\EntityProviderInterface;
 use App\Manager\Traits\EntityTrait;
 
 /**
  * Class FamilyProvider
  * @package App\Provider
  */
-class FamilyProvider
+class FamilyProvider implements EntityProviderInterface
 {
     use EntityTrait;
 

@@ -43,6 +43,7 @@ class CoreTranslationExtension extends AbstractExtension
     {
         return [
             new TwigFunction('coreTranslations', [$this, 'getCoreTranslations']),
+            new TwigFunction('method_exists', [$this, 'method_exists']),
         ];
     }
 
@@ -78,5 +79,16 @@ class CoreTranslationExtension extends AbstractExtension
         $translations['Menu'] = $this->translator->trans('Menu', [], 'mobile');
         $translations['Stay Connected'] = $this->translator->trans('Stay Connected', [], 'mobile');
         return $translations;
+    }
+
+    /**
+     * method_exists
+     * @param $object
+     * @param $method
+     * @return bool
+     */
+    public function method_exists($object, $method)
+    {
+        return method_exists($object, $method);
     }
 }

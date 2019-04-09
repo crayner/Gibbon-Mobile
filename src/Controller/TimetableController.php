@@ -28,8 +28,13 @@ class TimetableController extends AbstractController
 {
     /**
      * myTimetable
+     * @param TimetableRenderManager $manager
+     * @param Person $person
+     * @param Request $request
      * @param string $date
      * @return JsonResponse|Response
+     * @throws \Google_Exception
+     * @throws \Exception
      * @Route("/timetable/{date}/{person}/display/", name="api_timetable_display")
      */
     public function myTimetable(TimetableRenderManager $manager, Person $person, Request $request, string $date = 'today')

@@ -7,6 +7,7 @@ import TimetableRender from './TimetableRender'
 import {getDateString} from '../Component/getDateString'
 import AttendanceRender from '../Attendance/AttendanceRender'
 import {openPage} from '../Component/openPage'
+import {translateMessage} from '../Component/MessageTranslator'
 
 export default class TimetableApp extends Component {
     constructor (props) {
@@ -156,7 +157,7 @@ export default class TimetableApp extends Component {
                 if (data.content.valid === 'error') {
                     const message = {
                         id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
-                        message: 'An error occurred collecting the timetable information. You may not have access to this timetable.',
+                        message: translateMessage(this.otherProps.translations, 'An error occurred collecting the timetable information. You may not have access to this timetable.'),
                         level: 'danger',
                     }
                     const messages = [message]
@@ -490,6 +491,7 @@ export default class TimetableApp extends Component {
 
 TimetableApp.propTypes = {
     locale: PropTypes.string,
+    translations: PropTypes.object.required,
 }
 
 TimetableApp.defaultProps = {

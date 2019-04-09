@@ -62,7 +62,7 @@ class TT implements EntityInterface
     /**
      * @var array
      */
-    private static $nameShortDisplayList = ['Day Of The Week','Timetable Day Short Name',''];
+    private static $nameShortDisplayList = ['Day Of The Week','Dashboard Day Short Name',''];
 
     /**
      * @var string|null

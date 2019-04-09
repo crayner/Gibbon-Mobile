@@ -82,7 +82,7 @@ class RollGroupRepository extends ServiceEntityRepository
     public function findOneByPersonSchoolYear(Person $person, SchoolYear $schoolYear): ?RollGroup
     {
         if (UserHelper::isStaff())
-            return $this->findOneByTutor($person, $schoolYear);
+            return $this->findOneBy(['tutor' => $person, 'schoolYear' => $schoolYear]);
         return $this->findOneByStudent($person, $schoolYear);
     }
 

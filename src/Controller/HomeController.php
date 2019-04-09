@@ -15,6 +15,7 @@
  */
 namespace App\Controller;
 
+use App\Manager\ParentDashboardManager;
 use App\Manager\StudentDashboardManager;
 use App\Provider\SettingProvider;
 use App\Manager\StaffDashboardManager;
@@ -39,7 +40,7 @@ class HomeController extends AbstractController
      * @Route("/", name="home")
      * @IsGranted("ROLE_USER")
      */
-    public function home(StaffDashboardManager $staffDashboardManager, StudentDashboardManager $studentDashboardManager)
+    public function home(StaffDashboardManager $staffDashboardManager, StudentDashboardManager $studentDashboardManager, ParentDashboardManager $parentDashboardManager)
     {
         if (UserHelper::isStaff())
             $manager = $staffDashboardManager;
@@ -48,8 +49,8 @@ class HomeController extends AbstractController
             $manager = $studentDashboardManager;
 
         if (UserHelper::isParent())
-            throw new \Exception('Parent? What type of user is that?');
-
+            $manager = $parentDashboardManager;
+dump($manager);
         return $this->render('Default/home.html.twig',
             [
                 'manager' => $manager,

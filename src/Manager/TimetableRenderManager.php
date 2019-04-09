@@ -84,7 +84,7 @@ class TimetableRenderManager
                 $result['tt'] = $this->getTimetableProvider()->findBySchoolYearActive(['schoolYear' => SchoolYearHelper::getCurrentSchoolYear(), 'active' => 'Y']);
 
             if (!empty($timetableID)) {
-                if (SecurityHelper::isActionAccessible('/modules/Timetable/tt_master.php', 'View Master Timetable')) {
+                if (SecurityHelper::isActionAccessible('/modules/Dashboard/tt_master.php', 'View Master Dashboard')) {
                     $result['tt'] = $this->getTimetableProvider()->find($timetableID);
                 } else {
                     $result['tt'] = $this->getTimetableProvider()->findByPersonSchoolYearTimetable(['timetable' => $timetableID, 'person' => $person, 'schoolYear' => SchoolYearHelper::getCurrentSchoolYear()]);
@@ -131,7 +131,7 @@ class TimetableRenderManager
             $result['allowPersonalCalendar'] = ($result['person']->getViewCalendarPersonal() === 'Y'
                                                     && ! empty($result['person']->getCalendarFeedPersonal()));
             $result['allowSpaceBookingCalendar'] = ($result['person']->getViewCalendarSpaceBooking() === 'Y'
-                                                        && SecurityHelper::isActionAccessible('/modules/Timetable/spaceBooking_manage.php')) ;
+                                                        && SecurityHelper::isActionAccessible('/modules/Dashboard/spaceBooking_manage.php')) ;
 
             $googleManager = new GoogleAPIManager(UserHelper::getSecurityUser($person), $this->getGoogleAuthenticator());
             $this->convertGoogleCalendarEvents($result['allowSchoolCalendar'] ? $googleManager->getCalendarEvents($schoolAvailable, $result['date']) : [], 'school');

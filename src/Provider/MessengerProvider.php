@@ -46,59 +46,14 @@ class MessengerProvider
      * @return mixed
      * @throws \Exception
      */
-    private function getMatchingMessages(string $messageType, $identifier, string $showDate = 'today', string $timezone = 'UTC', string $personType = 'any')
+    private function getMatchingMessages(string $messageType, $identifier, string $showDate = 'today', string $timezone = 'UTC', string $personType = 'any'): array
     {
         if (empty($this->correctedDate) || empty($this->correctedDate[$showDate])) {
             $date = new \DateTime($showDate, new \DateTimeZone($timezone));
             $this->correctedDate[$showDate] = $date->format('Y-m-d');
         }
 
-        $query = $this->getRepository()->createQueryBuilder('m')
-            ->select('m, p, mt')
-            ->where('m.messageWall_date1 = :date OR m.messageWall_date2 = :date OR m.messageWall_date3 = :date')
-            ->leftJoin('m.targets', 'mt')
-            ->leftJoin('m.person', 'p')
-            ->andWhere('mt.type = :messageType')
-            ->setParameter('date', $this->correctedDate[$showDate])
-            ->setParameter('messageType', $messageType);
-
-        if (is_array($identifier))
-        {
-            $x = reset($identifier);
-            if (is_int($x))
-                $connectionType = Connection::PARAM_INT_ARRAY;
-            else
-                $connectionType = Connection::PARAM_STR_ARRAY;
-
-            $query->andWhere('mt.identifier IN (:identifier)')
-                ->setParameter('identifier', $identifier, $connectionType);
-
-        } else
-            $query->andWhere('mt.identifier = :identifier')
-                ->setParameter('identifier', $identifier);
-
-        switch($personType) {
-            case 'parents':
-                $query->andWhere('mt.parents = :yes')
-                    ->setParameter('yes', 'Y');
-                break;
-            case 'staff':
-                $query->andWhere('mt.staff = :yes')
-                    ->setParameter('yes', 'Y');
-                break;
-            case 'students':
-                $query->andWhere('mt.students = :yes')
-                    ->setParameter('yes', 'Y');
-                break;
-            case 'any':
-                break;
-            default:
-                trigger_error(sprintf('Programmer error: "%s" valid personType. Must be one of "staff", "students", "parents" or "any"', $personType), E_USER_ERROR);
-        }
-
-        return $query
-            ->getQuery()
-            ->getResult();
+        return $this->getRepository()->findMatchingMessages($messageType, $identifier, $this->correctedDate[$showDate], $personType);
     }
 
     /**
